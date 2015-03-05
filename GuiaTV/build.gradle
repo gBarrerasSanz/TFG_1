@@ -1,0 +1,10 @@
+repositories {
+    mavenCentral()
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+
+dependencies {
+    testCompile 'junit:junit:4.10'
+}
