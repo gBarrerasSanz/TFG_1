@@ -8,6 +8,7 @@ import org.junit.Test;
 public class EventProductorTest {
 	
 	EventProductor eventProductor;
+	MQTTClient mqttClient;
 	
 	@Before
 	public void initTest() {
@@ -16,9 +17,18 @@ public class EventProductorTest {
 	
 	@Test
 	public void sendMessage() {
-		boolean sendMsg;
-		eventProductor.declareQueue("testqueue1");
-		sendMsg = eventProductor.sendMessage("testmsg1");
-		assertEquals(true, sendMsg);
+		try {
+			boolean sendMsg;
+			eventProductor.declareQueue("testqueue1");
+			sendMsg = eventProductor.sendMessage("testmsg1");
+			assertEquals(true, sendMsg);
+			
+			
+			mqttClient = new MQTTClient(5);
+			mqttClient.subscribe("testqueue1");
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
 	}
 }

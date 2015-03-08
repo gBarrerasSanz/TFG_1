@@ -41,10 +41,15 @@ public class EventProductor {
 	}
 	
 	private void createContext() {
-		ApplicationContext context =
-			    new GenericXmlApplicationContext("/WebContent/WEB-INF/rabbitmq-context.xml");
-			amqpTemplate = context.getBean(AmqpTemplate.class);
-			rabbitAdmin = context.getBean(RabbitAdmin.class); 
+		try {
+			ApplicationContext context =
+				    new GenericXmlApplicationContext("rabbitmq-context.xml");
+				amqpTemplate = context.getBean(AmqpTemplate.class);
+				rabbitAdmin = context.getBean(RabbitAdmin.class); 
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 //	public String sendMsg(String id, String val) {

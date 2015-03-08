@@ -16,3 +16,22 @@ dependencies {
    	//compile 'org.eclipse.paho:mqtt-client:0.4.0' // it is only needed for testing purposes
     testCompile 'junit:junit:4.10'
 }
+
+sourceSets {
+	main {
+    	java {
+      		srcDir 'src/main/java'
+    	}
+    	resources {
+      		srcDir 'src/main/resources'
+    	}
+	}
+	test {
+    	java {
+    	  	srcDir 'src/test/java'
+    	}
+		resources {
+     		srcDir 'src/test/resources'
+		}
+	}
+}
