@@ -2,5 +2,5 @@
 /build/
 .classpath
 .project
-/.settings/
-/.gradle/
+.settings/
+.gradle/

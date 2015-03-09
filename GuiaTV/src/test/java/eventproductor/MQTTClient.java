@@ -24,8 +24,8 @@ public class MQTTClient {
 	public MQTTClient(int id){
 		mqttCallBack = new CallbackFunction(id);
 		this.broker = "http://localhost:1883";
-		this.username = "guest";
-		this.password = "guest".toCharArray();
+		this.username = "user";
+		this.password = "userp".toCharArray();
 		MemoryPersistence persistence = new MemoryPersistence();
 
 		try {
