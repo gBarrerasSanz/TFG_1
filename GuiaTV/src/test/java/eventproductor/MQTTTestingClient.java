@@ -6,33 +6,37 @@ import org.eclipse.paho.client.mqttv3.MqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
+import org.eclipse.paho.client.mqttv3.MqttCallback;
 
 
-public class NotificationService {
+public class MQTTTestingClient {
 
 	String clientId     = "RTNClient";
 	MqttDeliveryToken token;
-	int qos = 2;
+	int qos = 0;
 
 	MqttClient mqttclient;
 	String username;
 	char[] password;
-	String broker;
+	String BROKER_URL;
+	MqttCallback mqttCallBack;
 
-	public NotificationService(){
-		this.broker = "http://localhost:1883";
-		this.username = "guest";
-		this.password = "guest".toCharArray();
+	public MQTTTestingClient(int id){
+		mqttCallBack = new CallbackFunction(id);
+		this.BROKER_URL = "tcp://localhost:1883";
+		this.username = "user";
+		this.password = "userp".toCharArray();
 		MemoryPersistence persistence = new MemoryPersistence();
 
 		try {
-			System.out.print(broker);
+			System.out.print(BROKER_URL);
 			MqttConnectOptions connOpts = new MqttConnectOptions();
 			connOpts.setCleanSession(true);
 			connOpts.setUserName(username);
 			connOpts.setPassword(password);
-			mqttclient = new MqttClient(broker, clientId, persistence);
-			System.out.println("Connecting to broker: "+ broker);
+			mqttclient = new MqttClient(BROKER_URL, clientId, persistence);
+			System.out.println("Connecting to broker: "+ BROKER_URL);
+			mqttclient.setCallback(mqttCallBack);
 			mqttclient.connect(connOpts);
 
 		} catch (MqttException e) {
@@ -43,9 +47,17 @@ public class NotificationService {
 			System.out.println("excep "+e);
 			e.printStackTrace();
 		}
-
 	}
-
+	
+	public void subscribe(String topic) {
+		try {
+			mqttclient.subscribe(topic, this.qos);
+		} catch (MqttException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	public void Notify(String Topic, String message){
 		try {
 
