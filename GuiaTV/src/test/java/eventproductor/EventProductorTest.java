@@ -8,7 +8,7 @@ import org.junit.Test;
 public class EventProductorTest {
 	
 	EventProductor eventProductor;
-	MQTTClient mqttClient;
+	MQTTTestingClient mqttClient;
 	
 	@Before
 	public void initTest() {
@@ -24,7 +24,7 @@ public class EventProductorTest {
 			assertEquals(true, sendMsg);
 			
 			
-			mqttClient = new MQTTClient(5);
+			mqttClient = new MQTTTestingClient(5);
 			mqttClient.subscribe("testqueue1");
 		}
 		catch(Exception e) {

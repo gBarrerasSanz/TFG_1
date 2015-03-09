@@ -9,7 +9,7 @@ import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
 
 
-public class MQTTClient {
+public class MQTTTestingClient {
 
 	String clientId     = "RTNClient";
 	MqttDeliveryToken token;
@@ -18,24 +18,24 @@ public class MQTTClient {
 	MqttClient mqttclient;
 	String username;
 	char[] password;
-	String broker;
+	String BROKER_URL;
 	MqttCallback mqttCallBack;
 
-	public MQTTClient(int id){
+	public MQTTTestingClient(int id){
 		mqttCallBack = new CallbackFunction(id);
-		this.broker = "http://localhost:1883";
+		this.BROKER_URL = "tcp://localhost:1883";
 		this.username = "user";
 		this.password = "userp".toCharArray();
 		MemoryPersistence persistence = new MemoryPersistence();
 
 		try {
-			System.out.print(broker);
+			System.out.print(BROKER_URL);
 			MqttConnectOptions connOpts = new MqttConnectOptions();
 			connOpts.setCleanSession(true);
 			connOpts.setUserName(username);
 			connOpts.setPassword(password);
-			mqttclient = new MqttClient(broker, clientId, persistence);
-			System.out.println("Connecting to broker: "+ broker);
+			mqttclient = new MqttClient(BROKER_URL, clientId, persistence);
+			System.out.println("Connecting to broker: "+ BROKER_URL);
 			mqttclient.setCallback(mqttCallBack);
 			mqttclient.connect(connOpts);
 
