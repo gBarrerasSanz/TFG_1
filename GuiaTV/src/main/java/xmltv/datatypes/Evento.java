@@ -12,8 +12,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @Entity
-@Table(name="EVENTOTV")
-public class EventoTV {	
+@Table(name="EVENTO")
+public class Evento {	
 	
 	/**
 	 * Representa un evento, que puede ser retransmisión de serie, película, etc, espacio publicitario.
@@ -21,7 +21,7 @@ public class EventoTV {
 	 */
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	private long id;
+	private int id;
 	
 	@Column(name="CHANNEL")
 	private String channel;
@@ -30,33 +30,69 @@ public class EventoTV {
 	private String title;
 	
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name="START")
+	@Column(name="TIME_START")
 	private Date start;
 	
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name="END")
+	@Column(name="TIME_END")
 	private Date end;
 
-	public EventoTV() {
+	public Evento() {
 		super();
-		throw new IllegalArgumentException("No se puede construir un evento sin informacion");
 	}
 
-	public EventoTV(String channel, String title, Date start, Date end) {
+	public Evento(String channel, String title, Date start, Date end) {
 		super();
 		this.channel = channel;
 		this.title = title;
 		// TODO: Tratar las fechas
 		this.start = new Date();
-		this.start = new Date();
+		this.end = new Date();
+	}
+	
+	public boolean checkInitValues() {
+		return channel != null && title != null &&
+				start != null && end != null;
 	}
 
-	public long getId() {
+	public int getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(int id) {
 		this.id = id;
+	}
+
+	public String getChannel() {
+		return channel;
+	}
+
+	public void setChannel(String channel) {
+		this.channel = channel;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public Date getStart() {
+		return start;
+	}
+
+	public void setStart(Date start) {
+		this.start = start;
+	}
+
+	public Date getEnd() {
+		return end;
+	}
+
+	public void setEnd(Date end) {
+		this.end = end;
 	}
 
 	@Override
@@ -84,7 +120,7 @@ public class EventoTV {
 		if (getClass() != obj.getClass()) {
 			return false;
 		}
-		EventoTV other = (EventoTV) obj;
+		Evento other = (Evento) obj;
 		// Channel
 		if (channel == null) {
 			if (other.channel != null) {
@@ -110,7 +146,7 @@ public class EventoTV {
 				return false;
 			}
 		} 
-		else if (!start.equals(other.start)) {
+		else if (start.compareTo(other.start) != 0) {
 			return false;
 		}
 		
@@ -120,7 +156,7 @@ public class EventoTV {
 				return false;
 			}
 		} 
-		else if (!end.equals(other.end)) {
+		else if (end.compareTo(other.end) != 0) {
 			return false;
 		}
 		return true;

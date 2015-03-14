@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 	xmlns:int="http://www.springframework.org/schema/integration"
 	xmlns:int-jpa="http://www.springframework.org/schema/integration/jpa"
-	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
-	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc" xmlns:tx="http://www.springframework.org/schema/tx"
 	xmlns:context="http://www.springframework.org/schema/context"
 	xsi:schemaLocation="http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc.xsd
 		http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd
@@ -13,35 +12,32 @@
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
 		http://www.springframework.org/schema/integration/jpa http://www.springframework.org/schema/integration/jpa/spring-integration-jpa.xsd">
 
-	<int:channel id="createPersonRequestChannel"/>
-	<int:channel id="listPeopleRequestChannel"/>
-
-	<int:gateway id="personService"
-		service-interface="org.springframework.integration.samples.jpa.service.PersonService"
+	<int:channel id="createEventoRequestChannel" />
+	<int:channel id="listEventoRequestChannel" />
+	
+	<!-- El error XML es el siguiente:
+	cvc-complex-type.2.1: Element 'int:gateway' must have no character or element information item [children], because the type's content type is 
+	empty. 
+	Parece ser que el esquema xsd que lo define exige que el elemento gateway esté vacío, pero entonces no sé cómo poner los <int:method> -->
+	<int:gateway id="eventoService" service-interface="xmltv.datatypes.EventoService"
 		default-request-timeout="5000" default-reply-timeout="5000">
-		<int:method name="createPerson" request-channel="createPersonRequestChannel"/>
-		<int:method name="findPeople"   request-channel="listPeopleRequestChannel"/>
+		<int:method name="createEvento" request-channel="createEventoRequestChannel" />
+		<int:method name="findEvento" request-channel="listEventoRequestChannel" />
 	</int:gateway>
 
-	<int-jpa:retrieving-outbound-gateway entity-manager-factory="entityManagerFactory"
-		request-channel="listPeopleRequestChannel"
-		jpa-query="select p from Person p order by p.name asc">
+	<int-jpa:retrieving-outbound-gateway
+		entity-manager-factory="entityManagerFactory" request-channel="listEventoRequestChannel"
+		jpa-query="select e from Evento e order by e.start asc">
 	</int-jpa:retrieving-outbound-gateway>
 
-	<int-jpa:updating-outbound-gateway entity-manager-factory="entityManagerFactory"
-		request-channel="createPersonRequestChannel" >
+	<int-jpa:updating-outbound-gateway
+		entity-manager-factory="entityManagerFactory" request-channel="createEventoRequestChannel">
 		<int-jpa:transactional transaction-manager="transactionManager" />
 	</int-jpa:updating-outbound-gateway>
 
 	<!-- Depending on the selected profile, users can use different JPA Providers -->
 
 	<beans profile="default, hibernate">
-		<import resource="classpath:/META-INF/spring/integration/hibernate-context.xml"/>
-	</beans>
-	<beans profile="openjpa">
-		<import resource="classpath:/META-INF/spring/integration/openjpa-context.xml"/>
-	</beans>
-	<beans profile="eclipselink">
-		<import resource="classpath:/META-INF/spring/integration/eclipselink-context.xml"/>
+		<import resource="classpath:/META-INF/spring/integration/hibernate-context.xml" />
 	</beans>
 </beans>

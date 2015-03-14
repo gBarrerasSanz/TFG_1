@@ -15,6 +15,9 @@ public class EventProductorTest {
 		eventProductor = new EventProductor();
 	}
 	
+	/*
+	 * Este test se completa satisfactoriamente aun sin estar el RabbitMQ funcionando...
+	 * */
 	@Test
 	public void sendMessage() {
 		try {
