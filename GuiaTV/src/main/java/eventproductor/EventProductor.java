@@ -43,7 +43,7 @@ public class EventProductor {
 	private void createContext() {
 		try {
 			ApplicationContext context =
-				    new GenericXmlApplicationContext("rabbitmq-context.xml");
+				    new GenericXmlApplicationContext("classpath:META-INF/spring/integration/rabbitmq-context.xml");
 				amqpTemplate = context.getBean(AmqpTemplate.class);
 				rabbitAdmin = context.getBean(RabbitAdmin.class); 
 		}
