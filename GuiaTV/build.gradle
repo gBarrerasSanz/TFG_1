@@ -11,12 +11,14 @@ apply plugin: 'eclipse'
 dependencies {
 	compile 'org.springframework.amqp:spring-rabbit:1.4.3.RELEASE'
 	//compile 'org.springframework:spring-context-support:3.2.2.RELEASE'
-   	//compile 'org.springframework:spring-core:4.1.5.RELEASE'
+   	compile 'org.springframework:spring-core:4.1.2.RELEASE'
+   	//compile 'org.springframework.integration:spring-integration-xml:4.1.2'
    	compile 'org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.0.2' // it is only needed for testing purposes
     compile 'org.eclipse.persistence:javax.persistence:2.0.0'
     compile 'org.springframework.integration:spring-integration-jpa:4.1.2.RELEASE'
     compile 'log4j:log4j:1.2.17'
-    compile 'org.hibernate:hibernate-entitymanager:4.2.11.Final'
+    compile 'org.hibernate:hibernate-entitymanager:4.2.11.Final' // con este funciona
+    //compile 'org.hibernate:hibernate-entitymanager:4.3.8.Final' // con este no funciona
     compile 'com.h2database:h2:1.3.175'
     
     testCompile 'junit:junit:4.10'

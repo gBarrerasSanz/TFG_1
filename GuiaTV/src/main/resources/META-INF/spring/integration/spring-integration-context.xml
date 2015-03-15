@@ -3,7 +3,8 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 	xmlns:int="http://www.springframework.org/schema/integration"
 	xmlns:int-jpa="http://www.springframework.org/schema/integration/jpa"
-	xmlns:jdbc="http://www.springframework.org/schema/jdbc" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc" 
+	xmlns:tx="http://www.springframework.org/schema/tx"
 	xmlns:context="http://www.springframework.org/schema/context"
 	xsi:schemaLocation="http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc.xsd
 		http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd
@@ -14,11 +15,12 @@
 
 	<int:channel id="createEventoRequestChannel" />
 	<int:channel id="listEventoRequestChannel" />
-	
-	<!-- El error XML es el siguiente:
-	cvc-complex-type.2.1: Element 'int:gateway' must have no character or element information item [children], because the type's content type is 
-	empty. 
-	Parece ser que el esquema xsd que lo define exige que el elemento gateway esté vacío, pero entonces no sé cómo poner los <int:method> -->
+
+	<!-- El error XML es el siguiente: cvc-complex-type.2.1: Element 'int:gateway' 
+		must have no character or element information item [children], because the 
+		type's content type is empty. Parece ser que el esquema xsd que lo define 
+		exige que el elemento gateway esté vacío, pero entonces no sé cómo poner 
+		los <int:method> -->
 	<int:gateway id="eventoService" service-interface="xmltv.datatypes.EventoService"
 		default-request-timeout="5000" default-reply-timeout="5000">
 		<int:method name="createEvento" request-channel="createEventoRequestChannel" />
@@ -36,7 +38,7 @@
 	</int-jpa:updating-outbound-gateway>
 
 	<!-- Depending on the selected profile, users can use different JPA Providers -->
-
+	
 	<beans profile="default, hibernate">
 		<import resource="classpath:/META-INF/spring/integration/hibernate-context.xml" />
 	</beans>
