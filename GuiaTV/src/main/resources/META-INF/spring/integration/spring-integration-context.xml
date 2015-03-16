@@ -18,11 +18,6 @@
 	<int:channel id="listEventoRequestChannel" />
 	<int:channel id="xmltvFileChannel" />
 
-	<!-- El error XML es el siguiente: cvc-complex-type.2.1: Element 'int:gateway' 
-		must have no character or element information item [children], because the 
-		type's content type is empty. Parece ser que el esquema xsd que lo define 
-		exige que el elemento gateway esté vacío, pero entonces no sé cómo poner 
-		los <int:method> -->
 	<int:gateway id="eventoService" service-interface="xmltv.datatypes.EventoService"
 		default-request-timeout="5000" default-reply-timeout="5000">
 		<int:method name="createEvento" request-channel="createEventoRequestChannel" />
@@ -46,7 +41,7 @@
 	</int-file:inbound-channel-adapter>
 
 	<int:transformer id="testTransformer" ref="testTransformerBean"
-		input-channel="inChannel" method="transform" output-channel="createEventoRequestChannel" />
+		input-channel="xmltvFileChannel" method="transform" output-channel="createEventoRequestChannel" />
 	
 	<!-- TODO:  -->
 	<bean id="testTransformerBean" class="org.foo.TestTransformer" />
