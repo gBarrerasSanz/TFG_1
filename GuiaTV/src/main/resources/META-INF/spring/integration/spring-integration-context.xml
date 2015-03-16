@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:int="http://www.springframework.org/schema/integration"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:int="http://www.springframework.org/schema/integration"
 	xmlns:int-file="http://www.springframework.org/schema/integration/file"
 	xmlns:int-jpa="http://www.springframework.org/schema/integration/jpa"
-	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
-	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc" xmlns:tx="http://www.springframework.org/schema/tx"
 	xmlns:context="http://www.springframework.org/schema/context"
 	xsi:schemaLocation="http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-4.1.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
@@ -15,11 +13,11 @@
 		http://www.springframework.org/schema/integration/jpa http://www.springframework.org/schema/integration/jpa/spring-integration-jpa-4.1.xsd
 		http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration-4.1.xsd">
 
-	
+
 	<int:channel id="createEventoRequestChannel" />
 	<int:channel id="listEventoRequestChannel" />
-	<int:channel id="fileInChannel"/>
-	
+	<int:channel id="xmltvFileChannel" />
+
 	<!-- El error XML es el siguiente: cvc-complex-type.2.1: Element 'int:gateway' 
 		must have no character or element information item [children], because the 
 		type's content type is empty. Parece ser que el esquema xsd que lo define 
@@ -40,11 +38,19 @@
 		entity-manager-factory="entityManagerFactory" request-channel="createEventoRequestChannel">
 		<int-jpa:transactional transaction-manager="transactionManager" />
 	</int-jpa:updating-outbound-gateway>
+
+	<!-- file poller who keeps looking at a folder and picks up new landed files -->
+	<int-file:inbound-channel-adapter id="filePoller"
+		directory="file:${input.directory}" channel="xmltvFileChannel">
+		<int:poller fixed-rate="1000" />
+	</int-file:inbound-channel-adapter>
+
+	<int:transformer id="testTransformer" ref="testTransformerBean"
+		input-channel="inChannel" method="transform" output-channel="createEventoRequestChannel" />
 	
-	<!-- Leer de fichero -->
-	<int-file:inbound-channel-adapter id="filesIn4"
-    	directory="file:${input.directory}" />
-    	
+	<!-- TODO:  -->
+	<bean id="testTransformerBean" class="org.foo.TestTransformer" />
+
 	<!-- Depending on the selected profile, users can use different JPA Providers -->
 	<beans profile="default, hibernate">
 		<import resource="classpath:/META-INF/spring/integration/hibernate-context.xml" />
