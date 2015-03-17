@@ -13,7 +13,10 @@ public interface EventoService {
 	 * @return The persisted Entity
 	 */
 	Evento createEvento(Evento evt);
-
+	
+	
+	List<Evento> createMultipleEventos(List<Evento> listEvt);
+	
 	/**
 	 *
 	 * @return the matching {@link Evento} record(s)

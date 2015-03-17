@@ -146,7 +146,8 @@ public class Evento {
 				return false;
 			}
 		} 
-		else if (start.compareTo(other.start) != 0) {
+		// Comparar las dos fechas con granularidad en segundos
+		else if (Math.abs(this.start.getTime() - other.start.getTime()) > 1000) {
 			return false;
 		}
 		
@@ -156,7 +157,7 @@ public class Evento {
 				return false;
 			}
 		} 
-		else if (end.compareTo(other.end) != 0) {
+		else if (Math.abs(this.end.getTime() - other.end.getTime()) > 1000) {
 			return false;
 		}
 		return true;

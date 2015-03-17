@@ -21,6 +21,7 @@
 	<int:gateway id="eventoService" service-interface="xmltv.datatypes.EventoService"
 		default-request-timeout="5000" default-reply-timeout="5000">
 		<int:method name="createEvento" request-channel="createEventoRequestChannel" />
+		<int:method name="createMultipleEventos" request-channel="createEventoRequestChannel" />
 		<int:method name="findEvento" request-channel="listEventoRequestChannel" />
 	</int:gateway>
 
@@ -40,11 +41,11 @@
 		<int:poller fixed-rate="1000" />
 	</int-file:inbound-channel-adapter>
 
-	<int:transformer id="testTransformer" ref="testTransformerBean"
+	<int:transformer id="xmltvTransformer" ref="xmltvTransformerBean"
 		input-channel="xmltvFileChannel" method="transform" output-channel="createEventoRequestChannel" />
 	
 	<!-- TODO:  -->
-	<bean id="testTransformerBean" class="XMLTVTransformer" />
+	<bean id="xmltvTransformerBean" class="xmltv.transformer.XMLTVTransformer" />
 
 	<!-- Depending on the selected profile, users can use different JPA Providers -->
 	<beans profile="default, hibernate">
