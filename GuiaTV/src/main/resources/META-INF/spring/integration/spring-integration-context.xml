@@ -44,7 +44,7 @@
 		input-channel="xmltvFileChannel" method="transform" output-channel="createEventoRequestChannel" />
 	
 	<!-- TODO:  -->
-	<bean id="testTransformerBean" class="org.foo.TestTransformer" />
+	<bean id="testTransformerBean" class="XMLTVTransformer" />
 
 	<!-- Depending on the selected profile, users can use different JPA Providers -->
 	<beans profile="default, hibernate">
