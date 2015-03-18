@@ -19,7 +19,11 @@ import org.w3c.dom.Node;
 import xmltv.datatypes.Evento;
 
 public class XMLTVTransformer implements Transformer {
-
+	
+	/**
+	 * message.payload -> JXPathContext (ver XMLTVTranformerTests.transformTest)
+	 * @return Message<?>.payload -> List<Evento> 
+	 */
 	@Override
 	public Message<?> transform(Message<?> message) {
 		if (message.getPayload() instanceof JXPathContext) {
