@@ -15,6 +15,9 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.jxpath.Container;
+import org.apache.commons.jxpath.JXPathContext;
+import org.apache.commons.jxpath.xml.DocumentContainer;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -35,7 +38,12 @@ public class XMLTVTransformerTests {
 		File file = null;
 		try {
 			file = resource.getFile();
-			Message<?> fileMsg = MessageBuilder.withPayload(getStringFromFile(file)).build();
+			URL url = resource.getURL();
+//		    URL url = resource.getClassLoader().getResource("student_class.xml");
+		    Container container = new DocumentContainer(url);
+		    JXPathContext jxpathCtx = JXPathContext.newContext(container);
+			Message<?> fileMsg = MessageBuilder.
+					withPayload(jxpathCtx).build();
 			Message<?> resultMsg = transformer.transform(fileMsg);
 		} catch (IOException e) {
 			e.printStackTrace();

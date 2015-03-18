@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE tv SYSTEM "xmltv.dtd">
+<!-- TODO: Apuntar a la ruta relativa del dtd -->
+<!-- <!DOCTYPE name PUBLIC 
+    "-//SPRING//DTD BEAN//EN"
+        "/WEB-INF/xmltv/validation/xmltv.dtd"> -->
 
 <tv source-info-url="http://www.laguiatv.com/programacion/" source-data-url="http://www.laguiatv.com/programacion/" generator-info-name="XMLTV" generator-info-url="http://xmltv.org/">
   <channel id="fdf-734.laguiatv.com">
