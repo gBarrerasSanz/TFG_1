@@ -14,31 +14,7 @@
   <programme start="20150314020000 +0100" stop="20150314033000 +0100" channel="fdf-734.laguiatv.com">
     <title lang="es">La que se avecina.</title>
   </programme>
-  <programme start="20150314033000 +0100" stop="20150314051500 +0100" channel="fdf-734.laguiatv.com">
-    <title lang="es">La línea de la vida</title>
-  </programme>
-  <programme start="20150314051500 +0100" stop="20150314053000 +0100" channel="fdf-734.laguiatv.com">
-    <title lang="es">Mitelemúsica</title>
-  </programme>
-  <programme start="20150314053000 +0100" stop="20150314063000 +0100" channel="fdf-734.laguiatv.com">
-    <title lang="es">Infocomerciales</title>
-  </programme>
-  <programme start="20150314063000 +0100" stop="20150314074500 +0100" channel="fdf-734.laguiatv.com">
-    <title lang="es">Infocomerciales</title>
-  </programme>
-  <programme start="20150317201300 +0100" stop="20150317205000 +0100" channel="neox-722.laguiatv.com">
-    <title lang="es">Dos hombres y medio</title>
-  </programme>
-  <programme start="20150317205000 +0100" stop="20150317211000 +0100" channel="neox-722.laguiatv.com">
-    <title lang="es">Padre de Familia</title>
-  </programme>
-  <programme start="20150317211000 +0100" stop="20150317213500 +0100" channel="neox-722.laguiatv.com">
-    <title lang="es">Los Simpson</title>
-  </programme>
   <programme start="20150317213500 +0100" stop="20150317220000 +0100" channel="neox-722.laguiatv.com">
     <title lang="es">Los Simpson</title>
-  </programme>
-  <programme start="20150317220000 +0100" stop="20150318003000 +0100" channel="neox-722.laguiatv.com">
-    <title lang="es">La noche de los Simpson</title>
   </programme>
 </tv>

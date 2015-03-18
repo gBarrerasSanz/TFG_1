@@ -13,6 +13,11 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.jxpath.Container;
@@ -25,6 +30,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.integration.support.MessageBuilder;
 import org.springframework.messaging.Message;
 
+import xmltv.datatypes.Evento;
 import xmltv.datatypes.EventoService;
 
 public class XMLTVTransformerTests {
@@ -45,11 +51,38 @@ public class XMLTVTransformerTests {
 			Message<?> fileMsg = MessageBuilder.
 					withPayload(jxpathCtx).build();
 			Message<?> resultMsg = transformer.transform(fileMsg);
+			assertNotNull(resultMsg);
+			// Construir resultado esperado
+			List<Evento> lEvt = new ArrayList<Evento>();
+			Evento evt1 = new Evento(); Evento evt2 = new Evento();
+			evt1.setChannel("fdf-734.laguiatv.com");
+			evt1.setTitle("La que se avecina.");
+			evt1.setStart(strToDate("20150314020000 +0100"));
+			evt1.setEnd(strToDate("20150314033000 +0100"));
+			// evt2
+			evt2.setChannel("neox-722.laguiatv.com");
+			evt2.setTitle("Los Simpson");
+			evt2.setStart(strToDate("20150317213500 +0100"));
+			evt2.setEnd(strToDate("20150317220000 +0100"));
+			lEvt.add(evt1); lEvt.add(evt2);
+			assertEquals((List<Evento>)resultMsg.getPayload(), lEvt);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
-
+	
+	private static Date strToDate(String str) {
+//		String dateStr[] = str.split(" ");
+		SimpleDateFormat format = new SimpleDateFormat("yyyyMMddhhmmss Z");
+//		format.setTimeZone(TimeZone.getTimeZone(dateStr[1]));
+		try {
+			return format.parse(str);
+		} catch (ParseException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
 	private String getStringFromFile(File f) {
 		BufferedReader br;
 		try {
