@@ -5,16 +5,15 @@
         "/WEB-INF/xmltv/validation/xmltv.dtd"> -->
 
 <tv source-info-url="http://www.laguiatv.com/programacion/" source-data-url="http://www.laguiatv.com/programacion/" generator-info-name="XMLTV" generator-info-url="http://xmltv.org/">
-  <channel id="fdf-734.laguiatv.com">
-    <display-name>FDF</display-name>
-  </channel>
   <channel id="neox-722.laguiatv.com">
     <display-name>Neox</display-name>
   </channel>
-  <programme start="20150314020000 +0100" stop="20150314033000 +0100" channel="fdf-734.laguiatv.com">
-    <title lang="es">La que se avecina.</title>
+  <!-- Cómo conocí a vuestra madre: 17:35 hora española -->
+  <programme start="20150316173500 +0100" stop="20150316175400 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Cómo conocí a vuestra Madre</title>
   </programme>
-  <programme start="20150317213500 +0100" stop="20150317220000 +0100" channel="neox-722.laguiatv.com">
+  <!-- Los simpson: 21:45 hora española -->
+  <programme start="20150316214500 +0100" stop="20150316220000 +0100" channel="neox-722.laguiatv.com">
     <title lang="es">Los Simpson</title>
   </programme>
 </tv>

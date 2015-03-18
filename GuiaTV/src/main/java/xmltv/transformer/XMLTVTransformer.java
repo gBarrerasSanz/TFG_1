@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.TimeZone;
 
 import org.apache.commons.jxpath.JXPathContext;
@@ -58,9 +59,8 @@ public class XMLTVTransformer implements Transformer {
 	}
 
 	private static Date strToDate(String str) {
-//		String dateStr[] = str.split(" ");
-		SimpleDateFormat format = new SimpleDateFormat("yyyyMMddhhmmss Z");
-//		format.setTimeZone(TimeZone.getTimeZone(dateStr[1]));
+		final Locale SPAIN_LOCALE = new Locale("es","ES");
+		SimpleDateFormat format = new SimpleDateFormat("yyyyMMddhhmmss Z", SPAIN_LOCALE);
 		try {
 			return format.parse(str);
 		} catch (ParseException e) {

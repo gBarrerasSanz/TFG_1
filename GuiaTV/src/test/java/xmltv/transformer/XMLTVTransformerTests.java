@@ -18,6 +18,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.jxpath.Container;
@@ -39,7 +40,7 @@ public class XMLTVTransformerTests {
 	public void transformTest() {
 		final ApplicationContext context = new ClassPathXmlApplicationContext(
 				"classpath:/META-INF/spring/integration/spring-integration-context.xml");
-		Resource resource = context.getResource("/META-INF/test/xmltv/xmltv_sample.xml");
+		Resource resource = context.getResource("/META-INF/test/xmltv/xmltv_sample2.xml");
 		final XMLTVTransformer transformer = context.getBean(XMLTVTransformer.class);
 		File file = null;
 		try {
@@ -54,16 +55,17 @@ public class XMLTVTransformerTests {
 			assertNotNull(resultMsg);
 			// Construir resultado esperado
 			List<Evento> lEvt = new ArrayList<Evento>();
+			
 			Evento evt1 = new Evento(); Evento evt2 = new Evento();
-			evt1.setChannel("fdf-734.laguiatv.com");
-			evt1.setTitle("La que se avecina.");
-			evt1.setStart(strToDate("20150314020000 +0100"));
-			evt1.setEnd(strToDate("20150314033000 +0100"));
+			evt1.setChannel("neox-722.laguiatv.com");
+			evt1.setTitle("Cómo conocí a vuestra Madre");
+			evt1.setStart(strToDate("20150316173500 +0100"));
+			evt1.setEnd(strToDate("20150316175400 +0100"));
 			// evt2
 			evt2.setChannel("neox-722.laguiatv.com");
 			evt2.setTitle("Los Simpson");
-			evt2.setStart(strToDate("20150317213500 +0100"));
-			evt2.setEnd(strToDate("20150317220000 +0100"));
+			evt2.setStart(strToDate("20150316214500 +0100"));
+			evt2.setEnd(strToDate("20150316220000 +0100"));
 			lEvt.add(evt1); lEvt.add(evt2);
 			assertEquals((List<Evento>)resultMsg.getPayload(), lEvt);
 		} catch (IOException e) {
@@ -71,36 +73,15 @@ public class XMLTVTransformerTests {
 		}
 	}
 	
+	/*
+	 * Método duplicado de XMLTVTransformer.strToDate()
+	 */
 	private static Date strToDate(String str) {
-//		String dateStr[] = str.split(" ");
-		SimpleDateFormat format = new SimpleDateFormat("yyyyMMddhhmmss Z");
-//		format.setTimeZone(TimeZone.getTimeZone(dateStr[1]));
+		final Locale SPAIN_LOCALE = new Locale("es","ES");
+		SimpleDateFormat format = new SimpleDateFormat("yyyyMMddhhmmss Z", SPAIN_LOCALE);
 		try {
 			return format.parse(str);
 		} catch (ParseException e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
-	
-	private String getStringFromFile(File f) {
-		BufferedReader br;
-		try {
-			br = new BufferedReader(new FileReader(f));
-			StringBuilder sb = new StringBuilder();
-			String line = br.readLine();
-
-			while (line != null) {
-				sb.append(line);
-				sb.append(System.lineSeparator());
-				line = br.readLine();
-			}
-			br.close();
-			return sb.toString();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-			return null;
-		} catch (IOException e) {
 			e.printStackTrace();
 			return null;
 		}
