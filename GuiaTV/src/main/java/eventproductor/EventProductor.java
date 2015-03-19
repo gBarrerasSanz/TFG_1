@@ -35,9 +35,8 @@ public class EventProductor {
 			amqpTemplate.convertAndSend("amq.topic", "amq.topic.*", message); 
 	        return true;
 	    }catch(Exception ex){ 
-	        //Logging.
-	    } 
-	    return false;
+	    	return false;
+	    }
 	}
 	
 	private void createContext() {
