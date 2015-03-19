@@ -11,12 +11,8 @@
 	</appender>
 
 	<!-- Loggers -->
-	<logger name="org.springframework.integration">
-		<level value="warn" />
-	</logger>
-
-	<logger name="org.springframework.integration.samples">
-		<level value="info" />
+	<logger name="xmltv.transformer">
+		<level value="debug" />
 	</logger>
 
 	<!-- Root Logger -->

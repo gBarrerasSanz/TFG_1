@@ -7,9 +7,9 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
-import java.util.TimeZone;
 
 import org.apache.commons.jxpath.JXPathContext;
+import org.apache.log4j.Logger;
 import org.springframework.integration.support.MessageBuilder;
 import org.springframework.integration.transformer.Transformer;
 import org.springframework.messaging.Message;
@@ -19,6 +19,8 @@ import org.w3c.dom.Node;
 import xmltv.datatypes.Evento;
 
 public class XMLTVTransformer implements Transformer {
+	
+	static Logger log = Logger.getLogger(XMLTVTransformer.class.getName());
 	
 	/**
 	 * message.payload -> JXPathContext (ver XMLTVTranformerTests.transformTest)
@@ -47,7 +49,9 @@ public class XMLTVTransformer implements Transformer {
 					lEvt.add(evt);
 					itIdx++;
 				}
-				assert(listProgNodes.size() - 1 == itIdx);
+				log.debug("listProgNodes.size() = "+String.valueOf(listProgNodes.size() - 1));
+				log.debug("itIdx = "+String.valueOf(itIdx));
+				assert(listProgNodes.size() == itIdx);
 				Message<?> result = MessageBuilder.
 						withPayload(lEvt).build();
 				return result;
