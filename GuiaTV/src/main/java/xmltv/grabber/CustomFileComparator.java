@@ -1,14 +1,15 @@
 package xmltv.grabber;
 
-import java.io.File;
+import java.util.Comparator;
 
 
 
-public class CustomFileComparator implements Comparable<File>{
+
+public class CustomFileComparator<T> implements Comparator<T>{
 
 	@Override
-	public int compareTo(File arg0) {
-		// TODO: Ordenar por fecha decreciente
+	public int compare(T o1, T o2) {
+		// TODO Auto-generated method stub
 		return 0;
 	}
 

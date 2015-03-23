@@ -39,7 +39,7 @@
 	<!-- file poller who keeps looking at a folder and picks up new landed files -->
 	<int-file:inbound-channel-adapter id="filePoller"
 		directory="file:src/main/resources/META-INF/xmltv/cap" channel="xmltvFileOutChannel" 
-		auto-startup="true" comparator="xmltv.grabber.CustomFileComparator"
+		auto-startup="true" comparator="xmltvFileComparator"
 		filename-regex="xmltvDump_[0-9][0-9][0-9][0-9]_[0-9][0-9]_[0-9][0-9]_[0-9][0-9]_[0-9][0-9]_[0-9][0-9]\.xml"	>
 		<int:poller fixed-rate="1000" />
 	</int-file:inbound-channel-adapter>
@@ -50,8 +50,8 @@
 	
 	<!-- XMLTV Grabber -->
 	<int:inbound-channel-adapter id="xmltvGrabberInbound" ref="xmltvGrabber" method="doGrabbing">				
-		<int:poller max-messages-per-poll="1" cron="0 	*  *  *   *  ?   *"/>
-		<!--										sec m  h  dm  m  dw  y -->	
+		<int:poller max-messages-per-poll="1" cron="0 	*  *  *   *  ?  "/>
+		<!--										sec m  h  dm  m  dw -->	
 	</int:inbound-channel-adapter>
 	
 	<int-file:outbound-channel-adapter id="xmltvGrabberOutbound" channel="xmltvFileInChannel"
@@ -63,6 +63,8 @@
 	<bean id="xmltvGrabber" class="xmltv.grabber.XMLTVGrabber"/>
 	
 	<bean id="xmltvTransformerBean" class="xmltv.transformer.XMLTVTransformer" />
+	
+	<bean id="xmltvFileComparator" class="xmltv.grabber.CustomFileComparator"/>
 
 	<!-- Depending on the selected profile, users can use different JPA Providers -->
 	<beans profile="default, hibernate">

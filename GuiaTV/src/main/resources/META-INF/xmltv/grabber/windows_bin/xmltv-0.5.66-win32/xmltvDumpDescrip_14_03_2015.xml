@@ -1,0 +1,1691 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tv SYSTEM "xmltv.dtd">
+
+<tv source-info-url="http://www.laguiatv.com/programacion/" source-data-url="http://www.laguiatv.com/programacion/" generator-info-name="XMLTV" generator-info-url="http://xmltv.org/">
+  <channel id="fdf-734.laguiatv.com">
+    <display-name>FDF</display-name>
+  </channel>
+  <channel id="neox-722.laguiatv.com">
+    <display-name>Neox</display-name>
+  </channel>
+  <programme start="20150314020000 +0100" stop="20150314033000 +0100" channel="fdf-734.laguiatv.com">
+    <title lang="es">La que se avecina.</title>
+  </programme>
+  <programme start="20150314033000 +0100" stop="20150314051500 +0100" channel="fdf-734.laguiatv.com">
+    <title lang="es">La línea de la vida</title>
+    <desc lang="es">Espacio divulgativo.</desc>
+    <rating system="">
+      <value>+18</value>
+    </rating>
+  </programme>
+  <programme start="20150314051500 +0100" stop="20150314053000 +0100" channel="fdf-734.laguiatv.com">
+    <title lang="es">Mitelemúsica</title>
+    <desc lang="es">Programa que combina entrevistas y actuaciones en directo de artistas musicales con reportajes que muestran los secretos del estudio de grabación y el proceso de creación musical.</desc>
+    <rating system="">
+      <value>TP</value>
+    </rating>
+  </programme>
+  <programme start="20150314053000 +0100" stop="20150314063000 +0100" channel="fdf-734.laguiatv.com">
+    <title lang="es">Infocomerciales</title>
+    <desc lang="es">Espacio dedicado a la promoción y venta telefónica de diversos productos.</desc>
+    <rating system="">
+      <value>TP</value>
+    </rating>
+  </programme>
+  <programme start="20150314063000 +0100" stop="20150314074500 +0100" channel="fdf-734.laguiatv.com">
+    <title lang="es">Infocomerciales</title>
+    <desc lang="es">Espacio dedicado a la promoción y venta telefónica de diversos productos.</desc>
+    <rating system="">
+      <value>TP</value>
+    </rating>
+  </programme>
+  <programme start="20150314074500 +0100" stop="20150314084500 +0100" channel="fdf-734.laguiatv.com">
+    <title lang="es">Caso abierto</title>
+    <desc lang="es">Serie de investigación policial. La detective Lilly Rush, trabaja para el Departamento de Policía de Filadelfia, en casos....</desc>
+    <credits>
+      <actor>John Finnegan</actor>
+      <actor>Jackie Chan</actor>
+      <actor>Jeremy Ratchford</actor>
+    </credits>
+    <rating system="">
+      <value>SC</value>
+    </rating>
+  </programme>
+  <programme start="20150314084500 +0100" stop="20150314094500 +0100" channel="fdf-734.laguiatv.com">
+    <title lang="es">Caso abierto</title>
+    <desc lang="es">Serie de investigación policial. La detective Lilly Rush, trabaja para el Departamento de Policía de Filadelfia, en casos....</desc>
+    <credits>
+      <actor>John Finnegan</actor>
+      <actor>Jackie Chan</actor>
+      <actor>Jeremy Ratchford</actor>
+    </credits>
+    <rating system="">
+      <value>SC</value>
+    </rating>
+  </programme>
+  <programme start="20150314094500 +0100" stop="20150314104500 +0100" channel="fdf-734.laguiatv.com">
+    <title lang="es">Caso abierto</title>
+    <desc lang="es">Serie de investigación policial. La detective Lilly Rush, trabaja para el Departamento de Policía de Filadelfia, en casos....</desc>
+    <credits>
+      <actor>John Finnegan</actor>
+      <actor>Jackie Chan</actor>
+      <actor>Jeremy Ratchford</actor>
+    </credits>
+    <rating system="">
+      <value>SC</value>
+    </rating>
+  </programme>
+  <programme start="20150314104500 +0100" stop="20150314113000 +0100" channel="fdf-734.laguiatv.com">
+    <title lang="es">Caso abierto</title>
+    <desc lang="es">Serie de investigación policial. La detective Lilly Rush, trabaja para el Departamento de Policía de Filadelfia, en casos....</desc>
+    <credits>
+      <actor>John Finnegan</actor>
+      <actor>Jackie Chan</actor>
+      <actor>Jeremy Ratchford</actor>
+    </credits>
+    <rating system="">
+      <value>SC</value>
+    </rating>
+  </programme>
+  <programme start="20150314113000 +0100" stop="20150314121500 +0100" channel="fdf-734.laguiatv.com">
+    <title lang="es">Caso abierto</title>
+    <desc lang="es">Serie de investigación policial. La detective Lilly Rush, trabaja para el Departamento de Policía de Filadelfia, en casos....</desc>
+    <credits>
+      <actor>John Finnegan</actor>
+      <actor>Jackie Chan</actor>
+      <actor>Jeremy Ratchford</actor>
+    </credits>
+    <rating system="">
+      <value>SC</value>
+    </rating>
+  </programme>
+  <programme start="20150314121500 +0100" stop="20150314131500 +0100" channel="fdf-734.laguiatv.com">
+    <title lang="es">Mentes criminales</title>
+    <desc lang="es">Muestra el trabajo diario de una brigada de criminalistas de elite, perteneciente al FBI, cuya especialidad es analizar....</desc>
+    <credits>
+      <actor>Mandy Patinkin</actor>
+      <actor>Alfredo Landa</actor>
+      <actor>Thomas Gibson</actor>
+    </credits>
+    <rating system="">
+      <value>+13</value>
+    </rating>
+  </programme>
+  <programme start="20150314131500 +0100" stop="20150314141500 +0100" channel="fdf-734.laguiatv.com">
+    <title lang="es">Mentes criminales</title>
+    <desc lang="es">Muestra el trabajo diario de una brigada de criminalistas de elite, perteneciente al FBI, cuya especialidad es analizar....</desc>
+    <credits>
+      <actor>Mandy Patinkin</actor>
+      <actor>Alfredo Landa</actor>
+      <actor>Thomas Gibson</actor>
+    </credits>
+    <rating system="">
+      <value>+13</value>
+    </rating>
+  </programme>
+  <programme start="20150314141500 +0100" stop="20150314150000 +0100" channel="fdf-734.laguiatv.com">
+    <title lang="es">Mentes criminales</title>
+    <desc lang="es">Muestra el trabajo diario de una brigada de criminalistas de elite, perteneciente al FBI, cuya especialidad es analizar....</desc>
+    <credits>
+      <actor>Mandy Patinkin</actor>
+      <actor>Alfredo Landa</actor>
+      <actor>Thomas Gibson</actor>
+    </credits>
+    <rating system="">
+      <value>+13</value>
+    </rating>
+  </programme>
+  <programme start="20150314150000 +0100" stop="20150314164500 +0100" channel="fdf-734.laguiatv.com">
+    <title lang="es">La que se avecina.</title>
+  </programme>
+  <programme start="20150314164500 +0100" stop="20150314174500 +0100" channel="fdf-734.laguiatv.com">
+    <title lang="es">Aída</title>
+    <desc lang="es">Serie que recoge las dificultades de Aída para hacer frente a la vida como mujer separada, madre de dos hijos....</desc>
+    <credits>
+      <actor>Daniel J. Travanti</actor>
+      <actor>Donna Mills</actor>
+      <actor>Melani Olivares</actor>
+    </credits>
+    <rating system="">
+      <value>+7</value>
+    </rating>
+  </programme>
+  <programme start="20150314174500 +0100" stop="20150314184500 +0100" channel="fdf-734.laguiatv.com">
+    <title lang="es">Aída</title>
+    <desc lang="es">Serie que recoge las dificultades de Aída para hacer frente a la vida como mujer separada, madre de dos hijos....</desc>
+    <credits>
+      <actor>Daniel J. Travanti</actor>
+      <actor>Donna Mills</actor>
+      <actor>Melani Olivares</actor>
+    </credits>
+    <rating system="">
+      <value>+7</value>
+    </rating>
+  </programme>
+  <programme start="20150314184500 +0100" stop="20150314203000 +0100" channel="fdf-734.laguiatv.com">
+    <title lang="es">La que se avecina.</title>
+  </programme>
+  <programme start="20150314203000 +0100" stop="20150314223000 +0100" channel="fdf-734.laguiatv.com">
+    <title lang="es">La que se avecina.</title>
+  </programme>
+  <programme start="20150314223000 +0100" stop="20150314233000 +0100" channel="fdf-734.laguiatv.com">
+    <title lang="es">CSI New York</title>
+  </programme>
+  <programme start="20150314233000 +0100" stop="20150315001500 +0100" channel="fdf-734.laguiatv.com">
+    <title lang="es">CSI New York</title>
+  </programme>
+  <programme start="20150315001500 +0100" stop="20150315011500 +0100" channel="fdf-734.laguiatv.com">
+    <title lang="es">CSI: Las Vegas</title>
+  </programme>
+  <programme start="20150315011500 +0100" stop="20150315020000 +0100" channel="fdf-734.laguiatv.com">
+    <title lang="es">CSI: Las Vegas</title>
+  </programme>
+  <programme start="20150315020000 +0100" stop="20150315024500 +0100" channel="fdf-734.laguiatv.com">
+    <title lang="es">CSI New York</title>
+  </programme>
+  <programme start="20150315024500 +0100" stop="20150315033000 +0100" channel="fdf-734.laguiatv.com">
+    <title lang="es">CSI New York</title>
+  </programme>
+  <programme start="20150315033000 +0100" stop="20150315051500 +0100" channel="fdf-734.laguiatv.com">
+    <title lang="es">La línea de la vida</title>
+    <desc lang="es">Espacio divulgativo.</desc>
+    <rating system="">
+      <value>+18</value>
+    </rating>
+  </programme>
+  <programme start="20150315051500 +0100" stop="20150315053000 +0100" channel="fdf-734.laguiatv.com">
+    <title lang="es">Mitelemúsica</title>
+    <desc lang="es">Programa que combina entrevistas y actuaciones en directo de artistas musicales con reportajes que muestran los secretos del estudio de grabación y el proceso de creación musical.</desc>
+    <rating system="">
+      <value>TP</value>
+    </rating>
+  </programme>
+  <programme start="20150315053000 +0100" stop="20150315063000 +0100" channel="fdf-734.laguiatv.com">
+    <title lang="es">Infocomerciales</title>
+    <desc lang="es">Espacio dedicado a la promoción y venta telefónica de diversos productos.</desc>
+    <rating system="">
+      <value>TP</value>
+    </rating>
+  </programme>
+  <programme start="20150315063000 +0100" stop="20150315074500 +0100" channel="fdf-734.laguiatv.com">
+    <title lang="es">Infocomerciales</title>
+    <desc lang="es">Espacio dedicado a la promoción y venta telefónica de diversos productos.</desc>
+    <rating system="">
+      <value>TP</value>
+    </rating>
+  </programme>
+  <programme start="20150315074500 +0100" stop="20150315083000 +0100" channel="fdf-734.laguiatv.com">
+    <title lang="es">Caso abierto</title>
+    <desc lang="es">Serie de investigación policial. La detective Lilly Rush, trabaja para el Departamento de Policía de Filadelfia, en casos....</desc>
+    <credits>
+      <actor>John Finnegan</actor>
+      <actor>Jackie Chan</actor>
+      <actor>Jeremy Ratchford</actor>
+    </credits>
+    <rating system="">
+      <value>SC</value>
+    </rating>
+  </programme>
+  <programme start="20150315083000 +0100" stop="20150315091500 +0100" channel="fdf-734.laguiatv.com">
+    <title lang="es">Caso abierto</title>
+    <desc lang="es">Serie de investigación policial. La detective Lilly Rush, trabaja para el Departamento de Policía de Filadelfia, en casos....</desc>
+    <credits>
+      <actor>John Finnegan</actor>
+      <actor>Jackie Chan</actor>
+      <actor>Jeremy Ratchford</actor>
+    </credits>
+    <rating system="">
+      <value>SC</value>
+    </rating>
+  </programme>
+  <programme start="20150315091500 +0100" stop="20150315101500 +0100" channel="fdf-734.laguiatv.com">
+    <title lang="es">Caso abierto</title>
+    <desc lang="es">Serie de investigación policial. La detective Lilly Rush, trabaja para el Departamento de Policía de Filadelfia, en casos....</desc>
+    <credits>
+      <actor>John Finnegan</actor>
+      <actor>Jackie Chan</actor>
+      <actor>Jeremy Ratchford</actor>
+    </credits>
+    <rating system="">
+      <value>SC</value>
+    </rating>
+  </programme>
+  <programme start="20150315101500 +0100" stop="20150315110000 +0100" channel="fdf-734.laguiatv.com">
+    <title lang="es">Caso abierto</title>
+    <desc lang="es">Serie de investigación policial. La detective Lilly Rush, trabaja para el Departamento de Policía de Filadelfia, en casos....</desc>
+    <credits>
+      <actor>John Finnegan</actor>
+      <actor>Jackie Chan</actor>
+      <actor>Jeremy Ratchford</actor>
+    </credits>
+    <rating system="">
+      <value>SC</value>
+    </rating>
+  </programme>
+  <programme start="20150315110000 +0100" stop="20150315114500 +0100" channel="fdf-734.laguiatv.com">
+    <title lang="es">Caso abierto</title>
+    <desc lang="es">Serie de investigación policial. La detective Lilly Rush, trabaja para el Departamento de Policía de Filadelfia, en casos....</desc>
+    <credits>
+      <actor>John Finnegan</actor>
+      <actor>Jackie Chan</actor>
+      <actor>Jeremy Ratchford</actor>
+    </credits>
+    <rating system="">
+      <value>SC</value>
+    </rating>
+  </programme>
+  <programme start="20150315114500 +0100" stop="20150315123000 +0100" channel="fdf-734.laguiatv.com">
+    <title lang="es">Caso abierto</title>
+    <desc lang="es">Serie de investigación policial. La detective Lilly Rush, trabaja para el Departamento de Policía de Filadelfia, en casos....</desc>
+    <credits>
+      <actor>John Finnegan</actor>
+      <actor>Jackie Chan</actor>
+      <actor>Jeremy Ratchford</actor>
+    </credits>
+    <rating system="">
+      <value>SC</value>
+    </rating>
+  </programme>
+  <programme start="20150315123000 +0100" stop="20150315133000 +0100" channel="fdf-734.laguiatv.com">
+    <title lang="es">Mentes criminales</title>
+    <desc lang="es">Muestra el trabajo diario de una brigada de criminalistas de elite, perteneciente al FBI, cuya especialidad es analizar....</desc>
+    <credits>
+      <actor>Mandy Patinkin</actor>
+      <actor>Alfredo Landa</actor>
+      <actor>Thomas Gibson</actor>
+    </credits>
+    <rating system="">
+      <value>+13</value>
+    </rating>
+  </programme>
+  <programme start="20150315133000 +0100" stop="20150315141500 +0100" channel="fdf-734.laguiatv.com">
+    <title lang="es">Mentes criminales</title>
+    <desc lang="es">Muestra el trabajo diario de una brigada de criminalistas de elite, perteneciente al FBI, cuya especialidad es analizar....</desc>
+    <credits>
+      <actor>Mandy Patinkin</actor>
+      <actor>Alfredo Landa</actor>
+      <actor>Thomas Gibson</actor>
+    </credits>
+    <rating system="">
+      <value>+13</value>
+    </rating>
+  </programme>
+  <programme start="20150315141500 +0100" stop="20150315150000 +0100" channel="fdf-734.laguiatv.com">
+    <title lang="es">Mentes criminales</title>
+    <desc lang="es">Muestra el trabajo diario de una brigada de criminalistas de elite, perteneciente al FBI, cuya especialidad es analizar....</desc>
+    <credits>
+      <actor>Mandy Patinkin</actor>
+      <actor>Alfredo Landa</actor>
+      <actor>Thomas Gibson</actor>
+    </credits>
+    <rating system="">
+      <value>+13</value>
+    </rating>
+  </programme>
+  <programme start="20150315150000 +0100" stop="20150315164500 +0100" channel="fdf-734.laguiatv.com">
+    <title lang="es">La que se avecina.</title>
+  </programme>
+  <programme start="20150315164500 +0100" stop="20150315174500 +0100" channel="fdf-734.laguiatv.com">
+    <title lang="es">Aída</title>
+    <desc lang="es">Serie que recoge las dificultades de Aída para hacer frente a la vida como mujer separada, madre de dos hijos....</desc>
+    <credits>
+      <actor>Daniel J. Travanti</actor>
+      <actor>Donna Mills</actor>
+      <actor>Melani Olivares</actor>
+    </credits>
+    <rating system="">
+      <value>+7</value>
+    </rating>
+  </programme>
+  <programme start="20150315174500 +0100" stop="20150315184500 +0100" channel="fdf-734.laguiatv.com">
+    <title lang="es">Aída</title>
+    <desc lang="es">Serie que recoge las dificultades de Aída para hacer frente a la vida como mujer separada, madre de dos hijos....</desc>
+    <credits>
+      <actor>Daniel J. Travanti</actor>
+      <actor>Donna Mills</actor>
+      <actor>Melani Olivares</actor>
+    </credits>
+    <rating system="">
+      <value>+7</value>
+    </rating>
+  </programme>
+  <programme start="20150315184500 +0100" stop="20150315203000 +0100" channel="fdf-734.laguiatv.com">
+    <title lang="es">La que se avecina.</title>
+  </programme>
+  <programme start="20150315203000 +0100" stop="20150315223000 +0100" channel="fdf-734.laguiatv.com">
+    <title lang="es">La que se avecina.</title>
+  </programme>
+  <programme start="20150315223000 +0100" stop="20150315233000 +0100" channel="fdf-734.laguiatv.com">
+    <title lang="es">Mentes criminales</title>
+    <desc lang="es">Muestra el trabajo diario de una brigada de criminalistas de elite, perteneciente al FBI, cuya especialidad es analizar....</desc>
+    <credits>
+      <actor>Mandy Patinkin</actor>
+      <actor>Alfredo Landa</actor>
+      <actor>Thomas Gibson</actor>
+    </credits>
+    <rating system="">
+      <value>+13</value>
+    </rating>
+  </programme>
+  <programme start="20150315233000 +0100" stop="20150316003000 +0100" channel="fdf-734.laguiatv.com">
+    <title lang="es">Mentes criminales</title>
+    <desc lang="es">Muestra el trabajo diario de una brigada de criminalistas de elite, perteneciente al FBI, cuya especialidad es analizar....</desc>
+    <credits>
+      <actor>Mandy Patinkin</actor>
+      <actor>Alfredo Landa</actor>
+      <actor>Thomas Gibson</actor>
+    </credits>
+    <rating system="">
+      <value>+13</value>
+    </rating>
+  </programme>
+  <programme start="20150316003000 +0100" stop="20150316011500 +0100" channel="fdf-734.laguiatv.com">
+    <title lang="es">Mentes criminales</title>
+    <desc lang="es">Muestra el trabajo diario de una brigada de criminalistas de elite, perteneciente al FBI, cuya especialidad es analizar....</desc>
+    <credits>
+      <actor>Mandy Patinkin</actor>
+      <actor>Alfredo Landa</actor>
+      <actor>Thomas Gibson</actor>
+    </credits>
+    <rating system="">
+      <value>+13</value>
+    </rating>
+  </programme>
+  <programme start="20150316011500 +0100" stop="20150316020000 +0100" channel="fdf-734.laguiatv.com">
+    <title lang="es">Mentes criminales</title>
+    <desc lang="es">Muestra el trabajo diario de una brigada de criminalistas de elite, perteneciente al FBI, cuya especialidad es analizar....</desc>
+    <credits>
+      <actor>Mandy Patinkin</actor>
+      <actor>Alfredo Landa</actor>
+      <actor>Thomas Gibson</actor>
+    </credits>
+    <rating system="">
+      <value>+13</value>
+    </rating>
+  </programme>
+  <programme start="20150316020000 +0100" stop="20150316024500 +0100" channel="fdf-734.laguiatv.com">
+    <title lang="es">Mentes criminales</title>
+    <desc lang="es">Muestra el trabajo diario de una brigada de criminalistas de elite, perteneciente al FBI, cuya especialidad es analizar....</desc>
+    <credits>
+      <actor>Mandy Patinkin</actor>
+      <actor>Alfredo Landa</actor>
+      <actor>Thomas Gibson</actor>
+    </credits>
+    <rating system="">
+      <value>+13</value>
+    </rating>
+  </programme>
+  <programme start="20150316024500 +0100" stop="20150316033000 +0100" channel="fdf-734.laguiatv.com">
+    <title lang="es">Mentes criminales</title>
+    <desc lang="es">Muestra el trabajo diario de una brigada de criminalistas de elite, perteneciente al FBI, cuya especialidad es analizar....</desc>
+    <credits>
+      <actor>Mandy Patinkin</actor>
+      <actor>Alfredo Landa</actor>
+      <actor>Thomas Gibson</actor>
+    </credits>
+    <rating system="">
+      <value>+13</value>
+    </rating>
+  </programme>
+  <programme start="20150316033000 +0100" stop="20150316051500 +0100" channel="fdf-734.laguiatv.com">
+    <title lang="es">La línea de la vida</title>
+    <desc lang="es">Espacio divulgativo.</desc>
+    <rating system="">
+      <value>+18</value>
+    </rating>
+  </programme>
+  <programme start="20150316051500 +0100" stop="20150316053000 +0100" channel="fdf-734.laguiatv.com">
+    <title lang="es">Mitelemúsica</title>
+    <desc lang="es">Programa que combina entrevistas y actuaciones en directo de artistas musicales con reportajes que muestran los secretos del estudio de grabación y el proceso de creación musical.</desc>
+    <rating system="">
+      <value>TP</value>
+    </rating>
+  </programme>
+  <programme start="20150316053000 +0100" stop="20150316063000 +0100" channel="fdf-734.laguiatv.com">
+    <title lang="es">Infocomerciales</title>
+    <desc lang="es">Espacio dedicado a la promoción y venta telefónica de diversos productos.</desc>
+    <rating system="">
+      <value>TP</value>
+    </rating>
+  </programme>
+  <programme start="20150316063000 +0100" stop="20150316074500 +0100" channel="fdf-734.laguiatv.com">
+    <title lang="es">Infocomerciales</title>
+    <desc lang="es">Espacio dedicado a la promoción y venta telefónica de diversos productos.</desc>
+    <rating system="">
+      <value>TP</value>
+    </rating>
+  </programme>
+  <programme start="20150316074500 +0100" stop="20150316083000 +0100" channel="fdf-734.laguiatv.com">
+    <title lang="es">I love TV</title>
+    <desc lang="es">Espacio de zapping que recopila las mejores imágenes de la televisión nacional e internacional.</desc>
+    <rating system="">
+      <value>TP</value>
+    </rating>
+  </programme>
+  <programme start="20150316083000 +0100" stop="20150316094500 +0100" channel="fdf-734.laguiatv.com">
+    <title lang="es">Friends</title>
+    <desc lang="es">Teleserie centrada en la vida cotidiana de seis jóvenes norteamericanos, sus interacciones, y problemas, y narrada de....</desc>
+    <credits>
+      <actor>Greta Garbo</actor>
+      <actor>Lionel Barrymore</actor>
+      <actor>Laura Hope Crews</actor>
+    </credits>
+    <rating system="">
+      <value>+13</value>
+    </rating>
+  </programme>
+  <programme start="20150316094500 +0100" stop="20150316111500 +0100" channel="fdf-734.laguiatv.com">
+    <title lang="es">Los Serrano</title>
+    <desc lang="es">Diego Serrano, un viudo con tres hijos, se casa con su amor de juventud, Lucia, ahora divorciada y con dos hijas. Todos....</desc>
+    <credits>
+      <actor>Antonio Resines</actor>
+      <actor>Donald Sutherland</actor>
+      <actor>Charlie Sheen</actor>
+    </credits>
+    <rating system="">
+      <value>SC</value>
+    </rating>
+  </programme>
+  <programme start="20150316111500 +0100" stop="20150316123000 +0100" channel="fdf-734.laguiatv.com">
+    <title lang="es">Aída</title>
+    <desc lang="es">Serie que recoge las dificultades de Aída para hacer frente a la vida como mujer separada, madre de dos hijos....</desc>
+    <credits>
+      <actor>Daniel J. Travanti</actor>
+      <actor>Donna Mills</actor>
+      <actor>Melani Olivares</actor>
+    </credits>
+    <rating system="">
+      <value>+7</value>
+    </rating>
+  </programme>
+  <programme start="20150316123000 +0100" stop="20150316143000 +0100" channel="fdf-734.laguiatv.com">
+    <title lang="es">La que se avecina.</title>
+  </programme>
+  <programme start="20150316143000 +0100" stop="20150316151500 +0100" channel="fdf-734.laguiatv.com">
+    <title lang="es">Gym Tony</title>
+  </programme>
+  <programme start="20150316151500 +0100" stop="20150316170000 +0100" channel="fdf-734.laguiatv.com">
+    <title lang="es">La que se avecina.</title>
+  </programme>
+  <programme start="20150316184500 +0100" stop="20150316200000 +0100" channel="fdf-734.laguiatv.com">
+    <title lang="es">Camera café</title>
+    <desc lang="es">Programa de sketches en el que varios personajes reflejan en tono de humor el día a día en una oficina.</desc>
+    <rating system="">
+      <value>TP</value>
+    </rating>
+  </programme>
+  <programme start="20150316200000 +0100" stop="20150316211500 +0100" channel="fdf-734.laguiatv.com">
+    <title lang="es">Aída</title>
+    <desc lang="es">Serie que recoge las dificultades de Aída para hacer frente a la vida como mujer separada, madre de dos hijos....</desc>
+    <credits>
+      <actor>Daniel J. Travanti</actor>
+      <actor>Donna Mills</actor>
+      <actor>Melani Olivares</actor>
+    </credits>
+    <rating system="">
+      <value>+7</value>
+    </rating>
+  </programme>
+  <programme start="20150316211500 +0100" stop="20150316223000 +0100" channel="fdf-734.laguiatv.com">
+    <title lang="es">Aída</title>
+    <desc lang="es">Serie que recoge las dificultades de Aída para hacer frente a la vida como mujer separada, madre de dos hijos....</desc>
+    <credits>
+      <actor>Daniel J. Travanti</actor>
+      <actor>Donna Mills</actor>
+      <actor>Melani Olivares</actor>
+    </credits>
+    <rating system="">
+      <value>+7</value>
+    </rating>
+  </programme>
+  <programme start="20150316223000 +0100" stop="20150316234500 +0100" channel="fdf-734.laguiatv.com">
+    <title lang="es">Aída</title>
+    <desc lang="es">Serie que recoge las dificultades de Aída para hacer frente a la vida como mujer separada, madre de dos hijos....</desc>
+    <credits>
+      <actor>Daniel J. Travanti</actor>
+      <actor>Donna Mills</actor>
+      <actor>Melani Olivares</actor>
+    </credits>
+    <rating system="">
+      <value>+7</value>
+    </rating>
+  </programme>
+  <programme start="20150316234500 +0100" stop="20150317004500 +0100" channel="fdf-734.laguiatv.com">
+    <title lang="es">Aída</title>
+    <desc lang="es">Serie que recoge las dificultades de Aída para hacer frente a la vida como mujer separada, madre de dos hijos....</desc>
+    <credits>
+      <actor>Daniel J. Travanti</actor>
+      <actor>Donna Mills</actor>
+      <actor>Melani Olivares</actor>
+    </credits>
+    <rating system="">
+      <value>+7</value>
+    </rating>
+  </programme>
+  <programme start="20150317004500 +0100" stop="20150317024500 +0100" channel="fdf-734.laguiatv.com">
+    <title lang="es">La que se avecina.</title>
+  </programme>
+  <programme start="20150317024500 +0100" stop="20150317033000 +0100" channel="fdf-734.laguiatv.com">
+    <title lang="es">Hoy se nos avecina</title>
+    <rating system="">
+      <value>+7</value>
+    </rating>
+  </programme>
+  <programme start="20150317033000 +0100" stop="20150317051500 +0100" channel="fdf-734.laguiatv.com">
+    <title lang="es">La línea de la vida</title>
+    <desc lang="es">Espacio divulgativo.</desc>
+    <rating system="">
+      <value>+18</value>
+    </rating>
+  </programme>
+  <programme start="20150317051500 +0100" stop="20150317053000 +0100" channel="fdf-734.laguiatv.com">
+    <title lang="es">Mitelemúsica</title>
+    <desc lang="es">Programa que combina entrevistas y actuaciones en directo de artistas musicales con reportajes que muestran los secretos del estudio de grabación y el proceso de creación musical.</desc>
+    <rating system="">
+      <value>TP</value>
+    </rating>
+  </programme>
+  <programme start="20150317053000 +0100" stop="20150317063000 +0100" channel="fdf-734.laguiatv.com">
+    <title lang="es">Infocomerciales</title>
+    <desc lang="es">Espacio dedicado a la promoción y venta telefónica de diversos productos.</desc>
+    <rating system="">
+      <value>TP</value>
+    </rating>
+  </programme>
+  <programme start="20150317063000 +0100" stop="20150317074500 +0100" channel="fdf-734.laguiatv.com">
+    <title lang="es">Infocomerciales</title>
+    <desc lang="es">Espacio dedicado a la promoción y venta telefónica de diversos productos.</desc>
+    <rating system="">
+      <value>TP</value>
+    </rating>
+  </programme>
+  <programme start="20150317074500 +0100" stop="20150317083000 +0100" channel="fdf-734.laguiatv.com">
+    <title lang="es">I love TV</title>
+    <desc lang="es">Espacio de zapping que recopila las mejores imágenes de la televisión nacional e internacional.</desc>
+    <rating system="">
+      <value>TP</value>
+    </rating>
+  </programme>
+  <programme start="20150317083000 +0100" stop="20150317094500 +0100" channel="fdf-734.laguiatv.com">
+    <title lang="es">Friends</title>
+    <desc lang="es">Teleserie centrada en la vida cotidiana de seis jóvenes norteamericanos, sus interacciones, y problemas, y narrada de....</desc>
+    <credits>
+      <actor>Greta Garbo</actor>
+      <actor>Lionel Barrymore</actor>
+      <actor>Laura Hope Crews</actor>
+    </credits>
+    <rating system="">
+      <value>+13</value>
+    </rating>
+  </programme>
+  <programme start="20150317094500 +0100" stop="20150317111500 +0100" channel="fdf-734.laguiatv.com">
+    <title lang="es">Los Serrano</title>
+    <desc lang="es">Diego Serrano, un viudo con tres hijos, se casa con su amor de juventud, Lucia, ahora divorciada y con dos hijas. Todos....</desc>
+    <credits>
+      <actor>Antonio Resines</actor>
+      <actor>Donald Sutherland</actor>
+      <actor>Charlie Sheen</actor>
+    </credits>
+    <rating system="">
+      <value>SC</value>
+    </rating>
+  </programme>
+  <programme start="20150317111500 +0100" stop="20150317123000 +0100" channel="fdf-734.laguiatv.com">
+    <title lang="es">Aída</title>
+    <desc lang="es">Serie que recoge las dificultades de Aída para hacer frente a la vida como mujer separada, madre de dos hijos....</desc>
+    <credits>
+      <actor>Daniel J. Travanti</actor>
+      <actor>Donna Mills</actor>
+      <actor>Melani Olivares</actor>
+    </credits>
+    <rating system="">
+      <value>+7</value>
+    </rating>
+  </programme>
+  <programme start="20150317123000 +0100" stop="20150317143000 +0100" channel="fdf-734.laguiatv.com">
+    <title lang="es">La que se avecina.</title>
+  </programme>
+  <programme start="20150317143000 +0100" stop="20150317151500 +0100" channel="fdf-734.laguiatv.com">
+    <title lang="es">Gym Tony</title>
+  </programme>
+  <programme start="20150317151500 +0100" stop="20150317170000 +0100" channel="fdf-734.laguiatv.com">
+    <title lang="es">La que se avecina.</title>
+  </programme>
+  <programme start="20150317184500 +0100" stop="20150317200000 +0100" channel="fdf-734.laguiatv.com">
+    <title lang="es">Camera café</title>
+    <desc lang="es">Programa de sketches en el que varios personajes reflejan en tono de humor el día a día en una oficina.</desc>
+    <rating system="">
+      <value>TP</value>
+    </rating>
+  </programme>
+  <programme start="20150317200000 +0100" stop="20150317211500 +0100" channel="fdf-734.laguiatv.com">
+    <title lang="es">Aída</title>
+    <desc lang="es">Serie que recoge las dificultades de Aída para hacer frente a la vida como mujer separada, madre de dos hijos....</desc>
+    <credits>
+      <actor>Daniel J. Travanti</actor>
+      <actor>Donna Mills</actor>
+      <actor>Melani Olivares</actor>
+    </credits>
+    <rating system="">
+      <value>+7</value>
+    </rating>
+  </programme>
+  <programme start="20150317211500 +0100" stop="20150317223000 +0100" channel="fdf-734.laguiatv.com">
+    <title lang="es">Aída</title>
+    <desc lang="es">Serie que recoge las dificultades de Aída para hacer frente a la vida como mujer separada, madre de dos hijos....</desc>
+    <credits>
+      <actor>Daniel J. Travanti</actor>
+      <actor>Donna Mills</actor>
+      <actor>Melani Olivares</actor>
+    </credits>
+    <rating system="">
+      <value>+7</value>
+    </rating>
+  </programme>
+  <programme start="20150317223000 +0100" stop="20150318003000 +0100" channel="fdf-734.laguiatv.com">
+    <title lang="es">Cine</title>
+    <desc lang="es">Sin determinar.</desc>
+    <rating system="">
+      <value>SC</value>
+    </rating>
+  </programme>
+  <programme start="20150314011000 +0100" stop="20150314023000 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Con el culo al aire</title>
+    <desc lang="es">CON EL CULO AL AIRE es una serie moderna y divertida que cuenta el día a día de gente que intenta sobrevivir y hace lo....</desc>
+    <credits>
+      <actor>Vicente Romero</actor>
+      <actor>Toni Acosta</actor>
+      <actor>Paco Tous</actor>
+    </credits>
+  </programme>
+  <programme start="20150314030000 +0100" stop="20150314033000 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Canal Bingo</title>
+    <rating system="">
+      <value>+18</value>
+    </rating>
+  </programme>
+  <programme start="20150314033000 +0100" stop="20150314034500 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">English House TV</title>
+    <rating system="">
+      <value>TP</value>
+    </rating>
+  </programme>
+  <programme start="20150314034500 +0100" stop="20150314060000 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Minutos musicales</title>
+    <rating system="">
+      <value>TP</value>
+    </rating>
+  </programme>
+  <programme start="20150314060000 +0100" stop="20150314061500 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Impacto total</title>
+    <desc lang="es">Programa basado en el exitoso The World Most Amazing Videos de la NBC que muestra los vídeos nacionales e internacionales más espectaculares.</desc>
+    <rating system="">
+      <value>+7</value>
+    </rating>
+  </programme>
+  <programme start="20150314061500 +0100" stop="20150314080000 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Cine</title>
+    <desc lang="es">Sin determinar.</desc>
+    <rating system="">
+      <value>SC</value>
+    </rating>
+  </programme>
+  <programme start="20150314080000 +0100" stop="20150314083300 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Neox Kidz</title>
+  </programme>
+  <programme start="20150314083300 +0100" stop="20150314090600 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Shin-Chan</title>
+    <desc lang="es">Serie que nos muestra pequeñas anécdotas en la vida de Shinnosuke, Shin-Chan, un niño de cinco años que vive con sus....</desc>
+    <rating system="">
+      <value>SC</value>
+    </rating>
+  </programme>
+  <programme start="20150314090600 +0100" stop="20150314093900 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Super Cuatro</title>
+  </programme>
+  <programme start="20150314093900 +0100" stop="20150314101200 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Angry Birds</title>
+  </programme>
+  <programme start="20150314101200 +0100" stop="20150314104500 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Stella</title>
+    <desc lang="es">Comedia producida por la MTV, en la que no sólo lo absurdo cobra protagonismo, sino que también se satiriza al extremo....</desc>
+    <credits>
+      <actor>John Corbett</actor>
+      <actor>Tom Irwin</actor>
+      <actor>Rick Schorder</actor>
+    </credits>
+    <rating system="">
+      <value>SC</value>
+    </rating>
+  </programme>
+  <programme start="20150314104500 +0100" stop="20150314111800 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Piggy tales</title>
+  </programme>
+  <programme start="20150314111800 +0100" stop="20150314115100 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Los padrinos mágicos</title>
+    <desc lang="es">Timmy es un niño de diez años con unos padrinos muy especiales: Cosmo y Wanda, capaces de hacer realidad hasta su más....</desc>
+  </programme>
+  <programme start="20150314115100 +0100" stop="20150314122400 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Sanjay y Craig</title>
+  </programme>
+  <programme start="20150314122400 +0100" stop="20150314125700 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Los Thundermans</title>
+  </programme>
+  <programme start="20150314125700 +0100" stop="20150314133000 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Sam y Cat</title>
+  </programme>
+  <programme start="20150314133000 +0100" stop="20150314140000 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Slam City</title>
+  </programme>
+  <programme start="20150314140000 +0100" stop="20150314144500 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">RAW Pressing Catch</title>
+    <rating system="">
+      <value>+12</value>
+    </rating>
+  </programme>
+  <programme start="20150314144500 +0100" stop="20150314153000 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">El Club de la Comedia</title>
+    <desc lang="es">Programa de humor en el que cuatro famosos realizan un monólogo sobre diversos aspectos de la vida cotidiana.</desc>
+    <rating system="">
+      <value>+7</value>
+    </rating>
+  </programme>
+  <programme start="20150314153000 +0100" stop="20150314173000 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Cine</title>
+    <desc lang="es">Sin determinar.</desc>
+    <rating system="">
+      <value>SC</value>
+    </rating>
+  </programme>
+  <programme start="20150314173000 +0100" stop="20150314193000 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Cine</title>
+    <desc lang="es">Sin determinar.</desc>
+    <rating system="">
+      <value>SC</value>
+    </rating>
+  </programme>
+  <programme start="20150314193000 +0100" stop="20150314194000 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Top Trending Tele</title>
+    <rating system="">
+      <value>+7</value>
+    </rating>
+  </programme>
+  <programme start="20150314194000 +0100" stop="20150314195800 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">American Dad</title>
+    <desc lang="es">La serie gira en torno al personaje de Stan, un padre de familia republicano, conservador y altamente paranoico que....</desc>
+    <rating system="">
+      <value>SC</value>
+    </rating>
+  </programme>
+  <programme start="20150314195800 +0100" stop="20150314201500 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">American Dad</title>
+    <desc lang="es">La serie gira en torno al personaje de Stan, un padre de familia republicano, conservador y altamente paranoico que....</desc>
+    <rating system="">
+      <value>SC</value>
+    </rating>
+  </programme>
+  <programme start="20150314201500 +0100" stop="20150314204700 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Padre de Familia</title>
+    <desc lang="es">Peter Griffin y su esposa Lois lo tienen todo: una casa bonita, una vida agradable y tres hijos muy especiales; Stewie,....</desc>
+    <rating system="">
+      <value>+16</value>
+    </rating>
+  </programme>
+  <programme start="20150314204700 +0100" stop="20150314212000 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Padre de Familia</title>
+    <desc lang="es">Peter Griffin y su esposa Lois lo tienen todo: una casa bonita, una vida agradable y tres hijos muy especiales; Stewie,....</desc>
+    <rating system="">
+      <value>+16</value>
+    </rating>
+  </programme>
+  <programme start="20150314212000 +0100" stop="20150314214300 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Los Simpson</title>
+    <desc lang="es">Los Simpson son una peculiar familia norteamericana de clase media. Homer y Marge son los padres de tres niños....</desc>
+    <rating system="">
+      <value>SC</value>
+    </rating>
+  </programme>
+  <programme start="20150314214300 +0100" stop="20150314220600 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Los Simpson</title>
+    <desc lang="es">Los Simpson son una peculiar familia norteamericana de clase media. Homer y Marge son los padres de tres niños....</desc>
+    <rating system="">
+      <value>SC</value>
+    </rating>
+  </programme>
+  <programme start="20150314220600 +0100" stop="20150314223000 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Los Simpson</title>
+    <desc lang="es">Los Simpson son una peculiar familia norteamericana de clase media. Homer y Marge son los padres de tres niños....</desc>
+    <rating system="">
+      <value>SC</value>
+    </rating>
+  </programme>
+  <programme start="20150314223000 +0100" stop="20150314235000 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Con el culo al aire</title>
+    <desc lang="es">CON EL CULO AL AIRE es una serie moderna y divertida que cuenta el día a día de gente que intenta sobrevivir y hace lo....</desc>
+    <credits>
+      <actor>Vicente Romero</actor>
+      <actor>Toni Acosta</actor>
+      <actor>Paco Tous</actor>
+    </credits>
+  </programme>
+  <programme start="20150314235000 +0100" stop="20150315023000 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Con el culo al aire</title>
+    <desc lang="es">CON EL CULO AL AIRE es una serie moderna y divertida que cuenta el día a día de gente que intenta sobrevivir y hace lo....</desc>
+    <credits>
+      <actor>Vicente Romero</actor>
+      <actor>Toni Acosta</actor>
+      <actor>Paco Tous</actor>
+    </credits>
+  </programme>
+  <programme start="20150315030000 +0100" stop="20150315031500 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Canal Bingo</title>
+    <rating system="">
+      <value>+18</value>
+    </rating>
+  </programme>
+  <programme start="20150315031500 +0100" stop="20150315033000 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">English House TV</title>
+    <rating system="">
+      <value>TP</value>
+    </rating>
+  </programme>
+  <programme start="20150315033000 +0100" stop="20150315060000 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Minutos musicales</title>
+    <rating system="">
+      <value>TP</value>
+    </rating>
+  </programme>
+  <programme start="20150315060000 +0100" stop="20150315061500 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Impacto total</title>
+    <desc lang="es">Programa basado en el exitoso The World Most Amazing Videos de la NBC que muestra los vídeos nacionales e internacionales más espectaculares.</desc>
+    <rating system="">
+      <value>+7</value>
+    </rating>
+  </programme>
+  <programme start="20150315061500 +0100" stop="20150315080000 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Cine</title>
+    <desc lang="es">Sin determinar.</desc>
+    <rating system="">
+      <value>SC</value>
+    </rating>
+  </programme>
+  <programme start="20150315080000 +0100" stop="20150315083300 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Neox Kidz</title>
+  </programme>
+  <programme start="20150315083300 +0100" stop="20150315090600 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Shin-Chan</title>
+    <desc lang="es">Serie que nos muestra pequeñas anécdotas en la vida de Shinnosuke, Shin-Chan, un niño de cinco años que vive con sus....</desc>
+    <rating system="">
+      <value>SC</value>
+    </rating>
+  </programme>
+  <programme start="20150315090600 +0100" stop="20150315093900 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Super Cuatro</title>
+  </programme>
+  <programme start="20150315093900 +0100" stop="20150315101200 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Angry Birds</title>
+  </programme>
+  <programme start="20150315101200 +0100" stop="20150315104500 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Stella</title>
+    <desc lang="es">Comedia producida por la MTV, en la que no sólo lo absurdo cobra protagonismo, sino que también se satiriza al extremo....</desc>
+    <credits>
+      <actor>John Corbett</actor>
+      <actor>Tom Irwin</actor>
+      <actor>Rick Schorder</actor>
+    </credits>
+    <rating system="">
+      <value>SC</value>
+    </rating>
+  </programme>
+  <programme start="20150315104500 +0100" stop="20150315111800 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Piggy tales</title>
+  </programme>
+  <programme start="20150315111800 +0100" stop="20150315115100 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Los padrinos mágicos</title>
+    <desc lang="es">Timmy es un niño de diez años con unos padrinos muy especiales: Cosmo y Wanda, capaces de hacer realidad hasta su más....</desc>
+  </programme>
+  <programme start="20150315115100 +0100" stop="20150315122400 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Sanjay y Craig</title>
+  </programme>
+  <programme start="20150315122400 +0100" stop="20150315125700 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Los Thundermans</title>
+  </programme>
+  <programme start="20150315125700 +0100" stop="20150315133000 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Sam y Cat</title>
+  </programme>
+  <programme start="20150315133000 +0100" stop="20150315140000 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Slam City</title>
+  </programme>
+  <programme start="20150315140000 +0100" stop="20150315143000 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Smack Down Pressing Catch</title>
+    <rating system="">
+      <value>+12</value>
+    </rating>
+  </programme>
+  <programme start="20150315143000 +0100" stop="20150315153000 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">El Club de la Comedia</title>
+    <desc lang="es">Programa de humor en el que cuatro famosos realizan un monólogo sobre diversos aspectos de la vida cotidiana.</desc>
+    <rating system="">
+      <value>+7</value>
+    </rating>
+  </programme>
+  <programme start="20150315153000 +0100" stop="20150315173000 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Cine</title>
+    <desc lang="es">Sin determinar.</desc>
+    <rating system="">
+      <value>SC</value>
+    </rating>
+  </programme>
+  <programme start="20150315173000 +0100" stop="20150315193000 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Cine</title>
+    <desc lang="es">Sin determinar.</desc>
+    <rating system="">
+      <value>SC</value>
+    </rating>
+  </programme>
+  <programme start="20150315193000 +0100" stop="20150315194000 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Top Trending Tele</title>
+    <rating system="">
+      <value>+7</value>
+    </rating>
+  </programme>
+  <programme start="20150315194000 +0100" stop="20150315195800 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">American Dad</title>
+    <desc lang="es">La serie gira en torno al personaje de Stan, un padre de familia republicano, conservador y altamente paranoico que....</desc>
+    <rating system="">
+      <value>SC</value>
+    </rating>
+  </programme>
+  <programme start="20150315195800 +0100" stop="20150315201500 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">American Dad</title>
+    <desc lang="es">La serie gira en torno al personaje de Stan, un padre de familia republicano, conservador y altamente paranoico que....</desc>
+    <rating system="">
+      <value>SC</value>
+    </rating>
+  </programme>
+  <programme start="20150315201500 +0100" stop="20150315204700 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Padre de Familia</title>
+    <desc lang="es">Peter Griffin y su esposa Lois lo tienen todo: una casa bonita, una vida agradable y tres hijos muy especiales; Stewie,....</desc>
+    <rating system="">
+      <value>+16</value>
+    </rating>
+  </programme>
+  <programme start="20150315204700 +0100" stop="20150315212000 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Padre de Familia</title>
+    <desc lang="es">Peter Griffin y su esposa Lois lo tienen todo: una casa bonita, una vida agradable y tres hijos muy especiales; Stewie,....</desc>
+    <rating system="">
+      <value>+16</value>
+    </rating>
+  </programme>
+  <programme start="20150315212000 +0100" stop="20150315213300 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Los Simpson</title>
+    <desc lang="es">Los Simpson son una peculiar familia norteamericana de clase media. Homer y Marge son los padres de tres niños....</desc>
+    <rating system="">
+      <value>SC</value>
+    </rating>
+  </programme>
+  <programme start="20150315213300 +0100" stop="20150315214600 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Los Simpson</title>
+    <desc lang="es">Los Simpson son una peculiar familia norteamericana de clase media. Homer y Marge son los padres de tres niños....</desc>
+    <rating system="">
+      <value>SC</value>
+    </rating>
+  </programme>
+  <programme start="20150315214600 +0100" stop="20150315220000 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Los Simpson</title>
+    <desc lang="es">Los Simpson son una peculiar familia norteamericana de clase media. Homer y Marge son los padres de tres niños....</desc>
+    <rating system="">
+      <value>SC</value>
+    </rating>
+  </programme>
+  <programme start="20150315220000 +0100" stop="20150315223000 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Modern Family</title>
+    <desc lang="es">Una comedia con formato de falso documental que retrata a una típica (o atípica, según se mire) familia americana. Los....</desc>
+    <credits>
+      <actor>Alfredo Mayo</actor>
+      <actor>Darry Cowl</actor>
+      <actor>Blanca de Silos</actor>
+    </credits>
+    <rating system="">
+      <value>TP</value>
+    </rating>
+  </programme>
+  <programme start="20150315223000 +0100" stop="20150315230000 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Modern Family</title>
+    <desc lang="es">Una comedia con formato de falso documental que retrata a una típica (o atípica, según se mire) familia americana. Los....</desc>
+    <credits>
+      <actor>Alfredo Mayo</actor>
+      <actor>Darry Cowl</actor>
+      <actor>Blanca de Silos</actor>
+    </credits>
+    <rating system="">
+      <value>TP</value>
+    </rating>
+  </programme>
+  <programme start="20150315230000 +0100" stop="20150315233000 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Modern Family</title>
+    <desc lang="es">Una comedia con formato de falso documental que retrata a una típica (o atípica, según se mire) familia americana. Los....</desc>
+    <credits>
+      <actor>Alfredo Mayo</actor>
+      <actor>Darry Cowl</actor>
+      <actor>Blanca de Silos</actor>
+    </credits>
+    <rating system="">
+      <value>TP</value>
+    </rating>
+  </programme>
+  <programme start="20150315233000 +0100" stop="20150316024000 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">El Chiringuito de Jugones</title>
+    <desc lang="es">Josep Pedrerol y sus colaboradores ofrecen con su particular estilo el análisis, la polémica y las imágenes deportivas más impactantes del día.</desc>
+    <rating system="">
+      <value>TP</value>
+    </rating>
+  </programme>
+  <programme start="20150316033000 +0100" stop="20150316040000 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Canal Bingo</title>
+    <rating system="">
+      <value>+18</value>
+    </rating>
+  </programme>
+  <programme start="20150316040000 +0100" stop="20150316041000 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">English House TV</title>
+    <rating system="">
+      <value>TP</value>
+    </rating>
+  </programme>
+  <programme start="20150316041000 +0100" stop="20150316060000 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Minutos musicales</title>
+    <rating system="">
+      <value>TP</value>
+    </rating>
+  </programme>
+  <programme start="20150316060000 +0100" stop="20150316062500 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Impacto total</title>
+    <desc lang="es">Programa basado en el exitoso The World Most Amazing Videos de la NBC que muestra los vídeos nacionales e internacionales más espectaculares.</desc>
+    <rating system="">
+      <value>+7</value>
+    </rating>
+  </programme>
+  <programme start="20150316062500 +0100" stop="20150316070000 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Bestial</title>
+    <desc lang="es">Programa que descubre todos los secretos del mundo animal.</desc>
+    <rating system="">
+      <value>TP</value>
+    </rating>
+  </programme>
+  <programme start="20150316070000 +0100" stop="20150316072200 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Neox Kidz</title>
+  </programme>
+  <programme start="20150316072200 +0100" stop="20150316074400 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Shin-Chan</title>
+    <desc lang="es">Serie que nos muestra pequeñas anécdotas en la vida de Shinnosuke, Shin-Chan, un niño de cinco años que vive con sus....</desc>
+    <rating system="">
+      <value>SC</value>
+    </rating>
+  </programme>
+  <programme start="20150316074400 +0100" stop="20150316080600 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Angry Birds</title>
+  </programme>
+  <programme start="20150316080600 +0100" stop="20150316082800 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Stella</title>
+    <desc lang="es">Comedia producida por la MTV, en la que no sólo lo absurdo cobra protagonismo, sino que también se satiriza al extremo....</desc>
+    <credits>
+      <actor>John Corbett</actor>
+      <actor>Tom Irwin</actor>
+      <actor>Rick Schorder</actor>
+    </credits>
+    <rating system="">
+      <value>SC</value>
+    </rating>
+  </programme>
+  <programme start="20150316082800 +0100" stop="20150316085000 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Piggy tales</title>
+  </programme>
+  <programme start="20150316085000 +0100" stop="20150316091200 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Los padrinos mágicos</title>
+    <desc lang="es">Timmy es un niño de diez años con unos padrinos muy especiales: Cosmo y Wanda, capaces de hacer realidad hasta su más....</desc>
+  </programme>
+  <programme start="20150316091200 +0100" stop="20150316093400 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Rabbids, la invasión</title>
+  </programme>
+  <programme start="20150316093400 +0100" stop="20150316100000 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Shin-Chan</title>
+    <desc lang="es">Serie que nos muestra pequeñas anécdotas en la vida de Shinnosuke, Shin-Chan, un niño de cinco años que vive con sus....</desc>
+    <rating system="">
+      <value>SC</value>
+    </rating>
+  </programme>
+  <programme start="20150316100000 +0100" stop="20150316111500 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">El Barco</title>
+    <desc lang="es">Un cataclismo mundial, provocado por un fatal accidente en Ginebra (Suiza) durante la puesta en marcha del acelerador de....</desc>
+    <credits>
+      <actor>Dan Grimaldi</actor>
+      <actor>Robert Osth</actor>
+      <actor>Ruth Dardick</actor>
+    </credits>
+    <rating system="">
+      <value>SC</value>
+    </rating>
+  </programme>
+  <programme start="20150316111500 +0100" stop="20150316123000 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">El Barco</title>
+    <desc lang="es">Un cataclismo mundial, provocado por un fatal accidente en Ginebra (Suiza) durante la puesta en marcha del acelerador de....</desc>
+    <credits>
+      <actor>Dan Grimaldi</actor>
+      <actor>Robert Osth</actor>
+      <actor>Ruth Dardick</actor>
+    </credits>
+    <rating system="">
+      <value>SC</value>
+    </rating>
+  </programme>
+  <programme start="20150316123000 +0100" stop="20150316140000 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Aquí no hay quien viva</title>
+    <desc lang="es">Telecomedia ambientada en un edificio de viviendas en la que sus protagonistas son los propios vecinos, un grupo tan....</desc>
+    <credits>
+      <actor>Lea Thompson</actor>
+      <actor>Emma Penella</actor>
+      <actor>Mary Nell Santacroce</actor>
+    </credits>
+    <rating system="">
+      <value>+13</value>
+    </rating>
+  </programme>
+  <programme start="20150316140000 +0100" stop="20150316153000 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Aquí no hay quien viva</title>
+    <desc lang="es">Telecomedia ambientada en un edificio de viviendas en la que sus protagonistas son los propios vecinos, un grupo tan....</desc>
+    <credits>
+      <actor>Lea Thompson</actor>
+      <actor>Emma Penella</actor>
+      <actor>Mary Nell Santacroce</actor>
+    </credits>
+    <rating system="">
+      <value>+13</value>
+    </rating>
+  </programme>
+  <programme start="20150316153000 +0100" stop="20150316155000 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Dos hombres y medio</title>
+    <desc lang="es">La alocada vida de un escritor soltero se verá drásticamente alterada cuando su hermano y su sobrino de diez años se....</desc>
+    <credits>
+      <actor>Charlie Sheen</actor>
+      <actor>Timothy Busfield</actor>
+      <actor>Holland Taylor</actor>
+    </credits>
+    <rating system="">
+      <value>+13</value>
+    </rating>
+  </programme>
+  <programme start="20150316155000 +0100" stop="20150316161000 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Dos hombres y medio</title>
+    <desc lang="es">La alocada vida de un escritor soltero se verá drásticamente alterada cuando su hermano y su sobrino de diez años se....</desc>
+    <credits>
+      <actor>Charlie Sheen</actor>
+      <actor>Timothy Busfield</actor>
+      <actor>Holland Taylor</actor>
+    </credits>
+    <rating system="">
+      <value>+13</value>
+    </rating>
+  </programme>
+  <programme start="20150316161000 +0100" stop="20150316163000 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Dos hombres y medio</title>
+    <desc lang="es">La alocada vida de un escritor soltero se verá drásticamente alterada cuando su hermano y su sobrino de diez años se....</desc>
+    <credits>
+      <actor>Charlie Sheen</actor>
+      <actor>Timothy Busfield</actor>
+      <actor>Holland Taylor</actor>
+    </credits>
+    <rating system="">
+      <value>+13</value>
+    </rating>
+  </programme>
+  <programme start="20150316163000 +0100" stop="20150316164600 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">The Big Bang theory</title>
+  </programme>
+  <programme start="20150316164600 +0100" stop="20150316170200 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">The Big Bang theory</title>
+  </programme>
+  <programme start="20150316170200 +0100" stop="20150316171800 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">The Big Bang theory</title>
+  </programme>
+  <programme start="20150316171800 +0100" stop="20150316173500 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">The Big Bang theory</title>
+  </programme>
+  <programme start="20150316173500 +0100" stop="20150316175400 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Cómo conocí a vuestra Madre</title>
+    <desc lang="es">Ted Mosby cuenta a sus hijos, en 2030, cómo conoció a su madre, allá por el 2012. En su aventura le acompañarán sus....</desc>
+    <rating system="">
+      <value>TP</value>
+    </rating>
+  </programme>
+  <programme start="20150316175400 +0100" stop="20150316181300 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Cómo conocí a vuestra Madre</title>
+    <desc lang="es">Ted Mosby cuenta a sus hijos, en 2030, cómo conoció a su madre, allá por el 2012. En su aventura le acompañarán sus....</desc>
+    <rating system="">
+      <value>TP</value>
+    </rating>
+  </programme>
+  <programme start="20150316181300 +0100" stop="20150316183200 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Cómo conocí a vuestra Madre</title>
+    <desc lang="es">Ted Mosby cuenta a sus hijos, en 2030, cómo conoció a su madre, allá por el 2012. En su aventura le acompañarán sus....</desc>
+    <rating system="">
+      <value>TP</value>
+    </rating>
+  </programme>
+  <programme start="20150316183200 +0100" stop="20150316185000 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Cómo conocí a vuestra Madre</title>
+    <desc lang="es">Ted Mosby cuenta a sus hijos, en 2030, cómo conoció a su madre, allá por el 2012. En su aventura le acompañarán sus....</desc>
+    <rating system="">
+      <value>TP</value>
+    </rating>
+  </programme>
+  <programme start="20150316185000 +0100" stop="20150316190800 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Modern Family</title>
+    <desc lang="es">Una comedia con formato de falso documental que retrata a una típica (o atípica, según se mire) familia americana. Los....</desc>
+    <credits>
+      <actor>Alfredo Mayo</actor>
+      <actor>Darry Cowl</actor>
+      <actor>Blanca de Silos</actor>
+    </credits>
+    <rating system="">
+      <value>TP</value>
+    </rating>
+  </programme>
+  <programme start="20150316190800 +0100" stop="20150316192600 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Modern Family</title>
+    <desc lang="es">Una comedia con formato de falso documental que retrata a una típica (o atípica, según se mire) familia americana. Los....</desc>
+    <credits>
+      <actor>Alfredo Mayo</actor>
+      <actor>Darry Cowl</actor>
+      <actor>Blanca de Silos</actor>
+    </credits>
+    <rating system="">
+      <value>TP</value>
+    </rating>
+  </programme>
+  <programme start="20150316192600 +0100" stop="20150316194400 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Modern Family</title>
+    <desc lang="es">Una comedia con formato de falso documental que retrata a una típica (o atípica, según se mire) familia americana. Los....</desc>
+    <credits>
+      <actor>Alfredo Mayo</actor>
+      <actor>Darry Cowl</actor>
+      <actor>Blanca de Silos</actor>
+    </credits>
+    <rating system="">
+      <value>TP</value>
+    </rating>
+  </programme>
+  <programme start="20150316194400 +0100" stop="20150316200000 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Modern Family</title>
+    <desc lang="es">Una comedia con formato de falso documental que retrata a una típica (o atípica, según se mire) familia americana. Los....</desc>
+    <credits>
+      <actor>Alfredo Mayo</actor>
+      <actor>Darry Cowl</actor>
+      <actor>Blanca de Silos</actor>
+    </credits>
+    <rating system="">
+      <value>TP</value>
+    </rating>
+  </programme>
+  <programme start="20150316200000 +0100" stop="20150316202000 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Dos hombres y medio</title>
+    <desc lang="es">La alocada vida de un escritor soltero se verá drásticamente alterada cuando su hermano y su sobrino de diez años se....</desc>
+    <credits>
+      <actor>Charlie Sheen</actor>
+      <actor>Timothy Busfield</actor>
+      <actor>Holland Taylor</actor>
+    </credits>
+    <rating system="">
+      <value>+13</value>
+    </rating>
+  </programme>
+  <programme start="20150316202000 +0100" stop="20150316204000 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Dos hombres y medio</title>
+    <desc lang="es">La alocada vida de un escritor soltero se verá drásticamente alterada cuando su hermano y su sobrino de diez años se....</desc>
+    <credits>
+      <actor>Charlie Sheen</actor>
+      <actor>Timothy Busfield</actor>
+      <actor>Holland Taylor</actor>
+    </credits>
+    <rating system="">
+      <value>+13</value>
+    </rating>
+  </programme>
+  <programme start="20150316204000 +0100" stop="20150316210000 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Dos hombres y medio</title>
+    <desc lang="es">La alocada vida de un escritor soltero se verá drásticamente alterada cuando su hermano y su sobrino de diez años se....</desc>
+    <credits>
+      <actor>Charlie Sheen</actor>
+      <actor>Timothy Busfield</actor>
+      <actor>Holland Taylor</actor>
+    </credits>
+    <rating system="">
+      <value>+13</value>
+    </rating>
+  </programme>
+  <programme start="20150316210000 +0100" stop="20150316214500 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Padre de Familia</title>
+    <desc lang="es">Peter Griffin y su esposa Lois lo tienen todo: una casa bonita, una vida agradable y tres hijos muy especiales; Stewie,....</desc>
+    <rating system="">
+      <value>+16</value>
+    </rating>
+  </programme>
+  <programme start="20150316214500 +0100" stop="20150316220000 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Los Simpson</title>
+    <desc lang="es">Los Simpson son una peculiar familia norteamericana de clase media. Homer y Marge son los padres de tres niños....</desc>
+    <rating system="">
+      <value>SC</value>
+    </rating>
+  </programme>
+  <programme start="20150316220000 +0100" stop="20150316221500 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Los Simpson</title>
+    <desc lang="es">Los Simpson son una peculiar familia norteamericana de clase media. Homer y Marge son los padres de tres niños....</desc>
+    <rating system="">
+      <value>SC</value>
+    </rating>
+  </programme>
+  <programme start="20150316221500 +0100" stop="20150316223000 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Los Simpson</title>
+    <desc lang="es">Los Simpson son una peculiar familia norteamericana de clase media. Homer y Marge son los padres de tres niños....</desc>
+    <rating system="">
+      <value>SC</value>
+    </rating>
+  </programme>
+  <programme start="20150316223000 +0100" stop="20150316230200 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">The Walking Dead</title>
+    <desc lang="es">Adaptación del cómic homónimo de Robert Kirkman. La serie está ambientada en un futuro apocalíptico con la Tierra....</desc>
+    <rating system="">
+      <value>+18</value>
+    </rating>
+  </programme>
+  <programme start="20150316230200 +0100" stop="20150316233400 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">The Walking Dead</title>
+    <desc lang="es">Adaptación del cómic homónimo de Robert Kirkman. La serie está ambientada en un futuro apocalíptico con la Tierra....</desc>
+    <rating system="">
+      <value>+18</value>
+    </rating>
+  </programme>
+  <programme start="20150316233400 +0100" stop="20150317000500 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">The Walking Dead</title>
+    <desc lang="es">Adaptación del cómic homónimo de Robert Kirkman. La serie está ambientada en un futuro apocalíptico con la Tierra....</desc>
+    <rating system="">
+      <value>+18</value>
+    </rating>
+  </programme>
+  <programme start="20150317000500 +0100" stop="20150317023000 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">El Chiringuito de Jugones</title>
+    <desc lang="es">Josep Pedrerol y sus colaboradores ofrecen con su particular estilo el análisis, la polémica y las imágenes deportivas más impactantes del día.</desc>
+    <rating system="">
+      <value>TP</value>
+    </rating>
+  </programme>
+  <programme start="20150317023000 +0100" stop="20150317033000 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Teletienda club</title>
+    <rating system="">
+      <value>TP</value>
+    </rating>
+  </programme>
+  <programme start="20150317033000 +0100" stop="20150317040000 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Canal Bingo</title>
+    <rating system="">
+      <value>+18</value>
+    </rating>
+  </programme>
+  <programme start="20150317040000 +0100" stop="20150317041500 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">English House TV</title>
+    <rating system="">
+      <value>TP</value>
+    </rating>
+  </programme>
+  <programme start="20150317041500 +0100" stop="20150317060000 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Minutos musicales</title>
+    <rating system="">
+      <value>TP</value>
+    </rating>
+  </programme>
+  <programme start="20150317060000 +0100" stop="20150317062000 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Impacto total</title>
+    <desc lang="es">Programa basado en el exitoso The World Most Amazing Videos de la NBC que muestra los vídeos nacionales e internacionales más espectaculares.</desc>
+    <rating system="">
+      <value>+7</value>
+    </rating>
+  </programme>
+  <programme start="20150317062000 +0100" stop="20150317070000 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Bestial</title>
+    <desc lang="es">Programa que descubre todos los secretos del mundo animal.</desc>
+    <rating system="">
+      <value>TP</value>
+    </rating>
+  </programme>
+  <programme start="20150317070000 +0100" stop="20150317072200 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Neox Kidz</title>
+  </programme>
+  <programme start="20150317072200 +0100" stop="20150317074400 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Shin-Chan</title>
+    <desc lang="es">Serie que nos muestra pequeñas anécdotas en la vida de Shinnosuke, Shin-Chan, un niño de cinco años que vive con sus....</desc>
+    <rating system="">
+      <value>SC</value>
+    </rating>
+  </programme>
+  <programme start="20150317074400 +0100" stop="20150317080600 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Angry Birds</title>
+  </programme>
+  <programme start="20150317080600 +0100" stop="20150317082800 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Stella</title>
+    <desc lang="es">Comedia producida por la MTV, en la que no sólo lo absurdo cobra protagonismo, sino que también se satiriza al extremo....</desc>
+    <credits>
+      <actor>John Corbett</actor>
+      <actor>Tom Irwin</actor>
+      <actor>Rick Schorder</actor>
+    </credits>
+    <rating system="">
+      <value>SC</value>
+    </rating>
+  </programme>
+  <programme start="20150317082800 +0100" stop="20150317085000 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Piggy tales</title>
+  </programme>
+  <programme start="20150317085000 +0100" stop="20150317091200 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Los padrinos mágicos</title>
+    <desc lang="es">Timmy es un niño de diez años con unos padrinos muy especiales: Cosmo y Wanda, capaces de hacer realidad hasta su más....</desc>
+  </programme>
+  <programme start="20150317091200 +0100" stop="20150317093400 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Rabbids, la invasión</title>
+  </programme>
+  <programme start="20150317093400 +0100" stop="20150317100000 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Shin-Chan</title>
+    <desc lang="es">Serie que nos muestra pequeñas anécdotas en la vida de Shinnosuke, Shin-Chan, un niño de cinco años que vive con sus....</desc>
+    <rating system="">
+      <value>SC</value>
+    </rating>
+  </programme>
+  <programme start="20150317100000 +0100" stop="20150317104500 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">El Barco</title>
+    <desc lang="es">Un cataclismo mundial, provocado por un fatal accidente en Ginebra (Suiza) durante la puesta en marcha del acelerador de....</desc>
+    <credits>
+      <actor>Dan Grimaldi</actor>
+      <actor>Robert Osth</actor>
+      <actor>Ruth Dardick</actor>
+    </credits>
+    <rating system="">
+      <value>SC</value>
+    </rating>
+  </programme>
+  <programme start="20150317104500 +0100" stop="20150317113000 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">El Barco</title>
+    <desc lang="es">Un cataclismo mundial, provocado por un fatal accidente en Ginebra (Suiza) durante la puesta en marcha del acelerador de....</desc>
+    <credits>
+      <actor>Dan Grimaldi</actor>
+      <actor>Robert Osth</actor>
+      <actor>Ruth Dardick</actor>
+    </credits>
+    <rating system="">
+      <value>SC</value>
+    </rating>
+  </programme>
+  <programme start="20150317113000 +0100" stop="20150317133000 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Aquí no hay quien viva</title>
+    <desc lang="es">Telecomedia ambientada en un edificio de viviendas en la que sus protagonistas son los propios vecinos, un grupo tan....</desc>
+    <credits>
+      <actor>Lea Thompson</actor>
+      <actor>Emma Penella</actor>
+      <actor>Mary Nell Santacroce</actor>
+    </credits>
+    <rating system="">
+      <value>+13</value>
+    </rating>
+  </programme>
+  <programme start="20150317133000 +0100" stop="20150317153000 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Aquí no hay quien viva</title>
+    <desc lang="es">Telecomedia ambientada en un edificio de viviendas en la que sus protagonistas son los propios vecinos, un grupo tan....</desc>
+    <credits>
+      <actor>Lea Thompson</actor>
+      <actor>Emma Penella</actor>
+      <actor>Mary Nell Santacroce</actor>
+    </credits>
+    <rating system="">
+      <value>+13</value>
+    </rating>
+  </programme>
+  <programme start="20150317153000 +0100" stop="20150317160000 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Dos hombres y medio</title>
+    <desc lang="es">La alocada vida de un escritor soltero se verá drásticamente alterada cuando su hermano y su sobrino de diez años se....</desc>
+    <credits>
+      <actor>Charlie Sheen</actor>
+      <actor>Timothy Busfield</actor>
+      <actor>Holland Taylor</actor>
+    </credits>
+    <rating system="">
+      <value>+13</value>
+    </rating>
+  </programme>
+  <programme start="20150317160000 +0100" stop="20150317163000 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Dos hombres y medio</title>
+    <desc lang="es">La alocada vida de un escritor soltero se verá drásticamente alterada cuando su hermano y su sobrino de diez años se....</desc>
+    <credits>
+      <actor>Charlie Sheen</actor>
+      <actor>Timothy Busfield</actor>
+      <actor>Holland Taylor</actor>
+    </credits>
+    <rating system="">
+      <value>+13</value>
+    </rating>
+  </programme>
+  <programme start="20150317163000 +0100" stop="20150317164500 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">The Big Bang theory</title>
+  </programme>
+  <programme start="20150317164500 +0100" stop="20150317170000 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">The Big Bang theory</title>
+  </programme>
+  <programme start="20150317170000 +0100" stop="20150317171500 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">The Big Bang theory</title>
+  </programme>
+  <programme start="20150317171500 +0100" stop="20150317174800 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Cómo conocí a vuestra Madre</title>
+    <desc lang="es">Ted Mosby cuenta a sus hijos, en 2030, cómo conoció a su madre, allá por el 2012. En su aventura le acompañarán sus....</desc>
+    <rating system="">
+      <value>TP</value>
+    </rating>
+  </programme>
+  <programme start="20150317174800 +0100" stop="20150317182100 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Cómo conocí a vuestra Madre</title>
+    <desc lang="es">Ted Mosby cuenta a sus hijos, en 2030, cómo conoció a su madre, allá por el 2012. En su aventura le acompañarán sus....</desc>
+    <rating system="">
+      <value>TP</value>
+    </rating>
+  </programme>
+  <programme start="20150317182100 +0100" stop="20150317185500 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Cómo conocí a vuestra Madre</title>
+    <desc lang="es">Ted Mosby cuenta a sus hijos, en 2030, cómo conoció a su madre, allá por el 2012. En su aventura le acompañarán sus....</desc>
+    <rating system="">
+      <value>TP</value>
+    </rating>
+  </programme>
+  <programme start="20150317185500 +0100" stop="20150317190800 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Modern Family</title>
+    <desc lang="es">Una comedia con formato de falso documental que retrata a una típica (o atípica, según se mire) familia americana. Los....</desc>
+    <credits>
+      <actor>Alfredo Mayo</actor>
+      <actor>Darry Cowl</actor>
+      <actor>Blanca de Silos</actor>
+    </credits>
+    <rating system="">
+      <value>TP</value>
+    </rating>
+  </programme>
+  <programme start="20150317190800 +0100" stop="20150317192100 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Modern Family</title>
+    <desc lang="es">Una comedia con formato de falso documental que retrata a una típica (o atípica, según se mire) familia americana. Los....</desc>
+    <credits>
+      <actor>Alfredo Mayo</actor>
+      <actor>Darry Cowl</actor>
+      <actor>Blanca de Silos</actor>
+    </credits>
+    <rating system="">
+      <value>TP</value>
+    </rating>
+  </programme>
+  <programme start="20150317192100 +0100" stop="20150317193500 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Modern Family</title>
+    <desc lang="es">Una comedia con formato de falso documental que retrata a una típica (o atípica, según se mire) familia americana. Los....</desc>
+    <credits>
+      <actor>Alfredo Mayo</actor>
+      <actor>Darry Cowl</actor>
+      <actor>Blanca de Silos</actor>
+    </credits>
+    <rating system="">
+      <value>TP</value>
+    </rating>
+  </programme>
+  <programme start="20150317193500 +0100" stop="20150317201300 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Dos hombres y medio</title>
+    <desc lang="es">La alocada vida de un escritor soltero se verá drásticamente alterada cuando su hermano y su sobrino de diez años se....</desc>
+    <credits>
+      <actor>Charlie Sheen</actor>
+      <actor>Timothy Busfield</actor>
+      <actor>Holland Taylor</actor>
+    </credits>
+    <rating system="">
+      <value>+13</value>
+    </rating>
+  </programme>
+  <programme start="20150317201300 +0100" stop="20150317205000 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Dos hombres y medio</title>
+    <desc lang="es">La alocada vida de un escritor soltero se verá drásticamente alterada cuando su hermano y su sobrino de diez años se....</desc>
+    <credits>
+      <actor>Charlie Sheen</actor>
+      <actor>Timothy Busfield</actor>
+      <actor>Holland Taylor</actor>
+    </credits>
+    <rating system="">
+      <value>+13</value>
+    </rating>
+  </programme>
+  <programme start="20150317205000 +0100" stop="20150317211000 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Padre de Familia</title>
+    <desc lang="es">Peter Griffin y su esposa Lois lo tienen todo: una casa bonita, una vida agradable y tres hijos muy especiales; Stewie,....</desc>
+    <rating system="">
+      <value>+16</value>
+    </rating>
+  </programme>
+  <programme start="20150317211000 +0100" stop="20150317213500 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Los Simpson</title>
+    <desc lang="es">Los Simpson son una peculiar familia norteamericana de clase media. Homer y Marge son los padres de tres niños....</desc>
+    <rating system="">
+      <value>SC</value>
+    </rating>
+  </programme>
+  <programme start="20150317213500 +0100" stop="20150317220000 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">Los Simpson</title>
+    <desc lang="es">Los Simpson son una peculiar familia norteamericana de clase media. Homer y Marge son los padres de tres niños....</desc>
+    <rating system="">
+      <value>SC</value>
+    </rating>
+  </programme>
+  <programme start="20150317220000 +0100" stop="20150318003000 +0100" channel="neox-722.laguiatv.com">
+    <title lang="es">La noche de los Simpson</title>
+    <rating system="">
+      <value>TP</value>
+    </rating>
+  </programme>
+</tv>
