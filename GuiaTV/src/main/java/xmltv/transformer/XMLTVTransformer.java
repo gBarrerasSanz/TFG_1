@@ -1,18 +1,28 @@
 package xmltv.transformer;
 
+import java.io.File;
+import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import org.apache.commons.jxpath.Container;
 import org.apache.commons.jxpath.JXPathContext;
+import org.apache.commons.jxpath.xml.DocumentContainer;
 import org.apache.log4j.Logger;
 import org.springframework.integration.support.MessageBuilder;
 import org.springframework.integration.transformer.Transformer;
 import org.springframework.messaging.Message;
+import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
@@ -22,15 +32,16 @@ public class XMLTVTransformer implements Transformer {
 	
 	static Logger log = Logger.getLogger(XMLTVTransformer.class.getName());
 	
-	/**
-	 * message.payload -> JXPathContext (ver XMLTVTranformerTests.transformTest)
-	 * @return Message<?>.payload -> List<Evento> 
-	 */
 	@Override
 	public Message<?> transform(Message<?> message) {
-		if (message.getPayload() instanceof JXPathContext) {
+		Message<?> result = null;
+		if (message.getPayload() instanceof File) {
 			try{
-				JXPathContext jxpathCtx = (JXPathContext) message.getPayload();
+				File file = (File) message.getPayload();
+				DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+				DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+				Document doc = dBuilder.parse(file);
+				JXPathContext jxpathCtx = JXPathContext.newContext(doc);
 				@SuppressWarnings("unchecked")
 				List<Node> listProgNodes = jxpathCtx.selectNodes("/tv/programme");
 				@SuppressWarnings("unchecked")
@@ -49,21 +60,18 @@ public class XMLTVTransformer implements Transformer {
 					lEvt.add(evt);
 					itIdx++;
 				}
-				log.debug("listProgNodes.size() = "+String.valueOf(listProgNodes.size() - 1));
+				log.debug("listProgNodes.size() = "+String.valueOf(listProgNodes.size()));
 				log.debug("itIdx = "+String.valueOf(itIdx));
 				assert(listProgNodes.size() == itIdx);
-				Message<?> result = MessageBuilder.
-						withPayload(lEvt).build();
-				return result;
+				result = MessageBuilder.withPayload(lEvt).copyHeaders(message.getHeaders()).build();
 			}
 			catch(Exception e) {
 				e.printStackTrace();
-				return null;
 			}
 		}
 		else {
-			return null;
 		}
+		return result;
 	}
 
 	private static Date strToDate(String str) {

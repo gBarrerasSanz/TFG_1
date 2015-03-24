@@ -24,15 +24,25 @@ import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import application.Application;
 import xmltv.datatypes.Evento;
 import xmltv.datatypes.EventoService;
 
+@RunWith(SpringJUnit4ClassRunner.class)
+@SpringApplicationConfiguration(classes = Application.class)
 public class EventoServiceTests {
 
 	private static final Logger LOGGER = Logger.getLogger(EventoServiceTests.class);
+	
+	@Autowired
+	private ApplicationContext ctx;
 	
 	@Before
 	public void doNothing() {
@@ -41,10 +51,10 @@ public class EventoServiceTests {
 	
 	@Test
 	public void createEventoTest() {
-		final ApplicationContext context = new ClassPathXmlApplicationContext(
-				"classpath:/META-INF/spring/integration/spring-integration-context.xml");
+//		final ApplicationContext context = new ClassPathXmlApplicationContext(
+//				"classpath:/META-INF/spring/integration/spring-integration-context.xml");
 
-		final EventoService service = context.getBean(EventoService.class);
+		final EventoService service = ctx.getBean(EventoService.class);
 		LOGGER.info("Creating person Instance");
 		final Evento evt = new Evento();
 		evt.setChannel("Canal 2");
@@ -78,10 +88,10 @@ public class EventoServiceTests {
 	
 	@Test
 	public void createMultipleEventosTest() {
-		final ApplicationContext context = new ClassPathXmlApplicationContext(
-				"classpath:/META-INF/spring/integration/spring-integration-context.xml");
+//		final ApplicationContext context = new ClassPathXmlApplicationContext(
+//				"classpath:/META-INF/spring/integration/spring-integration-context.xml");
 
-		final EventoService service = context.getBean(EventoService.class);
+		final EventoService service = ctx.getBean(EventoService.class);
 		final int NUM_EVENTOS = 10;
 		ArrayList<Evento> lEvt = new ArrayList<Evento>(NUM_EVENTOS);
 		for (int i=0; i<NUM_EVENTOS; i++) {

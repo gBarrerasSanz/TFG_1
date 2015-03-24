@@ -20,19 +20,21 @@
 	<int:channel id="xmltvFileInChannel" />
 	
 	<int:gateway id="eventoService" service-interface="xmltv.datatypes.EventoService"
-		default-request-timeout="5000" default-reply-timeout="5000">
+		default-request-timeout="5000" default-reply-timeout="5000" >
 		<int:method name="createEvento" request-channel="createEventoRequestChannel" />
 		<int:method name="createMultipleEventos" request-channel="createEventoRequestChannel" />
 		<int:method name="findEvento" request-channel="listEventoRequestChannel" />
 	</int:gateway>
 
 	<int-jpa:retrieving-outbound-gateway
-		entity-manager-factory="entityManagerFactory" request-channel="listEventoRequestChannel"
+		entity-manager-factory="entityManagerFactory"
+		request-channel="listEventoRequestChannel"
 		jpa-query="select e from Evento e order by e.start asc">
 	</int-jpa:retrieving-outbound-gateway>
 
 	<int-jpa:updating-outbound-gateway
-		entity-manager-factory="entityManagerFactory" request-channel="createEventoRequestChannel">
+		entity-manager-factory="entityManagerFactory"
+		request-channel="createEventoRequestChannel">
 		<int-jpa:transactional transaction-manager="transactionManager" />
 	</int-jpa:updating-outbound-gateway>
 
@@ -45,7 +47,8 @@
 	</int-file:inbound-channel-adapter>
 
 	<int:transformer id="xmltvTransformer" ref="xmltvTransformerBean"
-		input-channel="xmltvFileOutChannel" method="transform" output-channel="createEventoRequestChannel" />
+		input-channel="xmltvFileOutChannel" method="transform" output-channel="createEventoRequestChannel" 
+		/>
 	
 	
 	<!-- XMLTV Grabber -->

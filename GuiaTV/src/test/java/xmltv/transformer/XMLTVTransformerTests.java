@@ -1,43 +1,51 @@
 package xmltv.transformer;
 
 import static org.junit.Assert.*;
+
+import java.io.File;
 import java.io.IOException;
-import java.net.URL;
+import java.net.URI;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import org.apache.commons.jxpath.Container;
-import org.apache.commons.jxpath.JXPathContext;
-import org.apache.commons.jxpath.xml.DocumentContainer;
+
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.core.io.Resource;
 import org.springframework.integration.support.MessageBuilder;
 import org.springframework.messaging.Message;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import xmltv.datatypes.Evento;
+import application.Application;
 
+@RunWith(SpringJUnit4ClassRunner.class)
+@SpringApplicationConfiguration(classes = Application.class)
 public class XMLTVTransformerTests {
+	
+	@Autowired
+	private ApplicationContext ctx;
+	
 	// TODO: Solucionar la conversion no segura
 	//assertEquals((List<Evento>)resultMsg.getPayload(), lEvt);
 	@SuppressWarnings("unchecked")
 	@Test
 	public void transformTest() {
-		final ApplicationContext context = new ClassPathXmlApplicationContext(
-				"classpath:/META-INF/spring/integration/spring-integration-context.xml");
-		Resource resource = context.getResource("/META-INF/test/xmltv/xmltv_sample.xml");
-		final XMLTVTransformer transformer = context.getBean(XMLTVTransformer.class);
+//		final ApplicationContext context = new ClassPathXmlApplicationContext(
+//				"classpath:/META-INF/spring/integration/spring-integration-context.xml");
+		Resource resource = ctx.getResource("/META-INF/test/xmltv/xmltv_sample.xml");
+		final XMLTVTransformer transformer = ctx.getBean(XMLTVTransformer.class);
 		try {
-			URL url = resource.getURL();
-//		    URL url = resource.getClassLoader().getResource("student_class.xml");
-		    Container container = new DocumentContainer(url);
-		    JXPathContext jxpathCtx = JXPathContext.newContext(container);
+			URI uri = resource.getURI();
+			File file = new File(uri);
 			Message<?> fileMsg = MessageBuilder.
-					withPayload(jxpathCtx).build();
+					withPayload(file).build();
 			Message<?> resultMsg = transformer.transform(fileMsg);
 			assertNotNull(resultMsg);
 			
