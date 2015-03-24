@@ -2,11 +2,7 @@ package xmltv.grabber;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -34,17 +30,21 @@ public class XMLTVGrabber {
 	}
 	
 	public File doGrabbing() {
-		Resource capDir = ctx.getResource("/META-INF/xmltv/cap/tmp");
+		Resource capDirRes = ctx.getResource("/META-INF/xmltv/cap");
+		File tmpDir = null;
+		try {
+			tmpDir = new File(capDirRes.getFile().getAbsolutePath()+
+					File.separator+"tmp");
+		} catch (IOException e2) {
+			e2.printStackTrace();
+		}
+		if (tmpDir.exists() == false) { tmpDir.mkdirs(); }
 		Resource binDirRes = ctx.getResource("/META-INF/xmltv/grabber/windows_bin/xmltv-0.5.66-win32");
 		File resFile = null, errFile = null;
-		try {
-			resFile = new File(capDir.getFile().getAbsolutePath()+
-					File.separator+"xmltvDump_"+getDateString()+".xml");
-			errFile = new File(capDir.getFile().getAbsolutePath()+
-					File.separator+"errorLog_"+getDateString()+".txt");
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		}
+		resFile = new File(tmpDir.getAbsolutePath()+
+				File.separator+"xmltvDump_"+getDateString()+".xml");
+		errFile = new File(tmpDir.getAbsolutePath()+
+				File.separator+"errorLog_"+getDateString()+".txt");
 		switch(platform) {
 		case WINDOWS:
 			try {
