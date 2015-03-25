@@ -40,9 +40,9 @@
 
 	<!-- file poller who keeps looking at a folder and picks up new landed files -->
 	<int-file:inbound-channel-adapter id="filePoller"
-		directory="file:src/main/resources/META-INF/xmltv/cap" channel="xmltvFileOutChannel" 
+		directory="file:xmltv_cap" channel="xmltvFileOutChannel"
 		auto-startup="true" comparator="xmltvFileComparator"
-		filename-regex="xmltvDump_[0-9][0-9][0-9][0-9]_[0-9][0-9]_[0-9][0-9]_[0-9][0-9]_[0-9][0-9]_[0-9][0-9]\.xml"	>
+		filename-regex="xmltvDump_[0-9][0-9][0-9][0-9]_[0-9][0-9]_[0-9][0-9]_[0-9][0-9]_[0-9][0-9]_[0-9][0-9]\.xml">
 		<int:poller fixed-rate="1000" />
 	</int-file:inbound-channel-adapter>
 
@@ -52,17 +52,19 @@
 	
 	
 	<!-- XMLTV Grabber -->
-	<int:inbound-channel-adapter id="xmltvGrabberInbound" ref="xmltvGrabber" method="doGrabbing">				
+	<int:inbound-channel-adapter id="xmltvGrabberInbound" ref="xmltvGrabber" method="doGrabbing"
+								channel="xmltvFileInChannel">				
 		<int:poller max-messages-per-poll="1" cron="0 	*  *  *   *  ?  "/>
 		<!--										sec m  h  dm  m  dw -->	
 	</int:inbound-channel-adapter>
 	
-	<int-file:outbound-channel-adapter id="xmltvGrabberOutbound" channel="xmltvFileInChannel"
-		directory="file:src/main/resources/META-INF/xmltv/cap" auto-create-directory="true"
-		mode="REPLACE" temporary-file-suffix="writing">
+	<int-file:outbound-channel-adapter id="xmltvGrabberOutbound"
+		channel="xmltvFileInChannel" directory="file:xmltv_cap"
+		auto-create-directory="true" mode="REPLACE"
+		temporary-file-suffix="writing">
 	</int-file:outbound-channel-adapter>
 
-	
+
 	<bean id="xmltvGrabber" class="xmltv.grabber.XMLTVGrabber"/>
 	
 	<bean id="xmltvTransformerBean" class="xmltv.transformer.XMLTVTransformer" />
