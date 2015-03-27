@@ -119,19 +119,12 @@
 	<!-- ****************************************
 	****************** PERSISTENCE TEST ****************** 
 	*********************************************-->
-	<int:channel id="getAllEventsReplyChannel" />
-	
-	<bean id="allEventsReceiver" class="persistence.AllEventsReceiver" />
 	
 	<int-jpa:retrieving-outbound-gateway id="getAllEventsOutbound"
 		entity-manager-factory="entityManagerFactory"
 		request-channel="getAllEventsRequestChannel"
-		jpa-query="select e from Event e"
-		reply-channel="getAllEventsReplyChannel">
+		jpa-query="select e from Event e">
 	</int-jpa:retrieving-outbound-gateway>
 
-	<int:outbound-channel-adapter id="getAllEventsResult"
-		ref="allEventsReceiver" method="receive" channel="getAllEventsReplyChannel">
-	</int:outbound-channel-adapter>
 	
 </beans>
