@@ -31,15 +31,15 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import eventmanager.EventService;
 import application.Application;
-import xmltv.datatypes.Evento;
-import xmltv.datatypes.EventoService;
+import xmltv.datatypes.Event;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
-public class EventoServiceTests {
+public class EventServiceTests {
 
-	private static final Logger LOGGER = Logger.getLogger(EventoServiceTests.class);
+	private static final Logger LOGGER = Logger.getLogger(EventServiceTests.class);
 	
 	@Autowired
 	private ApplicationContext ctx;
@@ -50,52 +50,15 @@ public class EventoServiceTests {
 	}
 	
 	@Test
-	public void createEventoTest() {
-//		final ApplicationContext context = new ClassPathXmlApplicationContext(
-//				"classpath:/META-INF/spring/integration/spring-integration-context.xml");
-
-		final EventoService service = ctx.getBean(EventoService.class);
-		LOGGER.info("Creating person Instance");
-		final Evento evt = new Evento();
-		evt.setChannel("Canal 2");
-		evt.setTitle("Programa 2");
-		Calendar cal = Calendar.getInstance(); // creates calendar
-	    cal.setTime(new Date()); // sets calendar time/date
-	    cal.add(Calendar.HOUR_OF_DAY, 1); // adds one hour
-	    Date start = cal.getTime(); // returns new date object, one hour in the future
-	    cal.add(Calendar.HOUR_OF_DAY, 1); // adds one hour
-	    Date end = cal.getTime();
-	    evt.setStart(start);
-	    evt.setEnd(end);
-	    Assert.assertEquals(true, evt.checkInitValues());
-		final Evento persistedEvento = service.createEvento(evt);
-		Assert.assertNotNull("Expected a non null instance of Evento, got null", persistedEvento);
-		LOGGER.info("\n\tGenerated person with id: " + persistedEvento.getId() + "\n" +
-				"\tchannel: " + persistedEvento.getChannel()+"\n" +
-				"\ttitle: " + persistedEvento.getTitle()+"\n" +
-				"\tstart: " + persistedEvento.getStart()+"\n" +
-				"\tend: " + persistedEvento.getEnd()+"\n");
-		
-		final List<Evento> listEvento = service.findEvento();
-		boolean found = false;
-		for (Evento e: listEvento) {
-			if (e.equals(persistedEvento)) {
-				found = true;
-			}
-		}
-		Assert.assertEquals(true, found);
-	}
-	
-	@Test
 	public void createMultipleEventosTest() {
 //		final ApplicationContext context = new ClassPathXmlApplicationContext(
 //				"classpath:/META-INF/spring/integration/spring-integration-context.xml");
 
-		final EventoService service = ctx.getBean(EventoService.class);
+		final EventService service = ctx.getBean(EventService.class);
 		final int NUM_EVENTOS = 10;
-		ArrayList<Evento> lEvt = new ArrayList<Evento>(NUM_EVENTOS);
+		ArrayList<Event> lEvt = new ArrayList<Event>(NUM_EVENTOS);
 		for (int i=0; i<NUM_EVENTOS; i++) {
-			Evento evt = new Evento();
+			Event evt = new Event();
 			evt.setChannel("Canal createMultipleEventosTest "+i);
 			evt.setTitle("Programa createMultipleEventosTest "+i);
 			Calendar cal = Calendar.getInstance(); // creates calendar
@@ -110,13 +73,13 @@ public class EventoServiceTests {
 			lEvt.add(evt);
 		}
 		
-		final List<Evento> listCreatedEvt = service.createMultipleEventos(lEvt);
+		final List<Event> listCreatedEvt = service.createMultipleEvents(lEvt);
 		Assert.assertNotNull("Expected a non null instance of List<Evento>, got null", listCreatedEvt);
-		final List<Evento> listEventoResult = service.findEvento();
+		final List<Event> listEventoResult = service.findEvent();
 		boolean found = false;
-		for (Evento eIn: lEvt) {
+		for (Event eIn: lEvt) {
 			found = false;
-			for (Evento eOut: listEventoResult) {
+			for (Event eOut: listEventoResult) {
 				if (eIn.equals(eOut)) {
 					found = true;
 					break;

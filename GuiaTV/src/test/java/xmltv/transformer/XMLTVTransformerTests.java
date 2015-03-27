@@ -22,7 +22,7 @@ import org.springframework.integration.support.MessageBuilder;
 import org.springframework.messaging.Message;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import xmltv.datatypes.Evento;
+import xmltv.datatypes.Event;
 import application.Application;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -50,9 +50,9 @@ public class XMLTVTransformerTests {
 			assertNotNull(resultMsg);
 			
 			// Construir resultado esperado
-			List<Evento> lEvt = new ArrayList<Evento>();
+			List<Event> lEvt = new ArrayList<Event>();
 			// evt1
-			Evento evt1 = new Evento(); Evento evt2 = new Evento();
+			Event evt1 = new Event(); Event evt2 = new Event();
 			evt1.setChannel("neox-722.laguiatv.com");
 			evt1.setTitle("Cómo conocí a vuestra Madre");
 			evt1.setStart(strToDate("20150316173500 +0100"));
@@ -63,7 +63,7 @@ public class XMLTVTransformerTests {
 			evt2.setStart(strToDate("20150316214500 +0100"));
 			evt2.setEnd(strToDate("20150316220000 +0100"));
 			lEvt.add(evt1); lEvt.add(evt2);
-			assertEquals((List<Evento>)resultMsg.getPayload(), lEvt);
+			assertEquals((List<Event>)resultMsg.getPayload(), lEvt);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

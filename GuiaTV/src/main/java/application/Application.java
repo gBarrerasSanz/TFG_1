@@ -10,6 +10,7 @@ import org.springframework.context.annotation.ImportResource;
 	
 @EnableAutoConfiguration
 @ComponentScan
+@Configuration
 public class Application {
 	public static void main(String[] args) {
         SpringApplication.run(Application.class, args);

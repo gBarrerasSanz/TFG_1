@@ -60,30 +60,24 @@
 	<!-- ****************************************
 	****************** PERSISTENCE ****************** 
 	*********************************************-->
-	<int:channel id="createMultipleEventosRequestChannel" />
-	<!-- <int:channel id="createEventoRequestChannel" /> -->
-	<int:channel id="listEventoRequestChannel" />
-	
-	<int:gateway id="eventoService" service-interface="xmltv.datatypes.EventoService"
-		default-request-timeout="5000" default-reply-timeout="5000" >
-		<int:method name="createMultipleEventos" reply-channel="eventTransformerOutChannel" request-channel="createMultipleEventosRequestChannel"/>
-		<!-- <int:method name="createEvento" request-channel="createEventoRequestChannel" /> -->
-		<!-- <int:method name="createMultipleEventos" request-channel="createEventoRequestChannel" /> -->
-		<int:method name="findEvento" request-channel="listEventoRequestChannel" />
+	<int:channel id="createMultipleEventsRequestChannel" />
+	<int:channel id="listEventRequestChannel" />
+
+	<int:gateway id="eventService"
+		service-interface="eventmanager.EventService"
+		default-request-timeout="5000" default-reply-timeout="5000">
+		<int:method name="createMultipleEvents" reply-channel="eventTransformerOutChannel" request-channel="createMultipleEventsRequestChannel"/>
+		<int:method name="findEvent" request-channel="listEventRequestChannel" />
 	</int:gateway>
-	
+
 	<int-jpa:updating-outbound-gateway
-		entity-manager-factory="entityManagerFactory" request-channel="createMultipleEventosRequestChannel">
+		entity-manager-factory="entityManagerFactory"
+		request-channel="createMultipleEventsRequestChannel">
 		<int-jpa:transactional transaction-manager="transactionManager" />
 	</int-jpa:updating-outbound-gateway>
 	
-	<!-- <int-jpa:updating-outbound-gateway
-		entity-manager-factory="entityManagerFactory" request-channel="createEventoRequestChannel">
-		<int-jpa:transactional transaction-manager="transactionManager" />
-	</int-jpa:updating-outbound-gateway> -->
-	
 	<int-jpa:retrieving-outbound-gateway
-		entity-manager-factory="entityManagerFactory" request-channel="listEventoRequestChannel"
-		jpa-query="select e from Evento e order by e.start asc">
+		entity-manager-factory="entityManagerFactory" request-channel="listEventRequestChannel"
+		jpa-query="select e from Event e order by e.start asc">
 	</int-jpa:retrieving-outbound-gateway>
 </beans>
