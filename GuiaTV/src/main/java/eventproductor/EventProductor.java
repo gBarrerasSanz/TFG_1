@@ -5,16 +5,25 @@ import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.core.TopicExchange;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.GenericXmlApplicationContext;
 
+import application.Application;
+
+@SpringApplicationConfiguration(classes = Application.class)
 public class EventProductor {
 	
 	AmqpTemplate amqpTemplate;
 	RabbitAdmin rabbitAdmin;
 	
+	@Autowired
+	private ApplicationContext ctx;
+	
 	public EventProductor() {
-		createContext();
+		amqpTemplate = ctx.getBean(AmqpTemplate.class);
+		rabbitAdmin = ctx.getBean(RabbitAdmin.class); 
 	}
 
 	public void declareQueue(String queueName) {
@@ -37,18 +46,6 @@ public class EventProductor {
 	    }catch(Exception ex){ 
 	    	return false;
 	    }
-	}
-	
-	private void createContext() {
-		try {
-			ApplicationContext context =
-				    new GenericXmlApplicationContext("classpath:META-INF/spring/integration/rabbitmq-context.xml");
-				amqpTemplate = context.getBean(AmqpTemplate.class);
-				rabbitAdmin = context.getBean(RabbitAdmin.class); 
-		}
-		catch(Exception e) {
-			e.printStackTrace();
-		}
 	}
 	
 //	public String sendMsg(String id, String val) {

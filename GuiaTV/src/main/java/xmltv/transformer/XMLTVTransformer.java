@@ -1,23 +1,18 @@
 package xmltv.transformer;
 
 import java.io.File;
-import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import org.apache.commons.jxpath.Container;
 import org.apache.commons.jxpath.JXPathContext;
-import org.apache.commons.jxpath.xml.DocumentContainer;
 import org.apache.log4j.Logger;
 import org.springframework.integration.support.MessageBuilder;
 import org.springframework.integration.transformer.Transformer;
@@ -26,7 +21,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
-import xmltv.datatypes.Evento;
+import xmltv.datatypes.Event;
 
 public class XMLTVTransformer implements Transformer {
 	
@@ -46,13 +41,13 @@ public class XMLTVTransformer implements Transformer {
 				List<Node> listProgNodes = jxpathCtx.selectNodes("/tv/programme");
 				@SuppressWarnings("unchecked")
 				Iterator<String> itProg = jxpathCtx.iterate("/tv/programme");
-				List<Evento> lEvt = new ArrayList<Evento>();
-				NamedNodeMap nodeMap = null; Evento evt = null; Node n = null;
+				List<Event> lEvt = new ArrayList<Event>();
+				NamedNodeMap nodeMap = null; Event evt = null; Node n = null;
 				int itIdx = 0;
 				while (itProg.hasNext()) {
 					n = listProgNodes.get(itIdx);
 					nodeMap= n.getAttributes();
-					evt = new Evento();
+					evt = new Event();
 					evt.setTitle(itProg.next());
 					evt.setChannel(nodeMap.getNamedItem("channel").getNodeValue());
 					evt.setStart(strToDate(nodeMap.getNamedItem("start").getNodeValue()));

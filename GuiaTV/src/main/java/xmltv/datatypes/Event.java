@@ -12,8 +12,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @Entity
-@Table(name="EVENTO")
-public class Evento {	
+@Table(name="EVENT")
+public class Event {	
 	
 	/**
 	 * Representa un evento, que puede ser retransmisión de serie, película, etc, espacio publicitario.
@@ -37,11 +37,11 @@ public class Evento {
 	@Column(name="TIME_END")
 	private Date end;
 
-	public Evento() {
+	public Event() {
 		super();
 	}
 
-	public Evento(String channel, String title, Date start, Date end) {
+	public Event(String channel, String title, Date start, Date end) {
 		super();
 		this.channel = channel;
 		this.title = title;
@@ -120,7 +120,7 @@ public class Evento {
 		if (getClass() != obj.getClass()) {
 			return false;
 		}
-		Evento other = (Evento) obj;
+		Event other = (Event) obj;
 		// Channel
 		if (channel == null) {
 			if (other.channel != null) {
