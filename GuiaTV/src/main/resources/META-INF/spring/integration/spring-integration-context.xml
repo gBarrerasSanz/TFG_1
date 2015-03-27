@@ -19,7 +19,7 @@
 	<import resource="classpath:/META-INF/spring/integration/hibernate-context.xml" />
 	<import resource="classpath:/META-INF/spring/integration/rabbitmq-context.xml" />
 	
-		<!-- ****************************************
+	<!-- ****************************************
 	****************** COMMON UTILITY ****************** 
 	*********************************************-->
 	<bean id="commonUtility" class="common.CommonUtility" />
@@ -67,23 +67,55 @@
 	****************** PERSISTENCE ****************** 
 	*********************************************-->
 	<int:channel id="createMultipleEventsRequestChannel" />
-	<int:channel id="listEventRequestChannel" />
+	<int:channel id="allEventsRequestChannel" />
+	
+	<int:channel id="closerEventsRequestChannel" />
+	<int:channel id="closerEventsReplyChannel" />
 
 	<int:gateway id="eventService"
 		service-interface="eventmanager.EventService"
 		default-request-timeout="5000" default-reply-timeout="5000">
-		<int:method name="createMultipleEvents" reply-channel="eventTransformerOutChannel" request-channel="createMultipleEventsRequestChannel"/>
-		<int:method name="findEvent" request-channel="listEventRequestChannel" />
+		<int:method name="createMultipleEvents" reply-channel="eventTransformerOutChannel" 
+			request-channel="createMultipleEventsRequestChannel"/>
+		<int:method name="findEvent" request-channel="allEventsRequestChannel" />
+		<int:method name="getCloserEvents" reply-channel="closerEventsReplyChannel" 
+			request-channel="closerEventsRequestChannel" />
 	</int:gateway>
 
 	<int-jpa:updating-outbound-gateway
-		entity-manager-factory="entityManagerFactory"
+		entity-manager-factory="entityManagerFactory" 
 		request-channel="createMultipleEventsRequestChannel">
 		<int-jpa:transactional transaction-manager="transactionManager" />
 	</int-jpa:updating-outbound-gateway>
 	
 	<int-jpa:retrieving-outbound-gateway
-		entity-manager-factory="entityManagerFactory" request-channel="listEventRequestChannel"
-		jpa-query="select e from Event e order by e.start asc">
+		entity-manager-factory="entityManagerFactory" request-channel="allEventsRequestChannel"
+		jpa-query="select e from Event e">
 	</int-jpa:retrieving-outbound-gateway>
+	
+	<int-jpa:retrieving-outbound-gateway
+		entity-manager-factory="entityManagerFactory" 
+		request-channel="closerEventsRequestChannel" reply-channel="publisherRequestChannel" 
+		jpa-query="select e from Event e where e.end > CURRENT_DATE order by e.start asc">
+		<!-- Seleccionar los eventos tal que la fecha de su final sea mayor que la fecha actual
+				y ordenarlos tal que los primeros que aparezcan sean los que antes empiecen -->
+	</int-jpa:retrieving-outbound-gateway>
+
+	<!-- ****************************************
+	****************** EVENT PRODUCTOR ****************** 
+	*********************************************-->
+	<int:channel id="publisherRequestChannel" />
+	
+	<bean id="eventProductorPoller" class="eventproductor.EventProductorPoller" />
+	<bean id="eventProductorPublisher" class="eventproductor.EventProductorPublisher" />
+	
+	<int:inbound-channel-adapter id="eventProductorPollerIn"
+		ref="eventProductorPoller" method="askForEvents" channel="closerEventsReplyChannel">
+		<int:poller fixed-rate="5000" />
+	</int:inbound-channel-adapter>
+	
+	<int:outbound-channel-adapter id="eventProductorPublisherOut"
+		ref="eventProductorPublisher" method="publishTopics" channel="publisherRequestChannel">
+	</int:outbound-channel-adapter>
+	
 </beans>

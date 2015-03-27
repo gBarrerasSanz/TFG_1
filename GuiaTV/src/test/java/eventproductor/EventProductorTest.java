@@ -16,7 +16,7 @@ import application.Application;
 public class EventProductorTest {
 	
 	@Autowired
-	private EventProductor evProductor;
+	private EventProductorPublisher evProductor;
 	
 	/*
 	 * Este test se completa satisfactoriamente aun sin estar el RabbitMQ funcionando...

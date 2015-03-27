@@ -6,9 +6,10 @@ import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.core.TopicExchange;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.Message;
 import org.springframework.stereotype.Service;
 
-public class EventProductor {
+public class EventProductorPublisher {
 	
 	@Autowired
 	AmqpTemplate amqpTemplate;
@@ -18,11 +19,15 @@ public class EventProductor {
 //	@Autowired
 //	private ApplicationContext ctx;
 	
-	public EventProductor() {
+//	public EventProductorPublisher() {
 //		amqpTemplate = ctx.getBean(AmqpTemplate.class);
 //		rabbitAdmin = ctx.getBean(RabbitAdmin.class); 
+//	}
+	
+	public Message<?> publishTopics() {
+		return null;
 	}
-
+	
 	public void declareQueue(String queueName) {
 		Queue queue = new Queue(queueName);
 		this.rabbitAdmin.declareQueue(queue);
