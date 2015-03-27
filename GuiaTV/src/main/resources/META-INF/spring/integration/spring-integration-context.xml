@@ -67,36 +67,34 @@
 	****************** PERSISTENCE ****************** 
 	*********************************************-->
 	<int:channel id="createMultipleEventsRequestChannel" />
-	<int:channel id="allEventsRequestChannel" />
 	
-	<int:channel id="closerEventsRequestChannel" />
-	<int:channel id="closerEventsReplyChannel" />
+	<int:channel id="getCloserEventsRequestChannel" />
+	<int:channel id="getCloserEventsReplyChannel" />
+	
+	<int:channel id="getAllEventsRequestChannel" />
 
 	<int:gateway id="eventService"
 		service-interface="eventmanager.EventService"
 		default-request-timeout="5000" default-reply-timeout="5000">
 		<int:method name="createMultipleEvents" reply-channel="eventTransformerOutChannel" 
 			request-channel="createMultipleEventsRequestChannel"/>
-		<int:method name="findEvent" request-channel="allEventsRequestChannel" />
-		<int:method name="getCloserEvents" reply-channel="closerEventsReplyChannel" 
-			request-channel="closerEventsRequestChannel" />
+		<int:method name="getCloserEvents" reply-channel="getCloserEventsReplyChannel" 
+			request-channel="getCloserEventsRequestChannel" />
+		<int:method name="getAllEvents" request-channel="getAllEventsRequestChannel" />
 	</int:gateway>
 
-	<int-jpa:updating-outbound-gateway
-		entity-manager-factory="entityManagerFactory" 
+	<int-jpa:updating-outbound-gateway id="createMultipleEventsOutbound"
+		entity-manager-factory="entityManagerFactory"
 		request-channel="createMultipleEventsRequestChannel">
 		<int-jpa:transactional transaction-manager="transactionManager" />
 	</int-jpa:updating-outbound-gateway>
 	
-	<int-jpa:retrieving-outbound-gateway
-		entity-manager-factory="entityManagerFactory" request-channel="allEventsRequestChannel"
-		jpa-query="select e from Event e">
-	</int-jpa:retrieving-outbound-gateway>
-	
-	<int-jpa:retrieving-outbound-gateway
-		entity-manager-factory="entityManagerFactory" 
-		request-channel="closerEventsRequestChannel" reply-channel="publisherRequestChannel" 
-		jpa-query="select e from Event e where e.end > CURRENT_DATE order by e.start asc">
+	<int-jpa:retrieving-outbound-gateway id="getCloserEventsOutbound"
+		entity-manager-factory="entityManagerFactory"
+		request-channel="getCloserEventsRequestChannel"
+		reply-channel="publisherRequestChannel"
+		jpa-query="select e from Event e where e.end > :now order by e.start asc">
+		 <int-jpa:parameter name="now" type="java.util.Date" />
 		<!-- Seleccionar los eventos tal que la fecha de su final sea mayor que la fecha actual
 				y ordenarlos tal que los primeros que aparezcan sean los que antes empiecen -->
 	</int-jpa:retrieving-outbound-gateway>
@@ -110,12 +108,30 @@
 	<bean id="eventProductorPublisher" class="eventproductor.EventProductorPublisher" />
 	
 	<int:inbound-channel-adapter id="eventProductorPollerIn"
-		ref="eventProductorPoller" method="askForEvents" channel="closerEventsReplyChannel">
+		ref="eventProductorPoller" method="askForEvents" channel="getCloserEventsReplyChannel">
 		<int:poller fixed-rate="5000" />
 	</int:inbound-channel-adapter>
 	
 	<int:outbound-channel-adapter id="eventProductorPublisherOut"
 		ref="eventProductorPublisher" method="publishTopics" channel="publisherRequestChannel">
+	</int:outbound-channel-adapter>
+	
+	<!-- ****************************************
+	****************** PERSISTENCE TEST ****************** 
+	*********************************************-->
+	<int:channel id="getAllEventsReplyChannel" />
+	
+	<bean id="allEventsReceiver" class="persistence.AllEventsReceiver" />
+	
+	<int-jpa:retrieving-outbound-gateway id="getAllEventsOutbound"
+		entity-manager-factory="entityManagerFactory"
+		request-channel="getAllEventsRequestChannel"
+		jpa-query="select e from Event e"
+		reply-channel="getAllEventsReplyChannel">
+	</int-jpa:retrieving-outbound-gateway>
+
+	<int:outbound-channel-adapter id="getAllEventsResult"
+		ref="allEventsReceiver" method="receive" channel="getAllEventsReplyChannel">
 	</int:outbound-channel-adapter>
 	
 </beans>

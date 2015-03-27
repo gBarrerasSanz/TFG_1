@@ -92,7 +92,7 @@ public class EventServiceTests {
 		
 		final List<Event> listCreatedEvt = evService.createMultipleEvents(lEvt);
 		Assert.assertNotNull("Expected a non null instance of List<Evento>, got null", listCreatedEvt);
-		final List<Event> listEventoResult = evService.findEvent();
+		final List<Event> listEventoResult = evService.getAllEvents();
 		boolean found = false;
 		for (Event eIn: lEvt) {
 			found = false;
@@ -146,7 +146,7 @@ public class EventServiceTests {
 		 ****************************************************************************/
 		
 		evService.createMultipleEvents(lEvt);
-		List<Event> listFoundEvt = evService.findEvent();
+		List<Event> listFoundEvt = evService.getAllEvents();
 		Assert.assertNotNull("Expected a non null instance of List<Evento>, got null", listFoundEvt);
 		boolean found = false;
 		for (Event eIn: lEvt) { // Para cada evento creado
