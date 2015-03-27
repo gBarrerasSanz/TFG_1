@@ -110,6 +110,10 @@ public class EventServiceTests {
 	@Test
 	public void createEventsFromXMLTVFileTest() {
 		Resource resource = ctx.getResource("/META-INF/test/xmltv/xmltv_sample.xml");
+		List<Event> lEvt = null;
+		/****************************************************************************
+		 * Transformar el fichero XMLTV en una lista de Events con el XMLTVTransformer
+		 ****************************************************************************/
 		try {
 			URI uri = resource.getURI();
 			File file = new File(uri);
@@ -119,7 +123,7 @@ public class EventServiceTests {
 			assertNotNull(resultMsg);
 			
 			// Construir resultado esperado
-			List<Event> lEvt = new ArrayList<Event>();
+			lEvt = new ArrayList<Event>();
 			// evt1
 			Event evt1 = new Event(); Event evt2 = new Event();
 			evt1.setChannel("neox-722.laguiatv.com");
@@ -137,41 +141,24 @@ public class EventServiceTests {
 			e.printStackTrace();
 		}
 		
+		/****************************************************************************
+		 * Insertar la lista de Events en la BD y comprobar que se ha insertado
+		 ****************************************************************************/
 		
-		//////////////////////////
-		final int NUM_EVENTOS = 10;
-		ArrayList<Event> lEvt = new ArrayList<Event>(NUM_EVENTOS);
-		for (int i=0; i<NUM_EVENTOS; i++) {
-			Event evt = new Event();
-			evt.setChannel("Canal createMultipleEventosTest "+i);
-			evt.setTitle("Programa createMultipleEventosTest "+i);
-			Calendar cal = Calendar.getInstance(); // creates calendar
-		    cal.setTime(new Date()); // sets calendar time/date
-		    cal.add(Calendar.HOUR_OF_DAY, 1); // adds one hour
-		    Date start = cal.getTime(); // returns new date object, one hour in the future
-		    cal.add(Calendar.HOUR_OF_DAY, 1); // adds one hour
-		    Date end = cal.getTime();
-		    evt.setStart(start);
-		    evt.setEnd(end);
-		    Assert.assertEquals(true, evt.checkInitValues());
-			lEvt.add(evt);
-		}
-		
-		final List<Event> listCreatedEvt = evService.createMultipleEvents(lEvt);
-		Assert.assertNotNull("Expected a non null instance of List<Evento>, got null", listCreatedEvt);
-		final List<Event> listEventoResult = evService.findEvent();
+		evService.createMultipleEvents(lEvt);
+		List<Event> listFoundEvt = evService.findEvent();
+		Assert.assertNotNull("Expected a non null instance of List<Evento>, got null", listFoundEvt);
 		boolean found = false;
-		for (Event eIn: lEvt) {
+		for (Event eIn: lEvt) { // Para cada evento creado
 			found = false;
-			for (Event eOut: listEventoResult) {
+			for (Event eOut: listFoundEvt) { // Para cada evento encontrado
 				if (eIn.equals(eOut)) {
 					found = true;
 					break;
 				}
 			}
-			Assert.assertEquals(true, found);
+			Assert.assertEquals(true, found); // Comprueba que eIn ha sido encontrado
 		}
-		Assert.assertEquals(true, found);
 	}
 	
 	

@@ -36,5 +36,9 @@ public class XMLTVGrabberTests {
 		File grabFile = grabber.doGrabbing();
 		assertEquals(true, grabFile.canRead());
 		assertEquals(true, utils.checkFileNameDate(grabFile.getName(), realDate));
+		// Borarr fichero generado
+		boolean deleted = grabFile.delete();
+		assertEquals(true, deleted); // Comprobar que se ha borrado
+		assertEquals(false, grabFile.exists()); // Comprobar que no existe
 	}
 }
