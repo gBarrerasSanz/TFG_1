@@ -32,6 +32,9 @@ public class XMLTVTransformerTests {
 	@Autowired
 	private ApplicationContext ctx;
 	
+	@Autowired
+	private XMLTVTransformer transformer;
+	
 	// TODO: Solucionar la conversion no segura
 	//assertEquals((List<Evento>)resultMsg.getPayload(), lEvt);
 	@SuppressWarnings("unchecked")
@@ -40,7 +43,7 @@ public class XMLTVTransformerTests {
 //		final ApplicationContext context = new ClassPathXmlApplicationContext(
 //				"classpath:/META-INF/spring/integration/spring-integration-context.xml");
 		Resource resource = ctx.getResource("/META-INF/test/xmltv/xmltv_sample.xml");
-		final XMLTVTransformer transformer = ctx.getBean(XMLTVTransformer.class);
+//		final XMLTVTransformer transformer = ctx.getBean(XMLTVTransformer.class);
 		try {
 			URI uri = resource.getURI();
 			File file = new File(uri);

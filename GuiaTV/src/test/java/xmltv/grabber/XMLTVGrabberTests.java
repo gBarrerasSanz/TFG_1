@@ -23,11 +23,10 @@ import application.Application;
 public class XMLTVGrabberTests {
 	
 	@Autowired
-	private ApplicationContext ctx;
+	private XMLTVGrabber grabber;
 	
 	@Test
 	public void grabbingTest() {
-		final XMLTVGrabber grabber = ctx.getBean(XMLTVGrabber.class);
 		Date realDate = new Date();
 		File grabFile = grabber.doGrabbing();
 		assertEquals(true, grabFile.canRead());
@@ -36,7 +35,7 @@ public class XMLTVGrabberTests {
 
 	private boolean checkFileNameDate(String grabFileName, Date realDate) {
 			final Locale SPAIN_LOCALE = new Locale("es", "ES");
-			SimpleDateFormat formatter = new SimpleDateFormat("yyyy_MM_dd_hh_mm_ss", SPAIN_LOCALE);
+			SimpleDateFormat formatter = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss", SPAIN_LOCALE);
 			String dateStr = grabFileName.substring(
 					grabFileName.indexOf("_")+1, grabFileName.indexOf("."));
 			try {

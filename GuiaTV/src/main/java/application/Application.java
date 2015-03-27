@@ -10,6 +10,7 @@ import org.springframework.context.annotation.ImportResource;
 	
 @EnableAutoConfiguration
 @ComponentScan
+@ImportResource("classpath:/META-INF/spring/integration/spring-integration-context.xml")
 @Configuration
 public class Application {
 	public static void main(String[] args) {
@@ -17,7 +18,4 @@ public class Application {
     }
 }
 
-@Configuration
-@ImportResource("classpath:/META-INF/spring/integration/spring-integration-context.xml")
-class XmlImportingConfiguration {
-}
+

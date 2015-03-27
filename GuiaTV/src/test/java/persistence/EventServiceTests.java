@@ -42,7 +42,7 @@ public class EventServiceTests {
 	private static final Logger LOGGER = Logger.getLogger(EventServiceTests.class);
 	
 	@Autowired
-	private ApplicationContext ctx;
+	private EventService evService;
 	
 	@Before
 	public void doNothing() {
@@ -54,7 +54,7 @@ public class EventServiceTests {
 //		final ApplicationContext context = new ClassPathXmlApplicationContext(
 //				"classpath:/META-INF/spring/integration/spring-integration-context.xml");
 
-		final EventService service = ctx.getBean(EventService.class);
+//		final EventService service = ctx.getBean(EventService.class);
 		final int NUM_EVENTOS = 10;
 		ArrayList<Event> lEvt = new ArrayList<Event>(NUM_EVENTOS);
 		for (int i=0; i<NUM_EVENTOS; i++) {
@@ -73,9 +73,9 @@ public class EventServiceTests {
 			lEvt.add(evt);
 		}
 		
-		final List<Event> listCreatedEvt = service.createMultipleEvents(lEvt);
+		final List<Event> listCreatedEvt = evService.createMultipleEvents(lEvt);
 		Assert.assertNotNull("Expected a non null instance of List<Evento>, got null", listCreatedEvt);
-		final List<Event> listEventoResult = service.findEvent();
+		final List<Event> listEventoResult = evService.findEvent();
 		boolean found = false;
 		for (Event eIn: lEvt) {
 			found = false;

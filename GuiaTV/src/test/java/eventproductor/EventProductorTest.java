@@ -2,8 +2,6 @@ package eventproductor;
 
 import static org.junit.Assert.*;
 
-import org.eclipse.paho.client.mqttv3.MqttClient;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,24 +11,24 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import application.Application;
 
-@RunWith(SpringJUnit4ClassRunner.class)
+//@RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 public class EventProductorTest {
 	
 	@Autowired
-	private ApplicationContext ctx;
+	private EventProductor evProductor;
 	
 	/*
 	 * Este test se completa satisfactoriamente aun sin estar el RabbitMQ funcionando...
 	 * */
-	@Test
+//	@Test
 	public void sendMessage() {
-		EventProductor eventProductor = new EventProductor();
+//		EventProductor eventProductor = new EventProductor();
 		MQTTTestingClient mqttClient = null;
 		try {
 			boolean sendMsg;
-			eventProductor.declareQueue("testqueue1");
-			sendMsg = eventProductor.sendMessage("testmsg1");
+			evProductor.declareQueue("testqueue1");
+			sendMsg = evProductor.sendMessage("testmsg1");
 			assertEquals(true, sendMsg);
 			
 			

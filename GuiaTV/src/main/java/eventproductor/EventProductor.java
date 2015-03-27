@@ -6,24 +6,21 @@ import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.core.TopicExchange;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.GenericXmlApplicationContext;
+import org.springframework.stereotype.Service;
 
-import application.Application;
-
-@SpringApplicationConfiguration(classes = Application.class)
 public class EventProductor {
 	
+	@Autowired
 	AmqpTemplate amqpTemplate;
+	@Autowired
 	RabbitAdmin rabbitAdmin;
 	
-	@Autowired
-	private ApplicationContext ctx;
+//	@Autowired
+//	private ApplicationContext ctx;
 	
 	public EventProductor() {
-		amqpTemplate = ctx.getBean(AmqpTemplate.class);
-		rabbitAdmin = ctx.getBean(RabbitAdmin.class); 
+//		amqpTemplate = ctx.getBean(AmqpTemplate.class);
+//		rabbitAdmin = ctx.getBean(RabbitAdmin.class); 
 	}
 
 	public void declareQueue(String queueName) {
