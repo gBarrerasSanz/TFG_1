@@ -13,69 +13,75 @@
 		http://www.springframework.org/schema/integration/jpa http://www.springframework.org/schema/integration/jpa/spring-integration-jpa-4.1.xsd
 		http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration-4.1.xsd">
 
-
-	<int:channel id="createEventoRequestChannel" />
-	<int:channel id="listEventoRequestChannel" />
-	<int:channel id="xmltvFileOutChannel" />
-	<int:channel id="xmltvFileInChannel" />
 	
-	<int:gateway id="eventoService" service-interface="xmltv.datatypes.EventoService"
-		default-request-timeout="5000" default-reply-timeout="5000" >
-		<int:method name="createEvento" request-channel="createEventoRequestChannel" />
-		<int:method name="createMultipleEventos" request-channel="createEventoRequestChannel" />
-		<int:method name="findEvento" request-channel="listEventoRequestChannel" />
-	</int:gateway>
+	<import resource="classpath:/META-INF/spring/integration/hibernate-context.xml" />
+	<import resource="classpath:/META-INF/spring/integration/rabbitmq-context.xml" />
+	
+	<!-- ****************************************
+	****************** GRABBER ****************** 
+	*********************************************-->
+	<int:channel id="xmltvFileInChannel" />
+	<int:channel id="xmltvFileOutChannel" />
+	
+	<bean id="xmltvGrabber" class="xmltv.grabber.XMLTVGrabber" />
+	
+	<int:inbound-channel-adapter id="xmltvGrabberInbound"
+		ref="xmltvGrabber" method="doGrabbing" channel="xmltvFileInChannel">
+		<int:poller max-messages-per-poll="1" cron="0 	*  *  *   *  ?  " />
+		<!-- sec m h dm m dw -->
+	</int:inbound-channel-adapter>
+	
+	<int-file:outbound-channel-adapter
+		id="xmltvGrabberOutbound" channel="xmltvFileInChannel" directory="file:xmltv_cap"
+		auto-create-directory="true" mode="REPLACE" temporary-file-suffix="writing">
+	</int-file:outbound-channel-adapter>
 
-	<int-jpa:retrieving-outbound-gateway
-		entity-manager-factory="entityManagerFactory"
-		request-channel="listEventoRequestChannel"
-		jpa-query="select e from Evento e order by e.start asc">
-	</int-jpa:retrieving-outbound-gateway>
-
-	<int-jpa:updating-outbound-gateway
-		entity-manager-factory="entityManagerFactory"
-		request-channel="createEventoRequestChannel">
-		<int-jpa:transactional transaction-manager="transactionManager" />
-	</int-jpa:updating-outbound-gateway>
-
-	<!-- file poller who keeps looking at a folder and picks up new landed files -->
+	<!-- ****************************************
+	****************** TRANSFORMER ****************** 
+	*********************************************-->
+	<int:channel id="eventTransformerOutChannel" />
+	
+	<bean id="xmltvTransformerBean" class="xmltv.transformer.XMLTVTransformer" />
+	<bean id="xmltvFileComparator" class="xmltv.grabber.CustomFileComparator" />
+	
 	<int-file:inbound-channel-adapter id="filePoller"
-		directory="file:xmltv_cap" channel="xmltvFileOutChannel"
-		auto-startup="true" comparator="xmltvFileComparator"
+		directory="file:xmltv_cap" channel="xmltvFileOutChannel" auto-startup="true"
+		comparator="xmltvFileComparator"
 		filename-regex="xmltvDump_[0-9][0-9][0-9][0-9]_[0-9][0-9]_[0-9][0-9]_[0-9][0-9]_[0-9][0-9]_[0-9][0-9]\.xml">
 		<int:poller fixed-rate="1000" />
 	</int-file:inbound-channel-adapter>
-
+	
 	<int:transformer id="xmltvTransformer" ref="xmltvTransformerBean"
-		input-channel="xmltvFileOutChannel" method="transform" output-channel="createEventoRequestChannel" 
-		/>
+		input-channel="xmltvFileOutChannel" method="transform"
+		output-channel="eventTransformerOutChannel" />
 	
+	<!-- ****************************************
+	****************** PERSISTENCE ****************** 
+	*********************************************-->
+	<int:channel id="createMultipleEventosRequestChannel" />
+	<!-- <int:channel id="createEventoRequestChannel" /> -->
+	<int:channel id="listEventoRequestChannel" />
 	
-	<!-- XMLTV Grabber -->
-	<int:inbound-channel-adapter id="xmltvGrabberInbound" ref="xmltvGrabber" method="doGrabbing"
-								channel="xmltvFileInChannel">				
-		<int:poller max-messages-per-poll="1" cron="0 	*  *  *   *  ?  "/>
-		<!--										sec m  h  dm  m  dw -->	
-	</int:inbound-channel-adapter>
+	<int:gateway id="eventoService" service-interface="xmltv.datatypes.EventoService"
+		default-request-timeout="5000" default-reply-timeout="5000" >
+		<int:method name="createMultipleEventos" reply-channel="eventTransformerOutChannel" request-channel="createMultipleEventosRequestChannel"/>
+		<!-- <int:method name="createEvento" request-channel="createEventoRequestChannel" /> -->
+		<!-- <int:method name="createMultipleEventos" request-channel="createEventoRequestChannel" /> -->
+		<int:method name="findEvento" request-channel="listEventoRequestChannel" />
+	</int:gateway>
 	
-	<int-file:outbound-channel-adapter id="xmltvGrabberOutbound"
-		channel="xmltvFileInChannel" directory="file:xmltv_cap"
-		auto-create-directory="true" mode="REPLACE"
-		temporary-file-suffix="writing">
-	</int-file:outbound-channel-adapter>
-
-
-	<bean id="xmltvGrabber" class="xmltv.grabber.XMLTVGrabber"/>
+	<int-jpa:updating-outbound-gateway
+		entity-manager-factory="entityManagerFactory" request-channel="createMultipleEventosRequestChannel">
+		<int-jpa:transactional transaction-manager="transactionManager" />
+	</int-jpa:updating-outbound-gateway>
 	
-	<bean id="xmltvTransformerBean" class="xmltv.transformer.XMLTVTransformer" />
+	<!-- <int-jpa:updating-outbound-gateway
+		entity-manager-factory="entityManagerFactory" request-channel="createEventoRequestChannel">
+		<int-jpa:transactional transaction-manager="transactionManager" />
+	</int-jpa:updating-outbound-gateway> -->
 	
-	<bean id="xmltvFileComparator" class="xmltv.grabber.CustomFileComparator"/>
-
-	<!-- Depending on the selected profile, users can use different JPA Providers -->
-	<beans profile="default, hibernate">
-		<import resource="classpath:/META-INF/spring/integration/hibernate-context.xml" />
-	</beans>
-	<beans profile="default, rabbitmq">
-		<import resource="classpath:/META-INF/spring/integration/rabbitmq-context.xml" />
-	</beans>
+	<int-jpa:retrieving-outbound-gateway
+		entity-manager-factory="entityManagerFactory" request-channel="listEventoRequestChannel"
+		jpa-query="select e from Evento e order by e.start asc">
+	</int-jpa:retrieving-outbound-gateway>
 </beans>
