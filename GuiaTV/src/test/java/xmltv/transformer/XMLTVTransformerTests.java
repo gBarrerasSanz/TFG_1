@@ -22,6 +22,8 @@ import org.springframework.integration.support.MessageBuilder;
 import org.springframework.messaging.Message;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import common.CommonUtility;
+
 import xmltv.datatypes.Event;
 import application.Application;
 
@@ -34,6 +36,9 @@ public class XMLTVTransformerTests {
 	
 	@Autowired
 	private XMLTVTransformer transformer;
+	
+	@Autowired
+	private CommonUtility utils;
 	
 	// TODO: Solucionar la conversion no segura
 	//assertEquals((List<Evento>)resultMsg.getPayload(), lEvt);
@@ -58,31 +63,17 @@ public class XMLTVTransformerTests {
 			Event evt1 = new Event(); Event evt2 = new Event();
 			evt1.setChannel("neox-722.laguiatv.com");
 			evt1.setTitle("Cómo conocí a vuestra Madre");
-			evt1.setStart(strToDate("20150316173500 +0100"));
-			evt1.setEnd(strToDate("20150316175400 +0100"));
+			evt1.setStart(utils.strToDate("20150316173500 +0100"));
+			evt1.setEnd(utils.strToDate("20150316175400 +0100"));
 			// evt2
 			evt2.setChannel("neox-722.laguiatv.com");
 			evt2.setTitle("Los Simpson");
-			evt2.setStart(strToDate("20150316214500 +0100"));
-			evt2.setEnd(strToDate("20150316220000 +0100"));
+			evt2.setStart(utils.strToDate("20150316214500 +0100"));
+			evt2.setEnd(utils.strToDate("20150316220000 +0100"));
 			lEvt.add(evt1); lEvt.add(evt2);
 			assertEquals((List<Event>)resultMsg.getPayload(), lEvt);
 		} catch (IOException e) {
 			e.printStackTrace();
-		}
-	}
-	
-	/*
-	 * Método duplicado de xmltv.transformer.XMLTVTransformer.strToDate()
-	 */
-	private static Date strToDate(String str) {
-		final Locale SPAIN_LOCALE = new Locale("es","ES");
-		SimpleDateFormat format = new SimpleDateFormat("yyyyMMddhhmmss Z", SPAIN_LOCALE);
-		try {
-			return format.parse(str);
-		} catch (ParseException e) {
-			e.printStackTrace();
-			return null;
 		}
 	}
 

@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.io.Resource;
 
+import common.CommonUtility;
+
 
 public class XMLTVGrabber {
 	
@@ -24,6 +26,9 @@ public class XMLTVGrabber {
 	
 	@Autowired
 	private ApplicationContext ctx;
+	
+	@Autowired
+	CommonUtility utils;
 	
 	public XMLTVGrabber() {
 		// TODO: Detectar plataforma e inicializar platform
@@ -43,9 +48,9 @@ public class XMLTVGrabber {
 		Resource binDirRes = ctx.getResource("/META-INF/xmltv/grabber/windows_bin/xmltv-0.5.66-win32");
 		File resFile = null, errFile = null;
 		resFile = new File(tmpDir.getAbsolutePath()+
-				File.separator+"xmltvDump_"+getDateString()+".xml");
+				File.separator+"xmltvDump_"+utils.getDateString()+".xml");
 		errFile = new File(tmpDir.getAbsolutePath()+
-				File.separator+"errorLog_"+getDateString()+".txt");
+				File.separator+"errorLog_"+utils.getDateString()+".txt");
 		switch(platform) {
 		case WINDOWS:
 			try {
@@ -73,12 +78,5 @@ public class XMLTVGrabber {
 			break;
 		}
 		return resFile;
-	}
-
-	private String getDateString() {
-		Date date = new Date();
-		final Locale SPAIN_LOCALE = new Locale("es", "ES");
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy_MM_dd_hh_mm_ss", SPAIN_LOCALE);
-		return formatter.format(date);
 	}
 }

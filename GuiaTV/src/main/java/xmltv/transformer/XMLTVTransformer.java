@@ -14,6 +14,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.apache.commons.jxpath.JXPathContext;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.integration.support.MessageBuilder;
 import org.springframework.integration.transformer.Transformer;
 import org.springframework.messaging.Message;
@@ -21,9 +22,13 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
+import common.CommonUtility;
 import xmltv.datatypes.Event;
 
 public class XMLTVTransformer implements Transformer {
+	
+	@Autowired
+	CommonUtility utils;
 	
 	static Logger log = Logger.getLogger(XMLTVTransformer.class.getName());
 	
@@ -50,8 +55,8 @@ public class XMLTVTransformer implements Transformer {
 					evt = new Event();
 					evt.setTitle(itProg.next());
 					evt.setChannel(nodeMap.getNamedItem("channel").getNodeValue());
-					evt.setStart(strToDate(nodeMap.getNamedItem("start").getNodeValue()));
-					evt.setEnd(strToDate(nodeMap.getNamedItem("stop").getNodeValue()));
+					evt.setStart(utils.strToDate(nodeMap.getNamedItem("start").getNodeValue()));
+					evt.setEnd(utils.strToDate(nodeMap.getNamedItem("stop").getNodeValue()));
 					lEvt.add(evt);
 					itIdx++;
 				}
@@ -67,16 +72,5 @@ public class XMLTVTransformer implements Transformer {
 		else {
 		}
 		return result;
-	}
-
-	private static Date strToDate(String str) {
-		final Locale SPAIN_LOCALE = new Locale("es","ES");
-		SimpleDateFormat format = new SimpleDateFormat("yyyyMMddhhmmss Z", SPAIN_LOCALE);
-		try {
-			return format.parse(str);
-		} catch (ParseException e) {
-			e.printStackTrace();
-			return null;
-		}
 	}
 }

@@ -19,6 +19,12 @@
 	<import resource="classpath:/META-INF/spring/integration/hibernate-context.xml" />
 	<import resource="classpath:/META-INF/spring/integration/rabbitmq-context.xml" />
 	
+		<!-- ****************************************
+	****************** COMMON UTILITY ****************** 
+	*********************************************-->
+	<bean id="commonUtility" class="common.CommonUtility" />
+	
+	
 	<!-- ****************************************
 	****************** GRABBER ****************** 
 	*********************************************-->

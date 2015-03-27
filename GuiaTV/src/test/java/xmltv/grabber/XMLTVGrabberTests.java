@@ -16,6 +16,8 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.core.io.Resource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import common.CommonUtility;
+
 import application.Application;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -25,29 +27,14 @@ public class XMLTVGrabberTests {
 	@Autowired
 	private XMLTVGrabber grabber;
 	
+	@Autowired
+	private CommonUtility utils;
+	
 	@Test
 	public void grabbingTest() {
 		Date realDate = new Date();
 		File grabFile = grabber.doGrabbing();
 		assertEquals(true, grabFile.canRead());
-		assertEquals(true, checkFileNameDate(grabFile.getName(), realDate));
-	}
-
-	private boolean checkFileNameDate(String grabFileName, Date realDate) {
-			final Locale SPAIN_LOCALE = new Locale("es", "ES");
-			SimpleDateFormat formatter = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss", SPAIN_LOCALE);
-			String dateStr = grabFileName.substring(
-					grabFileName.indexOf("_")+1, grabFileName.indexOf("."));
-			try {
-				Date readDate =  formatter.parse(dateStr);
-				// SI la diferencia es como mucho 2 minutos
-				if (realDate.getTime() - readDate.getTime() <= 2*(60*1000)) {
-					return true;
-				}
-				else { return false; }
-			} catch (ParseException e) {
-				e.printStackTrace();
-				return false;
-			}
+		assertEquals(true, utils.checkFileNameDate(grabFile.getName(), realDate));
 	}
 }
