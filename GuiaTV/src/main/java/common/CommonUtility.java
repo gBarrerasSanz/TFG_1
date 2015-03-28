@@ -12,12 +12,25 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 
+import org.apache.log4j.Logger;
+
+import persistence.EventServiceTests;
 import xmltv.datatypes.Event;
 
 
 public class CommonUtility {
 	
-	final int msToIntConv = 1000*60*60;
+	private static final Logger log = Logger.getLogger(EventServiceTests.class);
+	
+	final int msToSecsConv = 1000;
+	final int msToMinsConv = 1000*60;
+	final int msToHoursConv = 1000*60*60;
+	
+	private enum TimeUnit {
+		SEC, MIN, HOUR
+	}
+	
+	
 	
 	public Date strToDate(String str) {
 		final Locale SPAIN_LOCALE = new Locale("es","ES");
@@ -55,18 +68,32 @@ public class CommonUtility {
 		return formatter.format(date);
 	}
 	
-	public Date getFutureRandomDate() {
-		final int MAX_HOURS = 60;
+	public Date getFutureRandomDate(TimeUnit unit, int minTimeUnits, int maxTimeUnits) {
 		Random rand = new Random();
 		Date now = new Date();
-		int plusHours = rand.nextInt(MAX_HOURS)+1;
-		now.setTime(now.getTime() + plusHours * msToIntConv);
+		int plusUnits = rand.nextInt(maxTimeUnits)+minTimeUnits;
+		int plusTime = 0;
+		switch(unit){
+		case SEC:
+			plusTime = plusUnits * msToSecsConv;
+			break;
+		case MIN:
+			plusTime = plusUnits * msToSecsConv;
+			break;
+		case HOUR:
+			plusTime = plusUnits * msToSecsConv;
+			break;
+		default:
+			log.error("Invalidad TimeUnit");
+			break;
+		}
+		now.setTime(now.getTime() + plusTime);
 		return now;
 	}
 	
 	public Date sumTwoHours (Date date) {
 		Date newDate = new Date();
-		newDate.setTime(date.getTime() + 2 * msToIntConv);
+		newDate.setTime(date.getTime() + 2 * msToHoursConv);
 		return newDate;
 	}
 	
@@ -94,4 +121,16 @@ public class CommonUtility {
 		}
 		return sb.toString();
 	}
+	
+	public TimeUnit getTimeUnit(String str){
+		TimeUnit unit = null;
+		try {
+			unit = TimeUnit.valueOf(str.toUpperCase());
+		}
+		catch(IllegalArgumentException e){
+			e.printStackTrace();
+		}
+		return unit;
+	}
+	
 }

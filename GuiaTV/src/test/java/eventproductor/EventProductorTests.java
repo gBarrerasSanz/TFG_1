@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,6 +21,7 @@ import org.springframework.integration.support.MessageBuilder;
 import org.springframework.messaging.Message;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import persistence.EventServiceTests;
 import common.CommonUtility;
 import eventmanager.EventService;
 import xmltv.datatypes.Event;
@@ -29,6 +31,8 @@ import application.Application;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 public class EventProductorTests {
+	
+	private static final Logger log = Logger.getLogger(EventServiceTests.class);
 	
 	@Autowired
 	private ApplicationContext ctx;
@@ -85,9 +89,9 @@ public class EventProductorTests {
 			
 			// Construir resultado esperado
 			Date start1, start2, end1, end2;
-			start1 = utils.getFutureRandomDate(); 
+			start1 = utils.getFutureRandomDate(utils.getTimeUnit("min"), 2, 10); 
 			end1 = utils.sumTwoHours(start1);
-			start2 = utils.getFutureRandomDate();
+			start2 = utils.getFutureRandomDate(utils.getTimeUnit("min"), 12, 15);
 			end2 = utils.sumTwoHours(start2);
 			
 			lEvt = new ArrayList<Event>();

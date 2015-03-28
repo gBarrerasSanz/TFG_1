@@ -132,12 +132,15 @@
 	<!-- ****************************************
 	****************** EVENT PRODUCTOR ****************** 
 	*********************************************-->
-	<int:channel id="closerEventChOut" fixed-subscriber="true" />
+	<int:channel id="closerEventChOut" >
+		<int:queue capacity="10"/>
+	</int:channel>
 	<bean id="eventProductorPublisher" class="eventproductor.EventProductorPublisher" />
 	
 	<int:outbound-channel-adapter id="eventPublisherOut"
 		ref="eventProductorPublisher" method="publishTopics"
 		channel="closerEventChOut">
+		<int:poller fixed-rate="1000"/>
 	</int:outbound-channel-adapter>
 
 
