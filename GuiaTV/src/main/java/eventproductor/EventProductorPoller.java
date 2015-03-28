@@ -1,5 +1,6 @@
 package eventproductor;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -17,6 +18,9 @@ public class EventProductorPoller {
 	
 	public Message<?> askForEvents() {
 		List<Event> lEvt = evService.getCloserEvents(new Date());
+		if (lEvt == null) {
+			lEvt = new ArrayList<Event>();
+		}
 		Message<?> resultMsg = MessageBuilder.
 				withPayload(lEvt).build();
 		return resultMsg;

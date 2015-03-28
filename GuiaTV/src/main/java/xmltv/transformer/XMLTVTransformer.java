@@ -40,6 +40,7 @@ public class XMLTVTransformer implements Transformer {
 				File file = (File) message.getPayload();
 				DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 				DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+				utils.printFile(file);
 				Document doc = dBuilder.parse(file);
 				JXPathContext jxpathCtx = JXPathContext.newContext(doc);
 				@SuppressWarnings("unchecked")

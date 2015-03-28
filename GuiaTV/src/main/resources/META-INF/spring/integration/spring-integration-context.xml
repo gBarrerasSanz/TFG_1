@@ -56,7 +56,7 @@
 		directory="file:xmltv_cap" channel="xmltvFileOutChannel" auto-startup="true"
 		comparator="xmltvFileComparator"
 		filename-regex="xmltvDump_[0-9][0-9][0-9][0-9]_[0-9][0-9]_[0-9][0-9]_[0-9][0-9]_[0-9][0-9]_[0-9][0-9]\.xml">
-		<int:poller fixed-rate="1000" />
+		<int:poller fixed-rate="10000" />
 	</int-file:inbound-channel-adapter>
 	
 	<int:transformer id="xmltvTransformer" ref="xmltvTransformerBean"
@@ -70,7 +70,7 @@
 	
 	<int:channel id="getCloserEventsRequestChannel" />
 	<int:channel id="getCloserEventsReplyChannel" />
-	
+
 	<int:channel id="getAllEventsRequestChannel" />
 
 	<int:gateway id="eventService"
@@ -92,9 +92,10 @@
 	<int-jpa:retrieving-outbound-gateway id="getCloserEventsOutbound"
 		entity-manager-factory="entityManagerFactory"
 		request-channel="getCloserEventsRequestChannel"
-		reply-channel="publisherRequestChannel"
-		jpa-query="select e from Event e where e.end > :now order by e.start asc">
-		 <int-jpa:parameter name="now" type="java.util.Date" />
+		reply-channel="publisherReplyChannel"
+		jpa-query="select e from Event e" requires-reply="false">
+		<!-- jpa-query="select e from Event e where e.end > :now order by e.start asc"> -->
+		 <!-- <int-jpa:parameter name="now" type="java.util.Date" /> -->
 		<!-- Seleccionar los eventos tal que la fecha de su final sea mayor que la fecha actual
 				y ordenarlos tal que los primeros que aparezcan sean los que antes empiecen -->
 	</int-jpa:retrieving-outbound-gateway>
@@ -102,8 +103,8 @@
 	<!-- ****************************************
 	****************** EVENT PRODUCTOR ****************** 
 	*********************************************-->
-	<int:channel id="publisherRequestChannel" />
-	
+	<int:channel id="publisherReplyChannel" />
+
 	<bean id="eventProductorPoller" class="eventproductor.EventProductorPoller" />
 	<bean id="eventProductorPublisher" class="eventproductor.EventProductorPublisher" />
 	
@@ -113,9 +114,10 @@
 	</int:inbound-channel-adapter>
 	
 	<int:outbound-channel-adapter id="eventProductorPublisherOut"
-		ref="eventProductorPublisher" method="publishTopics" channel="publisherRequestChannel">
+		ref="eventProductorPublisher" method="publishTopics"
+		channel="publisherReplyChannel">
 	</int:outbound-channel-adapter>
-	
+
 	<!-- ****************************************
 	****************** PERSISTENCE TEST ****************** 
 	*********************************************-->

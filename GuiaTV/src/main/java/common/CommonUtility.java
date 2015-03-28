@@ -1,12 +1,20 @@
 package common;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Random;
 
 
 public class CommonUtility {
+	
+	final int msToIntConv = 1000*60*60;
 	
 	public Date strToDate(String str) {
 		final Locale SPAIN_LOCALE = new Locale("es","ES");
@@ -42,5 +50,37 @@ public class CommonUtility {
 		final Locale SPAIN_LOCALE = new Locale("es", "ES");
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss", SPAIN_LOCALE);
 		return formatter.format(date);
+	}
+	
+	public Date getFutureRandomDate() {
+		final int MAX_HOURS = 60;
+		Random rand = new Random();
+		Date now = new Date();
+		int plusHours = rand.nextInt(MAX_HOURS)+1;
+		now.setTime(now.getTime() + plusHours * msToIntConv);
+		return now;
+	}
+	
+	public Date sumTwoHours (Date date) {
+		Date newDate = new Date();
+		newDate.setTime(date.getTime() + 2 * msToIntConv);
+		return newDate;
+	}
+	
+	public void printFile (File f) {
+		try {
+			BufferedReader br = new BufferedReader(new FileReader(f));
+			String sCurrentLine = "";
+			while ((sCurrentLine = br.readLine()) != null) {
+				System.out.println(sCurrentLine);
+			}
+			br.close();
+		} 
+		catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }
