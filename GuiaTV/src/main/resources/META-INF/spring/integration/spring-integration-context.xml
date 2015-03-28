@@ -28,71 +28,100 @@
 	<!-- ****************************************
 	****************** GRABBER ****************** 
 	*********************************************-->
-	<int:channel id="xmltvFileInChannel" />
-	<int:channel id="xmltvFileOutChannel" />
-	
+	<int:channel id="grabberChOut" fixed-subscriber="true"/>
+	<int:channel id="transformerChIn" fixed-subscriber="true" />
+
 	<bean id="xmltvGrabber" class="xmltv.grabber.XMLTVGrabber" />
 	
-	<int:inbound-channel-adapter id="xmltvGrabberInbound"
-		ref="xmltvGrabber" method="doGrabbing" channel="xmltvFileInChannel">
+	<int:inbound-channel-adapter ref="xmltvGrabber" method="doGrabbing"
+		channel="grabberChOut" id="grabberInbound">
 		<int:poller max-messages-per-poll="1" cron="0 	*  *  *   *  ?  " />
 		<!-- sec m h dm m dw -->
 	</int:inbound-channel-adapter>
-	
-	<int-file:outbound-channel-adapter
-		id="xmltvGrabberOutbound" channel="xmltvFileInChannel" directory="file:xmltv_cap"
-		auto-create-directory="true" mode="REPLACE" temporary-file-suffix="writing">
+
+	<int-file:outbound-channel-adapter id="grabberOutbound"
+		channel="grabberChOut" directory="file:xmltv_cap"
+		auto-create-directory="true" mode="REPLACE"
+		temporary-file-suffix="writing">
 	</int-file:outbound-channel-adapter>
 
 	<!-- ****************************************
 	****************** TRANSFORMER ****************** 
 	*********************************************-->
-	<int:channel id="eventTransformerOutChannel" />
-	
+	<int:channel id="transformerChOut" fixed-subscriber="true" />
+
 	<bean id="xmltvTransformerBean" class="xmltv.transformer.XMLTVTransformer" />
 	<bean id="xmltvFileComparator" class="xmltv.grabber.CustomFileComparator" />
+	<bean id="eventCreator" class="xmltv.transformer.EventCreator"/>
 	
-	<int-file:inbound-channel-adapter id="filePoller"
-		directory="file:xmltv_cap" channel="xmltvFileOutChannel" auto-startup="true"
+	<int-file:inbound-channel-adapter id="filePollerInbound"
+		directory="file:xmltv_cap" channel="transformerChIn" auto-startup="true"
 		comparator="xmltvFileComparator"
 		filename-regex="xmltvDump_[0-9][0-9][0-9][0-9]_[0-9][0-9]_[0-9][0-9]_[0-9][0-9]_[0-9][0-9]_[0-9][0-9]\.xml">
 		<int:poller fixed-rate="10000" />
 	</int-file:inbound-channel-adapter>
+
+	<int:transformer id="transformerXmlToPojo"
+		ref="xmltvTransformerBean" input-channel="transformerChIn"
+		method="transform" output-channel="transformerChOut" />
+
+	<int:service-activator id="transformerSA"
+		input-channel="transformerChOut" ref="eventCreator" method="createEvents"
+		requires-reply="false">
+	</int:service-activator>
+
+	<!-- ****************************************
+	****************** EVENT POLLER ****************** 
+	*********************************************-->
+	<int:channel id="eventPollerChOut" fixed-subscriber="true" />
+
+	<bean id="eventPoller" class="eventproductor.EventProductorPoller" />
+	<bean id="eventPollerReply" class="eventproductor.EventProductorPollerReply"/>
 	
-	<int:transformer id="xmltvTransformer" ref="xmltvTransformerBean"
-		input-channel="xmltvFileOutChannel" method="transform"
-		output-channel="eventTransformerOutChannel" />
+	<int:inbound-channel-adapter id="eventPollerInbound"
+		ref="eventPoller" method="askForEvents"
+		channel="eventPollerChOut">
+		<int:poller fixed-rate="5000" />
+	</int:inbound-channel-adapter>
+	
+	<int:outbound-channel-adapter id="eventPollerOutbound"
+	channel="eventPollerChOut"
+	ref="eventPollerReply" method="receive">
+	</int:outbound-channel-adapter>
+	
+<!-- 	<int:service-activator id="eventPollerSA"
+		input-channel="eventPollerChIn" ref="eventPoller" method="askForEvents"
+		requires-reply="false" >
+	</int:service-activator> -->
+	
+	
 	
 	<!-- ****************************************
 	****************** PERSISTENCE ****************** 
 	*********************************************-->
-	<int:channel id="createMultipleEventsRequestChannel" />
-	
-	<int:channel id="getCloserEventsRequestChannel" />
-	<int:channel id="getCloserEventsReplyChannel" />
+	<int:channel id="eventCreatorChIn" fixed-subscriber="true" />
+	<int:channel id="closerEventChIn" fixed-subscriber="true" />
+	<int:channel id="getAllEventChIn" fixed-subscriber="true" />
 
-	<int:channel id="getAllEventsRequestChannel" />
-
-	<int:gateway id="eventService"
+	<int:gateway id="eventServiceGateway"
 		service-interface="eventmanager.EventService"
 		default-request-timeout="5000" default-reply-timeout="5000">
-		<int:method name="createMultipleEvents" reply-channel="eventTransformerOutChannel" 
-			request-channel="createMultipleEventsRequestChannel"/>
-		<int:method name="getCloserEvents" reply-channel="getCloserEventsReplyChannel" 
-			request-channel="getCloserEventsRequestChannel" />
-		<int:method name="getAllEvents" request-channel="getAllEventsRequestChannel" />
+		<int:method name="createMultipleEvents"
+			request-channel="eventCreatorChIn"/>
+		<int:method name="getCloserEvents" 
+			request-channel="closerEventChIn" />
+		<int:method name="getAllEvents" request-channel="getAllEventChIn" />
 	</int:gateway>
 
-	<int-jpa:updating-outbound-gateway id="createMultipleEventsOutbound"
+	<int-jpa:updating-outbound-gateway id="eventCreatorOutbound"
 		entity-manager-factory="entityManagerFactory"
-		request-channel="createMultipleEventsRequestChannel">
+		request-channel="eventCreatorChIn">
 		<int-jpa:transactional transaction-manager="transactionManager" />
 	</int-jpa:updating-outbound-gateway>
-	
+
 	<int-jpa:retrieving-outbound-gateway id="getCloserEventsOutbound"
 		entity-manager-factory="entityManagerFactory"
-		request-channel="getCloserEventsRequestChannel"
-		reply-channel="publisherReplyChannel"
+		request-channel="closerEventChIn" reply-channel="closerEventChOut"
 		jpa-query="select e from Event e" requires-reply="false">
 		<!-- jpa-query="select e from Event e where e.end > :now order by e.start asc"> -->
 		 <!-- <int-jpa:parameter name="now" type="java.util.Date" /> -->
@@ -103,20 +132,14 @@
 	<!-- ****************************************
 	****************** EVENT PRODUCTOR ****************** 
 	*********************************************-->
-	<int:channel id="publisherReplyChannel" />
-
-	<bean id="eventProductorPoller" class="eventproductor.EventProductorPoller" />
+	<int:channel id="closerEventChOut" fixed-subscriber="true" />
 	<bean id="eventProductorPublisher" class="eventproductor.EventProductorPublisher" />
 	
-	<int:inbound-channel-adapter id="eventProductorPollerIn"
-		ref="eventProductorPoller" method="askForEvents" channel="getCloserEventsReplyChannel">
-		<int:poller fixed-rate="5000" />
-	</int:inbound-channel-adapter>
-	
-	<int:outbound-channel-adapter id="eventProductorPublisherOut"
+	<int:outbound-channel-adapter id="eventPublisherOut"
 		ref="eventProductorPublisher" method="publishTopics"
-		channel="publisherReplyChannel">
+		channel="closerEventChOut">
 	</int:outbound-channel-adapter>
+
 
 	<!-- ****************************************
 	****************** PERSISTENCE TEST ****************** 
@@ -124,9 +147,7 @@
 	
 	<int-jpa:retrieving-outbound-gateway id="getAllEventsOutbound"
 		entity-manager-factory="entityManagerFactory"
-		request-channel="getAllEventsRequestChannel"
-		jpa-query="select e from Event e">
+		request-channel="getAllEventChIn" jpa-query="select e from Event e">
 	</int-jpa:retrieving-outbound-gateway>
 
-	
 </beans>

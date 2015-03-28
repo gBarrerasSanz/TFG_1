@@ -94,7 +94,18 @@ public class Event {
 	public void setEnd(Date end) {
 		this.end = end;
 	}
-
+	
+	
+	@Override
+	public String toString() {
+		return "Event "+id+" {"+
+				"channel="+channel+", "+
+				"title="+title+", "+
+				"start="+start+", "+
+				"end="+end+", "+
+				"}";
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;

@@ -33,8 +33,8 @@ public class XMLTVTransformer implements Transformer {
 	static Logger log = Logger.getLogger(XMLTVTransformer.class.getName());
 	
 	@Override
-	public Message<?> transform(Message<?> message) {
-		Message<?> result = null;
+	public Message<List<Event>> transform(Message<?> message) {
+		Message<List<Event>> result = null;
 		if (message.getPayload() instanceof File) {
 			try{
 				File file = (File) message.getPayload();

@@ -5,13 +5,8 @@ import static org.junit.Assert.*;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,10 +34,7 @@ public class XMLTVTransformerTests {
 	
 	@Autowired
 	private CommonUtility utils;
-	
-	// TODO: Solucionar la conversion no segura
-	//assertEquals((List<Evento>)resultMsg.getPayload(), lEvt);
-	@SuppressWarnings("unchecked")
+
 	@Test
 	public void transformTest() {
 //		final ApplicationContext context = new ClassPathXmlApplicationContext(
@@ -54,7 +46,7 @@ public class XMLTVTransformerTests {
 			File file = new File(uri);
 			Message<?> fileMsg = MessageBuilder.
 					withPayload(file).build();
-			Message<?> resultMsg = transformer.transform(fileMsg);
+			Message<List<Event>> resultMsg = transformer.transform(fileMsg);
 			assertNotNull(resultMsg);
 			
 			// Construir resultado esperado
@@ -71,7 +63,7 @@ public class XMLTVTransformerTests {
 			evt2.setStart(utils.strToDate("20150316214500 +0100"));
 			evt2.setEnd(utils.strToDate("20150316220000 +0100"));
 			lEvt.add(evt1); lEvt.add(evt2);
-			assertEquals((List<Event>)resultMsg.getPayload(), lEvt);
+			assertEquals(resultMsg.getPayload(), lEvt);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

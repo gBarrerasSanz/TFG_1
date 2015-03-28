@@ -8,8 +8,11 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.Random;
+
+import xmltv.datatypes.Event;
 
 
 public class CommonUtility {
@@ -82,5 +85,13 @@ public class CommonUtility {
 		catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public String lEvtToStr(List<Event> lEvt) {
+		StringBuilder sb = new StringBuilder();
+		for (Event e: lEvt) {
+			sb.append(e.toString()+"\n");
+		}
+		return sb.toString();
 	}
 }
