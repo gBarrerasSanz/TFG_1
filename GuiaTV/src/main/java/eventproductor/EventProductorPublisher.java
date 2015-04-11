@@ -1,10 +1,12 @@
 package eventproductor;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.amqp.core.BindingBuilder;
+import org.springframework.amqp.core.DirectExchange;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.core.TopicExchange;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
@@ -13,14 +15,22 @@ import org.springframework.integration.support.MessageBuilder;
 import org.springframework.messaging.Message;
 import org.springframework.stereotype.Service;
 
+import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.Connection;
+import com.rabbitmq.client.ConnectionFactory;
+
 import xmltv.datatypes.Event;
 
 public class EventProductorPublisher {
 	
+//	@Autowired
+//	AmqpTemplate amqpTemplate;
+//	@Autowired
+//	RabbitAdmin rabbitAdmin;
 	@Autowired
-	AmqpTemplate amqpTemplate;
+	ConnectionFactory connFactory;
 	@Autowired
-	RabbitAdmin rabbitAdmin;
+	TopicExchange topicExch;
 	
 //	@Autowired
 //	private ApplicationContext ctx;
@@ -30,37 +40,44 @@ public class EventProductorPublisher {
 //		rabbitAdmin = ctx.getBean(RabbitAdmin.class); 
 //	}
 	
-	public Message<?> publishTopics(Message<List<Event>> lEvtMsg ) {
-		List<Event> lEvt = lEvtMsg.getPayload();
-		for (Event e: lEvt) {
-			;
+	public void publishTopics(Message<List<Event>> lEvtMsg ) {
+		try {
+			Connection conn = connFactory.newConnection();
+			Channel ch = conn.createChannel();
+			
+			String routKey = null, msgBody = null;
+			for (Event ev: lEvtMsg.getPayload()) {
+				routKey = 
+				msgBody = "programme starting";
+				ch.basicPublish(topicExch.getName(), routKey, null, msgBody.getBytes());
+			}
+		} catch (IOException e1) {
+			e1.printStackTrace();
 		}
-		Message<List<Event>> respMsg = MessageBuilder.
-				withPayload(lEvt).build();
-		return respMsg;
+		
 	}
 	
-	public void declareQueue(String queueName) {
-		Queue queue = new Queue(queueName);
-		this.rabbitAdmin.declareQueue(queue);
-		TopicExchange topicExchange = new TopicExchange(queueName);
-		this.rabbitAdmin.declareExchange(topicExchange);
-		this.rabbitAdmin
-		    .declareBinding(
-		        BindingBuilder
-		            .bind(queue)
-		            .to(topicExchange)
-		            .with(queueName));
-	}
-
-	public boolean sendMessage(String message){ 
-		try{ 
-			amqpTemplate.convertAndSend("amq.topic", "amq.topic.*", message); 
-	        return true;
-	    }catch(Exception ex){ 
-	    	return false;
-	    }
-	}
+//	public void declareQueue(String queueName) {
+//		Queue queue = new Queue(queueName);
+//		this.rabbitAdmin.declareQueue(queue);
+//		TopicExchange topicExchange = new TopicExchange(queueName);
+//		this.rabbitAdmin.declareExchange(topicExchange);
+//		this.rabbitAdmin
+//		    .declareBinding(
+//		        BindingBuilder
+//		            .bind(queue)
+//		            .to(topicExchange)
+//		            .with(queueName));
+//	}
+//
+//	public boolean sendMessage(String message){ 
+//		try{ 
+//			amqpTemplate.convertAndSend("amq.topic", "amq.topic.*", message); 
+//	        return true;
+//	    }catch(Exception ex){ 
+//	    	return false;
+//	    }
+//	}
 	
 //	public String sendMsg(String id, String val) {
 //		amqpTemplate.convertAndSend(id, val);

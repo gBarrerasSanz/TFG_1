@@ -7,6 +7,5 @@
     <rabbit:connection-factory id="connectionFactory" virtual-host="/" username="user" password="userp" port="5672"/>
     <rabbit:template id="amqpTemplate" connection-factory="connectionFactory"/>
     <rabbit:admin connection-factory="connectionFactory"/>
-    <rabbit:queue name="myqueue"/>
 
 </beans>

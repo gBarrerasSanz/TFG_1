@@ -47,29 +47,39 @@ public class EventProductorTests {
 	private EventService evService;
 	
 	@Autowired
-	private EventProductorPublisher evProductor;
+	private EventProductorPublisher evProd;
 	
 	/*
 	 * Este test se completa satisfactoriamente aun sin estar el RabbitMQ funcionando...
 	 * */
-//	@Test
-//	public void sendMessage() {
-//		EventProductor eventProductor = new EventProductor();
-//		MQTTTestingClient mqttClient = null;
-//		try {
-//			boolean sendMsg;
-//			evProductor.declareQueue("testqueue1");
-//			sendMsg = evProductor.sendMessage("testmsg1");
-//			assertEquals(true, sendMsg);
-//			
-//			
-//			mqttClient = new MQTTTestingClient(5);
-//			mqttClient.subscribe("testqueue1");
-//		}
-//		catch(Exception e) {
-//			e.printStackTrace();
-//		}
-//	}
+	@Test
+	public void publishEventSimple() {
+		MQTTTestingClient mqttCl1 = null, mqttCl2 = null;
+		String ch1 = "neox-722<dot>laguiatv<dot>com";
+		String prog1 = "Cómo conocí a vuestra Madre";
+		String prog2 = "Los Simpson";
+		try {
+			// Hacer la suscripción por parte de los clientes
+			mqttCl1 = new MQTTTestingClient(1);
+			mqttCl2 = new MQTTTestingClient(2);
+
+			mqttCl1.subscribe(new String[]{prog1});
+			mqttCl2.subscribe(new String[]{prog1, prog2});
+			
+			// Producir mensaje
+			List<Event> lEvt = new ArrayList<Event>();
+			Event evt1 = new Event(ch1,	prog1, new Date(), new Date());
+			Event evt2 = new Event(ch1, prog2, new Date(), new Date());
+			lEvt.add(evt1); lEvt.add(evt2);
+			Message<List<Event>> lEvtMsg = MessageBuilder.
+					withPayload(lEvt).build();
+			evProd.publishTopics(lEvtMsg);		
+			
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
 	
 	
 	@Test

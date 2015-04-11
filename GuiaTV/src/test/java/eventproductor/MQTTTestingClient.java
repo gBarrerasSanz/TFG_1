@@ -49,11 +49,12 @@ public class MQTTTestingClient {
 		}
 	}
 	
-	public void subscribe(String topic) {
+	public void subscribe(String[] topicArr) {
 		try {
-			mqttclient.subscribe(topic, this.qos);
+			int[] qosArr = new int[topicArr.length];
+			for (int i=0; i<qosArr.length; i++) { qosArr[i] = qos; }
+			mqttclient.subscribe(topicArr, qosArr);
 		} catch (MqttException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

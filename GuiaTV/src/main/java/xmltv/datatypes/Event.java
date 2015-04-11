@@ -43,11 +43,10 @@ public class Event {
 
 	public Event(String channel, String title, Date start, Date end) {
 		super();
-		this.channel = channel;
-		this.title = title;
-		// TODO: Tratar las fechas
-		this.start = new Date();
-		this.end = new Date();
+		this.setChannel(channel);
+		this.setTitle(title);
+		this.setStart(start);
+		this.setEnd(end);
 	}
 	
 	public boolean checkInitValues() {
@@ -68,7 +67,7 @@ public class Event {
 	}
 
 	public void setChannel(String channel) {
-		this.channel = channel;
+		this.channel = filterTopicSpecialChars(channel);
 	}
 
 	public String getTitle() {
@@ -76,7 +75,7 @@ public class Event {
 	}
 
 	public void setTitle(String title) {
-		this.title = title;
+		this.title = filterTopicSpecialChars(title);
 	}
 
 	public Date getStart() {
@@ -95,6 +94,13 @@ public class Event {
 		this.end = end;
 	}
 	
+	private String filterTopicSpecialChars(String src) {
+		String dst = null;
+		dst = src.replace(".", "<dot>");
+		dst = dst.replace("#", "<hash>");
+		dst = dst.replace("*", "<star>");
+		return dst;
+	}
 	
 	@Override
 	public String toString() {
