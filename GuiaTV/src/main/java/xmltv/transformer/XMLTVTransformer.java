@@ -61,8 +61,8 @@ public class XMLTVTransformer implements Transformer {
 					lEvt.add(evt);
 					itIdx++;
 				}
-				log.debug("listProgNodes.size() = "+String.valueOf(listProgNodes.size()));
-				log.debug("itIdx = "+String.valueOf(itIdx));
+//				log.debug("listProgNodes.size() = "+String.valueOf(listProgNodes.size()));
+//				log.debug("itIdx = "+String.valueOf(itIdx));
 				assert(listProgNodes.size() == itIdx);
 				result = MessageBuilder.withPayload(lEvt).copyHeaders(message.getHeaders()).build();
 			}

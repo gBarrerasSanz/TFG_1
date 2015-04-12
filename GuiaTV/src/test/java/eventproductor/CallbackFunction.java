@@ -26,7 +26,7 @@ public class CallbackFunction implements MqttCallback {
 	@Override
 	public void messageArrived(String arg0, MqttMessage arg1) throws Exception {
 		// TODO Auto-generated method stub
-		System.err.println("arg0 = "+arg0 + "\narg1 = "+arg1.toString());
+		System.err.println("CallbackFunction.messageArrived (id="+id+"): "+"arg0 = "+arg0 + "\narg1 = "+arg1.toString());
 	}
 
 }

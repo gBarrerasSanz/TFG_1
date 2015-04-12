@@ -21,6 +21,6 @@ public class EventProductorPollerReply {
 	static Logger log = Logger.getLogger(XMLTVTransformer.class.getName());
 	
 	public void receive(Message<List<Event>> lEvtMsg) {
-		log.debug(utils.lEvtToStr(lEvtMsg.getPayload()));
+//		log.debug(utils.lEvtToStr(lEvtMsg.getPayload()));
 	}
 }

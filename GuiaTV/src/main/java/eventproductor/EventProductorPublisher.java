@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.DirectExchange;
+import org.springframework.amqp.core.MessageProperties;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.core.TopicExchange;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
@@ -28,9 +29,7 @@ public class EventProductorPublisher {
 //	@Autowired
 //	RabbitAdmin rabbitAdmin;
 	@Autowired
-	ConnectionFactory connFactory;
-	@Autowired
-	TopicExchange topicExch;
+	AmqpTemplate amqpTmp;
 	
 //	@Autowired
 //	private ApplicationContext ctx;
@@ -42,16 +41,19 @@ public class EventProductorPublisher {
 	
 	public void publishTopics(Message<List<Event>> lEvtMsg ) {
 		try {
-			Connection conn = connFactory.newConnection();
-			Channel ch = conn.createChannel();
+//			Connection conn = connFactory.newConnection();
+//			Channel ch = conn.createChannel();
 			
 			String routKey = null, msgBody = null;
+			org.springframework.amqp.core.Message msg = null;
 			for (Event ev: lEvtMsg.getPayload()) {
-				routKey = 
+				routKey = ev.getChannel()+"."+ev.getTitle();
 				msgBody = "programme starting";
-				ch.basicPublish(topicExch.getName(), routKey, null, msgBody.getBytes());
+				msg = new org.springframework.amqp.core.Message(msgBody.getBytes(), new MessageProperties());
+//				ch.basicPublish(topicExch.getName(), routKey, null, msgBody.getBytes());
+				amqpTmp.send(routKey, msg);
 			}
-		} catch (IOException e1) {
+		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
 		

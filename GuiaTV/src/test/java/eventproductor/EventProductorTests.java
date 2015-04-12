@@ -82,7 +82,7 @@ public class EventProductorTests {
 	}
 	
 	
-	@Test
+//	@Test
 	public void publishTopicsFromXMLTVFileTest() {
 		Resource resource = ctx.getResource("/META-INF/test/xmltv/xmltv_sample.xml");
 		List<Event> lEvt = null;

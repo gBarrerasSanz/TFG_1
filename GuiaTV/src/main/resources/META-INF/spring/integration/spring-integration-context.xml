@@ -133,17 +133,32 @@
 	<!-- ****************************************
 	****************** EVENT PRODUCTOR ****************** 
 	*********************************************-->
-	<bean id="rabbitConnectionFactoryBean" class="com.rabbitmq.client.ConnectionFactory">
+<!-- 	<bean id="rabbitConnectionFactoryBean" class="com.rabbitmq.client.ConnectionFactory">
 	<property name="host" 			value="localhost" />
 	<property name="username" 		value="user" />
 	<property name="password" 		value="userp" />
 	<property name="virtualHost" 	value="/" />
 	<property name="port" 			value="5672"/>
-	</bean>
-	<!-- <rabbit:connection-factory id="connectionFactory" virtual-host="/" username="user" password="userp" port="5672"/> -->
+	</bean> -->
     <!-- <rabbit:template id="amqpTemplate" connection-factory="connectionFactory"/> -->
     <!-- <rabbit:admin connection-factory="connectionFactory" /> -->
-    <rabbit:topic-exchange name="topicExchange"></rabbit:topic-exchange>
+    
+    <rabbit:connection-factory id="connectionFactory" 
+    	host="localhost" 
+    	virtual-host="/" 
+    	username="user" 
+    	password="userp" 
+    	port="5672" />
+    	
+    <rabbit:topic-exchange name="topicExchange" auto-declare="true"></rabbit:topic-exchange>
+    
+    <!-- <rabbit:connection-factory id="connectionFactory" host="localhost" publisher-confirms="true" publisher-returns="true" /> -->
+	<!-- Spring AMQP template - Creates a bean which can send a message to the topicExchange-->
+	<rabbit:template id="amqpTemplate" 
+		connection-factory="connectionFactory" 
+		exchange="topicExchange" />
+	<!-- Spring AMQP Admin -->
+	<rabbit:admin connection-factory="connectionFactory" />
     
 	<int:channel id="closerEventChOut" >
 		<int:queue capacity="10"/>
