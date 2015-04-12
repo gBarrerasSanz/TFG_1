@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -21,6 +22,9 @@ import org.springframework.integration.support.MessageBuilder;
 import org.springframework.messaging.Message;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.sun.java.swing.plaf.windows.WindowsTreeUI.CollapsedIcon;
+import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils.Collections;
+
 import persistence.EventServiceTests;
 import common.CommonUtility;
 import eventmanager.EventService;
@@ -33,7 +37,7 @@ import application.Application;
 @SpringApplicationConfiguration(classes = Application.class)
 public class EventProducerTests {
 	
-	private static final Logger log = Logger.getLogger(EventServiceTests.class);
+	private static final Logger log = Logger.getLogger("debugLog");
 	
 	@Autowired
 	private ApplicationContext ctx;
@@ -50,22 +54,26 @@ public class EventProducerTests {
 	@Autowired
 	private EventProducerPublisher evProd;
 	
+	@Autowired
+	private TaskExecutorMQTTClient client1;
+	
+	@Autowired
+	private TaskExecutorMQTTClient client2;
+	
 	/*
 	 * Este test se completa satisfactoriamente aun sin estar el RabbitMQ funcionando...
 	 * */
 	@Test
 	public void publishEventSimple() {
-		MQTTTestingClient mqttCl1 = null, mqttCl2 = null;
 		String ch1 = "ch1_Test";
 		String prog1 = "prog1_Test";
 		String prog2 = "prog2_Test";
 		try {
 			// Hacer la suscripción por parte de los clientes
-			mqttCl1 = new MQTTTestingClient("client1");
-			mqttCl2 = new MQTTTestingClient("client2");
-
-			mqttCl1.subscribe(new String[]{ch1+"."+prog1});
-			mqttCl2.subscribe(new String[]{ch1+"."+prog1, ch1+"."+prog2});
+			String[] cl1MsgsArr = new String[]{ch1+"."+prog1};
+			String[] cl2MsgsArr = new String[]{ch1+"."+prog1, ch1+"."+prog2};
+			client1.connectAndSubscribe("client1", cl1MsgsArr);
+			client2.connectAndSubscribe("client2", cl2MsgsArr);
 			
 			// Producir mensaje
 			List<Event> lEvt = new ArrayList<Event>();
@@ -74,7 +82,29 @@ public class EventProducerTests {
 			lEvt.add(evt1); lEvt.add(evt2);
 			Message<List<Event>> lEvtMsg = MessageBuilder.
 					withPayload(lEvt).build();
-			evProd.publishTopics(lEvtMsg);		
+			evProd.publishTopics(lEvtMsg);
+			log.debug("Topics publicados");
+			
+			// Confirmar que los consumidores lo han recibido
+			List<String> cl1Msgs = new ArrayList<String>(Arrays.asList(cl1MsgsArr));
+			List<String> cl2Msgs = new ArrayList<String>(Arrays.asList(cl2MsgsArr));
+			long initTime = System.currentTimeMillis();
+			long timeout = 5000;
+			boolean stop = false;
+			while (stop == false) {
+				if (System.currentTimeMillis() > initTime + timeout
+						|| (cl1Msgs.equals(client1.getReceivedMessages()) && cl2Msgs.equals(client2.getReceivedMessages()))) 
+				{
+					stop = true;
+				}
+				else {
+					Thread.sleep(50);
+				}
+			}
+			assertEquals(cl1Msgs, client1.getReceivedMessages());
+			assertEquals(cl2Msgs, client2.getReceivedMessages());
+			client1.disconnect();
+			client2.disconnect();
 		}
 		catch(Exception e) {
 			e.printStackTrace();

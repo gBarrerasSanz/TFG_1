@@ -11,7 +11,7 @@
 	</appender>
 
 	<!-- Loggers -->
-	<logger name="xmltv.transformer">
+	<logger name="debugLog">
 		<level value="debug" />
 	</logger>
 

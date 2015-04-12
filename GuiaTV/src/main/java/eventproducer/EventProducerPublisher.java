@@ -41,7 +41,7 @@ public class EventProducerPublisher {
 			String routKey = null, msgBody = null;
 			for (Event ev: lEvtMsg.getPayload()) {
 				routKey = ev.getChannel()+"."+ev.getTitle();
-				msgBody = "programme starting";
+				msgBody = routKey; // TODO: Cambiar esto
 				amqpTmp.convertAndSend(routKey, msgBody);
 			}
 		} catch (Exception e1) {

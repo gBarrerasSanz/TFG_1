@@ -43,7 +43,8 @@
 	<int-file:outbound-channel-adapter id="grabberOutbound"
 		channel="grabberChOut" directory="file:xmltv_cap"
 		auto-create-directory="true" mode="REPLACE"
-		temporary-file-suffix="writing">
+		temporary-file-suffix="writing" delete-source-files="true"
+		>
 	</int-file:outbound-channel-adapter>
 
 	<!-- ****************************************
@@ -58,7 +59,7 @@
 	<int-file:inbound-channel-adapter id="filePollerInbound"
 		directory="file:xmltv_cap" channel="transformerChIn" auto-startup="true"
 		comparator="xmltvFileComparator"
-		filename-regex="xmltvDump_[0-9][0-9][0-9][0-9]_[0-9][0-9]_[0-9][0-9]_[0-9][0-9]_[0-9][0-9]_[0-9][0-9]\.xml">
+		filename-regex="xmltvDump_[0-9][0-9][0-9][0-9]_[0-9][0-9]_[0-9][0-9]_[0-9][0-9]_[0-9][0-9]_[0-9][0-9]\.xml" >
 		<int:poller fixed-rate="10000" />
 	</int-file:inbound-channel-adapter>
 
@@ -165,7 +166,7 @@
 	<bean id="eventProducerPublisher" class="eventproducer.EventProducerPublisher" />
 	
 	<int:outbound-channel-adapter id="eventPublisherOut"
-		ref="eventProducerPublisher" method="publishTopicsDummy"
+		ref="eventProducerPublisher" method="publishTopics"
 		channel="closerEventChOut">
 		<int:poller fixed-rate="1000"/>
 	</int:outbound-channel-adapter>
@@ -179,5 +180,19 @@
 		entity-manager-factory="entityManagerFactory"
 		request-channel="getAllEventChIn" jpa-query="select e from Event e">
 	</int-jpa:retrieving-outbound-gateway>
-
+	
+	<!-- ****************************************
+	****************** MQTT CLIENT TEST ****************** 
+	*********************************************-->
+	
+	<bean id="taskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+    <property name="corePoolSize" value="5" />
+    <property name="maxPoolSize" value="10" />
+    <property name="queueCapacity" value="25" />
+	</bean>
+	<bean id="taskExecutorClient" class="eventproducer.TaskExecutorMQTTClient" 
+		scope="prototype">
+	    <constructor-arg ref="taskExecutor" />
+	    
+	</bean>
 </beans>
