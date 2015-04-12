@@ -76,8 +76,8 @@
 	*********************************************-->
 	<int:channel id="eventPollerChOut" fixed-subscriber="true" />
 
-	<bean id="eventPoller" class="eventproducer.EventProductorPoller" />
-	<bean id="eventPollerReply" class="eventproducer.EventProductorPollerReply"/>
+	<bean id="eventPoller" class="eventproducer.EventProducerPoller" />
+	<bean id="eventPollerReply" class="eventproducer.EventProducerPollerReply"/>
 	
 	<int:inbound-channel-adapter id="eventPollerInbound"
 		ref="eventPoller" method="askForEvents"
@@ -163,10 +163,10 @@
 	<int:channel id="closerEventChOut" >
 		<int:queue capacity="10"/>
 	</int:channel>
-	<bean id="eventProductorPublisher" class="eventproducer.EventProductorPublisher" />
+	<bean id="eventProducerPublisher" class="eventproducer.EventProducerPublisher" />
 	
 	<int:outbound-channel-adapter id="eventPublisherOut"
-		ref="eventProductorPublisher" method="publishTopicsDummy"
+		ref="eventProducerPublisher" method="publishTopicsDummy"
 		channel="closerEventChOut">
 		<int:poller fixed-rate="1000"/>
 	</int:outbound-channel-adapter>
