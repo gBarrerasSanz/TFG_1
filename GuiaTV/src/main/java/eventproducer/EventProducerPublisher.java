@@ -38,15 +38,8 @@ public class EventProducerPublisher {
 	
 	public void publishTopics(Message<List<Event>> lEvtMsg ) {
 		try {
-//			Connection conn = connFactory.newConnection();
-//			Channel ch = conn.createChannel();
-//			Queue q;
-//			Binding bind;
 			String routKey = null, msgBody = null;
 			for (Event ev: lEvtMsg.getPayload()) {
-//				q = rabbitAdmin.declareQueue(); // Declarar cola
-//				bind = BindingBuilder.bind(q).to(topicExch).with(q.getName()); // asociar cola a exchange
-//				rabbitAdmin.declareBinding(bind); // declarar la asociación
 				routKey = ev.getChannel()+"."+ev.getTitle();
 				msgBody = "programme starting";
 				amqpTmp.convertAndSend(routKey, msgBody);

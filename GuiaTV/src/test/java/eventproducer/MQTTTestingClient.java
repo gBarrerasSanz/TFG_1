@@ -57,7 +57,7 @@ public class MQTTTestingClient {
 		try {
 			int[] qosArr = new int[topicArr.length];
 			for (int i=0; i<qosArr.length; i++) { qosArr[i] = qos; }
-			mqttclient.subscribe(topicArr, qosArr);
+			mqttclient.subscribe(topicArr);
 		} catch (MqttException e) {
 			e.printStackTrace();
 		}

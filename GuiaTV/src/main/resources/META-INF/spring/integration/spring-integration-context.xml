@@ -150,18 +150,12 @@
     	password="userp" 
     	port="5672" />
 
-	<rabbit:queue id="receiveQueue" auto-delete="true" durable="false" />    	
-    <rabbit:topic-exchange name="topicExchange">
-    <rabbit:bindings>
-    	<rabbit:binding queue="receiveQueue" pattern="*.*"/>
-    </rabbit:bindings>
-    </rabbit:topic-exchange>
+    <rabbit:topic-exchange name="amq.topic"></rabbit:topic-exchange>
     
-    <!-- <rabbit:connection-factory id="connectionFactory" host="localhost" publisher-confirms="true" publisher-returns="true" /> -->
 	<!-- Spring AMQP template - Creates a bean which can send a message to the topicExchange-->
 	<rabbit:template id="amqpTemplate" 
 		connection-factory="connectionFactory" 
-		exchange="topicExchange" />
+		exchange="amq.topic" />
 	<!-- Spring AMQP Admin -->
 	<rabbit:admin connection-factory="connectionFactory" />
     
