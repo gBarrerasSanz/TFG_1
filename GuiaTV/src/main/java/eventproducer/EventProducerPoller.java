@@ -1,4 +1,4 @@
-package eventproductor;
+package eventproducer;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -11,7 +11,7 @@ import org.springframework.messaging.Message;
 import xmltv.datatypes.Event;
 import eventmanager.EventService;
 
-public class EventProductorPoller {
+public class EventProducerPoller {
 	
 	@Autowired
 	EventService evService;

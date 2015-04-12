@@ -1,4 +1,4 @@
-package eventproductor;
+package eventproducer;
 
 import java.util.Date;
 import java.util.List;
@@ -13,7 +13,7 @@ import xmltv.datatypes.Event;
 import xmltv.transformer.XMLTVTransformer;
 import eventmanager.EventService;
 
-public class EventProductorPollerReply {
+public class EventProducerPollerReply {
 	
 	@Autowired
 	CommonUtility utils;

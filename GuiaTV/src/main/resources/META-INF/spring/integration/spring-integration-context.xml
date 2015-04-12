@@ -76,8 +76,8 @@
 	*********************************************-->
 	<int:channel id="eventPollerChOut" fixed-subscriber="true" />
 
-	<bean id="eventPoller" class="eventproductor.EventProductorPoller" />
-	<bean id="eventPollerReply" class="eventproductor.EventProductorPollerReply"/>
+	<bean id="eventPoller" class="eventproducer.EventProductorPoller" />
+	<bean id="eventPollerReply" class="eventproducer.EventProductorPollerReply"/>
 	
 	<int:inbound-channel-adapter id="eventPollerInbound"
 		ref="eventPoller" method="askForEvents"
@@ -122,8 +122,8 @@
 
 	<int-jpa:retrieving-outbound-gateway id="getCloserEventsOutbound"
 		entity-manager-factory="entityManagerFactory"
-		request-channel="closerEventChIn" reply-channel="closerEventChOut"
-		jpa-query="select e from Event e" requires-reply="false">
+		request-channel="closerEventChIn" jpa-query="select e from Event e"
+		requires-reply="false" reply-channel="closerEventChOut">
 		<!-- jpa-query="select e from Event e where e.end > :now order by e.start asc"> -->
 		 <!-- <int-jpa:parameter name="now" type="java.util.Date" /> -->
 		<!-- Seleccionar los eventos tal que la fecha de su final sea mayor que la fecha actual
@@ -150,7 +150,7 @@
     	password="userp" 
     	port="5672" />
     	
-    <rabbit:topic-exchange name="topicExchange" auto-declare="true"></rabbit:topic-exchange>
+    <rabbit:topic-exchange name="topicExchange"></rabbit:topic-exchange>
     
     <!-- <rabbit:connection-factory id="connectionFactory" host="localhost" publisher-confirms="true" publisher-returns="true" /> -->
 	<!-- Spring AMQP template - Creates a bean which can send a message to the topicExchange-->
@@ -163,10 +163,10 @@
 	<int:channel id="closerEventChOut" >
 		<int:queue capacity="10"/>
 	</int:channel>
-	<bean id="eventProductorPublisher" class="eventproductor.EventProductorPublisher" />
+	<bean id="eventProductorPublisher" class="eventproducer.EventProductorPublisher" />
 	
 	<int:outbound-channel-adapter id="eventPublisherOut"
-		ref="eventProductorPublisher" method="publishTopics"
+		ref="eventProductorPublisher" method="publishTopicsDummy"
 		channel="closerEventChOut">
 		<int:poller fixed-rate="1000"/>
 	</int:outbound-channel-adapter>

@@ -1,5 +1,7 @@
-package eventproductor;
+package eventproducer;
 
+import org.apache.log4j.Logger;
+import org.eclipse.paho.client.mqttv3.IMqttToken;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttDeliveryToken;
@@ -10,19 +12,19 @@ import org.eclipse.paho.client.mqttv3.MqttCallback;
 
 
 public class MQTTTestingClient {
-
-	String clientId     = "RTNClient";
-	MqttDeliveryToken token;
+	
+	static Logger log = Logger.getLogger(MQTTTestingClient.class.getName());
+	
 	int qos = 0;
-
+	
 	MqttClient mqttclient;
+	IMqttToken token;
 	String username;
 	char[] password;
 	String BROKER_URL;
 	MqttCallback mqttCallBack;
 
-	public MQTTTestingClient(int id){
-		mqttCallBack = new CallbackFunction(id);
+	public MQTTTestingClient(String clientId){
 		this.BROKER_URL = "tcp://localhost:1883";
 		this.username = "user";
 		this.password = "userp".toCharArray();
@@ -34,10 +36,12 @@ public class MQTTTestingClient {
 			connOpts.setCleanSession(true);
 			connOpts.setUserName(username);
 			connOpts.setPassword(password);
-			mqttclient = new MqttClient(BROKER_URL, clientId, persistence);
+			mqttclient = new MqttClient(BROKER_URL,clientId);
 			System.out.println("Connecting to broker: "+ BROKER_URL);
 			mqttclient.setCallback(mqttCallBack);
-			mqttclient.connect(connOpts);
+//			mqttclient.connect(connOpts);
+			token = mqttclient.connectWithResult(connOpts);
+			mqttCallBack = new CallbackFunction(clientId);
 
 		} catch (MqttException e) {
 			System.out.println("reason "+e.getReasonCode());

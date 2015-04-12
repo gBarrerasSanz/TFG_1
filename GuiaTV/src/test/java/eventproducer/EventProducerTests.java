@@ -1,4 +1,4 @@
-package eventproductor;
+package eventproducer;
 
 import static org.junit.Assert.*;
 
@@ -24,13 +24,14 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import persistence.EventServiceTests;
 import common.CommonUtility;
 import eventmanager.EventService;
+import eventproducer.EventProducerPublisher;
 import xmltv.datatypes.Event;
 import xmltv.transformer.XMLTVTransformer;
 import application.Application;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
-public class EventProductorTests {
+public class EventProducerTests {
 	
 	private static final Logger log = Logger.getLogger(EventServiceTests.class);
 	
@@ -47,7 +48,7 @@ public class EventProductorTests {
 	private EventService evService;
 	
 	@Autowired
-	private EventProductorPublisher evProd;
+	private EventProducerPublisher evProd;
 	
 	/*
 	 * Este test se completa satisfactoriamente aun sin estar el RabbitMQ funcionando...
@@ -55,16 +56,16 @@ public class EventProductorTests {
 	@Test
 	public void publishEventSimple() {
 		MQTTTestingClient mqttCl1 = null, mqttCl2 = null;
-		String ch1 = "neox-722<dot>laguiatv<dot>com";
-		String prog1 = "Cómo conocí a vuestra Madre";
-		String prog2 = "Los Simpson";
+		String ch1 = "ch1_Test";
+		String prog1 = "prog1_Test";
+		String prog2 = "prog2_Test";
 		try {
 			// Hacer la suscripción por parte de los clientes
-			mqttCl1 = new MQTTTestingClient(1);
-			mqttCl2 = new MQTTTestingClient(2);
+			mqttCl1 = new MQTTTestingClient("client1");
+			mqttCl2 = new MQTTTestingClient("client2");
 
-			mqttCl1.subscribe(new String[]{prog1});
-			mqttCl2.subscribe(new String[]{prog1, prog2});
+			mqttCl1.subscribe(new String[]{ch1+"."+prog1});
+			mqttCl2.subscribe(new String[]{ch1+"."+prog1, ch1+"."+prog2});
 			
 			// Producir mensaje
 			List<Event> lEvt = new ArrayList<Event>();

@@ -1,10 +1,11 @@
-package eventproductor;
+package eventproducer;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.amqp.core.AmqpTemplate;
+import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.DirectExchange;
 import org.springframework.amqp.core.MessageProperties;
@@ -22,36 +23,33 @@ import com.rabbitmq.client.ConnectionFactory;
 
 import xmltv.datatypes.Event;
 
-public class EventProductorPublisher {
+public class EventProducerPublisher {
 	
-//	@Autowired
-//	AmqpTemplate amqpTemplate;
-//	@Autowired
-//	RabbitAdmin rabbitAdmin;
+	@Autowired
+	RabbitAdmin rabbitAdmin;
 	@Autowired
 	AmqpTemplate amqpTmp;
+	@Autowired
+	TopicExchange topicExch;
 	
-//	@Autowired
-//	private ApplicationContext ctx;
-	
-//	public EventProductorPublisher() {
-//		amqpTemplate = ctx.getBean(AmqpTemplate.class);
-//		rabbitAdmin = ctx.getBean(RabbitAdmin.class); 
-//	}
+	public void publishTopicsDummy(Message<List<Event>> lEvtMsg) {
+		
+	}
 	
 	public void publishTopics(Message<List<Event>> lEvtMsg ) {
 		try {
 //			Connection conn = connFactory.newConnection();
 //			Channel ch = conn.createChannel();
-			
+//			Queue q;
+//			Binding bind;
 			String routKey = null, msgBody = null;
-			org.springframework.amqp.core.Message msg = null;
 			for (Event ev: lEvtMsg.getPayload()) {
+//				q = rabbitAdmin.declareQueue(); // Declarar cola
+//				bind = BindingBuilder.bind(q).to(topicExch).with(q.getName()); // asociar cola a exchange
+//				rabbitAdmin.declareBinding(bind); // declarar la asociación
 				routKey = ev.getChannel()+"."+ev.getTitle();
 				msgBody = "programme starting";
-				msg = new org.springframework.amqp.core.Message(msgBody.getBytes(), new MessageProperties());
-//				ch.basicPublish(topicExch.getName(), routKey, null, msgBody.getBytes());
-				amqpTmp.send(routKey, msg);
+				amqpTmp.convertAndSend(routKey, msgBody);
 			}
 		} catch (Exception e1) {
 			e1.printStackTrace();

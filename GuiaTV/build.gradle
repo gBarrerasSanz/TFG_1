@@ -12,7 +12,7 @@ dependencies {
 	compile 'org.springframework.boot:spring-boot-gradle-plugin:1.2.2.RELEASE'
 	compile 'org.springframework.boot:spring-boot-starter:1.2.2.RELEASE'
 	compile 'org.springframework.amqp:spring-rabbit:1.4.3.RELEASE'
-	compile 'com.rabbitmq:amqp-client:3.5.1'
+	//compile 'com.rabbitmq:amqp-client:3.5.1'
 	//compile 'org.springframework:spring-context-support:3.2.2.RELEASE'
    	compile 'org.springframework:spring-core:4.1.2.RELEASE'
    	//compile 'org.springframework.integration:spring-integration-xml:4.1.2'
