@@ -56,10 +56,23 @@
 	<bean id="xmltvFileComparator" class="xmltv.grabber.CustomFileComparator" />
 	<bean id="eventCreator" class="xmltv.transformer.EventCreator"/>
 	
+	<bean id="compositeFilter"
+    	class="org.springframework.integration.file.filters.CompositeFileListFilter">
+    <constructor-arg>
+        <list>
+	        <bean class="org.springframework.integration.file.filters.RegexPatternFileListFilter">
+	    		<constructor-arg value="xmltvDump_[0-9][0-9][0-9][0-9]_[0-9][0-9]_[0-9][0-9]_[0-9][0-9]_[0-9][0-9]_[0-9][0-9]\.xml"/>
+	    	</bean>
+            <bean class="org.springframework.integration.file.filters.AcceptOnceFileListFilter"/>
+            <bean class="xmltv.transformer.EntireFileFilter"/>
+        </list>
+    </constructor-arg>
+</bean>
+
 	<int-file:inbound-channel-adapter id="filePollerInbound"
 		directory="file:xmltv_cap" channel="transformerChIn" auto-startup="true"
-		comparator="xmltvFileComparator"
-		filename-regex="xmltvDump_[0-9][0-9][0-9][0-9]_[0-9][0-9]_[0-9][0-9]_[0-9][0-9]_[0-9][0-9]_[0-9][0-9]\.xml" >
+		comparator="xmltvFileComparator" 
+		filter="compositeFilter" >
 		<int:poller fixed-rate="10000" />
 	</int-file:inbound-channel-adapter>
 

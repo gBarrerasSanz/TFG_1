@@ -23,7 +23,7 @@ public class TaskExecutorMQTTClient {
 	
 	private TaskExecutorMQTTClient thisThread = this;
 	
-	private class MQTTClient implements Runnable {
+	private class MQTTClientWorker implements Runnable {
 		
 		int qos = 0;
 		
@@ -36,7 +36,7 @@ public class TaskExecutorMQTTClient {
 		String[] topicArr;
 		List<String> receivedMessages;
 		
-		public MQTTClient(String clientId, String[] topicArr){
+		public MQTTClientWorker(String clientId, String[] topicArr){
 			this.BROKER_URL = "tcp://localhost:1883";
 			this.username = "user";
 			this.password = "userp".toCharArray();
@@ -112,26 +112,26 @@ public class TaskExecutorMQTTClient {
 	}
 	
 	private TaskExecutor taskExecutor;
-	private MQTTClient mqttClient;
+	private MQTTClientWorker mqttClientWorker;
     public TaskExecutorMQTTClient(TaskExecutor taskExecutor) {
         this.taskExecutor = taskExecutor;
     }
 
     public void connectAndSubscribe(String clientId, String[] topicArr) {
-    	mqttClient = new MQTTClient(clientId, topicArr);
-    	taskExecutor.execute(mqttClient);
+    	mqttClientWorker = new MQTTClientWorker(clientId, topicArr);
+    	taskExecutor.execute(mqttClientWorker);
     }
     
     public List<String> getReceivedMessages() {
-    	return mqttClient.receivedMessages;
+    	return mqttClientWorker.receivedMessages;
     }
     
     public void addReceivedMessage(String msg) {
-    	mqttClient.receivedMessages.add(msg);
+    	mqttClientWorker.receivedMessages.add(msg);
     }
 	
     public void disconnect() {
-    	mqttClient.disconnect();
+    	mqttClientWorker.disconnect();
     }
 
 }

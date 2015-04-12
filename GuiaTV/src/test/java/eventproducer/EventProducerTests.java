@@ -89,7 +89,7 @@ public class EventProducerTests {
 			List<String> cl1Msgs = new ArrayList<String>(Arrays.asList(cl1MsgsArr));
 			List<String> cl2Msgs = new ArrayList<String>(Arrays.asList(cl2MsgsArr));
 			long initTime = System.currentTimeMillis();
-			long timeout = 5000;
+			long timeout = 1000;
 			boolean stop = false;
 			while (stop == false) {
 				if (System.currentTimeMillis() > initTime + timeout
@@ -111,7 +111,7 @@ public class EventProducerTests {
 		}
 	}
 	
-	
+//	TODO: Completarlo si interesa
 //	@Test
 	public void publishTopicsFromXMLTVFileTest() {
 		Resource resource = ctx.getResource("/META-INF/test/xmltv/xmltv_sample.xml");

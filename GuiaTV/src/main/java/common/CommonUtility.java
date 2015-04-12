@@ -97,20 +97,24 @@ public class CommonUtility {
 		return newDate;
 	}
 	
-	public void printFile (File f) {
+	public String getFileString (File f) {
+		StringBuilder sb = new StringBuilder();
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(f));
 			String sCurrentLine = "";
 			while ((sCurrentLine = br.readLine()) != null) {
-				System.out.println(sCurrentLine);
+				sb.append(sCurrentLine+"\n");
 			}
 			br.close();
+			return sb.toString();
 		} 
 		catch (FileNotFoundException e) {
 			e.printStackTrace();
+			return null;
 		}
 		catch (IOException e) {
 			e.printStackTrace();
+			return null;
 		}
 	}
 	

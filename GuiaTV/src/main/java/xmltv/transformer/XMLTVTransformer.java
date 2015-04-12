@@ -30,14 +30,15 @@ public class XMLTVTransformer implements Transformer {
 	@Autowired
 	CommonUtility utils;
 	
-	static Logger log = Logger.getLogger(XMLTVTransformer.class.getName());
+	static Logger log = Logger.getLogger("debugLog");
 	
 	@Override
 	public Message<List<Event>> transform(Message<?> message) {
 		Message<List<Event>> result = null;
 		if (message.getPayload() instanceof File) {
+			File file = null;
 			try{
-				File file = (File) message.getPayload();
+				file = (File) message.getPayload();
 				DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 				DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 //				utils.printFile(file);
@@ -68,6 +69,9 @@ public class XMLTVTransformer implements Transformer {
 			}
 			catch(Exception e) {
 				e.printStackTrace();
+				log.debug("**** File content: ****");
+				log.debug(utils.getFileString(file));
+				return null;
 			}
 		}
 		else {
