@@ -75,7 +75,6 @@ public class EventProducerTests {
 			Message<List<Event>> lEvtMsg = MessageBuilder.
 					withPayload(lEvt).build();
 			evProd.publishTopics(lEvtMsg);		
-			
 		}
 		catch(Exception e) {
 			e.printStackTrace();
