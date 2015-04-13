@@ -37,10 +37,7 @@ public class XMLTVTransformerTests {
 
 	@Test
 	public void transformTest() {
-//		final ApplicationContext context = new ClassPathXmlApplicationContext(
-//				"classpath:/META-INF/spring/integration/spring-integration-context.xml");
-		Resource resource = ctx.getResource("/META-INF/test/xmltv/xmltv_sample.xml");
-//		final XMLTVTransformer transformer = ctx.getBean(XMLTVTransformer.class);
+		Resource resource = ctx.getResource("/xmltv/xmltv_sample.xml");
 		try {
 			URI uri = resource.getURI();
 			File file = new File(uri);
@@ -66,6 +63,7 @@ public class XMLTVTransformerTests {
 			assertEquals(resultMsg.getPayload(), lEvt);
 		} catch (IOException e) {
 			e.printStackTrace();
+			fail("IO Exception");
 		}
 	}
 

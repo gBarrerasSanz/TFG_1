@@ -93,7 +93,7 @@ public class EventServiceTests {
 	
 	@Test
 	public void createEventsFromXMLTVFileTest() {
-		Resource resource = ctx.getResource("/META-INF/test/xmltv/xmltv_sample.xml");
+		Resource resource = ctx.getResource("/xmltv/xmltv_sample.xml");
 		List<Event> lEvt = null;
 		/****************************************************************************
 		 * Transformar el fichero XMLTV en una lista de Events con el XMLTVTransformer
