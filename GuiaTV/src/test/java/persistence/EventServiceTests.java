@@ -22,10 +22,10 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.core.io.Resource;
 import org.springframework.integration.support.MessageBuilder;
 import org.springframework.messaging.Message;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import common.CommonUtility;
-
 import eventmanager.EventService;
 import application.Application;
 import xmltv.datatypes.Event;
@@ -33,6 +33,7 @@ import xmltv.transformer.XMLTVTransformer;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
+@DirtiesContext
 public class EventServiceTests {
 
 	private static final Logger LOGGER = Logger.getLogger(EventServiceTests.class);
