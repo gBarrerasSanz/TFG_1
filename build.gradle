@@ -3,7 +3,7 @@ apply plugin: 'eclipse'
 
 eclipse {
 	project {
-		name = "SandBox1"
+		name = "GuiaTV"
 	}
 }
 
