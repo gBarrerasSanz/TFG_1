@@ -1,5 +1,7 @@
 package guiatv.computervision;
 
+import org.opencv.core.Mat;
+
 public interface Classif {
 	
 	public static enum ClassifResult {
@@ -8,6 +10,6 @@ public interface Classif {
 	
 	public boolean learn();
 	
-	public ClassifResult classify();  
+	public ClassifResult classify(Mat img);  
 	
 }
