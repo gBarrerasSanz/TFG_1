@@ -1,3 +1,6 @@
+
+//include ':OpenCV-2.4.9'
+
 repositories {
     mavenCentral()
     maven {
@@ -7,6 +10,9 @@ repositories {
 
 apply plugin: 'java'
 apply plugin: 'eclipse'
+
+// Para incluir OpenCV-2.4.9, seguir estos pasos:
+// 	http://docs.opencv.org/doc/tutorials/introduction/java_eclipse/java_eclipse.html
 
 dependencies {
 	compile 'org.springframework.boot:spring-boot-gradle-plugin:1.2.2.RELEASE'

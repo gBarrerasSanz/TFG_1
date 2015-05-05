@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
@@ -25,6 +26,8 @@ import xmltv.datatypes.Event;
 
 public class EventProducerPublisher {
 	
+	private Logger logger = Logger.getLogger("debugLog");
+	
 	@Autowired
 	RabbitAdmin rabbitAdmin;
 	@Autowired
@@ -43,6 +46,7 @@ public class EventProducerPublisher {
 				routKey = ev.getChannel()+"."+ev.getTitle();
 				msgBody = routKey; // TODO: Cambiar esto
 				amqpTmp.convertAndSend(routKey, msgBody);
+				logger.debug("publishTopics() -> enviado: "+msgBody);
 			}
 		} catch (Exception e1) {
 			e1.printStackTrace();
