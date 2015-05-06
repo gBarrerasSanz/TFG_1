@@ -32,7 +32,7 @@ public class CommonUtility {
 	
 	
 	
-	public Date strToDate(String str) {
+	public static Date strToDate(String str) {
 		final Locale SPAIN_LOCALE = new Locale("es","ES");
 		SimpleDateFormat format = new SimpleDateFormat("yyyyMMddhhmmss Z", SPAIN_LOCALE);
 		try {
@@ -43,7 +43,7 @@ public class CommonUtility {
 		}
 	}
 	
-	public boolean checkFileNameDate(String grabFileName, Date realDate) {
+	public static boolean checkFileNameDate(String grabFileName, Date realDate) {
 		final Locale SPAIN_LOCALE = new Locale("es", "ES");
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss", SPAIN_LOCALE);
 		String dateStr = grabFileName.substring(

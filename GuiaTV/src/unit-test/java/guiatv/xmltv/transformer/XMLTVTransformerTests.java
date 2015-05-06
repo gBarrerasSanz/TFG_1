@@ -9,6 +9,8 @@ import guiatv.xmltv.transformer.XMLTVTransformer;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,28 +26,16 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = Application.class)
-@DirtiesContext
-public class XMLTVTransformerTests {
-	
-	@Autowired
-	private ApplicationContext ctx;
-	
-	@Autowired
-	private XMLTVTransformer transformer;
-	
-	@Autowired
-	private CommonUtility utils;
-
+public class XMLTVTransformerTests {	
 	@Test
 	public void transformTest() {
-		Resource resource = ctx.getResource("guiatv.xmltv/xmltv_sample.xml");
-		assertTrue(resource.exists());
+		URL url = this.getClass().getResource("guiatv.xmltv/xmltv_sample.xml");
 		try {
-			URI uri = resource.getURI();
-			File file = new File(uri);
+			File file = new File(url.toURI());
 			Message<?> fileMsg = MessageBuilder.
 					withPayload(file).build();
+			
+			XMLTVTransformer transformer  = new XMLTVTransformer();
 			Message<List<Event>> resultMsg = transformer.transform(fileMsg);
 			assertNotNull(resultMsg);
 			
@@ -55,16 +45,16 @@ public class XMLTVTransformerTests {
 			Event evt1 = new Event(); Event evt2 = new Event();
 			evt1.setChannel("neox-722.laguiatv.com");
 			evt1.setTitle("Cómo conocí a vuestra Madre");
-			evt1.setStart(utils.strToDate("20150316173500 +0100"));
-			evt1.setEnd(utils.strToDate("20150316175400 +0100"));
+			evt1.setStart(CommonUtility.strToDate("20150316173500 +0100"));
+			evt1.setEnd(CommonUtility.strToDate("20150316175400 +0100"));
 			// evt2
 			evt2.setChannel("neox-722.laguiatv.com");
 			evt2.setTitle("Los Simpson");
-			evt2.setStart(utils.strToDate("20150316214500 +0100"));
-			evt2.setEnd(utils.strToDate("20150316220000 +0100"));
+			evt2.setStart(CommonUtility.strToDate("20150316214500 +0100"));
+			evt2.setEnd(CommonUtility.strToDate("20150316220000 +0100"));
 			lEvt.add(evt1); lEvt.add(evt2);
 			assertEquals(resultMsg.getPayload(), lEvt);
-		} catch (IOException e) {
+		} catch (URISyntaxException e) {
 			e.printStackTrace();
 			fail("IO Exception");
 		}
