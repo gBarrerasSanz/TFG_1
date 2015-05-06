@@ -1,4 +1,4 @@
-package guiatv.eventproducer;
+package guiatv.eventproducer.utils;
 
 import guiatv.persistence.EventServiceTests;
 

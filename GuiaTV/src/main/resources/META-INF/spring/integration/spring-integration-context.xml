@@ -206,7 +206,7 @@
     <property name="maxPoolSize" value="10" />
     <property name="queueCapacity" value="25" />
 	</bean>
-	<bean id="taskExecutorClient" class="guiatv.eventproducer.TaskExecutorMQTTClient" 
+	<bean id="taskExecutorClient" class="guiatv.eventproducer.utils.TaskExecutorMQTTClient" 
 		scope="prototype">
 	    <constructor-arg ref="taskExecutor" />
 	    

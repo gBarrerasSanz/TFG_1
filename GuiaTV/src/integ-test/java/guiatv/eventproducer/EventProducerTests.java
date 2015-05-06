@@ -30,6 +30,7 @@ import guiatv.Application;
 import guiatv.common.CommonUtility;
 import guiatv.eventmanager.EventService;
 import guiatv.eventproducer.EventProducerPublisher;
+import guiatv.eventproducer.utils.TaskExecutorMQTTClient;
 import guiatv.persistence.EventServiceTests;
 import guiatv.xmltv.datatypes.Event;
 import guiatv.xmltv.transformer.XMLTVTransformer;
