@@ -4,4 +4,6 @@
 .project
 .settings/
 .gradle/
+client22-*
+xmltv_cap/xmltvDump*
 unoquenoexiste
