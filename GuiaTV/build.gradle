@@ -34,7 +34,14 @@ dependencies {
     compile 'org.springframework:spring-test:4.1.5.RELEASE'
     //compile 'commons-io:commons-io:2.4'
  	
+ 	// Para los tests (Unit)
     testCompile 'junit:junit:4.10'
+    
+    // Para los integration tests
+ 	//integTestCompile sourceSets.main.output
+    //integTestCompile configurations.testCompile
+    //integTestCompile sourceSets.test.output
+    //integTestRuntime configurations.testRuntime
 }
 
 sourceSets {
@@ -46,12 +53,36 @@ sourceSets {
       		srcDir 'src/main/resources'
     	}
 	}
+	
+	// A los unit tests se les llama "test" a secas
+	// para que utilicen la task por defecto del plugin java
 	test {
     	java {
-    	  	srcDir 'src/test/java'
+    	  	srcDir 'src/unit-test/java'
     	}
 		resources {
-     		srcDir 'src/test/resources'
+     		srcDir 'src/unit-test/resources'
 		}
+	}
+	
+	integTest {
+    	java {
+    	  	srcDir 'src/integ-test/java'
+    	}
+		resources {
+     		srcDir 'src/integ-test/resources'
+		}
+	}
+	
+	configurations {
+    	integTestCompile {
+    		extendsFrom testCompile
+    	}
+	}
+	
+	task integTest(type: Test) {
+    	testClassesDir = sourceSets.integTest.output.classesDir
+    	classpath = sourceSets.integTest.runtimeClasspath
+    	//debug = false
 	}
 }
