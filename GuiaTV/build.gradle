@@ -14,6 +14,15 @@ apply plugin: 'eclipse'
 // Para incluir OpenCV-2.4.9, seguir estos pasos:
 // 	http://docs.opencv.org/doc/tutorials/introduction/java_eclipse/java_eclipse.html
 
+configurations {
+	integTestCompile {
+		extendsFrom testCompile
+	}
+	integTestRuntime {
+		extendsFrom testCompile
+	}
+}
+
 dependencies {
 	compile 'org.springframework.boot:spring-boot-gradle-plugin:1.2.2.RELEASE'
 	compile 'org.springframework.boot:spring-boot-starter:1.2.2.RELEASE'
@@ -38,10 +47,8 @@ dependencies {
     testCompile 'junit:junit:4.10'
     
     // Para los integration tests
- 	//integTestCompile sourceSets.main.output
-    //integTestCompile configurations.testCompile
-    //integTestCompile sourceSets.test.output
-    //integTestRuntime configurations.testRuntime
+ 	//integTestCompile .. // Lo hereda de testCompile
+   
 }
 
 sourceSets {
@@ -73,16 +80,10 @@ sourceSets {
      		srcDir 'src/integ-test/resources'
 		}
 	}
-	
-	configurations {
-    	integTestCompile {
-    		extendsFrom testCompile
-    	}
-	}
-	
-	task integTest(type: Test) {
-    	testClassesDir = sourceSets.integTest.output.classesDir
-    	classpath = sourceSets.integTest.runtimeClasspath
-    	//debug = false
-	}
+}
+
+
+task integTest(type: Test) {
+	testClassesDir = sourceSets.integTest.output.classesDir
+	classpath = sourceSets.integTest.runtimeClasspath
 }
