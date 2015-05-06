@@ -22,11 +22,11 @@ public class CommonUtility {
 	
 	private static final Logger log = Logger.getLogger(EventServiceTests.class);
 	
-	final int msToSecsConv = 1000;
-	final int msToMinsConv = 1000*60;
-	final int msToHoursConv = 1000*60*60;
+	final static int msToSecsConv = 1000;
+	final static int msToMinsConv = 1000*60;
+	final static int msToHoursConv = 1000*60*60;
 	
-	private enum TimeUnit {
+	private static enum TimeUnit {
 		SEC, MIN, HOUR
 	}
 	
@@ -61,14 +61,14 @@ public class CommonUtility {
 		}
 	}
 	
-	public String getDateString() {
+	public static String getDateString() {
 		Date date = new Date();
 		final Locale SPAIN_LOCALE = new Locale("es", "ES");
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss", SPAIN_LOCALE);
 		return formatter.format(date);
 	}
 	
-	public Date getFutureRandomDate(TimeUnit unit, int minTimeUnits, int maxTimeUnits) {
+	public static Date getFutureRandomDate(TimeUnit unit, int minTimeUnits, int maxTimeUnits) {
 		Random rand = new Random();
 		Date now = new Date();
 		int plusUnits = rand.nextInt(maxTimeUnits)+minTimeUnits;
@@ -91,13 +91,13 @@ public class CommonUtility {
 		return now;
 	}
 	
-	public Date sumTwoHours (Date date) {
+	public static Date sumTwoHours (Date date) {
 		Date newDate = new Date();
 		newDate.setTime(date.getTime() + 2 * msToHoursConv);
 		return newDate;
 	}
 	
-	public String getFileString (File f) {
+	public static String getFileString (File f) {
 		StringBuilder sb = new StringBuilder();
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(f));
@@ -118,7 +118,7 @@ public class CommonUtility {
 		}
 	}
 	
-	public String lEvtToStr(List<Event> lEvt) {
+	public static String lEvtToStr(List<Event> lEvt) {
 		StringBuilder sb = new StringBuilder();
 		for (Event e: lEvt) {
 			sb.append(e.toString()+"\n");
@@ -126,7 +126,7 @@ public class CommonUtility {
 		return sb.toString();
 	}
 	
-	public TimeUnit getTimeUnit(String str){
+	public static TimeUnit getTimeUnit(String str){
 		TimeUnit unit = null;
 		try {
 			unit = TimeUnit.valueOf(str.toUpperCase());

@@ -19,17 +19,21 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.ImportResource;
 import org.springframework.core.io.Resource;
 import org.springframework.integration.support.MessageBuilder;
 import org.springframework.messaging.Message;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-@RunWith(SpringJUnit4ClassRunner.class)
 public class XMLTVTransformerTests {	
+	
+	@Autowired
+	ApplicationContext ctx;
+	
 	@Test
 	public void transformTest() {
-		URL url = this.getClass().getResource("guiatv.xmltv/xmltv_sample.xml");
+		URL url = this.getClass().getClassLoader().getResource("guiatv.xmltv/xmltv_sample.xml");
 		try {
 			File file = new File(url.toURI());
 			Message<?> fileMsg = MessageBuilder.
@@ -56,7 +60,7 @@ public class XMLTVTransformerTests {
 			assertEquals(resultMsg.getPayload(), lEvt);
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
-			fail("IO Exception");
+			fail("URISyntaxException");
 		}
 	}
 
