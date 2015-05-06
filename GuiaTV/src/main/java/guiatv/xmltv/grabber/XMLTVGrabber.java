@@ -36,7 +36,7 @@ public class XMLTVGrabber {
 	}
 	
 	public File doGrabbing() {
-		Resource capDirRes = ctx.getResource("/META-INF/xmltv/cap");
+		Resource capDirRes = ctx.getResource("META-INF/xmltv/cap");
 		File tmpDir = null;
 		try {
 			tmpDir = new File(capDirRes.getFile().getAbsolutePath()+
@@ -45,7 +45,7 @@ public class XMLTVGrabber {
 			e2.printStackTrace();
 		}
 		if (tmpDir.exists() == false) { tmpDir.mkdirs(); }
-		Resource binDirRes = ctx.getResource("/META-INF/xmltv/grabber/windows_bin/xmltv-0.5.66-win32");
+		Resource binDirRes = ctx.getResource("META-INF/xmltv/grabber/windows_bin/xmltv-0.5.66-win32");
 		File resFile = null, errFile = null;
 		resFile = new File(tmpDir.getAbsolutePath()+
 				File.separator+"xmltvDump_"+utils.getDateString()+".xml");

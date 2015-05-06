@@ -95,7 +95,7 @@ public class EventServiceTests {
 	
 	@Test
 	public void createEventsFromXMLTVFileTest() {
-		Resource resource = ctx.getResource("/guiatv/xmltv/xmltv_sample.xml");
+		Resource resource = ctx.getResource("guiatv.xmltv/xmltv_sample.xml");
 		assertTrue(resource.exists());
 		List<Event> lEvt = null;
 		/****************************************************************************

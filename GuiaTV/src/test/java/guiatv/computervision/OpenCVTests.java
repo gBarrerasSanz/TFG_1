@@ -31,13 +31,12 @@ public class OpenCVTests {
 	@Test
 	public void test() {
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-		Resource resource = ctx.getResource("/guiatv/xmltv/xmltv_sample.xml");
 		Resource programmesDir = ctx
-				.getResource("/guiatv/opencv/program_samples/laSexta");
+				.getResource("guiatv.opencv.program_samples.laSexta");
 		Resource tptRes = ctx
-				.getResource("/guiatv/opencv/template_samples/laSexta/tpt1.png");
+				.getResource("guiatv.opencv.template_samples.laSexta/tpt1.png");
 		Resource advertisementRes = ctx
-				.getResource("/guiatv/opencv/advertisement_samples/laSexta/pub1.png");
+				.getResource("guiatv.opencv.advertisement_samples.laSexta/pub1.png");
 //		assertTrue(programmesDir.exists());
 //		assertTrue(tptRes.exists());
 //		assertTrue(advertisementRes.exists());

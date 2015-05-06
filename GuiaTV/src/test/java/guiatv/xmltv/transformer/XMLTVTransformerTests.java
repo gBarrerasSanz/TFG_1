@@ -39,7 +39,7 @@ public class XMLTVTransformerTests {
 
 	@Test
 	public void transformTest() {
-		Resource resource = ctx.getResource("classpath:META-INF/guiatv/xmltv/xmltv_sample.xml");
+		Resource resource = ctx.getResource("guiatv.xmltv/xmltv_sample.xml");
 		assertTrue(resource.exists());
 		try {
 			URI uri = resource.getURI();
