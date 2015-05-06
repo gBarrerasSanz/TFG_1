@@ -34,7 +34,7 @@ import guiatv.xmltv.transformer.XMLTVTransformer;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
-@DirtiesContext
+//@DirtiesContext
 public class EventServiceTests {
 
 	private static final Logger LOGGER = Logger.getLogger(EventServiceTests.class);
