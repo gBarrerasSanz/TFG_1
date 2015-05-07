@@ -1,6 +1,6 @@
-package guiatv.computervision;
+package guiatv.computervision.classificator;
 
-import guiatv.computervision.Classif;
+import guiatv.computervision.classificator.Classif;
 
 import org.opencv.core.Core;
 import org.opencv.core.Core.MinMaxLocResult;
@@ -41,15 +41,24 @@ public class TemplateMatchingClassif implements Classif{
 		Point matchLoc;
         matchLoc = mmr.minLoc;
         
-        Core.rectangle(img, matchLoc, new Point(matchLoc.x + tpt.cols(),
-                matchLoc.y + tpt.rows()), new Scalar(0, 255, 0));
+//        showTemplate(img,  matchLoc);
         
-        Imshow im = new Imshow("Title");
-        im.showImage(img);
-        // Save the visualized detection.
-//        System.out.println("Writing "+ outFile);
-//        Highgui.imwrite(outFile, img);
-		return null;
+        if (mmr.maxVal == 1) { 	return ClassifResult.PROGRAM; }
+        else {					return ClassifResult.ADVERTISEMENT; }
+	}
+	
+	
+	private void showTemplate(Mat img, Point matchLoc) {
+		 Core.rectangle(img, matchLoc, new Point(matchLoc.x + tpt.cols(),
+	                matchLoc.y + tpt.rows()), new Scalar(0, 255, 0));
+	        
+	        Imshow im = new Imshow("Title");
+	        im.showImage(img);
+	        
+	        // Save Image
+	        // Save the visualized detection.
+//	        System.out.println("Writing "+ outFile);
+//	        Highgui.imwrite(outFile, img);
 	}
 
 }

@@ -1,4 +1,4 @@
-package guiatv.computervision;
+package guiatv.computervision.classificator;
 
 
 /*

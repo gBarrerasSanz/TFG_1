@@ -1,7 +1,9 @@
-package guiatv.computervision;
+package guiatv.computervision.classificator;
 
 import static org.junit.Assert.*;
 import guiatv.Application;
+import guiatv.computervision.classificator.Classif;
+import guiatv.computervision.classificator.TemplateMatchingClassif;
 
 import java.io.File;
 import java.io.IOException;
@@ -28,9 +30,9 @@ public class OpenCVTests {
 	@Test
 	public void test() {
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-		URL programmesDirUrl = this.getClass().getClassLoader().getResource("guiatv.opencv.program_samples.laSexta");
-		URL tptUrl = this.getClass().getClassLoader().getResource("guiatv.opencv.template_samples.laSexta/tpt1.png");
-		URL advertsUrl = this.getClass().getClassLoader().getResource("guiatv.opencv.advertisement_samples.laSexta/pub1.png");
+		URL programmesDirUrl = this.getClass().getClassLoader().getResource("guiatv.opencv/program_samples/laSexta");
+		URL tptUrl = this.getClass().getClassLoader().getResource("guiatv.opencv/template_samples/laSexta/tpt1.png");
+		URL advertsUrl = this.getClass().getClassLoader().getResource("guiatv.opencv/advertisement_samples/laSexta/pub1.png");
 
 		URI programmesUri, tptUri, advertisementUri;
 		try {
@@ -43,11 +45,17 @@ public class OpenCVTests {
 			assertTrue(advertsFile.exists());
 			
 			File[] listOfFiles = programmesDir.listFiles();
-			Mat img = Highgui.imread(listOfFiles[0].getAbsolutePath());
+			Mat imgProgram = Highgui.imread(listOfFiles[0].getAbsolutePath());
+			Mat imgAvert = Highgui.imread(advertsFile.getAbsolutePath());
 	        Mat tpt = Highgui.imread(tptFile.getAbsolutePath());
 	        
 	        Classif classif = new TemplateMatchingClassif(tpt);
-	        classif.learn();
+	        boolean success = classif.learn();
+	        
+	        Classif.ClassifResult result1 = classif.classify(imgProgram);
+	        Classif.ClassifResult result2 = classif.classify(imgAvert);
+	        assertEquals(result1, Classif.ClassifResult.PROGRAM);
+	        assertEquals(result2, Classif.ClassifResult.ADVERTISEMENT);
 	        
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
