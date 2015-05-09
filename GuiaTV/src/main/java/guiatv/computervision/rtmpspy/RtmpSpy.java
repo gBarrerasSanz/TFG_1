@@ -1,42 +1,33 @@
 package guiatv.computervision.rtmpspy;
 
 import guiatv.common.CommonUtility;
+import guiatv.computervision.classificator.Imshow;
 
 import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.core.io.Resource;
+import org.opencv.core.Core;
+import org.opencv.core.CvType;
+import org.opencv.core.Mat;
+import org.opencv.highgui.Highgui;
+import org.springframework.beans.factory.annotation.Value;
 
 
 public class RtmpSpy {
 	
-	private enum Platform {
-		WINDOWS
-	}
+//	@Value("${execution.platform}") // TODO: Averiguar por qué no funciona 
+	String platform = "Windows8.1";
 	
-	Platform platform;
 	String[] rtmpSources = {
-	"rtmp://antena3fms35livefs.fplive.net:1935/antena3fms35live-live/stream-lasexta_1 live=1"
+	"rtmp://antena3fms35livefs.fplive.net:1935/antena3fms35live-live/stream-lasexta_1"
 	};
 	
 	public RtmpSpy() {
-		// TODO: Detectar plataforma e inicializar platform
-		platform = Platform.WINDOWS;
+		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 	}
 	
 	public File doRtmpSpying() {
@@ -64,46 +55,74 @@ public class RtmpSpy {
 		errFile = new File(tmpDir.getAbsolutePath()+
 				File.separator+"errorLog_"+CommonUtility.getDateString()+".txt");
 		switch(platform) {
-		case WINDOWS:
-			OutputStream stream = null;
-			BufferedInputStream buf = null;
+		case "Windows8.1":
+			BufferedInputStream in = null;
 			try {
 				File binDir = new File(binDirUrl.toURI());
+//				ffmpeg -i "rtmp://antena3fms35livefs.fplive.net:1935/antena3fms35live-live/stream-lasexta_1 live=1" -vcodec mjpeg -f image2pipe -pix_fmt yuvj420p -r 1 -
 				String[] cmd = { 
 					binDir.getAbsolutePath()+File.separator+"ffmpeg.exe",
-					"-i",
-					rtmpSources[0],
-					"-f jpg",
+					"-i", rtmpSources[0]+" live=1",
+					"-vcodec", "mjpeg",
+					"-f", "image2pipe",
+					"-pix_fmt", "yuvj420p",
+					"-r", "1",
 					"-"
 				};
 				Process p = null;
 				ProcessBuilder pb = new ProcessBuilder(cmd);
 				pb.directory(binDir);
-				pb.redirectOutput(resFile);
 				pb.redirectError(errFile);
+				
+				/////////////////////////
+				final int BUFFSIZE = 10240;
+				ByteArrayOutputStream data = new ByteArrayOutputStream();
+				byte[] readData = new byte[BUFFSIZE];
+				boolean skip = true;
+				boolean imgReady = false;
+				boolean ff = false;
+				int readBytes = -1;
+				/////////////////////////
 				p = pb.start();
-//		        p.waitFor();
-			    if (p != null) {
-			        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(p.getOutputStream()));
-//			        BufferedReader inputFile = new BufferedReader(new InputStreamReader(new FileInputStream(capDirUrl+"")));
-			        File jpg = new File("file.jpg");
-			        FileInputStream input = new FileInputStream(jpg);
-			        buf = new BufferedInputStream(input);
-			        int readBytes = 0;
-			        while ((readBytes = buf.read()) != -1) {
-			            stream.write(readBytes);
-			        }
-				}
+				Imshow im = new Imshow("Image");
+				in = new BufferedInputStream(p.getInputStream());
+		        while ((readBytes = in.read(readData, 0, BUFFSIZE)) != -1) {
+		            //
+		        	
+		        	for (byte b: readData) {
+		        		char c = (char) (b & 0xff);
+		        		if (ff && c == 0xd8){
+		        			skip = false;
+		        			data.write(0xff);
+		        		}
+		        		if (ff && c == 0xd9) {
+		        			imgReady = true;
+		        			data.write(0xd9);
+		        			skip = true;
+		        		}
+		        		ff = c == 0xff;
+		        		if ( ! skip) {
+		        			data.write(b);
+		        		}
+		        		if (imgReady) {
+		        			if (data.size() != 0) {
+		        				Mat dataMat = new Mat(512, 512, CvType.CV_8UC1);
+		        				dataMat.put(0, 0, data.toByteArray());
+		        				Mat frameMat = Highgui.imdecode(dataMat, 1);
+		        		        im.showImage(frameMat);
+		        			}
+		        		}
+		        	}
+		        }
 			} catch (IOException e) {
 				e.printStackTrace();
 			} catch (URISyntaxException e) {
 				e.printStackTrace();
+			} catch (Exception e) {
+				e.printStackTrace();	
 			} finally {
-		        if (stream != null) {
-		            try { stream.close(); } catch(Exception e){}
-		        }
-		        if (buf != null) {
-		            try { buf.close(); } catch(Exception e){}
+		        if (in != null) {
+		            try { in.close(); } catch(Exception e){}
 		        }
 		    }
 			break;
