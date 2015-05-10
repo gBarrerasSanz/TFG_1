@@ -14,25 +14,21 @@ import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.highgui.Highgui;
-import org.springframework.beans.factory.annotation.Value;
 
-
-public class RtmpSpy {
+public class Test1 {
 	
-//	@Value("${execution.platform}") // TODO: Averiguar por qué no funciona 
-	String platform = "Windows8.1";
-	
-	String[] rtmpSources = {
-	"rtmp://antena3fms35livefs.fplive.net:1935/antena3fms35live-live/stream-lasexta_1"
-	};
-	
-	public RtmpSpy() {
+	private static String platform = "Windows8.1";
+	static String[] rtmpSources = {
+			"rtmp://antena3fms35livefs.fplive.net:1935/antena3fms35live-live/stream-lasexta_1"
+			};
+	public static void main(String[] args) {
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+		doRtmpSpying();
 	}
 	
-	public File doRtmpSpying() {
+	public static File doRtmpSpying() {
 //		Resource capDirRes = ctx.getResource("META-INF/xmltv/cap");
-		URL capDirUrl = this.getClass().getClassLoader().getResource("META-INF/ffmpeg/cap");
+		URL capDirUrl = Test1.class.getClassLoader().getResource("META-INF/ffmpeg/cap");
 		File capDir = null;
 		try {
 			capDir = new File(capDirUrl.toURI());
@@ -46,19 +42,15 @@ public class RtmpSpy {
 				File.separator+"tmp");
 		if (tmpDir.exists() == false) { tmpDir.mkdirs(); }
 //		Resource binDirRes = ctx.getResource("META-INF/xmltv/grabber/windows_bin/xmltv-0.5.66-win32");
-		URL binDirUrl = this.getClass().getClassLoader()
-				.getResource("META-INF/ffmpeg/windows_bin/ffmpeg-win64/bin");
-		
+		String binDirStr = "D:/GitHub/TFG_1/GuiaTV/bin/META-INF/ffmpeg/windows_bin/ffmpeg-win64/bin";
 		File resFile = null, errFile = null;
-		resFile = new File(tmpDir.getAbsolutePath()+
-				File.separator+"xmltvDump_"+CommonUtility.getDateString()+".xml");
-		errFile = new File(tmpDir.getAbsolutePath()+
-				File.separator+"errorLog_"+CommonUtility.getDateString()+".txt");
+		resFile = new File("res");
+		errFile = new File("D:/GitHub/TFG_1/GuiaTV/bin/META-INF/ffmpeg/cap/tmp/errorLog_"+CommonUtility.getDateString()+".txt");
 		switch(platform) {
 		case "Windows8.1":
 			BufferedInputStream in = null;
 			try {
-				File binDir = new File(binDirUrl.toURI());
+				File binDir = new File(binDirStr);
 //				ffmpeg -i "rtmp://antena3fms35livefs.fplive.net:1935/antena3fms35live-live/stream-lasexta_1 live=1" -vcodec mjpeg -f image2pipe -pix_fmt yuvj420p -r 1 -
 				String[] cmd = { 
 					binDir.getAbsolutePath()+File.separator+"ffmpeg.exe",
@@ -84,9 +76,11 @@ public class RtmpSpy {
 				int readBytes = -1;
 				/////////////////////////
 				p = pb.start();
-				Imshow im = new Imshow("Image");
+				
 				in = new BufferedInputStream(p.getInputStream());
 		        while ((readBytes = in.read(readData, 0, BUFFSIZE)) != -1) {
+		            //
+		        	
 		        	for (byte b: readData) {
 		        		char c = (char) (b & 0xff);
 		        		if (ff && c == 0xd8){
@@ -107,21 +101,13 @@ public class RtmpSpy {
 		        				Mat dataMat = new Mat(512, 512, CvType.CV_8UC1);
 		        				dataMat.put(0, 0, data.toByteArray());
 		        				Mat frameMat = Highgui.imdecode(dataMat, 1);
-		        		        
-		        				im.showImage(frameMat);
-		        		        
-		        		        // Reinicializar 
-		        		        skip = true;
-		        				imgReady = false;
-		        				ff = false;
-		        		        data.reset();
+		        				Imshow im = new Imshow("Image");
+		        		        im.showImage(frameMat);
 		        			}
 		        		}
 		        	}
 		        }
 			} catch (IOException e) {
-				e.printStackTrace();
-			} catch (URISyntaxException e) {
 				e.printStackTrace();
 			} catch (Exception e) {
 				e.printStackTrace();	
