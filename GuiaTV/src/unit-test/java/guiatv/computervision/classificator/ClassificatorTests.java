@@ -27,7 +27,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 public class ClassificatorTests {
 
 
-	//@Test
+//	@Test
 	public void test() {
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 		URL programmesDirUrl = this.getClass().getClassLoader().getResource("guiatv.opencv/program_samples/laSexta");

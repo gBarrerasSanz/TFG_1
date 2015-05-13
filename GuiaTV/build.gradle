@@ -55,7 +55,6 @@ dependencies {
  	
  	// El jar de OpenCV-2.4.9: http://stackoverflow.com/questions/12576413/including-local-jar-file-in-project-at-build-time-using-gradle
  	 compile files('./src/main/resources/META-INF/opencv-2.4.9/jar/opencv-249.jar')  	
- 	 // \src\main\resources\META-INF\opencv-2.4.9\jar
  	 
  	// Sacado de aqui: https://github.com/tlrasor/Gradle-Lwjgl2-Template/blob/master/build.gradle
  	compile 'org.lwjgl.lwjgl:lwjgl:2.9.2'
@@ -109,15 +108,9 @@ natives {
     platforms = "$os"
 }
 
-/*
-run {
-    systemProperty 'java.library.path', file("build/natives/${getOs()}")
-}
-*/
-
 def getOs() {
     if (Os.isFamily(Os.FAMILY_WINDOWS)) {
-        return 'win'
+        return 'windows_bin'
     }
     if (Os.isFamily(Os.FAMILY_MAC)) {
         return 'osx'
@@ -126,6 +119,11 @@ def getOs() {
         return 'linux' //this is not really all that correct
     throw new GradleException('Your OS does not seem to be supported')
 }
+
+tasks.withType(JavaCompile) {
+    systemProperty "java.library.path", file("./src/main/resources/META-INF/opencv-2.4.9/windows_bin/x64")
+}
+
 
 task checkOs  {
   println "Operating System: ${getOs()}"
