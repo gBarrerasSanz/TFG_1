@@ -8,7 +8,7 @@ public interface Classif {
 		ADVERTISEMENT, PROGRAM
 	}
 	
-	public boolean learn();
+	public boolean train(Mat tpt);
 	
 	public ClassifResult classify(Mat img);  
 	

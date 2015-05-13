@@ -1,6 +1,5 @@
 package guiatv.common;
 
-import guiatv.persistence.EventServiceTests;
 import guiatv.xmltv.datatypes.Event;
 
 import java.io.BufferedReader;
@@ -20,7 +19,7 @@ import org.apache.log4j.Logger;
 
 public class CommonUtility {
 	
-	private static final Logger log = Logger.getLogger(EventServiceTests.class);
+	private static final Logger log = Logger.getLogger(CommonUtility.class);
 	
 	final static int msToSecsConv = 1000;
 	final static int msToMinsConv = 1000*60;

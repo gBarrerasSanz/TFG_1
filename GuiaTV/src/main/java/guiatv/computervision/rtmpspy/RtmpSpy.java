@@ -14,13 +14,22 @@ import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.highgui.Highgui;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.integration.support.MessageBuilder;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.MessageChannel;
 
 
 public class RtmpSpy {
 	
-//	@Value("${execution.platform}") // TODO: Averiguar por qué no funciona 
-	String platform = "Windows8.1";
+	@Value("${platform}") // TODO: Averiguar por qué no funciona 
+	String platform;
+	
+	@Autowired
+	MessageChannel rtmpSpyChOut;
+	
+	//	String platform = "Windows8.1";
 	
 	String[] rtmpSources = {
 	"rtmp://antena3fms35livefs.fplive.net:1935/antena3fms35live-live/stream-lasexta_1"
@@ -30,7 +39,7 @@ public class RtmpSpy {
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 	}
 	
-	public File doRtmpSpying() {
+	public boolean doRtmpSpying() {
 //		Resource capDirRes = ctx.getResource("META-INF/xmltv/cap");
 		URL capDirUrl = this.getClass().getClassLoader().getResource("META-INF/ffmpeg/cap");
 		File capDir = null;
@@ -108,8 +117,11 @@ public class RtmpSpy {
 		        				dataMat.put(0, 0, data.toByteArray());
 		        				Mat frameMat = Highgui.imdecode(dataMat, 1);
 		        		        
-		        				im.showImage(frameMat);
-		        		        
+//		        				im.showImage(frameMat);
+		        				Message<?> frameMsg = MessageBuilder.
+		        						withPayload(frameMat).build();
+		        				rtmpSpyChOut.send(frameMsg);
+		        				
 		        		        // Reinicializar 
 		        		        skip = true;
 		        				imgReady = false;
@@ -134,6 +146,6 @@ public class RtmpSpy {
 		default:
 			break;
 		}
-		return resFile;
+		return true;
 	}
 }

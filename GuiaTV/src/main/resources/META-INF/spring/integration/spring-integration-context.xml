@@ -104,6 +104,30 @@
 	ref="eventPollerReply" method="receive">
 	</int:outbound-channel-adapter>
 	
+	
+	<!-- ****************************************
+	****************** RTMP SPY ****************** 
+	*********************************************-->
+	<int:channel id="rtmpSpyChOut" >
+		<int:priority-queue capacity="10" /> 
+		<!-- TODO: Comparar por fecha -->
+	</int:channel>
+	
+	<bean id="rtmpSpy" class="guiatv.computervision.rtmpspy.RtmpSpy"/>
+	<bean id="templateMatchingClassif" class="guiatv.computervision.classificator.TemplateMatchingClassif"/>
+	
+	<int:inbound-channel-adapter id="rtmpSpyInbound"
+		channel="rtmpSpyChOut"
+		ref="rtmpSpy" method="doRtmpSpying" auto-startup="true">
+		<int:poller fixed-rate="500000000"></int:poller>
+	</int:inbound-channel-adapter>
+	
+	<int:outbound-channel-adapter id="classificatorOutbound"
+		channel="rtmpSpyChOut"
+		ref="templateMatchingClassif" method="classify">
+		<int:poller fixed-rate="500"></int:poller>
+	</int:outbound-channel-adapter>
+	
 <!-- 	<int:service-activator id="eventPollerSA"
 		input-channel="eventPollerChIn" ref="eventPoller" method="askForEvents"
 		requires-reply="false" >
@@ -186,8 +210,8 @@
 		channel="closerEventChOut">
 		<int:poller fixed-rate="1000"/>
 	</int:outbound-channel-adapter>
-
-
+	
+	
 	<!-- ****************************************
 	****************** PERSISTENCE TEST ****************** 
 	*********************************************-->
@@ -209,6 +233,8 @@
 	<bean id="taskExecutorClient" class="guiatv.eventproducer.utils.TaskExecutorMQTTClient" 
 		scope="prototype">
 	    <constructor-arg ref="taskExecutor" />
-	    
 	</bean>
+	
+	
+	
 </beans>

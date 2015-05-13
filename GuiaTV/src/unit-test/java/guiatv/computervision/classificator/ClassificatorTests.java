@@ -24,7 +24,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-public class OpenCVTests {
+public class ClassificatorTests {
 
 
 	@Test
@@ -49,8 +49,8 @@ public class OpenCVTests {
 			Mat imgAvert = Highgui.imread(advertsFile.getAbsolutePath());
 	        Mat tpt = Highgui.imread(tptFile.getAbsolutePath());
 	        
-	        Classif classif = new TemplateMatchingClassif(tpt);
-	        boolean success = classif.learn();
+	        Classif classif = new TemplateMatchingClassif();
+	        boolean success = classif.train(tpt);
 	        
 	        Classif.ClassifResult result1 = classif.classify(imgProgram);
 	        Classif.ClassifResult result2 = classif.classify(imgAvert);
