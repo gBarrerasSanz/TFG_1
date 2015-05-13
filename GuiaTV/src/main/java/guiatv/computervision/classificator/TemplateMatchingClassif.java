@@ -60,7 +60,7 @@ public class TemplateMatchingClassif implements Classif{
 		Point matchLoc;
         matchLoc = mmr.minLoc;
         
-        showTemplate(img,  matchLoc);
+//        showTemplate(img,  matchLoc);
 
         if (mmr.maxVal == 1) { 	return ClassifResult.PROGRAM; }
         else {					return ClassifResult.ADVERTISEMENT; }

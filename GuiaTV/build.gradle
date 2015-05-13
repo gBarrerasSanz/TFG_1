@@ -1,11 +1,26 @@
 import org.apache.tools.ant.taskdefs.condition.Os
 
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.2.3.RELEASE")
+    }
+}
+
 plugins {
 	id 'java'
 	id 'eclipse'
-    //id 'groovy'
     id 'com.stehno.natives' version '0.2.1'
 }
+
+// Soluciona el problema de las tildes y caracteres en UTF-8
+tasks.withType(JavaCompile) {
+  options.encoding = "iso-8859-1"
+}
+
+apply plugin: 'spring-boot'
 
 repositories {
     mavenCentral()
@@ -120,9 +135,36 @@ def getOs() {
     throw new GradleException('Your OS does not seem to be supported')
 }
 
-tasks.withType(JavaCompile) {
+
+/*
+tasks.withType(JavaExec) { JavaExec t ->
+    t.options "java.library.path", file("./src/main/resources/META-INF/opencv-2.4.9/windows_bin/x64")
+}
+*/
+
+/*
+// Funciona pero solo para build, etc, NO funciona para run
+test {
+	jvmArgs = ['-Djava.library.path=./src/main/resources/META-INF/opencv-2.4.9/windows_bin/x64']
+}
+*/
+
+run {
+    systemProperty 'java.library.path', file("./src/main/resources/META-INF/opencv-2.4.9/windows_bin/x64")
+}
+
+
+/*
+tasks.withType(JavaExec) { 
     systemProperty "java.library.path", file("./src/main/resources/META-INF/opencv-2.4.9/windows_bin/x64")
 }
+*/
+
+/*
+tasks.withType(JavaExec) { JavaExec t ->
+    t.systemProperty "java.library.path", file("./src/main/resources/META-INF/opencv-2.4.9/windows_bin/x64")
+}
+*/
 
 
 task checkOs  {

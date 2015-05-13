@@ -23,7 +23,7 @@ import org.springframework.messaging.MessageChannel;
 
 public class RtmpSpy {
 	
-	@Value("${platform}") // TODO: Averiguar por qué no funciona 
+	@Value("${platform}") // TODO: Averiguar por que no funciona 
 	String platform;
 	
 	@Autowired
