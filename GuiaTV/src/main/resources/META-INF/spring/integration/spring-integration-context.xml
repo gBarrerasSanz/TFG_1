@@ -108,9 +108,9 @@
 	<!-- ****************************************
 	****************** RTMP SPY ****************** 
 	*********************************************-->
+	<!--  
 	<int:channel id="rtmpSpyChOut" >
 		<int:priority-queue capacity="10" /> 
-		<!-- TODO: Comparar por fecha -->
 	</int:channel>
 	
 	<bean id="rtmpSpy" class="guiatv.computervision.rtmpspy.RtmpSpy"/>
@@ -127,6 +127,8 @@
 		ref="templateMatchingClassif" method="classify">
 		<int:poller fixed-rate="500"></int:poller>
 	</int:outbound-channel-adapter>
+	-->
+	
 	
 <!-- 	<int:service-activator id="eventPollerSA"
 		input-channel="eventPollerChIn" ref="eventPoller" method="askForEvents"
@@ -172,7 +174,7 @@
 	</int-jpa:retrieving-outbound-gateway>
 
 	<!-- ****************************************
-	****************** EVENT PRODUCTOR ****************** 
+	****************** EVENT PRODUCER ****************** 
 	*********************************************-->
 <!-- 	<bean id="rabbitConnectionFactoryBean" class="com.rabbitmq.client.ConnectionFactory">
 	<property name="host" 			value="localhost" />
@@ -224,7 +226,7 @@
 	<!-- ****************************************
 	****************** MQTT CLIENT TEST ****************** 
 	*********************************************-->
-	
+	<!--  
 	<bean id="taskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
     <property name="corePoolSize" value="5" />
     <property name="maxPoolSize" value="10" />
@@ -234,7 +236,7 @@
 		scope="prototype">
 	    <constructor-arg ref="taskExecutor" />
 	</bean>
-	
+	-->
 	
 	
 </beans>

@@ -135,13 +135,6 @@ def getOs() {
     throw new GradleException('Your OS does not seem to be supported')
 }
 
-
-/*
-tasks.withType(JavaExec) { JavaExec t ->
-    t.options "java.library.path", file("./src/main/resources/META-INF/opencv-2.4.9/windows_bin/x64")
-}
-*/
-
 /*
 // Funciona pero solo para build, etc, NO funciona para run
 test {
@@ -149,23 +142,23 @@ test {
 }
 */
 
+// Hace que funcione "gradle build", "gradle test"
+test {
+	jvmArgs = ['-Djava.library.path=./src/main/resources/META-INF/opencv-2.4.9/windows_bin/x64']
+}
+
+// Hace que funcione "gradle run"
 run {
-    systemProperty 'java.library.path', file("./src/main/resources/META-INF/opencv-2.4.9/windows_bin/x64")
+    jvmArgs = ['-Djava.library.path=./src/main/resources/META-INF/opencv-2.4.9/windows_bin/x64']
 }
 
 
 /*
-tasks.withType(JavaExec) { 
-    systemProperty "java.library.path", file("./src/main/resources/META-INF/opencv-2.4.9/windows_bin/x64")
-}
-*/
-
-/*
+// Esto también funciona
 tasks.withType(JavaExec) { JavaExec t ->
-    t.systemProperty "java.library.path", file("./src/main/resources/META-INF/opencv-2.4.9/windows_bin/x64")
+    t.jvmArgs = ['-Djava.library.path=./src/main/resources/META-INF/opencv-2.4.9/windows_bin/x64']
 }
 */
-
 
 task checkOs  {
   println "Operating System: ${getOs()}"
@@ -176,3 +169,5 @@ task integTest(type: Test) {
 	testClassesDir = sourceSets.integTest.output.classesDir
 	classpath = sourceSets.integTest.runtimeClasspath
 }
+
+//jvmArgs = ['-Djava.library.path=./src/main/resources/META-INF/opencv-2.4.9/windows_bin/x64']
