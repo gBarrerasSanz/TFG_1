@@ -33,53 +33,8 @@ repositories {
 // 	http://docs.opencv.org/doc/tutorials/introduction/java_eclipse/java_eclipse.html
 
 
-configurations {
-	integTestCompile {
-		extendsFrom testCompile
-	}
-	integTestRuntime {
-		extendsFrom testCompile
-	}
-}
-
 ext {
 	lwjglVersion = '2.9.2'
-}
-
-
-dependencies {
-	compile 'org.springframework.boot:spring-boot-gradle-plugin:1.2.2.RELEASE'
-	compile 'org.springframework.boot:spring-boot-starter:1.2.2.RELEASE'
-	compile 'org.springframework.amqp:spring-rabbit:1.4.3.RELEASE'
-	//compile 'com.rabbitmq:amqp-client:3.5.1'
-	//compile 'org.springframework:spring-context-support:3.2.2.RELEASE'
-   	compile 'org.springframework:spring-core:4.1.2.RELEASE'
-   	//compile 'org.springframework.integration:spring-integration-xml:4.1.2'
-   	compile 'org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.0.2' // it is only needed for testing purposes
-    compile 'org.eclipse.persistence:javax.persistence:2.0.0'
-    compile 'org.springframework.integration:spring-integration-jpa:4.1.2.RELEASE'
-    compile 'log4j:log4j:1.2.17'
-    compile 'org.hibernate:hibernate-entitymanager:4.2.11.Final' // con este funciona
-    //compile 'org.hibernate:hibernate-entitymanager:4.3.8.Final' // con este no funciona
-    compile 'com.h2database:h2:1.3.175'
-    compile 'org.springframework.integration:spring-integration-file:4.1.2.RELEASE'
-    compile 'commons-jxpath:commons-jxpath:1.3'
-    compile 'org.springframework:spring-test:4.1.5.RELEASE'
-    //compile 'commons-io:commons-io:2.4'
- 	
- 	
- 	// El jar de OpenCV-2.4.9: http://stackoverflow.com/questions/12576413/including-local-jar-file-in-project-at-build-time-using-gradle
- 	 compile files('./src/main/resources/META-INF/opencv-2.4.9/jar/opencv-249.jar')  	
- 	 
- 	// Sacado de aqui: https://github.com/tlrasor/Gradle-Lwjgl2-Template/blob/master/build.gradle
- 	compile 'org.lwjgl.lwjgl:lwjgl:2.9.2'
- 	
- 	// Para los tests (Unit)
-    testCompile 'junit:junit:4.10'
-    
-    // Para los integration tests
- 	//integTestCompile .. // Lo hereda de testCompile
-   
 }
 
 sourceSets {
@@ -113,6 +68,61 @@ sourceSets {
 	}
 }
 
+task integTest(type: Test) {
+    description = "Runs integration tests."
+    testClassesDir = sourceSets.integTest.output.classesDir
+    classpath = sourceSets.integTest.runtimeClasspath
+    jvmArgs = ['-Djava.library.path=./src/main/resources/META-INF/opencv-2.4.9/windows_bin/x64']
+    //maxHeapSize = '1024m'
+    // ensure we don't overwrite default report directories used by 'test' task
+    reports.html.destination = "${project.buildDir}/reports/integTest"
+    reports.junitXml.destination = "${project.buildDir}/integTest-results"
+    binResultsDir = file("${project.buildDir}/integTest-results/binary/integTest")
+    // always run integration tests after unit tests in order to fail fast
+    //mustRunAfter test
+}
+
+dependencies {
+	compile 'org.springframework.boot:spring-boot-gradle-plugin:1.2.2.RELEASE'
+	compile 'org.springframework.boot:spring-boot-starter:1.2.2.RELEASE'
+	compile 'org.springframework.amqp:spring-rabbit:1.4.3.RELEASE'
+	//compile 'com.rabbitmq:amqp-client:3.5.1'
+	//compile 'org.springframework:spring-context-support:3.2.2.RELEASE'
+   	compile 'org.springframework:spring-core:4.1.2.RELEASE'
+   	//compile 'org.springframework.integration:spring-integration-xml:4.1.2'
+   	compile 'org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.0.2' // it is only needed for testing purposes
+    compile 'org.eclipse.persistence:javax.persistence:2.0.0'
+    compile 'org.springframework.integration:spring-integration-jpa:4.1.2.RELEASE'
+    compile 'log4j:log4j:1.2.17'
+    compile 'org.hibernate:hibernate-entitymanager:4.2.11.Final' // con este funciona
+    //compile 'org.hibernate:hibernate-entitymanager:4.3.8.Final' // con este no funciona
+    compile 'com.h2database:h2:1.3.175'
+    compile 'org.springframework.integration:spring-integration-file:4.1.2.RELEASE'
+    compile 'commons-jxpath:commons-jxpath:1.3'
+    compile 'org.springframework:spring-test:4.1.5.RELEASE'
+    //compile 'commons-io:commons-io:2.4'
+ 	
+ 	
+ 	// El jar de OpenCV-2.4.9: http://stackoverflow.com/questions/12576413/including-local-jar-file-in-project-at-build-time-using-gradle
+ 	 compile files('./src/main/resources/META-INF/opencv-2.4.9/jar/opencv-249.jar')  	
+ 	 
+ 	// Sacado de aqui: https://github.com/tlrasor/Gradle-Lwjgl2-Template/blob/master/build.gradle
+ 	compile 'org.lwjgl.lwjgl:lwjgl:2.9.2'
+ 	
+ 	// Para los tests (Unit)
+    testCompile 'junit:junit:4.10'
+    
+    // Para los integration tests
+	integTestCompile sourceSets.main.output
+    integTestCompile sourceSets.test.output
+    integTestCompile configurations.compile
+    integTestCompile configurations.testCompile
+    integTestRuntime configurations.runtime
+    integTestRuntime configurations.testRuntime   
+}
+
+
+
 natives {
     def os = getOs()
     //println "Unpacking natives for $os to ./build/natives/$os"
@@ -135,13 +145,6 @@ def getOs() {
     throw new GradleException('Your OS does not seem to be supported')
 }
 
-/*
-// Funciona pero solo para build, etc, NO funciona para run
-test {
-	jvmArgs = ['-Djava.library.path=./src/main/resources/META-INF/opencv-2.4.9/windows_bin/x64']
-}
-*/
-
 // Hace que funcione "gradle build", "gradle test"
 test {
 	jvmArgs = ['-Djava.library.path=./src/main/resources/META-INF/opencv-2.4.9/windows_bin/x64']
@@ -163,11 +166,3 @@ tasks.withType(JavaExec) { JavaExec t ->
 task checkOs  {
   println "Operating System: ${getOs()}"
 }
-
-
-task integTest(type: Test) {
-	testClassesDir = sourceSets.integTest.output.classesDir
-	classpath = sourceSets.integTest.runtimeClasspath
-}
-
-//jvmArgs = ['-Djava.library.path=./src/main/resources/META-INF/opencv-2.4.9/windows_bin/x64']

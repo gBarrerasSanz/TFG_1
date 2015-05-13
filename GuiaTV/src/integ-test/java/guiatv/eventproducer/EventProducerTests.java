@@ -22,10 +22,6 @@ import org.springframework.integration.support.MessageBuilder;
 import org.springframework.messaging.Message;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
-import com.sun.java.swing.plaf.windows.WindowsTreeUI.CollapsedIcon;
-import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils.Collections;
-
 import guiatv.Application;
 import guiatv.common.CommonUtility;
 import guiatv.eventmanager.EventService;
