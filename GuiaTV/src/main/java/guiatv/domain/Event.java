@@ -1,4 +1,4 @@
-package guiatv.xmltv.datatypes;
+package guiatv.domain;
 
 import java.util.Date;
 

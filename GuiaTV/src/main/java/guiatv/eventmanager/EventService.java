@@ -1,6 +1,6 @@
 package guiatv.eventmanager;
 
-import guiatv.xmltv.datatypes.Event;
+import guiatv.domain.Event;
 
 import java.util.Date;
 import java.util.List;

@@ -22,13 +22,14 @@ import org.springframework.integration.support.MessageBuilder;
 import org.springframework.messaging.Message;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
 import guiatv.Application;
 import guiatv.common.CommonUtility;
+import guiatv.domain.Event;
 import guiatv.eventmanager.EventService;
 import guiatv.eventproducer.EventProducerPublisher;
 import guiatv.eventproducer.utils.TaskExecutorMQTTClient;
 import guiatv.persistence.EventServiceTests;
-import guiatv.xmltv.datatypes.Event;
 import guiatv.xmltv.transformer.XMLTVTransformer;
 
 @RunWith(SpringJUnit4ClassRunner.class)

@@ -28,8 +28,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import guiatv.Application;
 import guiatv.common.CommonUtility;
+import guiatv.domain.Event;
 import guiatv.eventmanager.EventService;
-import guiatv.xmltv.datatypes.Event;
 import guiatv.xmltv.transformer.XMLTVTransformer;
 
 @RunWith(SpringJUnit4ClassRunner.class)

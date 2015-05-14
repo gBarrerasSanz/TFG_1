@@ -15,12 +15,12 @@
 
 	<jdbc:embedded-database id="dataSource" type="H2" />
 
-	<jdbc:initialize-database data-source="dataSource"
+	<!-- <jdbc:initialize-database data-source="dataSource"
 		ignore-failures="DROPS">
 		<jdbc:script location="classpath:/META-INF/SQL/H2-DropTables.sql" />
 		<jdbc:script location="classpath:/META-INF/SQL/H2-CreateTables.sql" />
 		<jdbc:script location="classpath:/META-INF/SQL/H2-PopulateData.sql" />
-	</jdbc:initialize-database>
+	</jdbc:initialize-database> -->
 
 	<!-- Define the JPA transaction manager -->
 	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
@@ -31,7 +31,7 @@
 		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
 		<property name="dataSource" ref="dataSource" />
 		<property name="jpaVendorAdapter" ref="vendorAdaptor" />
-		<property name="packagesToScan" value="**.*" />
+		<property name="packagesToScan" value="guiatv.domain" />
 	</bean>
 
 	<bean id="abstractVendorAdaptor" abstract="true">

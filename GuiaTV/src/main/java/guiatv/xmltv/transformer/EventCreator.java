@@ -5,8 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.Message;
 
+import guiatv.domain.Event;
 import guiatv.eventmanager.EventService;
-import guiatv.xmltv.datatypes.Event;
 
 public class EventCreator {
 	

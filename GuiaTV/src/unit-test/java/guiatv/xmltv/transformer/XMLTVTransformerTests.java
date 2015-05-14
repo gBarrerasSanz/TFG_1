@@ -3,7 +3,7 @@ package guiatv.xmltv.transformer;
 import static org.junit.Assert.*;
 import guiatv.Application;
 import guiatv.common.CommonUtility;
-import guiatv.xmltv.datatypes.Event;
+import guiatv.domain.Event;
 import guiatv.xmltv.transformer.XMLTVTransformer;
 
 import java.io.File;
