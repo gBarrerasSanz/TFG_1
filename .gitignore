@@ -1,3 +1,4 @@
 # Editar si necesario
 /.project
 .gradle/
+/build/
