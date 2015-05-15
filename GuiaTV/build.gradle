@@ -15,7 +15,8 @@ plugins {
     id 'com.stehno.natives' version '0.2.1'
 }
 
-eclipse.classpath.downloadJavadoc = true
+// Descomentar esta linea si se quiere descargar el javadoc ( Tarda mucho)
+//eclipse.classpath.downloadJavadoc = true
 
 // Soluciona el problema de las tildes y caracteres en UTF-8
 tasks.withType(JavaCompile) {
@@ -81,7 +82,7 @@ task integTest(type: Test) {
     reports.junitXml.destination = "${project.buildDir}/integTest-results"
     binResultsDir = file("${project.buildDir}/integTest-results/binary/integTest")
     // always run integration tests after unit tests in order to fail fast
-    //mustRunAfter test
+    mustRunAfter test
 }
 
 dependencies {

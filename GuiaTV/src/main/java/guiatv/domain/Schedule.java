@@ -25,18 +25,18 @@ public class Schedule implements Serializable {
 	
 	@Id
     @Column(name = "IDSCHED", nullable = false)
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idSched;
     
 //	@OneToOne(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
-	@OneToOne
-	@JoinColumn(table="CHANNEL", name="IDCH")
-    private String idCh;
+	@OneToOne(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+	@JoinColumn(name="CHID")
+	private Channel channel;
     
 //	@OneToOne(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
-	@OneToOne
-	@JoinColumn(table="PROGRAMME", name="IDPROG")
-    private Long idProg;
+	@OneToOne(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+	@JoinColumn(name="PROGID")
+	private Programme programme;
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "START", nullable = false)
@@ -59,20 +59,20 @@ public class Schedule implements Serializable {
 		this.idSched = idSched;
 	}
 
-	public String getIdCh() {
-		return idCh;
+	public Channel getChannel() {
+		return channel;
 	}
 
-	public void setIdCh(String idCh) {
-		this.idCh = idCh;
+	public void setChannel(Channel channel) {
+		this.channel = channel;
 	}
 
-	public Long getIdProg() {
-		return idProg;
+	public Programme getProgramme() {
+		return programme;
 	}
 
-	public void setIdProg(Long idProg) {
-		this.idProg = idProg;
+	public void setProgramme(Programme programme) {
+		this.programme = programme;
 	}
 
 	public Date getStart() {
@@ -91,14 +91,14 @@ public class Schedule implements Serializable {
 		this.end = end;
 	}
 	
-//	@Override
-//	public String toString() {
-//		return "Event "+id+" {"+
-//				"channel="+channel+", "+
-//				"title="+title+", "+
-//				"start="+start+", "+
-//				"end="+end+", "+
-//				"}";
-//	}
+	@Override
+	public String toString() {
+		return "Schedule "+idSched+" {"+
+				"channel="+channel.getNomIdCh()+", "+
+				"programme="+programme.getNomProg()+", "+
+				"start="+start+", "+
+				"end="+end+", "+
+				"}";
+	}
 	
 }

@@ -14,9 +14,6 @@ import guiatv.xmltv.transformer.XMLTVTransformer;
 
 public class EventProducerPollerReply {
 	
-	@Autowired
-	CommonUtility utils;
-	
 	static Logger log = Logger.getLogger(XMLTVTransformer.class.getName());
 	
 	public void receive(Message<List<Event>> lEvtMsg) {

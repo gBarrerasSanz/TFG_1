@@ -21,7 +21,7 @@ public class Programme implements Serializable {
 
 	@Id
     @Column(name = "IDPROG", nullable = false)
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idProg;
     
     @Column(name = "NOMPROG", nullable = true, length = 50)

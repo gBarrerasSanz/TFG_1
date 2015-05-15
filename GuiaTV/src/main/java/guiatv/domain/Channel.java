@@ -17,8 +17,11 @@ public class Channel implements Serializable {
 
 	@Id
     @Column(name = "IDCH", nullable = false)
-//    @GeneratedValue(strategy = GenerationType.AUTO)
-    private String idCh;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long idCh;
+    
+    @Column(name = "NOMIDCH", nullable = true, length = 50)
+    private String nomIdCh;
     
     @Column(name = "NOMCH", nullable = true, length = 50)
     private String nomCh;
@@ -31,18 +34,25 @@ public class Channel implements Serializable {
     @Lob
     @Column(name = "IMGSMB", nullable = true)
     private byte[] imgSmb;
-
-
+    
     /**********************************************************
      * 					GETTERS / SETTERS
      *********************************************************/
     
-	public String getIdCh() {
+	public Long getIdCh() {
 		return idCh;
 	}
 
-	public void setIdCh(String idCh) {
+	public void setIdCh(Long idCh) {
 		this.idCh = idCh;
+	}
+
+	public String getNomIdCh() {
+		return nomIdCh;
+	}
+
+	public void setNomIdCh(String nomIdCh) {
+		this.nomIdCh = nomIdCh;
 	}
 
 	public String getNomCh() {
@@ -69,8 +79,5 @@ public class Channel implements Serializable {
 		this.imgSmb = imgSmb;
 	}
 
-	public static long getSerialversionuid() {
-		return serialVersionUID;
-	}
 
 }

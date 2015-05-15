@@ -48,9 +48,6 @@ public class EventServiceTests {
 	@Autowired
 	private XMLTVTransformer transformer;
 	
-	@Autowired
-	private CommonUtility utils;
-	
 	@Before
 	public void doNothing() {
 		LOGGER.info("No hacer nada");
@@ -115,13 +112,13 @@ public class EventServiceTests {
 			Event evt1 = new Event(); Event evt2 = new Event();
 			evt1.setChannel("neox-722.laguiatv.com");
 			evt1.setTitle("Cómo conocí a vuestra Madre");
-			evt1.setStart(utils.strToDate("20150316173500 +0100"));
-			evt1.setEnd(utils.strToDate("20150316175400 +0100"));
+			evt1.setStart(CommonUtility.strToDate("20150316173500 +0100"));
+			evt1.setEnd(CommonUtility.strToDate("20150316175400 +0100"));
 			// evt2
 			evt2.setChannel("neox-722.laguiatv.com");
 			evt2.setTitle("Los Simpson");
-			evt2.setStart(utils.strToDate("20150316214500 +0100"));
-			evt2.setEnd(utils.strToDate("20150316220000 +0100"));
+			evt2.setStart(CommonUtility.strToDate("20150316214500 +0100"));
+			evt2.setEnd(CommonUtility.strToDate("20150316220000 +0100"));
 			lEvt.add(evt1); lEvt.add(evt2);
 			assertEquals(resultMsg.getPayload(), lEvt);
 		} catch (IOException e) {

@@ -27,9 +27,6 @@ import org.w3c.dom.Node;
 
 public class XMLTVTransformer implements Transformer {
 	
-	@Autowired
-	CommonUtility utils;
-	
 	static Logger log = Logger.getLogger("debugLog");
 	
 	@Override
@@ -57,8 +54,8 @@ public class XMLTVTransformer implements Transformer {
 					evt = new Event();
 					evt.setTitle(itProg.next());
 					evt.setChannel(nodeMap.getNamedItem("channel").getNodeValue());
-					evt.setStart(utils.strToDate(nodeMap.getNamedItem("start").getNodeValue()));
-					evt.setEnd(utils.strToDate(nodeMap.getNamedItem("stop").getNodeValue()));
+					evt.setStart(CommonUtility.strToDate(nodeMap.getNamedItem("start").getNodeValue()));
+					evt.setEnd(CommonUtility.strToDate(nodeMap.getNamedItem("stop").getNodeValue()));
 					lEvt.add(evt);
 					itIdx++;
 				}
@@ -70,7 +67,7 @@ public class XMLTVTransformer implements Transformer {
 			catch(Exception e) {
 				e.printStackTrace();
 				log.debug("**** File content: ****");
-				log.debug(utils.getFileString(file));
+				log.debug(CommonUtility.getFileString(file));
 				return null;
 			}
 		}

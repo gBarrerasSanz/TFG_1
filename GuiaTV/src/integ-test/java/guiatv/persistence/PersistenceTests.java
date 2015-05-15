@@ -3,6 +3,7 @@ package guiatv.persistence;
 import static org.junit.Assert.*;
 
 import java.util.Date;
+import java.util.List;
 
 import guiatv.Application;
 import guiatv.domain.Channel;
@@ -33,28 +34,29 @@ public class PersistenceTests {
 		Channel ch2 = new Channel();
 		Programme prog1 = new Programme();
 		Programme prog2 = new Programme();
-		ch1.setIdCh("fdf"); ch1.setCountry("spain");
-		ch1.setIdCh("neox"); ch1.setCountry("spain");
+		ch1.setNomIdCh("fdf-123"); ch1.setCountry("spain");
+		ch2.setNomIdCh("neox-123"); ch1.setCountry("spain");
 		prog1.setNomProg("aida");
-		prog1.setNomProg("Los Simpsons");
+		prog2.setNomProg("Los Simpsons");
 		
 		Schedule sched1 = new Schedule();
-		sched1.setIdCh(ch1.getIdCh());
-		sched1.setIdProg(prog1.getIdProg());
+		sched1.setChannel(ch1);
+		sched1.setProgramme(prog1);
 		sched1.setStart(new Date()); sched1.setEnd(new Date());
 		
 		Schedule sched2 = new Schedule();
-		sched1.setIdCh(ch2.getIdCh());
-		sched1.setIdProg(prog2.getIdProg());
+		sched2.setChannel(ch2);
+		sched2.setProgramme(prog2);
 		sched2.setStart(new Date()); sched2.setEnd(new Date());
 		
 		schedRep.save(sched1);
 		schedRep.save(sched2);
 
 		// fetch all customers
-		System.out.println("Customers found with findAll():");
+		List<Schedule> schedList = schedRep.findAll();
+		System.out.println("Customers found with findAll(): size="+schedList.size());
 		System.out.println("-------------------------------");
-		for (Schedule sched : schedRep.findAll()) {
+		for (Schedule sched : schedList) {
 			logger.info(sched);
 		}
 		

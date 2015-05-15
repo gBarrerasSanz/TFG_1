@@ -1,5 +1,6 @@
 /bin/
-/build/
+/build/ 			# Excluir directorio el directorio build
+# !/build/reports/ 	# Incluir el directorio de reports
 .classpath
 .project
 .settings/

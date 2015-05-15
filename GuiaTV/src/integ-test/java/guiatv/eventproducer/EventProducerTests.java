@@ -46,9 +46,6 @@ public class EventProducerTests {
 	private XMLTVTransformer transformer;
 	
 	@Autowired
-	private CommonUtility utils;
-	
-	@Autowired
 	private EventService evService;
 	
 	@Autowired
@@ -129,10 +126,10 @@ public class EventProducerTests {
 			
 			// Construir resultado esperado
 			Date start1, start2, end1, end2;
-			start1 = utils.getFutureRandomDate(utils.getTimeUnit("min"), 2, 10); 
-			end1 = utils.sumTwoHours(start1);
-			start2 = utils.getFutureRandomDate(utils.getTimeUnit("min"), 12, 15);
-			end2 = utils.sumTwoHours(start2);
+			start1 = CommonUtility.getFutureRandomDate(CommonUtility.getTimeUnit("min"), 2, 10); 
+			end1 = CommonUtility.sumTwoHours(start1);
+			start2 = CommonUtility.getFutureRandomDate(CommonUtility.getTimeUnit("min"), 12, 15);
+			end2 = CommonUtility.sumTwoHours(start2);
 			
 			lEvt = new ArrayList<Event>();
 			// evt1
@@ -150,6 +147,7 @@ public class EventProducerTests {
 			evt2.setStart(start2); evt2.setEnd(end2);
 			lEvt.add(evt1); lEvt.add(evt2);
 			
+			@SuppressWarnings("unchecked")
 			List<Event> recEvList = (List<Event>)resultMsg.getPayload();
 			assertEquals(lEvt.size(), recEvList.size());
 			recEvList.get(0).setStart(start1); recEvList.get(0).setEnd(end1);

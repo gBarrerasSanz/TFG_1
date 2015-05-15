@@ -23,7 +23,8 @@
 	<!-- ****************************************
 	****************** COMMON UTILITY ****************** 
 	*********************************************-->
-	<bean id="commonUtility" class="guiatv.common.CommonUtility" />
+	<!-- Ahora se accede a las utilidades de forma estática -->
+	<!-- <bean id="commonUtility" class="guiatv.common.CommonUtility" /> -->
 	
 	
 	<!-- ****************************************
