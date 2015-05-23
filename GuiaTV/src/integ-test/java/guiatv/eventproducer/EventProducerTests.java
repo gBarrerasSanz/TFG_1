@@ -30,7 +30,7 @@ import guiatv.eventmanager.EventService;
 import guiatv.eventproducer.EventProducerPublisher;
 import guiatv.eventproducer.utils.TaskExecutorMQTTClient;
 import guiatv.persistence.EventServiceTests;
-import guiatv.xmltv.transformer.XMLTVTransformer;
+import guiatv.xmltv.transformer.XMLTVTransformer_old1;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
@@ -43,7 +43,7 @@ public class EventProducerTests {
 	private ApplicationContext ctx;
 	
 	@Autowired
-	private XMLTVTransformer transformer;
+	private XMLTVTransformer_old1 transformer;
 	
 	@Autowired
 	private EventService evService;

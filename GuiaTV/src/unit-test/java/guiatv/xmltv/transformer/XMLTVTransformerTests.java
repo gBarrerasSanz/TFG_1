@@ -3,8 +3,11 @@ package guiatv.xmltv.transformer;
 import static org.junit.Assert.*;
 import guiatv.Application;
 import guiatv.common.CommonUtility;
+import guiatv.domain.Channel;
 import guiatv.domain.Event;
-import guiatv.xmltv.transformer.XMLTVTransformer;
+import guiatv.domain.Programme;
+import guiatv.domain.Schedule;
+import guiatv.xmltv.transformer.XMLTVTransformer_old1;
 
 import java.io.File;
 import java.io.IOException;
@@ -40,24 +43,44 @@ public class XMLTVTransformerTests {
 					withPayload(file).build();
 			
 			XMLTVTransformer transformer  = new XMLTVTransformer();
-			Message<List<Event>> resultMsg = transformer.transform(fileMsg);
-			assertNotNull(resultMsg);
+			Message<List<Schedule>> msgListScheduleReturned = transformer.transform(fileMsg);
+			assertNotNull(msgListScheduleReturned);
 			
 			// Construir resultado esperado
-			List<Event> lEvt = new ArrayList<Event>();
-			// evt1
-			Event evt1 = new Event(); Event evt2 = new Event();
-			evt1.setChannel("neox-722.laguiatv.com");
-			evt1.setTitle("Cómo conocí a vuestra Madre");
-			evt1.setStart(CommonUtility.strToDate("20150316173500 +0100"));
-			evt1.setEnd(CommonUtility.strToDate("20150316175400 +0100"));
-			// evt2
-			evt2.setChannel("neox-722.laguiatv.com");
-			evt2.setTitle("Los Simpson");
-			evt2.setStart(CommonUtility.strToDate("20150316214500 +0100"));
-			evt2.setEnd(CommonUtility.strToDate("20150316220000 +0100"));
-			lEvt.add(evt1); lEvt.add(evt2);
-			assertEquals(resultMsg.getPayload(), lEvt);
+			List<Schedule> listScheduleExpected = new ArrayList<Schedule>();
+			// Crear channels
+			Channel chNeox = new Channel();
+			chNeox.setNomIdCh("neox-722.laguiatv.com");
+			// Crear programmes
+			Programme progMadre = new Programme();
+			progMadre.setNomProg("Cómo conocí a vuestra Madre");
+			Programme progSimpsons = new Programme();
+			progSimpsons.setNomProg("Los Simpson");
+			// Crear schedules
+			Schedule schedMadre = new Schedule();
+			schedMadre.setChannel(chNeox);
+			schedMadre.setProgramme(progMadre);
+			schedMadre.setStart(CommonUtility.strToDate("20150316173500 +0100"));
+			schedMadre.setEnd(CommonUtility.strToDate("20150316175400 +0100"));
+			
+			Schedule schedSimpsons = new Schedule();
+			schedSimpsons.setChannel(chNeox);
+			schedSimpsons.setProgramme(progSimpsons);
+			schedSimpsons.setStart(CommonUtility.strToDate("20150316214500 +0100"));
+			schedSimpsons.setEnd(CommonUtility.strToDate("20150316220000 +0100"));
+			
+			listScheduleExpected.add(schedMadre); 
+			listScheduleExpected.add(schedSimpsons); 
+			
+			List<Schedule> listScheduleReturned = msgListScheduleReturned.getPayload();
+			for (int i=0; i<listScheduleExpected.size(); i++) {
+				Schedule schedReturned = listScheduleReturned.get(i);
+				Schedule schedExpected = listScheduleReturned.get(i);
+				assertEquals(schedExpected.getProgramme(), schedReturned.getProgramme());
+				assertEquals(schedExpected.getChannel(), schedReturned.getChannel());
+				assertEquals(schedExpected.getStart(), schedReturned.getStart());
+				assertEquals(schedExpected.getEnd(), schedReturned.getEnd());
+			}
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
 			fail("URISyntaxException");

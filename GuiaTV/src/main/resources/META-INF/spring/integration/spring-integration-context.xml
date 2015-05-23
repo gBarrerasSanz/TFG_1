@@ -44,7 +44,7 @@
 	<int-file:outbound-channel-adapter id="grabberOutbound"
 		channel="grabberChOut" directory="file:xmltv_cap"
 		auto-create-directory="true" mode="REPLACE"
-		temporary-file-suffix="writing" delete-source-files="true"
+		temporary-file-suffix=".writing" delete-source-files="true"
 		>
 	</int-file:outbound-channel-adapter>
 
@@ -72,7 +72,6 @@
 
 	<int-file:inbound-channel-adapter id="filePollerInbound"
 		directory="file:xmltv_cap" channel="transformerChIn" auto-startup="true"
-		comparator="xmltvFileComparator" 
 		filter="compositeFilter" >
 		<int:poller fixed-rate="10000" />
 	</int-file:inbound-channel-adapter>

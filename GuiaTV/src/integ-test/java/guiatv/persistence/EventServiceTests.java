@@ -30,7 +30,7 @@ import guiatv.Application;
 import guiatv.common.CommonUtility;
 import guiatv.domain.Event;
 import guiatv.eventmanager.EventService;
-import guiatv.xmltv.transformer.XMLTVTransformer;
+import guiatv.xmltv.transformer.XMLTVTransformer_old1;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
@@ -46,7 +46,7 @@ public class EventServiceTests {
 	private EventService evService;
 	
 	@Autowired
-	private XMLTVTransformer transformer;
+	private XMLTVTransformer_old1 transformer;
 	
 	@Before
 	public void doNothing() {
