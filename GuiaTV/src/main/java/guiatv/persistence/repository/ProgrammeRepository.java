@@ -1,4 +1,4 @@
-package guiatv.persistence;
+package guiatv.persistence.repository;
 
 import java.util.List;
 

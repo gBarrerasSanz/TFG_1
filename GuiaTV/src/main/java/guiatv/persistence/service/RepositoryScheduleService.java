@@ -1,6 +1,7 @@
-package guiatv.persistence;
+package guiatv.persistence.service;
 
 import guiatv.domain.Schedule;
+import guiatv.persistence.repository.ScheduleRepository;
 
 import java.util.List;
 

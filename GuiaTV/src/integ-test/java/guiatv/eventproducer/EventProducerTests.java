@@ -29,7 +29,7 @@ import guiatv.domain.Event;
 import guiatv.eventmanager.EventService;
 import guiatv.eventproducer.EventProducerPublisher;
 import guiatv.eventproducer.utils.TaskExecutorMQTTClient;
-import guiatv.persistence.EventServiceTests;
+import guiatv.persistence.EventServiceTests_old1;
 import guiatv.xmltv.transformer.XMLTVTransformer_old1;
 
 @RunWith(SpringJUnit4ClassRunner.class)

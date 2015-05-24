@@ -1,4 +1,4 @@
-package guiatv.persistence;
+package guiatv.persistence.service;
 
 import guiatv.domain.Schedule;
 

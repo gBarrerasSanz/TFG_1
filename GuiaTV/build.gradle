@@ -121,7 +121,7 @@ dependencies {
     // JPA con Spring Boot
     //compile 'org.springframework.boot:spring-boot-starter-data-jpa:1.2.3.RELEASE'
     
-    
+    compile 'org.aspectj:aspectjweaver:1.8.5'
     
     // Para los integration tests
 	integTestCompile sourceSets.main.output

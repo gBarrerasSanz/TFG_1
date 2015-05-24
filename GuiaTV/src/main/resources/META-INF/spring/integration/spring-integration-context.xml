@@ -54,8 +54,7 @@
 	<int:channel id="transformerChOut" fixed-subscriber="true" />
 
 	<bean id="xmltvTransformerBean" class="guiatv.xmltv.transformer.XMLTVTransformer" />
-	<bean id="xmltvFileComparator" class="guiatv.xmltv.grabber.CustomFileComparator" />
-	<bean id="eventCreator" class="guiatv.xmltv.transformer.EventCreator"/>
+	<bean id="scheduleLoader" class="guiatv.scheduleloader.ScheduleLoader"/>
 	
 	<bean id="compositeFilter"
     	class="org.springframework.integration.file.filters.CompositeFileListFilter">
@@ -79,11 +78,15 @@
 	<int:transformer id="transformerXmlToPojo"
 		ref="xmltvTransformerBean" input-channel="transformerChIn"
 		method="transform" output-channel="transformerChOut" />
-
-	<int:service-activator id="transformerSA"
+	
+	<int:outbound-channel-adapter id="scheduleLoaderOutbound"
+		channel="transformerChOut" ref="scheduleLoader" method="loadListSchedules">
+	</int:outbound-channel-adapter>
+	
+	<!-- <int:service-activator id="transformerSA"
 		input-channel="transformerChOut" ref="eventCreator" method="createEvents"
 		requires-reply="false">
-	</int:service-activator>
+	</int:service-activator> -->
 
 	<!-- ****************************************
 	****************** EVENT POLLER ****************** 

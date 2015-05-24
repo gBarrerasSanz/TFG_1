@@ -8,7 +8,7 @@ import org.springframework.messaging.Message;
 import guiatv.domain.Event;
 import guiatv.eventmanager.EventService;
 
-public class EventCreator {
+public class EventCreator_old1 {
 	
 	@Autowired
 	EventService evService;
