@@ -1,4 +1,4 @@
-package guiatv.computervision.classificator;
+package guiatv.cv.classificator;
 
 import org.opencv.core.Core;
 import org.opencv.core.CvType;

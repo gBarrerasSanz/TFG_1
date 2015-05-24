@@ -1,8 +1,8 @@
-package guiatv.computervision.classificator;
+package guiatv.cv.classificator;
 
 import org.opencv.core.Mat;
 
-public interface Classif {
+public interface Classif_old {
 	
 	public static enum ClassifResult {
 		ADVERTISEMENT, PROGRAM

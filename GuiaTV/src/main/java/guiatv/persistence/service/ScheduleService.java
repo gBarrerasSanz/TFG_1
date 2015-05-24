@@ -1,6 +1,6 @@
 package guiatv.persistence.service;
 
-import guiatv.domain.Schedule;
+import guiatv.persistence.domain.Schedule;
 
 import java.util.List;
 

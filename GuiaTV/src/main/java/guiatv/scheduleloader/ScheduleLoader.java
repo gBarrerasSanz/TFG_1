@@ -1,6 +1,6 @@
 package guiatv.scheduleloader;
 
-import guiatv.domain.Schedule;
+import guiatv.persistence.domain.Schedule;
 import guiatv.persistence.repository.ScheduleRepository;
 
 import java.util.List;

@@ -28,8 +28,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import guiatv.Application;
 import guiatv.common.CommonUtility;
-import guiatv.domain.Event;
-import guiatv.eventmanager.EventService;
+import guiatv.eventmanager.ImgProcessingGateway;
+import guiatv.persistence.domain.Event;
 import guiatv.xmltv.transformer.XMLTVTransformer_old1;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -43,7 +43,7 @@ public class EventServiceTests_old1 {
 	private ApplicationContext ctx;
 	
 	@Autowired
-	private EventService evService;
+	private ImgProcessingGateway evService;
 	
 	@Autowired
 	private XMLTVTransformer_old1 transformer;

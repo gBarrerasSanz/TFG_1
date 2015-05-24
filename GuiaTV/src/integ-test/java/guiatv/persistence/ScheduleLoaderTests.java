@@ -28,11 +28,11 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import guiatv.Application;
 import guiatv.common.CommonUtility;
-import guiatv.domain.Channel;
-import guiatv.domain.Event;
-import guiatv.domain.Programme;
-import guiatv.domain.Schedule;
-import guiatv.eventmanager.EventService;
+import guiatv.eventmanager.ImgProcessingGateway;
+import guiatv.persistence.domain.Channel;
+import guiatv.persistence.domain.Event;
+import guiatv.persistence.domain.Programme;
+import guiatv.persistence.domain.Schedule;
 import guiatv.persistence.repository.ScheduleRepository;
 import guiatv.scheduleloader.ScheduleLoader;
 import guiatv.xmltv.transformer.XMLTVTransformer_old1;

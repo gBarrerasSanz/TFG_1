@@ -8,13 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.integration.support.MessageBuilder;
 import org.springframework.messaging.Message;
 
-import guiatv.domain.Event;
-import guiatv.eventmanager.EventService;
+import guiatv.eventmanager.ImgProcessingGateway;
+import guiatv.persistence.domain.Event;
 
 public class EventProducerPoller {
 	
 	@Autowired
-	EventService evService;
+	ImgProcessingGateway evService;
 	
 	public Message<List<Event>> askForEvents() {
 		List<Event> lEvt = evService.getCloserEvents(new Date());

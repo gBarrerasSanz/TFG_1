@@ -1,6 +1,6 @@
 package guiatv.common;
 
-import guiatv.domain.Event;
+import guiatv.persistence.domain.Event;
 
 import java.io.BufferedReader;
 import java.io.File;

@@ -1,10 +1,10 @@
 package guiatv.xmltv.transformer;
 
 import guiatv.common.CommonUtility;
-import guiatv.domain.Channel;
-import guiatv.domain.Event;
-import guiatv.domain.Programme;
-import guiatv.domain.Schedule;
+import guiatv.persistence.domain.Channel;
+import guiatv.persistence.domain.Event;
+import guiatv.persistence.domain.Programme;
+import guiatv.persistence.domain.Schedule;
 
 import java.io.File;
 import java.text.ParseException;

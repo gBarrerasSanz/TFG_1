@@ -1,7 +1,7 @@
 package guiatv.xmltv.transformer;
 
 import guiatv.common.CommonUtility;
-import guiatv.domain.Event;
+import guiatv.persistence.domain.Event;
 
 import java.io.File;
 import java.text.ParseException;

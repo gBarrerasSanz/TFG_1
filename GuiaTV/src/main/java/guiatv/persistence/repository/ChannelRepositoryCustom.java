@@ -1,6 +1,6 @@
 package guiatv.persistence.repository;
 
-import guiatv.domain.Channel;
+import guiatv.persistence.domain.Channel;
 
 public interface ChannelRepositoryCustom {
 

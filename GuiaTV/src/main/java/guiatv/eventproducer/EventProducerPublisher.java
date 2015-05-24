@@ -1,6 +1,6 @@
 package guiatv.eventproducer;
 
-import guiatv.domain.Event;
+import guiatv.persistence.domain.Event;
 
 import java.io.IOException;
 import java.util.ArrayList;

@@ -8,8 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.Message;
 
 import guiatv.common.CommonUtility;
-import guiatv.domain.Event;
-import guiatv.eventmanager.EventService;
+import guiatv.eventmanager.ImgProcessingGateway;
+import guiatv.persistence.domain.Event;
 import guiatv.xmltv.transformer.XMLTVTransformer_old1;
 
 public class EventProducerPollerReply {

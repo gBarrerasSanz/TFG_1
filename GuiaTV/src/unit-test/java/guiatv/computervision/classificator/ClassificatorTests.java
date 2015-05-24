@@ -2,8 +2,8 @@ package guiatv.computervision.classificator;
 
 import static org.junit.Assert.*;
 import guiatv.Application;
-import guiatv.computervision.classificator.Classif;
-import guiatv.computervision.classificator.TemplateMatchingClassif;
+import guiatv.cv.classificator.Classif_old;
+import guiatv.cv.classificator.TemplateMatchingClassif;
 
 import java.io.File;
 import java.io.IOException;
@@ -49,13 +49,13 @@ public class ClassificatorTests {
 			Mat imgAvert = Highgui.imread(advertsFile.getAbsolutePath());
 	        Mat tpt = Highgui.imread(tptFile.getAbsolutePath());
 	        
-	        Classif classif = new TemplateMatchingClassif();
+	        Classif_old classif = new TemplateMatchingClassif();
 	        boolean success = classif.train(tpt);
 	        
-	        Classif.ClassifResult result1 = classif.classify(imgProgram);
-	        Classif.ClassifResult result2 = classif.classify(imgAvert);
-	        assertEquals(result1, Classif.ClassifResult.PROGRAM);
-	        assertEquals(result2, Classif.ClassifResult.ADVERTISEMENT);
+	        Classif_old.ClassifResult result1 = classif.classify(imgProgram);
+	        Classif_old.ClassifResult result2 = classif.classify(imgAvert);
+	        assertEquals(result1, Classif_old.ClassifResult.PROGRAM);
+	        assertEquals(result2, Classif_old.ClassifResult.ADVERTISEMENT);
 	        
 		} catch (URISyntaxException e) {
 			e.printStackTrace();

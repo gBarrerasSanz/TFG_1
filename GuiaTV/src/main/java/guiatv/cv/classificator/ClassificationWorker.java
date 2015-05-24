@@ -1,10 +1,12 @@
-package guiatv.computervision.classificator;
+package guiatv.cv.classificator;
 
 import java.io.File;
 import java.net.URISyntaxException;
 import java.net.URL;
 
-import guiatv.computervision.classificator.Classif;
+import guiatv.common.datatypes.Frame;
+import guiatv.cv.classificator.Classif_old;
+import guiatv.persistence.domain.RTEvent;
 
 import org.opencv.core.Core;
 import org.opencv.core.Core.MinMaxLocResult;
@@ -19,15 +21,14 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.core.io.Resource;
 
 
-public class TemplateMatchingClassif implements Classif{
+public class ClassificationWorker {
 
 	private final int MATCH_METHOD = Imgproc.TM_SQDIFF_NORMED;
 	///
 	private boolean trained = false;
 	private Mat tpt;
 	
-	public TemplateMatchingClassif() {
-		pseudoTrain();
+	public ClassificationWorker() {
 	}
 
 	private void pseudoTrain() {
@@ -49,8 +50,13 @@ public class TemplateMatchingClassif implements Classif{
 		return true;
 	}
 
-	@Override
-	public ClassifResult classify(Mat img) {
+	public RTEvent classify(Frame frame) {
+		// Obtener 
+		if ( ! trained) {
+			
+		}
+		// Clasificar
+		
 		if ( ! trained) { throw new IllegalStateException("Not trained"); }
 		int result_cols = img.cols() - tpt.cols() + 1;
         int result_rows = img.rows() - tpt.rows() + 1;

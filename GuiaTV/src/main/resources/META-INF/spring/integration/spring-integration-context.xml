@@ -141,41 +141,63 @@
 	
 	
 	<!-- ****************************************
-	****************** PERSISTENCE ****************** 
+	********* IMG PROCESSING GATWEAY ****************** 
 	*********************************************-->
-	<int:channel id="eventCreatorChIn" fixed-subscriber="true" />
-	<int:channel id="closerEventChIn" fixed-subscriber="true" />
-	<int:channel id="getAllEventChIn" fixed-subscriber="true" />
-
-	<int:gateway id="eventServiceGateway"
-		service-interface="guiatv.eventmanager.EventService"
+	<int:channel id="sendFrameChOut"/>
+	
+	<!-- <int:channel id="sendFrameChOut">
+	    <int:dispatcher task-executor="taskExecutor" load-balancer="round-robin"/>
+	</int:channel> -->	
+	
+	
+	
+	<bean id="taskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+	    <property name="corePoolSize" value="5" />
+	    <property name="maxPoolSize" value="10" />
+	    <property name="queueCapacity" value="25" />
+	</bean>
+	
+	<bean id="classificationWorker" class="guiatv.cv.classification.ClassificationWorker" />
+	
+	<bean id="trainingWorker" class="guiatv.cv.training.TrainingWorker" />
+	
+	<bean id="frameRouter" class="guiatv.eventmanager.FrameRouter" />
+	
+	
+	<int:gateway id="imgProcessingGateway"
+		service-interface="guiatv.eventmanager.ImgProcessingGateway"
 		default-request-timeout="5000" default-reply-timeout="5000">
-		<int:method name="createMultipleEvents"
-			request-channel="eventCreatorChIn"/>
-		<int:method name="getCloserEvents" 
-			request-channel="closerEventChIn" />
-		<int:method name="getAllEvents" request-channel="getAllEventChIn" />
+		<int:method name="sendFrame" request-channel="sendFrameChOut"/>
 	</int:gateway>
+	
+	<int:router id="frameRouter" input-channel="sendFrameChOut" ref="frameRouter"
+		method="processFrame" />
+	
+	<int:channel id="classificationChBridgeIn"/>
+	
+	<int:bridge input-channel="classificationChBridgeIn" output-channel="classificationChIn" />
+	
+	<int:channel id="trainingChBridgeIn" />
 
-	<int-jpa:updating-outbound-gateway id="eventCreatorOutbound"
-		entity-manager-factory="entityManagerFactory"
-		request-channel="eventCreatorChIn">
-		<int-jpa:transactional transaction-manager="transactionManager" />
-	</int-jpa:updating-outbound-gateway>
+	<int:bridge input-channel="trainingChBridgeIn" output-channel="trainingChIn" />
+	
+	
+	
+	<int:channel id="classificationChIn">
+	    <int:dispatcher task-executor="taskExecutor" load-balancer="round-robin"/>
+	</int:channel>
+	<int:channel id="trainingChIn">
+	    <int:dispatcher task-executor="taskExecutor" load-balancer="round-robin"/>
+	</int:channel>
+	
+	
 
-	<int-jpa:retrieving-outbound-gateway id="getCloserEventsOutbound"
-		entity-manager-factory="entityManagerFactory"
-		request-channel="closerEventChIn" 
-		jpa-query="SELECT e FROM Event e"
-		requires-reply="false" reply-channel="closerEventChOut">
-		
-		<!-- jpa-query="SELECT e FROM Event e WHERE CURRENT_DATE BETWEEN e.start AND e.end" -->
-		<!-- jpa-query="select e from Event e where e.end > :now order by e.start asc"> -->
-		 <!-- <int-jpa:parameter name="now" type="java.util.Date" /> -->
-		<!-- Seleccionar los eventos tal que la fecha de su final sea mayor que la fecha actual
-				y ordenarlos tal que los primeros que aparezcan sean los que antes empiecen -->
-	</int-jpa:retrieving-outbound-gateway>
-
+	<int:outbound-channel-adapter id="classificationWorkerOutbound"
+		channel="classificationChIn" ref="classificationWorker" method="classify"/>
+	
+	<int:outbound-channel-adapter id="trainingWorkerOutbound"
+		channel="trainingChIn" ref="trainingWorker" method="train"/>
+	
 	<!-- ****************************************
 	****************** EVENT PRODUCER ****************** 
 	*********************************************-->

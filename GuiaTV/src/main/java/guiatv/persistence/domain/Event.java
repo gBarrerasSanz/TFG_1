@@ -1,4 +1,4 @@
-package guiatv.domain;
+package guiatv.persistence.domain;
 
 import java.util.Date;
 

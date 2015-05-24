@@ -1,6 +1,6 @@
 package guiatv.persistence.repository;
 
-import guiatv.domain.Channel;
+import guiatv.persistence.domain.Channel;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

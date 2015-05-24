@@ -3,10 +3,10 @@ package guiatv.xmltv.transformer;
 import static org.junit.Assert.*;
 import guiatv.Application;
 import guiatv.common.CommonUtility;
-import guiatv.domain.Channel;
-import guiatv.domain.Event;
-import guiatv.domain.Programme;
-import guiatv.domain.Schedule;
+import guiatv.persistence.domain.Channel;
+import guiatv.persistence.domain.Event;
+import guiatv.persistence.domain.Programme;
+import guiatv.persistence.domain.Schedule;
 import guiatv.xmltv.transformer.XMLTVTransformer_old1;
 
 import java.io.File;

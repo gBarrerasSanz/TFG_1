@@ -3,7 +3,7 @@ package guiatv.computervision.rtmpspy;
 import static org.junit.Assert.*;
 import guiatv.Application;
 import guiatv.common.CommonUtility;
-import guiatv.computervision.classificator.Imshow;
+import guiatv.cv.classificator.Imshow;
 import guiatv.xmltv.grabber.XMLTVGrabber;
 
 import java.io.File;

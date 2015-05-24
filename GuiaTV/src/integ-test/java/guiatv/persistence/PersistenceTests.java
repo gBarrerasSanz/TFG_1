@@ -6,9 +6,9 @@ import java.util.Date;
 import java.util.List;
 
 import guiatv.Application;
-import guiatv.domain.Channel;
-import guiatv.domain.Programme;
-import guiatv.domain.Schedule;
+import guiatv.persistence.domain.Channel;
+import guiatv.persistence.domain.Programme;
+import guiatv.persistence.domain.Schedule;
 import guiatv.persistence.repository.ScheduleRepository;
 
 import org.apache.log4j.Logger;

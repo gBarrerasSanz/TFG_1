@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
-import guiatv.domain.Channel;
+import guiatv.persistence.domain.Channel;
 
 public interface ChannelRepository extends JpaRepository<Channel, Long>,
 		JpaSpecificationExecutor<Channel>, ChannelRepositoryCustom {
