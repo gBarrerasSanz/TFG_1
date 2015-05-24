@@ -11,29 +11,29 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.Version;
 
-@Entity(name = "CHANNEL")
+@Entity(name = "channel")
 public class Channel implements Serializable {
 	private static final long serialVersionUID = 6291049572278425446L;
 
 	@Id
-    @Column(name = "IDCH", nullable = false)
+    @Column(name = "idCh", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idCh;
     
-    @Column(name = "NOMIDCH", nullable = true, length = 50)
+    @Column(name = "nomIdCh", nullable = true, length = 50)
     private String nomIdCh;
     
-    @Column(name = "NOMCH", nullable = true, length = 50)
+    @Column(name = "nomCh", nullable = true, length = 50)
     private String nomCh;
     
-    @Column(name = "COUNTRY", nullable = true, length = 50)
+    @Column(name = "country", nullable = true, length = 50)
     private String country;
     
     // Consultar aquí: http://www.javacodegeeks.com/2012/05/load-or-save-image-using-hibernate.html
     // Además lo hace con Hibernate
     @Lob
-    @Column(name = "IMGSMB", nullable = true)
-    private byte[] imgSmb;
+    @Column(name = "imgIcon", nullable = true)
+    private byte[] imgIcon;
     
     /**********************************************************
      * 					GETTERS / SETTERS
@@ -71,13 +71,15 @@ public class Channel implements Serializable {
 		this.country = country;
 	}
 
-	public byte[] getImgSmb() {
-		return imgSmb;
+	public byte[] getImgIcon() {
+		return imgIcon;
 	}
 
-	public void setImgSmb(byte[] imgSmb) {
-		this.imgSmb = imgSmb;
+	public void setImgIcon(byte[] imgIcon) {
+		this.imgIcon = imgIcon;
 	}
+
+	
 
 
 }

@@ -89,9 +89,12 @@ dependencies {
 	compile 'org.springframework.boot:spring-boot-gradle-plugin:1.2.2.RELEASE'
 	compile 'org.springframework.boot:spring-boot-starter:1.2.2.RELEASE'
 	compile 'org.springframework.amqp:spring-rabbit:1.4.3.RELEASE'
-	//compile 'com.rabbitmq:amqp-client:3.5.1'
-	//compile 'org.springframework:spring-context-support:3.2.2.RELEASE'
-   	compile 'org.springframework:spring-core:4.1.2.RELEASE'
+	
+   	compile 'org.springframework:spring-core:4.1.6.RELEASE'
+   	compile 'org.springframework:spring-context-support:4.1.6.RELEASE'
+   	compile 'org.springframework.integration:spring-integration-core:4.1.4.RELEASE'
+   	compile 'org.springframework:spring-beans:4.1.6.RELEASE'
+   	
    	//compile 'org.springframework.integration:spring-integration-xml:4.1.2'
    	compile 'org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.0.2' // it is only needed for testing purposes
     compile 'org.eclipse.persistence:javax.persistence:2.0.0'

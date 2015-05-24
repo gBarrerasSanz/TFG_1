@@ -2,7 +2,7 @@ package guiatv.xmltv.transformer;
 
 import guiatv.common.CommonUtility;
 import guiatv.persistence.domain.Channel;
-import guiatv.persistence.domain.Event;
+import guiatv.persistence.domain.Event_old;
 import guiatv.persistence.domain.Programme;
 import guiatv.persistence.domain.Schedule;
 

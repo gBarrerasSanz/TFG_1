@@ -22,7 +22,7 @@ public class ScheduleLoader {
 	
 	public void loadListSchedules(List<Schedule> listSchedule) {
 		for (Schedule sched: listSchedule) {
-			logger.info("sched to save: "+sched);
+//			logger.info("sched to save: "+sched);
 			schedRep.save(sched);
 		}
 	}

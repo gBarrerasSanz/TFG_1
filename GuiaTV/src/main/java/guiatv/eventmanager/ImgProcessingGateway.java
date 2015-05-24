@@ -1,8 +1,8 @@
 package guiatv.eventmanager;
 
 import guiatv.common.datatypes.Frame;
-import guiatv.persistence.domain.Event;
-import guiatv.persistence.domain.RTEvent;
+import guiatv.persistence.domain.Event_old;
+import guiatv.persistence.domain.RtEvent;
 
 import java.util.Date;
 import java.util.List;

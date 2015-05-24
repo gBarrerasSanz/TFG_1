@@ -26,10 +26,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import guiatv.Application;
 import guiatv.common.CommonUtility;
 import guiatv.eventmanager.ImgProcessingGateway;
-import guiatv.eventproducer.EventProducerPublisher;
 import guiatv.eventproducer.utils.TaskExecutorMQTTClient;
-import guiatv.persistence.EventServiceTests_old1;
-import guiatv.persistence.domain.Event;
+import guiatv.persistence.domain.Event_old;
+import guiatv.scheduleproducer.ScheduleProducerPublisher;
 import guiatv.xmltv.transformer.XMLTVTransformer_old1;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -49,7 +48,7 @@ public class EventProducerTests {
 	private ImgProcessingGateway evService;
 	
 	@Autowired
-	private EventProducerPublisher evProd;
+	private ScheduleProducerPublisher evProd;
 	
 	@Autowired
 	private TaskExecutorMQTTClient client1;
@@ -73,11 +72,11 @@ public class EventProducerTests {
 			client2.connectAndSubscribe("client2", cl2MsgsArr);
 			
 			// Producir mensaje
-			List<Event> lEvt = new ArrayList<Event>();
-			Event evt1 = new Event(ch1,	prog1, new Date(), new Date());
-			Event evt2 = new Event(ch1, prog2, new Date(), new Date());
+			List<Event_old> lEvt = new ArrayList<Event_old>();
+			Event_old evt1 = new Event_old(ch1,	prog1, new Date(), new Date());
+			Event_old evt2 = new Event_old(ch1, prog2, new Date(), new Date());
 			lEvt.add(evt1); lEvt.add(evt2);
-			Message<List<Event>> lEvtMsg = MessageBuilder.
+			Message<List<Event_old>> lEvtMsg = MessageBuilder.
 					withPayload(lEvt).build();
 			evProd.publishTopics(lEvtMsg);
 			log.debug("Topics publicados");
@@ -112,7 +111,7 @@ public class EventProducerTests {
 //	@Test
 	public void publishTopicsFromXMLTVFileTest() {
 		Resource resource = ctx.getResource("/xmltv/xmltv_sample.xml");
-		List<Event> lEvt = null;
+		List<Event_old> lEvt = null;
 		/****************************************************************************
 		 * Transformar el fichero XMLTV en una lista de Events con el XMLTVTransformer
 		 ****************************************************************************/
@@ -131,9 +130,9 @@ public class EventProducerTests {
 			start2 = CommonUtility.getFutureRandomDate(CommonUtility.getTimeUnit("min"), 12, 15);
 			end2 = CommonUtility.sumTwoHours(start2);
 			
-			lEvt = new ArrayList<Event>();
+			lEvt = new ArrayList<Event_old>();
 			// evt1
-			Event evt1 = new Event(); Event evt2 = new Event();
+			Event_old evt1 = new Event_old(); Event_old evt2 = new Event_old();
 			evt1.setChannel("neox-722.laguiatv.com");
 			evt1.setTitle("Cómo conocí a vuestra Madre");
 //			evt1.setStart(utils.strToDate("20150316173500 +0100"));
@@ -148,7 +147,7 @@ public class EventProducerTests {
 			lEvt.add(evt1); lEvt.add(evt2);
 			
 			@SuppressWarnings("unchecked")
-			List<Event> recEvList = (List<Event>)resultMsg.getPayload();
+			List<Event_old> recEvList = (List<Event_old>)resultMsg.getPayload();
 			assertEquals(lEvt.size(), recEvList.size());
 			recEvList.get(0).setStart(start1); recEvList.get(0).setEnd(end1);
 			recEvList.get(1).setStart(start2); recEvList.get(1).setEnd(end2);
@@ -161,12 +160,12 @@ public class EventProducerTests {
 		 * Insertar la lista de Events en la BD y comprobar que se ha insertado
 		 ****************************************************************************/
 		evService.createMultipleEvents(lEvt);
-		List<Event> listFoundEvt = evService.getAllEvents();
+		List<Event_old> listFoundEvt = evService.getAllEvents();
 		Assert.assertNotNull("Expected a non null instance of List<Evento>, got null", listFoundEvt);
 		boolean found = false;
-		for (Event eIn: lEvt) { // Para cada evento creado
+		for (Event_old eIn: lEvt) { // Para cada evento creado
 			found = false;
-			for (Event eOut: listFoundEvt) { // Para cada evento encontrado
+			for (Event_old eOut: listFoundEvt) { // Para cada evento encontrado
 				if (eIn.equals(eOut)) {
 					found = true;
 					break;

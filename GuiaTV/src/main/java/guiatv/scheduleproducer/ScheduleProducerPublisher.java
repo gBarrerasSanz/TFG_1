@@ -1,6 +1,6 @@
-package guiatv.eventproducer;
+package guiatv.scheduleproducer;
 
-import guiatv.persistence.domain.Event;
+import guiatv.persistence.domain.Event_old;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -23,7 +23,7 @@ import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 
-public class EventProducerPublisher {
+public class ScheduleProducerPublisher {
 	
 	@Autowired
 	RabbitAdmin rabbitAdmin;
@@ -32,14 +32,14 @@ public class EventProducerPublisher {
 	@Autowired
 	TopicExchange topicExch;
 	
-	public void publishTopicsDummy(Message<List<Event>> lEvtMsg) {
+	public void publishTopicsDummy(Message<List<Event_old>> lEvtMsg) {
 		
 	}
 	
-	public void publishTopics(Message<List<Event>> lEvtMsg ) {
+	public void publishTopics(Message<List<Event_old>> lEvtMsg ) {
 		try {
 			String routKey = null, msgBody = null;
-			for (Event ev: lEvtMsg.getPayload()) {
+			for (Event_old ev: lEvtMsg.getPayload()) {
 				routKey = ev.getChannel()+"."+ev.getTitle();
 				msgBody = routKey; // TODO: Cambiar esto
 				amqpTmp.convertAndSend(routKey, msgBody);

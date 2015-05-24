@@ -1,7 +1,7 @@
 package guiatv.xmltv.transformer;
 
 import guiatv.common.CommonUtility;
-import guiatv.persistence.domain.Event;
+import guiatv.persistence.domain.Event_old;
 
 import java.io.File;
 import java.text.ParseException;
@@ -30,8 +30,8 @@ public class XMLTVTransformer_old1 implements Transformer {
 	static Logger log = Logger.getLogger("debugLog");
 	
 	@Override
-	public Message<List<Event>> transform(Message<?> message) {
-		Message<List<Event>> result = null;
+	public Message<List<Event_old>> transform(Message<?> message) {
+		Message<List<Event_old>> result = null;
 		if (message.getPayload() instanceof File) {
 			File file = null;
 			try{
@@ -45,13 +45,13 @@ public class XMLTVTransformer_old1 implements Transformer {
 				List<Node> listProgNodes = jxpathCtx.selectNodes("/tv/programme");
 				@SuppressWarnings("unchecked")
 				Iterator<String> itProg = jxpathCtx.iterate("/tv/programme");
-				List<Event> lEvt = new ArrayList<Event>();
-				NamedNodeMap nodeMap = null; Event evt = null; Node n = null;
+				List<Event_old> lEvt = new ArrayList<Event_old>();
+				NamedNodeMap nodeMap = null; Event_old evt = null; Node n = null;
 				int itIdx = 0;
 				while (itProg.hasNext()) {
 					n = listProgNodes.get(itIdx);
 					nodeMap= n.getAttributes();
-					evt = new Event();
+					evt = new Event_old();
 					evt.setTitle(itProg.next());
 					evt.setChannel(nodeMap.getNamedItem("channel").getNodeValue());
 					evt.setStart(CommonUtility.strToDate(nodeMap.getNamedItem("start").getNodeValue()));

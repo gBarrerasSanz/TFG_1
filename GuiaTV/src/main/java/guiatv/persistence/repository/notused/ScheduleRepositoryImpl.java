@@ -1,4 +1,4 @@
-package guiatv.persistence.repository;
+package guiatv.persistence.repository.notused;
 
 import guiatv.persistence.domain.Channel;
 
@@ -24,8 +24,10 @@ import org.springframework.stereotype.Repository;
 
 
 @Repository
-public class ChannelRepositoryImpl implements ChannelRepositoryCustom {
-
+public class ScheduleRepositoryImpl implements ScheduleRepositoryCustom {
+	
+	public ScheduleRepositoryImpl() {
+	}
 //	@Override
 //	public void findByOverrridingMethod() {
 //		// TODO Auto-generated method stub
@@ -37,7 +39,9 @@ public class ChannelRepositoryImpl implements ChannelRepositoryCustom {
 //		// TODO Auto-generated method stub
 //		
 //	}
-
+	
+//	public boolean isChannelTrained(Channel ch, String rtmpUrl) {
+//	}
 
 
 }

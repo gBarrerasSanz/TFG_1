@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:int="http://www.springframework.org/schema/integration"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:int="http://www.springframework.org/schema/integration"
 	xmlns:int-file="http://www.springframework.org/schema/integration/file"
 	xmlns:int-jpa="http://www.springframework.org/schema/integration/jpa"
-	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
-	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc" xmlns:tx="http://www.springframework.org/schema/tx"
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:rabbit="http://www.springframework.org/schema/rabbit"
 	xsi:schemaLocation="http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-4.1.xsd
@@ -15,251 +13,218 @@
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.1.xsd
 		http://www.springframework.org/schema/integration/jpa http://www.springframework.org/schema/integration/jpa/spring-integration-jpa-4.1.xsd
 		http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration-4.1.xsd
-		http://www.springframework.org/schema/rabbit http://www.springframework.org/schema/rabbit/spring-rabbit-1.4.xsd">
+		http://www.springframework.org/schema/rabbit http://www.springframework.org/schema/rabbit/spring-rabbit-1.4.xsd"
+		>
 
-	
-	<import resource="classpath:/META-INF/spring/integration/hibernate-context.xml" />
-	
-	<!-- ****************************************
-	****************** COMMON UTILITY ****************** 
-	*********************************************-->
+	<!-- <import resource="classpath:/META-INF/spring/integration/hibernate-context.xml" 
+		/> -->
+	<!-- **************************************** ****************** COMMON 
+		UTILITY ****************** ********************************************* -->
 	<!-- Ahora se accede a las utilidades de forma estática -->
 	<!-- <bean id="commonUtility" class="guiatv.common.CommonUtility" /> -->
-	
-	
-	<!-- ****************************************
-	****************** GRABBER ****************** 
-	*********************************************-->
-	<int:channel id="grabberChOut" fixed-subscriber="true"/>
-	<int:channel id="transformerChIn" fixed-subscriber="true" />
 
-	<bean id="xmltvGrabber" class="guiatv.xmltv.grabber.XMLTVGrabber" />
-	
-	<int:inbound-channel-adapter ref="xmltvGrabber" method="doGrabbing"
-		channel="grabberChOut" id="grabberInbound">
-		<int:poller max-messages-per-poll="1" cron="0 	*  *  *   *  ?  " />
-		<!-- sec m h dm m dw -->
-	</int:inbound-channel-adapter>
+	<!-- **************************************** PERSISTENCE ***************************************** -->
 
-	<int-file:outbound-channel-adapter id="grabberOutbound"
-		channel="grabberChOut" directory="file:xmltv_cap"
-		auto-create-directory="true" mode="REPLACE"
-		temporary-file-suffix=".writing" delete-source-files="true"
-		>
-	</int-file:outbound-channel-adapter>
+	<!-- <beans profile="dev, default"> -->
+		<jdbc:embedded-database id="dataSource" type="H2" />
 
-	<!-- ****************************************
-	****************** TRANSFORMER ****************** 
-	*********************************************-->
-	<int:channel id="transformerChOut" fixed-subscriber="true" />
+		<!-- <jdbc:initialize-database data-source="dataSource" ignore-failures="DROPS"> 
+			<jdbc:script location="classpath:/META-INF/SQL/H2-DropTables.sql" /> <jdbc:script 
+			location="classpath:/META-INF/SQL/H2-CreateTables.sql" /> <jdbc:script location="classpath:/META-INF/SQL/H2-PopulateData.sql" 
+			/> </jdbc:initialize-database> -->
 
-	<bean id="xmltvTransformerBean" class="guiatv.xmltv.transformer.XMLTVTransformer" />
-	<bean id="scheduleLoader" class="guiatv.scheduleloader.ScheduleLoader"/>
-	
-	<bean id="compositeFilter"
-    	class="org.springframework.integration.file.filters.CompositeFileListFilter">
-    <constructor-arg>
-        <list>
-	        <bean class="org.springframework.integration.file.filters.RegexPatternFileListFilter">
-	    		<constructor-arg value="xmltvDump_[0-9][0-9][0-9][0-9]_[0-9][0-9]_[0-9][0-9]_[0-9][0-9]_[0-9][0-9]_[0-9][0-9]\.xml"/>
-	    	</bean>
-            <bean class="org.springframework.integration.file.filters.AcceptOnceFileListFilter"/>
-            <bean class="guiatv.xmltv.transformer.EntireFileFilter"/>
-        </list>
-    </constructor-arg>
-</bean>
 
-	<int-file:inbound-channel-adapter id="filePollerInbound"
-		directory="file:xmltv_cap" channel="transformerChIn" auto-startup="true"
-		filter="compositeFilter" >
-		<int:poller fixed-rate="10000" />
-	</int-file:inbound-channel-adapter>
+		<!-- Define the JPA transaction manager -->
+		<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+			<constructor-arg ref="entityManagerFactory" />
+		</bean>
 
-	<int:transformer id="transformerXmlToPojo"
-		ref="xmltvTransformerBean" input-channel="transformerChIn"
-		method="transform" output-channel="transformerChOut" />
-	
-	<int:outbound-channel-adapter id="scheduleLoaderOutbound"
-		channel="transformerChOut" ref="scheduleLoader" method="loadListSchedules">
-	</int:outbound-channel-adapter>
-	
-	<!-- <int:service-activator id="transformerSA"
-		input-channel="transformerChOut" ref="eventCreator" method="createEvents"
-		requires-reply="false">
-	</int:service-activator> -->
 
-	<!-- ****************************************
-	****************** EVENT POLLER ****************** 
-	*********************************************-->
-	<int:channel id="eventPollerChOut" fixed-subscriber="true" />
+		<bean id="entityManagerFactory"
+			class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+			<property name="dataSource" ref="dataSource" />
+			<property name="jpaVendorAdapter" ref="vendorAdaptor" />
+			<property name="packagesToScan" value="guiatv.persistence.*" />
+		</bean>
 
-	<bean id="eventPoller" class="guiatv.eventproducer.EventProducerPoller" />
-	<bean id="eventPollerReply" class="guiatv.eventproducer.EventProducerPollerReply"/>
-	
-	<int:inbound-channel-adapter id="eventPollerInbound"
-		ref="eventPoller" method="askForEvents"
-		channel="eventPollerChOut">
-		<int:poller fixed-rate="5000" />
-	</int:inbound-channel-adapter>
-	
-	<int:outbound-channel-adapter id="eventPollerOutbound"
-	channel="eventPollerChOut"
-	ref="eventPollerReply" method="receive">
-	</int:outbound-channel-adapter>
-	
-	
-	<!-- ****************************************
-	****************** RTMP SPY ****************** 
-	*********************************************-->
-	<!--  
-	<int:channel id="rtmpSpyChOut" >
-		<int:priority-queue capacity="10" /> 
-	</int:channel>
-	
-	<bean id="rtmpSpy" class="guiatv.computervision.rtmpspy.RtmpSpy"/>
-	<bean id="templateMatchingClassif" class="guiatv.computervision.classificator.TemplateMatchingClassif"/>
-	
-	<int:inbound-channel-adapter id="rtmpSpyInbound"
-		channel="rtmpSpyChOut"
-		ref="rtmpSpy" method="doRtmpSpying" auto-startup="true">
-		<int:poller fixed-rate="500000000"></int:poller>
-	</int:inbound-channel-adapter>
-	
-	<int:outbound-channel-adapter id="classificatorOutbound"
-		channel="rtmpSpyChOut"
-		ref="templateMatchingClassif" method="classify">
-		<int:poller fixed-rate="500"></int:poller>
-	</int:outbound-channel-adapter>
-	-->
-	
-	
-<!-- 	<int:service-activator id="eventPollerSA"
-		input-channel="eventPollerChIn" ref="eventPoller" method="askForEvents"
-		requires-reply="false" >
-	</int:service-activator> -->
-	
-	
-	
-	<!-- ****************************************
-	********* IMG PROCESSING GATWEAY ****************** 
-	*********************************************-->
-	<int:channel id="sendFrameChOut"/>
-	
-	<!-- <int:channel id="sendFrameChOut">
-	    <int:dispatcher task-executor="taskExecutor" load-balancer="round-robin"/>
-	</int:channel> -->	
-	
-	
-	
-	<bean id="taskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
-	    <property name="corePoolSize" value="5" />
-	    <property name="maxPoolSize" value="10" />
-	    <property name="queueCapacity" value="25" />
-	</bean>
-	
-	<bean id="classificationWorker" class="guiatv.cv.classification.ClassificationWorker" />
-	
-	<bean id="trainingWorker" class="guiatv.cv.training.TrainingWorker" />
-	
-	<bean id="frameRouter" class="guiatv.eventmanager.FrameRouter" />
-	
-	
-	<int:gateway id="imgProcessingGateway"
-		service-interface="guiatv.eventmanager.ImgProcessingGateway"
-		default-request-timeout="5000" default-reply-timeout="5000">
-		<int:method name="sendFrame" request-channel="sendFrameChOut"/>
-	</int:gateway>
-	
-	<int:router id="frameRouter" input-channel="sendFrameChOut" ref="frameRouter"
-		method="processFrame" />
-	
-	<int:channel id="classificationChBridgeIn"/>
-	
-	<int:bridge input-channel="classificationChBridgeIn" output-channel="classificationChIn" />
-	
-	<int:channel id="trainingChBridgeIn" />
+		<bean id="abstractVendorAdaptor" abstract="true">
+			<property name="generateDdl" value="true" />
+			<property name="database" value="H2" />
+			<property name="showSql" value="false" />
+		</bean>
 
-	<int:bridge input-channel="trainingChBridgeIn" output-channel="trainingChIn" />
-	
-	
-	
-	<int:channel id="classificationChIn">
-	    <int:dispatcher task-executor="taskExecutor" load-balancer="round-robin"/>
-	</int:channel>
-	<int:channel id="trainingChIn">
-	    <int:dispatcher task-executor="taskExecutor" load-balancer="round-robin"/>
-	</int:channel>
-	
-	
+		<bean id="entityManager"
+			class="org.springframework.orm.jpa.support.SharedEntityManagerBean">
+			<property name="entityManagerFactory" ref="entityManagerFactory" />
+		</bean>
 
-	<int:outbound-channel-adapter id="classificationWorkerOutbound"
-		channel="classificationChIn" ref="classificationWorker" method="classify"/>
-	
-	<int:outbound-channel-adapter id="trainingWorkerOutbound"
-		channel="trainingChIn" ref="trainingWorker" method="train"/>
-	
-	<!-- ****************************************
-	****************** EVENT PRODUCER ****************** 
-	*********************************************-->
-<!-- 	<bean id="rabbitConnectionFactoryBean" class="com.rabbitmq.client.ConnectionFactory">
-	<property name="host" 			value="localhost" />
-	<property name="username" 		value="user" />
-	<property name="password" 		value="userp" />
-	<property name="virtualHost" 	value="/" />
-	<property name="port" 			value="5672"/>
-	</bean> -->
-    <!-- <rabbit:template id="amqpTemplate" connection-factory="connectionFactory"/> -->
-    <!-- <rabbit:admin connection-factory="connectionFactory" /> -->
-    
-    <rabbit:connection-factory id="connectionFactory" 
-    	host="localhost" 
-    	virtual-host="/" 
-    	username="user" 
-    	password="userp" 
-    	port="5672" />
+		<bean id="vendorAdaptor"
+			class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"
+			parent="abstractVendorAdaptor">
+		</bean>
+		
+	<!-- </beans> -->
+	<!-- **************************************** ****************** GRABBER 
+		****************** ********************************************* -->
+	<!-- <beans profile="dev2"> -->
+		<int:channel id="grabberChOut" fixed-subscriber="true" />
+		<int:channel id="transformerChIn" fixed-subscriber="true" />
 
-    <rabbit:topic-exchange name="amq.topic"></rabbit:topic-exchange>
-    
-	<!-- Spring AMQP template - Creates a bean which can send a message to the topicExchange-->
-	<rabbit:template id="amqpTemplate" 
-		connection-factory="connectionFactory" 
-		exchange="amq.topic" />
-	<!-- Spring AMQP Admin -->
-	<rabbit:admin connection-factory="connectionFactory" />
-    
-	<int:channel id="closerEventChOut" >
-		<int:queue capacity="10"/>
-	</int:channel>
-	<bean id="eventProducerPublisher" class="guiatv.eventproducer.EventProducerPublisher" />
-	
-	<int:outbound-channel-adapter id="eventPublisherOut"
-		ref="eventProducerPublisher" method="publishTopics"
-		channel="closerEventChOut">
-		<int:poller fixed-rate="1000"/>
-	</int:outbound-channel-adapter>
-	
-	
-	<!-- ****************************************
-	****************** PERSISTENCE TEST ****************** 
-	*********************************************-->
-	
-	<int-jpa:retrieving-outbound-gateway id="getAllEventsOutbound"
-		entity-manager-factory="entityManagerFactory"
-		request-channel="getAllEventChIn" jpa-query="select e from Event e">
-	</int-jpa:retrieving-outbound-gateway>
-	
-	<!-- ****************************************
-	****************** MQTT CLIENT TEST ****************** 
-	*********************************************-->
-	<bean id="taskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
-    <property name="corePoolSize" value="5" />
-    <property name="maxPoolSize" value="10" />
-    <property name="queueCapacity" value="25" />
-	</bean>
-	<bean id="taskExecutorClient" class="guiatv.eventproducer.utils.TaskExecutorMQTTClient" 
-		scope="prototype">
-	    <constructor-arg ref="taskExecutor" />
-	</bean>
-	
-	
+		<bean id="xmltvGrabber" class="guiatv.xmltv.grabber.XMLTVGrabber" />
+
+		<int:inbound-channel-adapter ref="xmltvGrabber"
+			method="doGrabbing" channel="grabberChOut" id="grabberInbound">
+			<int:poller max-messages-per-poll="1" cron="0 	*  *  *   *  ?  " />
+			<!-- sec m h dm m dw -->
+		</int:inbound-channel-adapter>
+
+		<int-file:outbound-channel-adapter
+			id="grabberOutbound" channel="grabberChOut" directory="file:xmltv_cap"
+			auto-create-directory="true" mode="REPLACE" temporary-file-suffix=".writing"
+			delete-source-files="true">
+		</int-file:outbound-channel-adapter>
+	<!-- </beans> -->
+
+	<!-- **************************************** ****************** TRANSFORMER 
+		****************** ********************************************* -->
+	<!-- <beans profile="dev, default"> -->
+		<int:channel id="transformerChOut" fixed-subscriber="true" />
+
+		<bean id="xmltvTransformerBean" class="guiatv.xmltv.transformer.XMLTVTransformer" />
+		<bean id="scheduleLoader" class="guiatv.scheduleloader.ScheduleLoader" />
+
+		<bean id="compositeFilter"
+			class="org.springframework.integration.file.filters.CompositeFileListFilter">
+			<constructor-arg>
+				<list>
+					<bean
+						class="org.springframework.integration.file.filters.RegexPatternFileListFilter">
+						<constructor-arg
+							value="xmltvDump_[0-9][0-9][0-9][0-9]_[0-9][0-9]_[0-9][0-9]_[0-9][0-9]_[0-9][0-9]_[0-9][0-9]\.xml" />
+					</bean>
+					<bean
+						class="org.springframework.integration.file.filters.AcceptOnceFileListFilter" />
+					<bean class="guiatv.xmltv.transformer.EntireFileFilter" />
+				</list>
+			</constructor-arg>
+		</bean>
+
+		<int-file:inbound-channel-adapter id="filePollerInbound"
+			directory="file:xmltv_cap" channel="transformerChIn" auto-startup="true"
+			filter="compositeFilter">
+			<int:poller fixed-rate="10000" />
+		</int-file:inbound-channel-adapter>
+
+		<int:transformer id="transformerXmlToPojo" ref="xmltvTransformerBean"
+			input-channel="transformerChIn" method="transform" output-channel="transformerChOut" />
+
+		<int:outbound-channel-adapter id="scheduleLoaderOutbound"
+			channel="transformerChOut" ref="scheduleLoader" method="loadListSchedules">
+		</int:outbound-channel-adapter>
+	<!-- </beans> -->
+
+	<!-- <int:service-activator id="transformerSA" input-channel="transformerChOut" 
+		ref="eventCreator" method="createEvents" requires-reply="false"> </int:service-activator> -->
+
+
+	<!-- **************************************** ****************** RTMP SPY 
+		****************** ********************************************* -->
+	<!-- <int:channel id="rtmpSpyChOut" > <int:priority-queue capacity="10" 
+		/> </int:channel> <bean id="rtmpSpy" class="guiatv.computervision.rtmpspy.RtmpSpy"/> 
+		<bean id="templateMatchingClassif" class="guiatv.computervision.classificator.TemplateMatchingClassif"/> 
+		<int:inbound-channel-adapter id="rtmpSpyInbound" channel="rtmpSpyChOut" ref="rtmpSpy" 
+		method="doRtmpSpying" auto-startup="true"> <int:poller fixed-rate="500000000"></int:poller> 
+		</int:inbound-channel-adapter> <int:outbound-channel-adapter id="classificatorOutbound" 
+		channel="rtmpSpyChOut" ref="templateMatchingClassif" method="classify"> <int:poller 
+		fixed-rate="500"></int:poller> </int:outbound-channel-adapter> -->
+
+
+	<!-- <int:service-activator id="eventPollerSA" input-channel="eventPollerChIn" 
+		ref="eventPoller" method="askForEvents" requires-reply="false" > </int:service-activator> -->
+
+
+
+	<!-- *************************************************************** ***** 
+		IMG PROCESSING GATWEAY ****************** ********************************************* -->
+	<!-- <beans profile="dev2"> -->
+		<int:channel id="sendFrameChOut" />
+
+		<!-- <int:channel id="sendFrameChOut"> <int:dispatcher task-executor="taskExecutor" 
+			load-balancer="round-robin"/> </int:channel> -->
+
+
+
+		<bean id="taskExecutor"
+			class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+			<property name="corePoolSize" value="5" />
+			<property name="maxPoolSize" value="10" />
+			<property name="queueCapacity" value="25" />
+		</bean>
+
+		<bean id="classificationWorker" class="guiatv.cv.classificator.ClassificationWorker" />
+
+		<bean id="trainingWorker" class="guiatv.cv.trainer.TrainingWorker" />
+
+		<bean id="customFrameRouter" class="guiatv.eventmanager.FrameRouter" />
+
+
+		<int:gateway id="imgProcessingGateway" service-interface="guiatv.eventmanager.ImgProcessingGateway"
+			default-request-timeout="5000" default-reply-timeout="5000">
+			<int:method name="sendFrame" request-channel="sendFrameChOut" />
+		</int:gateway>
+
+		<int:router id="frameRouter" input-channel="sendFrameChOut"
+			ref="customFrameRouter" method="processFrame" />
+
+		<int:channel id="classificationChBridgeIn" />
+
+		<int:bridge input-channel="classificationChBridgeIn"
+			output-channel="classificationChIn" />
+
+		<int:channel id="trainingChBridgeIn" />
+
+		<int:bridge input-channel="trainingChBridgeIn"
+			output-channel="trainingChIn" />
+
+		<int:channel id="classificationChIn">
+			<int:dispatcher task-executor="taskExecutor"
+				load-balancer="round-robin" />
+		</int:channel>
+		<int:channel id="trainingChIn">
+			<int:dispatcher task-executor="taskExecutor"
+				load-balancer="round-robin" />
+		</int:channel>
+
+		<int:outbound-channel-adapter id="classificationWorkerOutbound"
+			channel="classificationChIn" ref="classificationWorker" method="classify" />
+
+		<int:outbound-channel-adapter id="trainingWorkerOutbound"
+			channel="trainingChIn" ref="trainingWorker" method="train" />
+	<!-- </beans> -->
+
+
+
+
+	<!-- **************************************** ****************** PERSISTENCE 
+		TEST ****************** ********************************************* -->
+
+	<!-- <int-jpa:retrieving-outbound-gateway id="getAllEventsOutbound" entity-manager-factory="entityManagerFactory" 
+		request-channel="getAllEventChIn" jpa-query="select e from Event e"> </int-jpa:retrieving-outbound-gateway> -->
+
+	<!-- **************************************** ****************** MQTT CLIENT 
+		TEST ****************** ********************************************* -->
+	<beans profile="eventProducerTests">
+		<bean id="taskExecutor"
+			class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+			<property name="corePoolSize" value="5" />
+			<property name="maxPoolSize" value="10" />
+			<property name="queueCapacity" value="25" />
+		</bean>
+		<bean id="taskExecutorClient" class="guiatv.eventproducer.utils.TaskExecutorMQTTClient"
+			scope="prototype">
+			<constructor-arg ref="taskExecutor" />
+		</bean>
+	</beans>
+
+
 </beans>

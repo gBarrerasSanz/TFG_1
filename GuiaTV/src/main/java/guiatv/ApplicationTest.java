@@ -8,17 +8,17 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
 
 	
-//@EnableAutoConfiguration
-//@ComponentScan
+
+@SpringBootApplication 
 @ImportResource("classpath:/META-INF/spring/integration/spring-integration-context.xml")
-//@Configuration
-@SpringBootApplication // TODO: Probar con esto
-public class Application {
+public class ApplicationTest {
 	public static void main(String[] args) {
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME); // Cargar libreria de OpenCV
-        SpringApplication.run(Application.class, args);
+        SpringApplication.run(ApplicationTest.class, args);
     }
 }
 

@@ -1,8 +1,9 @@
 package guiatv.persistence.repository;
 
 import guiatv.persistence.domain.Channel;
+import guiatv.persistence.domain.RtmpSource;
 
-public interface ChannelRepositoryCustom {
+public interface LearnedChannelRepositoryCustom {
 
 	/**
 	 * Method actually triggering a finder but being overridden.
@@ -15,4 +16,6 @@ public interface ChannelRepositoryCustom {
 	 * @param user
 	 */
 //	void someCustomMethod(Channel ch);
+	
+	public boolean isTrained(Channel ch, RtmpSource source);
 }

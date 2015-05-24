@@ -11,7 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.Version;
 
-@Entity(name = "PROGRAMME")
+@Entity(name = "programme")
 public class Programme implements Serializable {
 
 	/**
@@ -20,11 +20,11 @@ public class Programme implements Serializable {
 	private static final long serialVersionUID = 7540103864705903738L;
 
 	@Id
-    @Column(name = "IDPROG", nullable = false)
+    @Column(name = "idProg", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idProg;
     
-    @Column(name = "NOMPROG", nullable = true, length = 50)
+    @Column(name = "nomProg", nullable = true, length = 50)
     private String nomProg;
 
 

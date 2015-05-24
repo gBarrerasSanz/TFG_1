@@ -1,14 +1,17 @@
 package guiatv.common.datatypes;
 
+import guiatv.persistence.domain.Channel;
+import guiatv.persistence.domain.RtmpSource;
+
 import java.util.Date;
 
 public class Frame {
 	
 	private byte[] frameImg;
 	
-	private Long idCh;
+	private Channel channel;
 	
-	private String rtmpUrl;
+	private RtmpSource rtmp;
 	
 	private Date takenDate;
 	
@@ -23,20 +26,21 @@ public class Frame {
 		this.frameImg = frameImg;
 	}
 
-	public Long getIdCh() {
-		return idCh;
+
+	public Channel getChannel() {
+		return channel;
 	}
 
-	public void setIdCh(Long idCh) {
-		this.idCh = idCh;
+	public void setChannel(Channel channel) {
+		this.channel = channel;
 	}
 
-	public String getRtmpUrl() {
-		return rtmpUrl;
+	public RtmpSource getRtmp() {
+		return rtmp;
 	}
 
-	public void setRtmpUrl(String rtmpUrl) {
-		this.rtmpUrl = rtmpUrl;
+	public void setRtmp(RtmpSource rtmp) {
+		this.rtmp = rtmp;
 	}
 
 	public Date getTakenDate() {

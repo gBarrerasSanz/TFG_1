@@ -4,7 +4,7 @@ import static org.junit.Assert.*;
 import guiatv.Application;
 import guiatv.common.CommonUtility;
 import guiatv.persistence.domain.Channel;
-import guiatv.persistence.domain.Event;
+import guiatv.persistence.domain.Event_old;
 import guiatv.persistence.domain.Programme;
 import guiatv.persistence.domain.Schedule;
 import guiatv.xmltv.transformer.XMLTVTransformer_old1;

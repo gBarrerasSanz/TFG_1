@@ -18,32 +18,32 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Version;
 
-@Entity(name = "SCHEDULE")
+@Entity(name = "schedule")
 public class Schedule implements Serializable {
 
 	private static final long serialVersionUID = -8835185421528324020L;
 	
 	@Id
-    @Column(name = "IDSCHED", nullable = false)
+    @Column(name = "idSched", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idSched;
     
 //	@OneToOne(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
 	@OneToOne(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
-	@JoinColumn(name="CHID")
+	@JoinColumn(name="idCh")
 	private Channel channel;
     
 //	@OneToOne(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
 	@OneToOne(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
-	@JoinColumn(name="PROGID")
+	@JoinColumn(name="idProg")
 	private Programme programme;
 	
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "START", nullable = false)
+	@Column(name = "start", nullable = false)
 	private Date start;
 	
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "END", nullable = false)
+	@Column(name = "end", nullable = false)
 	private Date end;
 
     
