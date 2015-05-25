@@ -1,4 +1,4 @@
-package guiatv.eventproducer;
+package guiatv.scheduleproducer;
 
 import static org.junit.Assert.*;
 
@@ -21,9 +21,11 @@ import org.springframework.core.io.Resource;
 import org.springframework.integration.support.MessageBuilder;
 import org.springframework.messaging.Message;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import guiatv.Application;
+import guiatv.ApplicationTest;
 import guiatv.common.CommonUtility;
 import guiatv.eventmanager.ImgProcessingGateway;
 import guiatv.eventproducer.utils.TaskExecutorMQTTClient;
@@ -32,9 +34,9 @@ import guiatv.scheduleproducer.ScheduleProducerPublisher;
 import guiatv.xmltv.transformer.XMLTVTransformer_old1;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = Application.class)
-@DirtiesContext
-public class EventProducerTests {
+@SpringApplicationConfiguration(classes = ApplicationTest.class)
+@ActiveProfiles("ScheduleProducerTests")
+public class ScheduleProducerTests {
 	
 	private static final Logger log = Logger.getLogger("debugLog");
 	

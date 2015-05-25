@@ -2,6 +2,7 @@ package guiatv.persistence.domain;
 
 import java.io.Serializable;
 import java.sql.Date;
+import java.util.Arrays;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -78,7 +79,37 @@ public class Channel implements Serializable {
 	public void setImgIcon(byte[] imgIcon) {
 		this.imgIcon = imgIcon;
 	}
+	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((nomIdCh == null) ? 0 : nomIdCh.hashCode());
+		return result;
+	}
 
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Channel other = (Channel) obj;
+		if (nomIdCh == null) {
+			if (other.nomIdCh != null)
+				return false;
+		} else if (!nomIdCh.equals(other.nomIdCh))
+			return false;
+		return true;
+	}
+
+	public String toString() {
+		return "Channel {"+
+				"nomIdCh="+this.getNomIdCh()+", "+
+				"country="+this.getCountry()+"}";
+	}
 	
 
 

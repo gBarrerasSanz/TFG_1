@@ -1,4 +1,4 @@
-package guiatv.scheduleproducer;
+package guiatv.schedulepoller;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -13,12 +13,12 @@ import guiatv.persistence.domain.Event_old;
 import guiatv.persistence.domain.Schedule;
 import guiatv.persistence.repository.ScheduleRepository;
 
-public class ScheduleProducerPoller {
+public class SchedulePoller {
 	
 	@Autowired
 	ScheduleRepository schedRep;
 	
-	public List<Schedule> askForEvents() {
+	public List<Schedule> askForSchedules() {
 		// TODO: De momento devuelve todos los schedules
 		List<Schedule> lSched = schedRep.findAll();
 		return lSched;

@@ -48,4 +48,30 @@ public class Programme implements Serializable {
 		this.nomProg = nomProg;
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((nomProg == null) ? 0 : nomProg.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Programme other = (Programme) obj;
+		if (nomProg == null) {
+			if (other.nomProg != null)
+				return false;
+		} else if (!nomProg.equals(other.nomProg))
+			return false;
+		return true;
+	}
+
+	
 }

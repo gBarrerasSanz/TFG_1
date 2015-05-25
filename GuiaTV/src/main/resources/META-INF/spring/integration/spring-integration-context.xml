@@ -15,17 +15,21 @@
 		http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration-4.1.xsd
 		http://www.springframework.org/schema/rabbit http://www.springframework.org/schema/rabbit/spring-rabbit-1.4.xsd">
 
-	<!-- <import resource="classpath:/META-INF/spring/integration/hibernate-context.xml" /> -->
+	<!-- <import resource="classpath:/META-INF/spring/integration/hibernate-context.xml" 
+		/> -->
 
 
 	<!-- ******************************** SHARED CHANNELS ***************************************** -->
-	
-	<!-- ** TRANSFORMER -> SCHEDULE LOADER** -->
-	<int:channel id="transformerChOut"/>
-	
+
+	<!-- ** TRANSFORMER -> SCHEDULE LOADER ** -->
+	<int:channel id="transformerChOut" />
+
+	<!-- ** SCHEDULE POLLER -> SCHEDULE PRODUCER ** -->
+	<int:channel id="schedPollerChOut" />
+
 	<!-- **************************************** PERSISTENCE ***************************************** -->
 
-	<beans profile="PersistenceTests, default">
+	<beans profile="ScheduleLoaderTests, SchedulePollerTests, default">
 		<jdbc:embedded-database id="dataSource" type="H2" />
 
 		<!-- <jdbc:initialize-database data-source="dataSource" ignore-failures="DROPS"> 
@@ -69,7 +73,7 @@
 
 	<beans profile="dev2">
 		<int:channel id="grabberChOut" fixed-subscriber="true" />
-		
+
 		<bean id="xmltvGrabber" class="guiatv.xmltv.grabber.XMLTVGrabber" />
 
 		<int:inbound-channel-adapter ref="xmltvGrabber"
@@ -87,9 +91,9 @@
 
 	<!-- **************************************** GRABBER POLLER ***************************************** -->
 	<beans profile="dev, default">
-		
+
 		<int:channel id="transformerChIn" fixed-subscriber="true" />
-		
+
 		<bean id="compositeFilter"
 			class="org.springframework.integration.file.filters.CompositeFileListFilter">
 			<constructor-arg>
@@ -105,7 +109,7 @@
 				</list>
 			</constructor-arg>
 		</bean>
-		
+
 		<int-file:inbound-channel-adapter id="filePollerInbound"
 			directory="file:xmltv_cap" channel="transformerChIn" auto-startup="true"
 			filter="compositeFilter">
@@ -114,26 +118,55 @@
 	</beans>
 	<!-- **************************************** TRANSFORMER POLLER ***************************************** -->
 	<beans profile="dev, default">
-		
+
 		<!-- <int:channel id="transformerChOut"/> -->
-		
+
 		<bean id="xmltvTransformerBean" class="guiatv.xmltv.transformer.XMLTVTransformer" />
-		
+
 		<int:transformer id="transformerXmlToPojo" ref="xmltvTransformerBean"
 			input-channel="transformerChIn" method="transform" output-channel="transformerChOut" />
 
-		
+
 	</beans>
-	
+
 	<!-- **************************************** SCHEDULE LOADER ***************************************** -->
-	
-	<beans profile="dev, default, PersistenceTests">
+
+	<beans profile="ScheduleLoaderTests, dev, default">
 		<bean id="scheduleLoader" class="guiatv.scheduleloader.ScheduleLoader" />
-		
+
 		<int:outbound-channel-adapter id="scheduleLoaderOutbound"
 			channel="transformerChOut" ref="scheduleLoader" method="loadListSchedules">
 		</int:outbound-channel-adapter>
 	</beans>
+
+
+	<!-- **************************************** SCHEDULE POLLER ***************************************** -->
+	<beans profile="SchedulePollerTests, dev, default">
+		<!-- <int:channel id="eventPollerChOut" /> -->
+
+		<bean id="schedPoller" class="guiatv.schedulepoller.SchedulePoller" />
+		<!-- <bean id="eventPollerReply" class="guiatv.eventproducer.EventProducerPollerReply"/> -->
+
+		<int:inbound-channel-adapter id="schedPollerInbound"
+			ref="schedPoller" method="askForSchedules" channel="schedPollerChOut">
+			<int:poller fixed-rate="5000" />
+		</int:inbound-channel-adapter>
+	</beans>
+	
+	<!-- ** DUMMY OUTBOUND (SchedulePollerTests) ** -->
+	<beans profile="SchedulePollerTests">
+		<bean id="schedPollerOutDummy" class="guiatv.schedulepoller.SchedulePollerOutDummy" />
+		
+		<int:outbound-channel-adapter id="schedPollerOutbound" channel="schedPollerChOut"
+			ref="schedPollerOutDummy" method="receiveDummy"> 
+		</int:outbound-channel-adapter>
+	</beans>
+	
+	<!-- <int:outbound-channel-adapter id="eventPollerOutbound" channel="eventPollerChOut" 
+		ref="eventPollerReply" method="receive"> </int:outbound-channel-adapter> -->
+
+	<!-- **************************************** SCHEDULE PRODUCER ***************************************** -->
+
 
 	<!-- ******************************** IMAGE PROCESSING GATEWAY ***************************************** -->
 	<beans profile="dev2">
@@ -194,15 +227,8 @@
 
 
 
-	<!-- **************************************** ****************** PERSISTENCE 
-		TEST ****************** ********************************************* -->
-
-	<!-- <int-jpa:retrieving-outbound-gateway id="getAllEventsOutbound" entity-manager-factory="entityManagerFactory" 
-		request-channel="getAllEventChIn" jpa-query="select e from Event e"> </int-jpa:retrieving-outbound-gateway> -->
-
-	<!-- **************************************** ****************** MQTT CLIENT 
-		TEST ****************** ********************************************* -->
-	<beans profile="eventProducerTests">
+	<!-- ******************************** MQTT CLIENT (ScheduleProducerTests) ***************************************** -->
+	<beans profile="ScheduleProducerTests">
 		<bean id="taskExecutor"
 			class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
 			<property name="corePoolSize" value="5" />

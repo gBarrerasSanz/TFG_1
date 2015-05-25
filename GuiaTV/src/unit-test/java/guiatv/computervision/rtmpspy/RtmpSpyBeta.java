@@ -21,10 +21,10 @@ import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
 
 
-public class RtmpSpy {
+public class RtmpSpyBeta {
 	
-	@Value("${platform}") // TODO: Averiguar por que no funciona 
-	String platform;
+//	@Value("${platform}") // TODO: Averiguar por que no funciona 
+	String platform = "Windows8.1";
 	
 	@Autowired
 	MessageChannel rtmpSpyChOut;
@@ -32,10 +32,11 @@ public class RtmpSpy {
 	//	String platform = "Windows8.1";
 	
 	String[] rtmpSources = {
-	"rtmp://antena3fms35livefs.fplive.net:1935/antena3fms35live-live/stream-lasexta_1"
+	"rtmp://antena3fms35livefs.fplive.net:1935/antena3fms35live-live/stream-lasexta_1",
+	"rtmp://antena3fms35livefs.fplive.net/antena3fms35live-live/stream-antena3_1"
 	};
 	
-	public RtmpSpy() {
+	public RtmpSpyBeta() {
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 	}
 	
@@ -71,7 +72,7 @@ public class RtmpSpy {
 //				ffmpeg -i "rtmp://antena3fms35livefs.fplive.net:1935/antena3fms35live-live/stream-lasexta_1 live=1" -vcodec mjpeg -f image2pipe -pix_fmt yuvj420p -r 1 -
 				String[] cmd = { 
 					binDir.getAbsolutePath()+File.separator+"ffmpeg.exe",
-					"-i", rtmpSources[0]+" live=1",
+					"-i", rtmpSources[1]+" live=1",
 					"-vcodec", "mjpeg",
 					"-f", "image2pipe",
 					"-pix_fmt", "yuvj420p",
@@ -117,10 +118,13 @@ public class RtmpSpy {
 		        				dataMat.put(0, 0, data.toByteArray());
 		        				Mat frameMat = Highgui.imdecode(dataMat, 1);
 		        		        
-//		        				im.showImage(frameMat);
-		        				Message<?> frameMsg = MessageBuilder.
-		        						withPayload(frameMat).build();
-		        				rtmpSpyChOut.send(frameMsg);
+		        		        Highgui.imwrite("a3.jpeg", frameMat);
+		        				im.showImage(frameMat);
+		        				System.out.println("Done");
+		        				System.exit(0);
+//		        				Message<?> frameMsg = MessageBuilder.
+//		        						withPayload(frameMat).build();
+//		        				rtmpSpyChOut.send(frameMsg);
 		        				
 		        		        // Reinicializar 
 		        		        skip = true;

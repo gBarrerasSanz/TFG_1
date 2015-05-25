@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -40,6 +41,10 @@ public class CommonUtility {
 			e.printStackTrace();
 			return null;
 		}
+	}
+	
+	public static Timestamp strToTimestamp(String str) {
+		return new Timestamp(strToDate(str).getTime()); 
 	}
 	
 	public static boolean checkFileNameDate(String grabFileName, Date realDate) {

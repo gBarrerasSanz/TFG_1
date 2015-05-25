@@ -2,6 +2,7 @@ package guiatv.persistence;
 
 import static org.junit.Assert.*;
 
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
@@ -10,8 +11,10 @@ import guiatv.persistence.domain.Channel;
 import guiatv.persistence.domain.Programme;
 import guiatv.persistence.domain.Schedule;
 import guiatv.persistence.repository.ScheduleRepository;
+import guiatv.schedule.utils.ListScheduleCreator;
 
 import org.apache.log4j.Logger;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,35 +34,14 @@ public class PersistenceTests {
 	
 	@Test
 	public void test() {
-		Channel ch1 = new Channel();
-		Channel ch2 = new Channel();
-		Programme prog1 = new Programme();
-		Programme prog2 = new Programme();
-		ch1.setNomIdCh("fdf-123"); ch1.setCountry("spain");
-		ch2.setNomIdCh("neox-123"); ch1.setCountry("spain");
-		prog1.setNomProg("aida");
-		prog2.setNomProg("Los Simpsons");
+		// Cargar valores de prueba en la base de datos
+		List<Schedule> listSchedExpected = ListScheduleCreator.getListSchedule();
+		schedRep.save(listSchedExpected);
 		
-		Schedule sched1 = new Schedule();
-		sched1.setChannel(ch1);
-		sched1.setProgramme(prog1);
-		sched1.setStart(new Date()); sched1.setEnd(new Date());
-		
-		Schedule sched2 = new Schedule();
-		sched2.setChannel(ch2);
-		sched2.setProgramme(prog2);
-		sched2.setStart(new Date()); sched2.setEnd(new Date());
-		
-		schedRep.save(sched1);
-		schedRep.save(sched2);
+		List<Schedule> listSchedRetrieved = schedRep.findAll();
+		Assert.assertEquals(listSchedExpected, listSchedRetrieved);
 
-		// fetch all customers
-		List<Schedule> schedList = schedRep.findAll();
-		System.out.println("Customers found with findAll(): size="+schedList.size());
-		System.out.println("-------------------------------");
-		for (Schedule sched : schedList) {
-			logger.info(sched);
-		}
+		
 		
 	}
 

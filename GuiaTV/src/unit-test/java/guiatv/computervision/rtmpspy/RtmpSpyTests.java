@@ -3,7 +3,7 @@ package guiatv.computervision.rtmpspy;
 import static org.junit.Assert.*;
 import guiatv.Application;
 import guiatv.common.CommonUtility;
-import guiatv.cv.rtmpspy.RtmpSpy;
+import guiatv.computervision.rtmpspy.RtmpSpyBeta;
 import guiatv.xmltv.grabber.XMLTVGrabber;
 
 import java.io.File;
@@ -17,9 +17,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 public class RtmpSpyTests {
 	
-//	@Test
+	@Test
 	public void spyingTest() {
-		RtmpSpy spy = new RtmpSpy();
+		RtmpSpyBeta spy = new RtmpSpyBeta();
 		spy.doRtmpSpying();
 //		assertEquals(true, spyFile.canRead());
 	}

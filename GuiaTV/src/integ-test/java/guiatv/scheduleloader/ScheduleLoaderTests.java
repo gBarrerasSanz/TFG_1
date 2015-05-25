@@ -1,4 +1,4 @@
-package guiatv.persistence;
+package guiatv.scheduleloader;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -38,14 +38,13 @@ import guiatv.persistence.domain.Event_old;
 import guiatv.persistence.domain.Programme;
 import guiatv.persistence.domain.Schedule;
 import guiatv.persistence.repository.ScheduleRepository;
-import guiatv.persistence.utils.ListScheduleCreator;
+import guiatv.schedule.utils.ListScheduleCreator;
 import guiatv.scheduleloader.ScheduleLoader;
 import guiatv.xmltv.transformer.XMLTVTransformer_old1;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-//@ContextConfiguration("/META-INF/spring/integration/spring-integration-context.xml")
 @SpringApplicationConfiguration(classes = ApplicationTest.class)
-@ActiveProfiles("PersistenceTests")
+@ActiveProfiles("ScheduleLoaderTests")
 public class ScheduleLoaderTests {
 
 	private static Logger logger = Logger.getLogger("debugLog");

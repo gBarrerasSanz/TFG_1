@@ -95,8 +95,8 @@ public class XMLTVTransformer implements Transformer {
 					String nomIdChannel = schedNodeMap.getNamedItem("channel").getNodeValue();
 					sched.setChannel(mapCh.get(nomIdChannel));
 					sched.setProgramme(mapProg.get(nombreProg));
-					sched.setStart(CommonUtility.strToDate(schedNodeMap.getNamedItem("start").getNodeValue()));
-					sched.setEnd(CommonUtility.strToDate(schedNodeMap.getNamedItem("stop").getNodeValue()));
+					sched.setStart(CommonUtility.strToTimestamp(schedNodeMap.getNamedItem("start").getNodeValue()));
+					sched.setEnd(CommonUtility.strToTimestamp(schedNodeMap.getNamedItem("stop").getNodeValue()));
 					lSched.add(sched);
 					schedItIdx++;
 				}
