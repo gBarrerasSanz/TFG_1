@@ -29,7 +29,7 @@
 
 	<!-- **************************************** PERSISTENCE ***************************************** -->
 
-	<beans profile="ScheduleLoaderTests, SchedulePollerTests, default">
+	<beans profile="ScheduleLoaderTests, SchedulePollerTests, PersistenceTests, default">
 		<jdbc:embedded-database id="dataSource" type="H2" />
 
 		<!-- <jdbc:initialize-database data-source="dataSource" ignore-failures="DROPS"> 
