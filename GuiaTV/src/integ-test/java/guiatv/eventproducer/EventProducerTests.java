@@ -86,12 +86,12 @@ public class EventProducerTests {
 			List<String> cl2Msgs = new ArrayList<String>(Arrays.asList(cl2MsgsArr));
 			long initTime = System.currentTimeMillis();
 			long timeout = 1000;
-			boolean stop = false;
-			while (stop == false) {
+			boolean mustContinue = true;
+			while (mustContinue) {
 				if (System.currentTimeMillis() > initTime + timeout
 						|| (cl1Msgs.equals(client1.getReceivedMessages()) && cl2Msgs.equals(client2.getReceivedMessages()))) 
 				{
-					stop = true;
+					mustContinue = false;
 				}
 				else {
 					Thread.sleep(50);
@@ -109,71 +109,71 @@ public class EventProducerTests {
 	
 //	TODO: Completarlo si interesa
 //	@Test
-	public void publishTopicsFromXMLTVFileTest() {
-		Resource resource = ctx.getResource("/xmltv/xmltv_sample.xml");
-		List<Event_old> lEvt = null;
-		/****************************************************************************
-		 * Transformar el fichero XMLTV en una lista de Events con el XMLTVTransformer
-		 ****************************************************************************/
-		try {
-			URI uri = resource.getURI();
-			File file = new File(uri);
-			Message<?> fileMsg = MessageBuilder.
-					withPayload(file).build();
-			Message<?> resultMsg = transformer.transform(fileMsg);
-			assertNotNull(resultMsg);
-			
-			// Construir resultado esperado
-			Date start1, start2, end1, end2;
-			start1 = CommonUtility.getFutureRandomDate(CommonUtility.getTimeUnit("min"), 2, 10); 
-			end1 = CommonUtility.sumTwoHours(start1);
-			start2 = CommonUtility.getFutureRandomDate(CommonUtility.getTimeUnit("min"), 12, 15);
-			end2 = CommonUtility.sumTwoHours(start2);
-			
-			lEvt = new ArrayList<Event_old>();
-			// evt1
-			Event_old evt1 = new Event_old(); Event_old evt2 = new Event_old();
-			evt1.setChannel("neox-722.laguiatv.com");
-			evt1.setTitle("Cómo conocí a vuestra Madre");
-//			evt1.setStart(utils.strToDate("20150316173500 +0100"));
-//			evt1.setEnd(utils.strToDate("20150316175400 +0100"));
-			evt1.setStart(start1); evt1.setEnd(end1);
-			// evt2
-			evt2.setChannel("neox-722.laguiatv.com");
-			evt2.setTitle("Los Simpson");
-//			evt2.setStart(utils.strToDate("20150316214500 +0100"));
-//			evt2.setEnd(utils.strToDate("20150316220000 +0100"));
-			evt2.setStart(start2); evt2.setEnd(end2);
-			lEvt.add(evt1); lEvt.add(evt2);
-			
-			@SuppressWarnings("unchecked")
-			List<Event_old> recEvList = (List<Event_old>)resultMsg.getPayload();
-			assertEquals(lEvt.size(), recEvList.size());
-			recEvList.get(0).setStart(start1); recEvList.get(0).setEnd(end1);
-			recEvList.get(1).setStart(start2); recEvList.get(1).setEnd(end2);
-			assertEquals(lEvt, recEvList);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-		/****************************************************************************
-		 * Insertar la lista de Events en la BD y comprobar que se ha insertado
-		 ****************************************************************************/
-		evService.createMultipleEvents(lEvt);
-		List<Event_old> listFoundEvt = evService.getAllEvents();
-		Assert.assertNotNull("Expected a non null instance of List<Evento>, got null", listFoundEvt);
-		boolean found = false;
-		for (Event_old eIn: lEvt) { // Para cada evento creado
-			found = false;
-			for (Event_old eOut: listFoundEvt) { // Para cada evento encontrado
-				if (eIn.equals(eOut)) {
-					found = true;
-					break;
-				}
-			}
-			Assert.assertEquals(true, found); // Comprueba que eIn ha sido encontrado
-		}
-		
-		
-	}
+//	public void publishTopicsFromXMLTVFileTest() {
+//		Resource resource = ctx.getResource("/xmltv/xmltv_sample.xml");
+//		List<Event_old> lEvt = null;
+//		/****************************************************************************
+//		 * Transformar el fichero XMLTV en una lista de Events con el XMLTVTransformer
+//		 ****************************************************************************/
+//		try {
+//			URI uri = resource.getURI();
+//			File file = new File(uri);
+//			Message<?> fileMsg = MessageBuilder.
+//					withPayload(file).build();
+//			Message<?> resultMsg = transformer.transform(fileMsg);
+//			assertNotNull(resultMsg);
+//			
+//			// Construir resultado esperado
+//			Date start1, start2, end1, end2;
+//			start1 = CommonUtility.getFutureRandomDate(CommonUtility.getTimeUnit("min"), 2, 10); 
+//			end1 = CommonUtility.sumTwoHours(start1);
+//			start2 = CommonUtility.getFutureRandomDate(CommonUtility.getTimeUnit("min"), 12, 15);
+//			end2 = CommonUtility.sumTwoHours(start2);
+//			
+//			lEvt = new ArrayList<Event_old>();
+//			// evt1
+//			Event_old evt1 = new Event_old(); Event_old evt2 = new Event_old();
+//			evt1.setChannel("neox-722.laguiatv.com");
+//			evt1.setTitle("Cómo conocí a vuestra Madre");
+////			evt1.setStart(utils.strToDate("20150316173500 +0100"));
+////			evt1.setEnd(utils.strToDate("20150316175400 +0100"));
+//			evt1.setStart(start1); evt1.setEnd(end1);
+//			// evt2
+//			evt2.setChannel("neox-722.laguiatv.com");
+//			evt2.setTitle("Los Simpson");
+////			evt2.setStart(utils.strToDate("20150316214500 +0100"));
+////			evt2.setEnd(utils.strToDate("20150316220000 +0100"));
+//			evt2.setStart(start2); evt2.setEnd(end2);
+//			lEvt.add(evt1); lEvt.add(evt2);
+//			
+//			@SuppressWarnings("unchecked")
+//			List<Event_old> recEvList = (List<Event_old>)resultMsg.getPayload();
+//			assertEquals(lEvt.size(), recEvList.size());
+//			recEvList.get(0).setStart(start1); recEvList.get(0).setEnd(end1);
+//			recEvList.get(1).setStart(start2); recEvList.get(1).setEnd(end2);
+//			assertEquals(lEvt, recEvList);
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+//		
+//		/****************************************************************************
+//		 * Insertar la lista de Events en la BD y comprobar que se ha insertado
+//		 ****************************************************************************/
+//		evService.createMultipleEvents(lEvt);
+//		List<Event_old> listFoundEvt = evService.getAllEvents();
+//		Assert.assertNotNull("Expected a non null instance of List<Evento>, got null", listFoundEvt);
+//		boolean found = false;
+//		for (Event_old eIn: lEvt) { // Para cada evento creado
+//			found = false;
+//			for (Event_old eOut: listFoundEvt) { // Para cada evento encontrado
+//				if (eIn.equals(eOut)) {
+//					found = true;
+//					break;
+//				}
+//			}
+//			Assert.assertEquals(true, found); // Comprueba que eIn ha sido encontrado
+//		}
+//		
+//		
+//	}
 }

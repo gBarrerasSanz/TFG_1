@@ -38,14 +38,14 @@ import guiatv.persistence.domain.Event_old;
 import guiatv.persistence.domain.Programme;
 import guiatv.persistence.domain.Schedule;
 import guiatv.persistence.repository.ScheduleRepository;
+import guiatv.persistence.utils.ListScheduleCreator;
 import guiatv.scheduleloader.ScheduleLoader;
 import guiatv.xmltv.transformer.XMLTVTransformer_old1;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 //@ContextConfiguration("/META-INF/spring/integration/spring-integration-context.xml")
 @SpringApplicationConfiguration(classes = ApplicationTest.class)
-@ActiveProfiles("default")
-//@DirtiesContext
+@ActiveProfiles("PersistenceTests")
 public class ScheduleLoaderTests {
 
 	private static Logger logger = Logger.getLogger("debugLog");
@@ -68,30 +68,8 @@ public class ScheduleLoaderTests {
 	public void createMultipleEventsTest() {
 		
 		// Construir resultado esperado
-		List<Schedule> listScheduleExpected = new ArrayList<Schedule>();
-		// Crear channels
-		Channel chNeox = new Channel();
-		chNeox.setNomIdCh("neox-722.laguiatv.com");
-		// Crear programmes
-		Programme progMadre = new Programme();
-		progMadre.setNomProg("Cómo conocí a vuestra Madre");
-		Programme progSimpsons = new Programme();
-		progSimpsons.setNomProg("Los Simpson");
-		// Crear schedules
-		Schedule schedMadre = new Schedule();
-		schedMadre.setChannel(chNeox);
-		schedMadre.setProgramme(progMadre);
-		schedMadre.setStart(CommonUtility.strToDate("20150316173500 +0100"));
-		schedMadre.setEnd(CommonUtility.strToDate("20150316175400 +0100"));
+		List<Schedule> listScheduleExpected = ListScheduleCreator.getListSchedule();
 		
-		Schedule schedSimpsons = new Schedule();
-		schedSimpsons.setChannel(chNeox);
-		schedSimpsons.setProgramme(progSimpsons);
-		schedSimpsons.setStart(CommonUtility.strToDate("20150316214500 +0100"));
-		schedSimpsons.setEnd(CommonUtility.strToDate("20150316220000 +0100"));
-		
-		listScheduleExpected.add(schedMadre);
-		listScheduleExpected.add(schedSimpsons);
 		schedLoader.loadListSchedules(listScheduleExpected);
 		List<Schedule> listScheduleReturned= shedRep.findAll();
 
