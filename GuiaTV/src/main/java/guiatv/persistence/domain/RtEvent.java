@@ -3,9 +3,9 @@ package guiatv.persistence.domain;
 import guiatv.persistence.domain.RtEvent.EventType;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.util.Date;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -17,9 +17,19 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.UniqueConstraint;
 
-@Entity
-@Table(name="RtEvent")
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+
+// TODO: Hacer el Entidad Relacion y hacer los @OneToMany y @ManyToOne y luego ya las restricciones
+/*
+ * El business-Id sobre el que se implementan los métodos de equals() y hashCode() 
+ * debe ser único(@UniqueConstraint) y está compuesto de campos que deben ser inmutables:
+ * business-Id: (channel, start)
+ */
+//@Table(uniqueConstraints={@UniqueConstraint(columnNames = {"channel", "start", "end"})})
+@Entity(name="RtEvent")
 public class RtEvent implements Serializable {	
 	
     /**
@@ -31,15 +41,20 @@ public class RtEvent implements Serializable {
     	BREAK_START, BREAK_END, UNKNOWN 
     }
 	
-    @Id
-	@OneToOne(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+	@Id
+    @Column(name = "idEv", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long idEv;
+	
+	
+	@OneToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="idCh")
+    @Cascade(value=CascadeType.ALL)
 	private Channel channel;
     
-    @Id
-	@Temporal(TemporalType.TIMESTAMP)
+//	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "start", nullable = false)
-	private Date start;
+	private Timestamp start;
 	
 	@Column(name = "type", nullable = false)
 	private EventType type;
@@ -47,9 +62,9 @@ public class RtEvent implements Serializable {
 	@Column(name = "expectedLength", nullable = true)
 	private Integer expectedLegth; // Duración esperada en segundos
 	
-	@Temporal(TemporalType.TIMESTAMP)
+//	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "end", nullable = true)
-	private Date end;
+	private Timestamp end;
 
 	public Channel getChannel() {
 		return channel;
@@ -67,12 +82,20 @@ public class RtEvent implements Serializable {
 		this.type = type;
 	}
 
-	public Date getStart() {
+	public Timestamp getStart() {
 		return start;
 	}
 
-	public void setStart(Date start) {
+	public void setStart(Timestamp start) {
 		this.start = start;
+	}
+
+	public Timestamp getEnd() {
+		return end;
+	}
+
+	public void setEnd(Timestamp end) {
+		this.end = end;
 	}
 
 	public Integer getExpectedLegth() {
@@ -83,12 +106,6 @@ public class RtEvent implements Serializable {
 		this.expectedLegth = expectedLegth;
 	}
 
-	public Date getEnd() {
-		return end;
-	}
 
-	public void setEnd(Date end) {
-		this.end = end;
-	}
 	
 }

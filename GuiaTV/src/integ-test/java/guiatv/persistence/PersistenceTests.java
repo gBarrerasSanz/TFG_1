@@ -21,12 +21,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 @ActiveProfiles("PersistenceTests")
-public class PersistenceTests {
+public class PersistenceTests extends AbstractTransactionalJUnit4SpringContextTests {
 	
 	private static Logger logger = Logger.getLogger("debugLog");
 	
@@ -35,12 +37,17 @@ public class PersistenceTests {
 	
 	@Test
 	public void test() {
-		// Cargar valores de prueba en la base de datos
-		List<Schedule> listSchedExpected = ListScheduleCreator.getListSchedule();
-		schedRep.save(listSchedExpected);
-		
-		List<Schedule> listSchedRetrieved = schedRep.findAll();
-		Assert.assertEquals(listSchedExpected, listSchedRetrieved);
+		try {
+			// Cargar valores de prueba en la base de datos
+			List<Schedule> listSchedExpected = ListScheduleCreator.getListSchedule();
+			schedRep.save(listSchedExpected);
+			
+			List<Schedule> listSchedRetrieved = schedRep.findAll();
+			Assert.assertEquals(listSchedExpected, listSchedRetrieved);
+		} catch(Exception e) {
+			e.printStackTrace();
+			fail();
+		}
 
 		
 		

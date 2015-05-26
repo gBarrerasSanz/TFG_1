@@ -2,15 +2,26 @@ package guiatv.persistence.domain;
 
 import java.io.Serializable;
 import java.sql.Date;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import javax.persistence.Version;
 
+/*
+ * El business-Id sobre el que se implementan los métodos de equals() y hashCode() 
+ * debe ser único(@UniqueConstraint) y está compuesto de campos que deben ser inmutables:
+ * business-Id: nomProg
+ */
+@Table(uniqueConstraints={@UniqueConstraint(columnNames = {"nomProg"})})
 @Entity(name = "programme")
 public class Programme implements Serializable {
 
@@ -26,9 +37,20 @@ public class Programme implements Serializable {
     
     @Column(name = "nomProg", nullable = true, length = 50)
     private String nomProg;
+    
+    @OneToMany(mappedBy="programme", fetch=FetchType.LAZY)
+    private Set<Schedule> setSchedules;
+    
 
+    public Set<Schedule> getSetSchedules() {
+		return setSchedules;
+	}
 
-    /**********************************************************
+	public void setSetSchedules(Set<Schedule> setSchedules) {
+		this.setSchedules = setSchedules;
+	}
+
+	/**********************************************************
      * 					GETTERS / SETTERS
      *********************************************************/
     

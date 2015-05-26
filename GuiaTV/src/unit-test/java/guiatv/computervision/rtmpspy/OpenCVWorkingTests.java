@@ -20,7 +20,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 public class OpenCVWorkingTests {
 	
-	@Test
+//	@Test
 	public void spyingTest() {
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 		Imshow im = new Imshow("Test Image");

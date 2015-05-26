@@ -1,4 +1,4 @@
-package guiatv.computervision.trainer.utils;
+package guiatv.computervision.trainer;
 
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;

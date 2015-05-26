@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Date;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -13,12 +12,24 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.UniqueConstraint;
 import javax.persistence.Version;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+
+/*
+ * El business-Id sobre el que se implementan los métodos de equals() y hashCode() 
+ * debe ser único(@UniqueConstraint) y está compuesto de campos que deben ser inmutables:
+ * business-Id: (channel, programme, start, end)
+ */
+@Table(uniqueConstraints={@UniqueConstraint(columnNames = {"channel", "programme", "start", "end"})})
 @Entity(name = "schedule")
 public class Schedule implements Serializable {
 
@@ -29,14 +40,16 @@ public class Schedule implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idSched;
     
-//	@OneToOne(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
-	@OneToOne(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
-	@JoinColumn(name="idCh")
+	
+	// @Cascade modificado por esto: // http://www.mkyong.com/hibernate/cascade-jpa-hibernate-annotation-common-mistake/
+	@Cascade(value=CascadeType.ALL)
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="channel")
 	private Channel channel;
     
-//	@OneToOne(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
-	@OneToOne(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
-	@JoinColumn(name="idProg")
+	@Cascade(value=CascadeType.ALL)
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="programme")
 	private Programme programme;
 	
 //	@Temporal(TemporalType.TIMESTAMP)

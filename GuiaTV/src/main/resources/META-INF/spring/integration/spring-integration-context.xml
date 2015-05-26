@@ -33,6 +33,7 @@
 
 	<beans
 		profile="ScheduleLoaderTests, SchedulePollerTests, PersistenceTests, default">
+		
 		<jdbc:embedded-database id="dataSource" type="H2" />
 
 		<!-- <jdbc:initialize-database data-source="dataSource" ignore-failures="DROPS"> 
@@ -69,7 +70,11 @@
 			class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"
 			parent="abstractVendorAdaptor">
 		</bean>
-
+		
+		<context:annotation-config />
+    	<tx:annotation-driven />
+    	<context:component-scan base-package="guiatv.persistence" />
+    	
 	</beans>
 
 	<!-- **************************************** GRABBER ***************************************** -->
@@ -147,7 +152,7 @@
 	<beans profile="SchedulePollerTests, dev, default">
 		<!-- <int:channel id="eventPollerChOut" /> -->
 
-		<bean id="schedPoller" class="guiatv.schedulepoller.SchedulePoller" />
+		<bean id="schedPoller" class="guiatv.schedule.poller.SchedulePoller" />
 		<!-- <bean id="eventPollerReply" class="guiatv.eventproducer.EventProducerPollerReply"/> -->
 
 		<int:inbound-channel-adapter id="schedPollerInbound"
@@ -162,6 +167,7 @@
 
 		<int:outbound-channel-adapter id="schedPollerOutbound"
 			channel="schedPollerChOut" ref="schedPollerOutDummy" method="receiveDummy">
+			<int:poller fixed-rate="5000"></int:poller>
 		</int:outbound-channel-adapter>
 	</beans>
 

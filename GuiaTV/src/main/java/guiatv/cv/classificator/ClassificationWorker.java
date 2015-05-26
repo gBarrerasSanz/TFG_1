@@ -3,6 +3,7 @@ package guiatv.cv.classificator;
 import java.io.File;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.sql.Timestamp;
 import java.util.Date;
 
 import guiatv.common.datatypes.Frame;
@@ -39,7 +40,7 @@ public class ClassificationWorker {
 	public RtEvent classify(Frame frame) {
 		RtEvent ev = new RtEvent();
 		ev.setChannel(frame.getChannel());
-		ev.setStart(new Date());
+		ev.setStart(new Timestamp(new Date().getTime()));
 		ev.setType(EventType.UNKNOWN);
 		
 		byte[] templateByteArr = learnedChRep.

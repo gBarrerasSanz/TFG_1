@@ -31,13 +31,15 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class LearnedChannelRepositoryImpl implements LearnedChannelRepositoryCustom {
 	private static Logger logger = Logger.getLogger("debugLog");
-
-	@Autowired
-	private EntityManager entityManager;
+	
+	
+	// TODO: Poner @Autowired o @PersistenceContext? Y por qué?
+	@PersistenceContext
+    private EntityManager em;
 
 	@Override
 	public boolean isTrained(Channel ch, RtmpSource rtmp) {
-		LearnedChannel learnedCh = (LearnedChannel) entityManager.createQuery(
+		LearnedChannel learnedCh = (LearnedChannel) em.createQuery(
 				"Select lc from learnedChannel lc"+
 						"where lc.idCh = "+ch.getIdCh()+" and "+
 						"lc.rtmpUrl like '"+rtmp.getRtmpUrl()+"'"

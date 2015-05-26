@@ -17,7 +17,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 public class RtmpSpyTests {
 	
-	@Test
+//	@Test
 	public void spyingTest() {
 		RtmpSpyBeta spy = new RtmpSpyBeta();
 		spy.doRtmpSpying();

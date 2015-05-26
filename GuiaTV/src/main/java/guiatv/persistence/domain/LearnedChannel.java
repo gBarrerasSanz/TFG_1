@@ -3,7 +3,6 @@ package guiatv.persistence.domain;
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -14,10 +13,24 @@ import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.UniqueConstraint;
 import javax.persistence.Version;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+
+
+//TODO: Hacer el Entidad Relacion y hacer los @OneToMany y @ManyToOne y luego ya las restricciones
+// TODO: Esta tabla no sé todavía cómo la voy a utilizar
+/*
+ * El business-Id sobre el que se implementan los métodos de equals() y hashCode() 
+ * debe ser único(@UniqueConstraint) y está compuesto de campos que deben ser inmutables:
+ * 
+ */
+//@Table(uniqueConstraints={@UniqueConstraint(columnNames = {"channel", "start", "end"})})
 @Entity(name = "learnedChannel")
 public class LearnedChannel implements Serializable {
 
@@ -28,12 +41,14 @@ public class LearnedChannel implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idLearnedCh;
 	
-	@OneToOne(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+	@OneToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="idCh")
+	@Cascade(value=CascadeType.ALL)
 	private Channel channel;
     
-	@OneToOne(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+	@OneToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="idRtmpSource")
+	@Cascade(value=CascadeType.ALL)
 	private RtmpSource rtmpSource;
 	
 	@Column(name = "learned", nullable = false)

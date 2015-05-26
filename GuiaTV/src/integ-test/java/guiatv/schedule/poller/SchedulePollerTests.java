@@ -22,6 +22,7 @@ import org.springframework.integration.support.MessageBuilder;
 import org.springframework.messaging.Message;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import guiatv.Application;
@@ -40,7 +41,7 @@ import guiatv.xmltv.transformer.XMLTVTransformer_old1;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = ApplicationTest.class)
 @ActiveProfiles("SchedulePollerTests")
-public class SchedulePollerTests {
+public class SchedulePollerTests extends AbstractTransactionalJUnit4SpringContextTests {
 	
 	private static final Logger logger = Logger.getLogger("debugLog");
 	
@@ -86,6 +87,7 @@ public class SchedulePollerTests {
 		}
 		catch(Exception e) {
 			e.printStackTrace();
+			fail();
 		}
 	}
 }

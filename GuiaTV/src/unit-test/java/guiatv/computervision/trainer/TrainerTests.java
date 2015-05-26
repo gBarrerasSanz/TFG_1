@@ -3,7 +3,6 @@ package guiatv.computervision.trainer;
 import static org.junit.Assert.*;
 import guiatv.Application;
 import guiatv.computervision.rtmpspy.utils.RtmpSpy2;
-import guiatv.computervision.trainer.utils.TrainerHelper;
 import guiatv.cv.classificator.Classif_old;
 import guiatv.cv.classificator.TemplateMatchingClassif;
 

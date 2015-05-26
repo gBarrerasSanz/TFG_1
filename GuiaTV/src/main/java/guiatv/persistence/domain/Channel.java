@@ -3,15 +3,28 @@ package guiatv.persistence.domain;
 import java.io.Serializable;
 import java.sql.Date;
 import java.util.Arrays;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import javax.persistence.Version;
 
+//@Entity(name = "channel")
+
+/*
+ * El business-Id sobre el que se implementan los métodos de equals() y hashCode() 
+ * debe ser único(@UniqueConstraint) y está compuesto de campos que deben ser inmutables:
+ * business-Id: nomIdCh
+ */
+@Table(uniqueConstraints={@UniqueConstraint(columnNames = {"nomIdCh"})})
 @Entity(name = "channel")
 public class Channel implements Serializable {
 	private static final long serialVersionUID = 6291049572278425446L;
@@ -27,6 +40,10 @@ public class Channel implements Serializable {
     @Column(name = "nomCh", nullable = true, length = 50)
     private String nomCh;
     
+    @OneToMany(mappedBy="channel", fetch=FetchType.LAZY)
+    private Set<Schedule> setSchedules;
+    
+    // country no se usa de momento
     @Column(name = "country", nullable = true, length = 50)
     private String country;
     
@@ -42,6 +59,14 @@ public class Channel implements Serializable {
     
 	public Long getIdCh() {
 		return idCh;
+	}
+
+	public Set<Schedule> getSetSchedules() {
+		return setSchedules;
+	}
+
+	public void setSetSchedules(Set<Schedule> setSchedules) {
+		this.setSchedules = setSchedules;
 	}
 
 	public void setIdCh(Long idCh) {

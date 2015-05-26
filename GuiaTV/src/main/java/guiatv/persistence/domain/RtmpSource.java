@@ -3,7 +3,6 @@ package guiatv.persistence.domain;
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -15,10 +14,22 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.UniqueConstraint;
 import javax.persistence.Version;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+
+//TODO: Hacer el Entidad Relacion y hacer los @OneToMany y @ManyToOne y luego ya las restricciones
+/*
+ * El business-Id sobre el que se implementan los métodos de equals() y hashCode() 
+ * debe ser único(@UniqueConstraint) y está compuesto de campos que deben ser inmutables:
+ * business-Id: (channel, rtmpUrl)
+ */
+//@Table(uniqueConstraints={@UniqueConstraint(columnNames = {"channel", "rtmpUrl"})})
 @Entity(name = "rtmpSource")
 public class RtmpSource implements Serializable {
 
@@ -30,8 +41,9 @@ public class RtmpSource implements Serializable {
     private Long idRtmpSource;
 	
 	
-	@ManyToOne(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="idCh")
+	@Cascade(value=CascadeType.ALL)
 	private Channel channel;
 	
 	@Column(name = "rtmpUrl", nullable = false)
@@ -56,9 +68,36 @@ public class RtmpSource implements Serializable {
 	public void setRtmpUrl(String rtmpUrl) {
 		this.rtmpUrl = rtmpUrl;
 	}
-	
-   
-    
-	
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((channel == null) ? 0 : channel.hashCode());
+		result = prime * result + ((rtmpUrl == null) ? 0 : rtmpUrl.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		RtmpSource other = (RtmpSource) obj;
+		if (channel == null) {
+			if (other.channel != null)
+				return false;
+		} else if (!channel.equals(other.channel))
+			return false;
+		if (rtmpUrl == null) {
+			if (other.rtmpUrl != null)
+				return false;
+		} else if (!rtmpUrl.equals(other.rtmpUrl))
+			return false;
+		return true;
+	}
 	
 }
