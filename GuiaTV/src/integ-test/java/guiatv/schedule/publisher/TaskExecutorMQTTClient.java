@@ -1,4 +1,6 @@
-package guiatv.eventproducer.utils;
+package guiatv.schedule.publisher;
+
+import guiatv.persistence.domain.Schedule;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,12 +14,21 @@ import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
+import org.springframework.amqp.core.Message;
+import org.springframework.amqp.core.MessageProperties;
+import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Component;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 
 public class TaskExecutorMQTTClient {
+	
+	@Autowired
+	Jackson2JsonMessageConverter jackson;
 	
 	static Logger log = Logger.getLogger(TaskExecutorMQTTClient.class.getName());
 	
@@ -122,8 +133,24 @@ public class TaskExecutorMQTTClient {
     	taskExecutor.execute(mqttClientWorker);
     }
     
-    public List<String> getReceivedMessages() {
-    	return mqttClientWorker.receivedMessages;
+    public List<Schedule> getReceivedListSchedules() {
+    	List<Schedule> listSchedules = new ArrayList<Schedule>();
+    	ObjectMapper mapper = new ObjectMapper();
+    	
+    	try {
+	    	for (String msgStr: mqttClientWorker.receivedMessages) {
+//	    		Message message = jackson.toMessage(msgStr, new MessageProperties());
+	    		Schedule sched = mapper.readValue(msgStr, Schedule.class);
+	    		listSchedules.add(sched);
+	    	}
+    	} catch(Exception e) {
+    		e.printStackTrace();
+    	}
+//    	JsonMessageConverter converter = new JsonMessageConverter();
+//    	converter.setClassMapper(new DefaultClassMapper());
+//    	Message message = converter.toMessage(new String[] { "test" }, new MessageProperties());
+//    	Object fromMessage = converter.fromMessage(message);
+    	return listSchedules;
     }
     
     public void addReceivedMessage(String msg) {

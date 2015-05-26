@@ -1,6 +1,7 @@
-package guiatv.scheduleproducer;
+package guiatv.schedule.publisher;
 
 import guiatv.persistence.domain.Event_old;
+import guiatv.persistence.domain.Schedule;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -18,31 +19,28 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.integration.support.MessageBuilder;
 import org.springframework.messaging.Message;
 import org.springframework.stereotype.Service;
+import org.springframework.test.context.ActiveProfiles;
 
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 
-public class ScheduleProducerPublisher {
+public class SchedulePublisher {
 	
-	@Autowired
-	RabbitAdmin rabbitAdmin;
+//	@Autowired
+//	RabbitAdmin rabbitAdmin;
+//	@Autowired
+//	TopicExchange topicExch;
+	
 	@Autowired
 	AmqpTemplate amqpTmp;
-	@Autowired
-	TopicExchange topicExch;
 	
-	public void publishTopicsDummy(Message<List<Event_old>> lEvtMsg) {
-		
-	}
-	
-	public void publishTopics(Message<List<Event_old>> lEvtMsg ) {
+	public void publishTopics(Message<List<Schedule>> listSchedMsg ) {
 		try {
-			String routKey = null, msgBody = null;
-			for (Event_old ev: lEvtMsg.getPayload()) {
-				routKey = ev.getChannel()+"."+ev.getTitle();
-				msgBody = routKey; // TODO: Cambiar esto
-				amqpTmp.convertAndSend(routKey, msgBody);
+			String routKey = null;
+			for (Schedule sched: listSchedMsg.getPayload()) {
+				routKey = sched.getChannel().getNomIdCh()+"."+sched.getProgramme().getNomProg();
+				amqpTmp.convertAndSend(routKey, sched);
 			}
 		} catch (Exception e1) {
 			e1.printStackTrace();

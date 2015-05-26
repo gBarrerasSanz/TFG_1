@@ -1,4 +1,4 @@
-package guiatv.scheduleproducer;
+package guiatv.schedule.poller;
 
 import java.util.Date;
 import java.util.List;
@@ -10,13 +10,14 @@ import org.springframework.messaging.Message;
 import guiatv.common.CommonUtility;
 import guiatv.eventmanager.ImgProcessingGateway;
 import guiatv.persistence.domain.Event_old;
+import guiatv.persistence.domain.Schedule;
 import guiatv.xmltv.transformer.XMLTVTransformer_old1;
 
-public class ScheduleProducerPollerReply {
+public class SchedulePollerOutDummy {
 	
-	static Logger log = Logger.getLogger(XMLTVTransformer_old1.class.getName());
+	private static final Logger logger = Logger.getLogger("debugLog");
 	
-	public void receive(Message<List<Event_old>> lEvtMsg) {
-//		log.debug(utils.lEvtToStr(lEvtMsg.getPayload()));
+	public void receiveDummy(Message<List<Schedule>> listScheduleMsg) {
+		// No hacer nada
 	}
 }

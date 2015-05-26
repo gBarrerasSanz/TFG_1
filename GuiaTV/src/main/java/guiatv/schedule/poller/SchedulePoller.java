@@ -1,4 +1,4 @@
-package guiatv.schedulepoller;
+package guiatv.schedule.poller;
 
 import java.util.ArrayList;
 import java.util.Date;

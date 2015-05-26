@@ -24,12 +24,15 @@
 	<!-- ** TRANSFORMER -> SCHEDULE LOADER ** -->
 	<int:channel id="transformerChOut" />
 
-	<!-- ** SCHEDULE POLLER -> SCHEDULE PRODUCER ** -->
-	<int:channel id="schedPollerChOut" />
+	<!-- ** SCHEDULE POLLER -> SCHEDULE PUBLISHER ** -->
+	<int:channel id="schedPollerChOut">
+		<int:queue capacity="10" />
+	</int:channel>
 
 	<!-- **************************************** PERSISTENCE ***************************************** -->
 
-	<beans profile="ScheduleLoaderTests, SchedulePollerTests, PersistenceTests, default">
+	<beans
+		profile="ScheduleLoaderTests, SchedulePollerTests, PersistenceTests, default">
 		<jdbc:embedded-database id="dataSource" type="H2" />
 
 		<!-- <jdbc:initialize-database data-source="dataSource" ignore-failures="DROPS"> 
@@ -132,7 +135,7 @@
 	<!-- **************************************** SCHEDULE LOADER ***************************************** -->
 
 	<beans profile="ScheduleLoaderTests, dev, default">
-		<bean id="scheduleLoader" class="guiatv.scheduleloader.ScheduleLoader" />
+		<bean id="scheduleLoader" class="guiatv.schedule.loader.ScheduleLoader" />
 
 		<int:outbound-channel-adapter id="scheduleLoaderOutbound"
 			channel="transformerChOut" ref="scheduleLoader" method="loadListSchedules">
@@ -152,22 +155,48 @@
 			<int:poller fixed-rate="5000" />
 		</int:inbound-channel-adapter>
 	</beans>
-	
+
 	<!-- ** DUMMY OUTBOUND (SchedulePollerTests) ** -->
 	<beans profile="SchedulePollerTests">
-		<bean id="schedPollerOutDummy" class="guiatv.schedulepoller.SchedulePollerOutDummy" />
-		
-		<int:outbound-channel-adapter id="schedPollerOutbound" channel="schedPollerChOut"
-			ref="schedPollerOutDummy" method="receiveDummy"> 
+		<bean id="schedPollerOutDummy" class="guiatv.schedule.poller.SchedulePollerOutDummy" />
+
+		<int:outbound-channel-adapter id="schedPollerOutbound"
+			channel="schedPollerChOut" ref="schedPollerOutDummy" method="receiveDummy">
 		</int:outbound-channel-adapter>
 	</beans>
-	
+
 	<!-- <int:outbound-channel-adapter id="eventPollerOutbound" channel="eventPollerChOut" 
 		ref="eventPollerReply" method="receive"> </int:outbound-channel-adapter> -->
 
-	<!-- **************************************** SCHEDULE PRODUCER ***************************************** -->
+	<!-- **************************************** SCHEDULE PUBLISHER ***************************************** -->
+	<beans profile="SchedulePublisherTests, dev, default">
 
+		<bean id="jsonMessageConverter"
+			class="org.springframework.amqp.support.converter.Jackson2JsonMessageConverter" />
+		<!-- ** RABBITMQ ** -->
+		<rabbit:connection-factory id="connectionFactory"
+			host="localhost" virtual-host="/" username="user" password="userp"
+			port="5672" />
 
+		<rabbit:topic-exchange name="amq.topic" ></rabbit:topic-exchange>
+
+<!-- 		<rabbit:template id="amqpTemplate" connection-factory="connectionFactory"
+			exchange="amq.topic"  /> -->
+		<rabbit:template id="amqpTemplate" connection-factory="connectionFactory"
+			exchange="amq.topic" message-converter="jsonMessageConverter" encoding="UTF-8"/>
+			
+		<rabbit:admin connection-factory="connectionFactory" />
+
+		<!-- ** PUBLISHER ** -->
+
+		<bean id="schedPublisher" class="guiatv.schedule.publisher.SchedulePublisher" />
+
+		<int:outbound-channel-adapter id="schedPublisherOutbound"
+			ref="schedPublisher" method="publishTopics" channel="schedPollerChOut">
+			<int:poller fixed-rate="5000"/>
+		</int:outbound-channel-adapter>
+
+	</beans>
 	<!-- ******************************** IMAGE PROCESSING GATEWAY ***************************************** -->
 	<beans profile="dev2">
 		<int:channel id="sendFrameChOut" />
@@ -225,17 +254,15 @@
 	</beans>
 
 
-
-
-	<!-- ******************************** MQTT CLIENT (ScheduleProducerTests) ***************************************** -->
-	<beans profile="ScheduleProducerTests">
+	<!-- ************************** MQTT CLIENT (ScheduleProducerTests) ************************************ -->
+	<beans profile="SchedulePublisherTests">
 		<bean id="taskExecutor"
 			class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
-			<property name="corePoolSize" value="5" />
-			<property name="maxPoolSize" value="10" />
-			<property name="queueCapacity" value="25" />
+			<property name="corePoolSize" value="2" />
+			<property name="maxPoolSize" value="2" />
+			<property name="queueCapacity" value="2" />
 		</bean>
-		<bean id="taskExecutorClient" class="guiatv.eventproducer.utils.TaskExecutorMQTTClient"
+		<bean id="taskExecutorClient" class="guiatv.schedule.publisher.TaskExecutorMQTTClient"
 			scope="prototype">
 			<constructor-arg ref="taskExecutor" />
 		</bean>

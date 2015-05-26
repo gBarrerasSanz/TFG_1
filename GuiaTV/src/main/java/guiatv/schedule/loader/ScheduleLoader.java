@@ -1,4 +1,4 @@
-package guiatv.scheduleloader;
+package guiatv.schedule.loader;
 
 import guiatv.persistence.domain.Schedule;
 import guiatv.persistence.repository.ScheduleRepository;

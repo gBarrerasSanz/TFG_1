@@ -1,4 +1,4 @@
-package guiatv.schedulepoller;
+package guiatv.schedule.poller;
 
 import static org.junit.Assert.*;
 
@@ -28,12 +28,13 @@ import guiatv.Application;
 import guiatv.ApplicationTest;
 import guiatv.common.CommonUtility;
 import guiatv.eventmanager.ImgProcessingGateway;
-import guiatv.eventproducer.utils.TaskExecutorMQTTClient;
 import guiatv.persistence.domain.Event_old;
 import guiatv.persistence.domain.Schedule;
 import guiatv.persistence.repository.ScheduleRepository;
+import guiatv.schedule.poller.SchedulePoller;
+import guiatv.schedule.publisher.SchedulePublisher;
+import guiatv.schedule.publisher.TaskExecutorMQTTClient;
 import guiatv.schedule.utils.ListScheduleCreator;
-import guiatv.scheduleproducer.ScheduleProducerPublisher;
 import guiatv.xmltv.transformer.XMLTVTransformer_old1;
 
 @RunWith(SpringJUnit4ClassRunner.class)

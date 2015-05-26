@@ -1,4 +1,4 @@
-package guiatv.scheduleloader;
+package guiatv.schedule.loader;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -38,8 +38,8 @@ import guiatv.persistence.domain.Event_old;
 import guiatv.persistence.domain.Programme;
 import guiatv.persistence.domain.Schedule;
 import guiatv.persistence.repository.ScheduleRepository;
+import guiatv.schedule.loader.ScheduleLoader;
 import guiatv.schedule.utils.ListScheduleCreator;
-import guiatv.scheduleloader.ScheduleLoader;
 import guiatv.xmltv.transformer.XMLTVTransformer_old1;
 
 @RunWith(SpringJUnit4ClassRunner.class)
