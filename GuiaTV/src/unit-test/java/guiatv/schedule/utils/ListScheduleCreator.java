@@ -16,12 +16,12 @@ public class ListScheduleCreator {
 		List<Schedule> listScheduleExpected = new ArrayList<Schedule>();
 		// Crear channels
 		Channel chNeox = new Channel();
-		chNeox.setNomIdCh("neox-722.laguiatv.com");
+		chNeox.setNameIdCh("neox-722.laguiatv.com");
 		// Crear programmes
 		Programme progMadre = new Programme();
-		progMadre.setNomProg("Cómo conocí a vuestra Madre");
+		progMadre.setNameProg("Cómo conocí a vuestra Madre");
 		Programme progSimpsons = new Programme();
-		progSimpsons.setNomProg("Los Simpson");
+		progSimpsons.setNameProg("Los Simpson");
 		// Crear schedules
 		Schedule schedMadre = new Schedule();
 		schedMadre.setChannel(chNeox);

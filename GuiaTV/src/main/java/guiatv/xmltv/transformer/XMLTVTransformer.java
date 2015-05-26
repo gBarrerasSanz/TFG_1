@@ -57,9 +57,9 @@ public class XMLTVTransformer implements Transformer {
 					chNode = listChNodes.get(chItIdx);
 					chNodeMap = chNode.getAttributes();
 					ch = new Channel();
-					ch.setNomIdCh(chNodeMap.getNamedItem("id").getNodeValue()); // Coger id
-					ch.setNomCh(itCh.next()); // Coger nombre
-					mapCh.put(ch.getNomIdCh(), ch); // Meter channel en el mapa hash
+					ch.setNameIdCh(chNodeMap.getNamedItem("id").getNodeValue()); // Coger id
+					ch.setNameCh(itCh.next()); // Coger nombre
+					mapCh.put(ch.getNameIdCh(), ch); // Meter channel en el mapa hash
 					chItIdx++;
 				}
 				// Iterar sobre la lista de programmes
@@ -74,8 +74,8 @@ public class XMLTVTransformer implements Transformer {
 					progNode = listProgNodes.get(progItIdx);
 					progNodeMap = progNode.getAttributes();
 					prog = new Programme();
-					prog.setNomProg(itProg.next()); // Coger el nombre del programa
-					mapProg.put(prog.getNomProg(), prog); // Meter programme en el mapa hash
+					prog.setNameProg(itProg.next()); // Coger el nombre del programa
+					mapProg.put(prog.getNameProg(), prog); // Meter programme en el mapa hash
 					progItIdx++;
 				}
 				

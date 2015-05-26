@@ -39,7 +39,7 @@ public class SchedulePublisher {
 		try {
 			String routKey = null;
 			for (Schedule sched: listSchedMsg.getPayload()) {
-				routKey = sched.getChannel().getNomIdCh()+"."+sched.getProgramme().getNomProg();
+				routKey = sched.getChannel().getNameIdCh()+"."+sched.getProgramme().getNameProg();
 				amqpTmp.convertAndSend(routKey, sched);
 			}
 		} catch (Exception e1) {

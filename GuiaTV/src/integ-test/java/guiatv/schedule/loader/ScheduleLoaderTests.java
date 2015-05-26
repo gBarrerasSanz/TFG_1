@@ -80,11 +80,11 @@ public class ScheduleLoaderTests extends
 			for (Schedule schedExp : listScheduleExpected) {
 				found = false;
 				for (Schedule schedRet : listScheduleReturned) {
-					if (schedExp.getProgramme().getNomProg()
-							.equals(schedRet.getProgramme().getNomProg())) {
+					if (schedExp.getProgramme().getNameProg()
+							.equals(schedRet.getProgramme().getNameProg())) {
 						found = true;
 						logger.info("Found programme with name"
-								+ schedExp.getProgramme().getNomProg());
+								+ schedExp.getProgramme().getNameProg());
 						break;
 					}
 				}

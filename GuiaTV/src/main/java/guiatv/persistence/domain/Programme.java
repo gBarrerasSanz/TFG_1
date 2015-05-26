@@ -19,9 +19,9 @@ import javax.persistence.Version;
 /*
  * El business-Id sobre el que se implementan los métodos de equals() y hashCode() 
  * debe ser único(@UniqueConstraint) y está compuesto de campos que deben ser inmutables:
- * business-Id: nomProg
+ * business-Id: nameProg
  */
-@Table(uniqueConstraints={@UniqueConstraint(columnNames = {"nomProg"})})
+@Table(uniqueConstraints={@UniqueConstraint(columnNames = {"nameProg"})})
 @Entity(name = "programme")
 public class Programme implements Serializable {
 
@@ -35,25 +35,22 @@ public class Programme implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idProg;
     
-    @Column(name = "nomProg", nullable = true, length = 50)
-    private String nomProg;
+    @Column(name = "nameProg", nullable = true, length = 50)
+    private String nameProg;
     
     @OneToMany(mappedBy="programme", fetch=FetchType.LAZY)
     private Set<Schedule> setSchedules;
     
-
-    public Set<Schedule> getSetSchedules() {
-		return setSchedules;
-	}
-
-	public void setSetSchedules(Set<Schedule> setSchedules) {
-		this.setSchedules = setSchedules;
-	}
-
-	/**********************************************************
+    
+    /**********************************************************
      * 					GETTERS / SETTERS
      *********************************************************/
-    
+    public Programme() {
+    }
+
+    public Programme(String nameProg) {
+    	this.nameProg = nameProg;
+    }
 	public Long getIdProg() {
 		return idProg;
 	}
@@ -62,19 +59,19 @@ public class Programme implements Serializable {
 		this.idProg = idProg;
 	}
 
-	public String getNomProg() {
-		return nomProg;
+	public String getNameProg() {
+		return nameProg;
 	}
 
-	public void setNomProg(String nomProg) {
-		this.nomProg = nomProg;
+	public void setNameProg(String nameProg) {
+		this.nameProg = nameProg;
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((nomProg == null) ? 0 : nomProg.hashCode());
+		result = prime * result + ((nameProg == null) ? 0 : nameProg.hashCode());
 		return result;
 	}
 
@@ -87,10 +84,10 @@ public class Programme implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		Programme other = (Programme) obj;
-		if (nomProg == null) {
-			if (other.nomProg != null)
+		if (nameProg == null) {
+			if (other.nameProg != null)
 				return false;
-		} else if (!nomProg.equals(other.nomProg))
+		} else if (!nameProg.equals(other.nameProg))
 			return false;
 		return true;
 	}

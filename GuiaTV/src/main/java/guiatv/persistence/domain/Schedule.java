@@ -64,7 +64,17 @@ public class Schedule implements Serializable {
     /**********************************************************
      * 					GETTERS / SETTERS
      *********************************************************/
-    
+	public Schedule() {
+	}
+
+	public Schedule(Channel channel, Programme programme, Timestamp start, Timestamp end) {
+    	this.channel = channel;
+    	this.programme = programme;
+    	this.start = start;
+    	this.end = end;
+    }
+	
+	
 	public Long getIdSched() {
 		return idSched;
 	}
@@ -155,8 +165,8 @@ public class Schedule implements Serializable {
 	@Override
 	public String toString() {
 		return "Schedule {"+
-				"channel="+channel.getNomIdCh()+", "+
-				"programme="+programme.getNomProg()+", "+
+				"channel="+channel.getNameIdCh()+", "+
+				"programme="+programme.getNameProg()+", "+
 				"start="+start+", "+
 				"end="+end+", "+
 				"}";

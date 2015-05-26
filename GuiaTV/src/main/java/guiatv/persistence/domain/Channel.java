@@ -22,9 +22,9 @@ import javax.persistence.Version;
 /*
  * El business-Id sobre el que se implementan los métodos de equals() y hashCode() 
  * debe ser único(@UniqueConstraint) y está compuesto de campos que deben ser inmutables:
- * business-Id: nomIdCh
+ * business-Id: nameIdCh
  */
-@Table(uniqueConstraints={@UniqueConstraint(columnNames = {"nomIdCh"})})
+@Table(uniqueConstraints={@UniqueConstraint(columnNames = {"nameIdCh"})})
 @Entity(name = "channel")
 public class Channel implements Serializable {
 	private static final long serialVersionUID = 6291049572278425446L;
@@ -34,11 +34,11 @@ public class Channel implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idCh;
     
-    @Column(name = "nomIdCh", nullable = true, length = 50)
-    private String nomIdCh;
+    @Column(name = "nameIdCh", nullable = true, length = 50)
+    private String nameIdCh;
     
     @Column(name = "nomCh", nullable = true, length = 50)
-    private String nomCh;
+    private String nameCh;
     
     @OneToMany(mappedBy="channel", fetch=FetchType.LAZY)
     private Set<Schedule> setSchedules;
@@ -56,6 +56,12 @@ public class Channel implements Serializable {
     /**********************************************************
      * 					GETTERS / SETTERS
      *********************************************************/
+    public Channel() {
+    }
+    
+    public Channel(String nameIdCh) {
+    	this.nameIdCh = nameIdCh;
+    }
     
 	public Long getIdCh() {
 		return idCh;
@@ -73,20 +79,20 @@ public class Channel implements Serializable {
 		this.idCh = idCh;
 	}
 
-	public String getNomIdCh() {
-		return nomIdCh;
+	public String getNameIdCh() {
+		return nameIdCh;
 	}
 
-	public void setNomIdCh(String nomIdCh) {
-		this.nomIdCh = nomIdCh;
+	public void setNameIdCh(String nameIdCh) {
+		this.nameIdCh = nameIdCh;
 	}
 
-	public String getNomCh() {
-		return nomCh;
+	public String getNameCh() {
+		return nameCh;
 	}
 
-	public void setNomCh(String nomCh) {
-		this.nomCh = nomCh;
+	public void setNameCh(String nameCh) {
+		this.nameCh = nameCh;
 	}
 
 	public String getCountry() {
@@ -109,7 +115,7 @@ public class Channel implements Serializable {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((nomIdCh == null) ? 0 : nomIdCh.hashCode());
+		result = prime * result + ((nameIdCh == null) ? 0 : nameIdCh.hashCode());
 		return result;
 	}
 
@@ -122,17 +128,17 @@ public class Channel implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		Channel other = (Channel) obj;
-		if (nomIdCh == null) {
-			if (other.nomIdCh != null)
+		if (nameIdCh == null) {
+			if (other.nameIdCh != null)
 				return false;
-		} else if (!nomIdCh.equals(other.nomIdCh))
+		} else if (!nameIdCh.equals(other.nameIdCh))
 			return false;
 		return true;
 	}
 
 	public String toString() {
 		return "Channel {"+
-				"nomIdCh="+this.getNomIdCh()+", "+
+				"nomIdCh="+this.getNameIdCh()+", "+
 				"country="+this.getCountry()+"}";
 	}
 	
