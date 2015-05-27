@@ -36,7 +36,7 @@ import guiatv.persistence.domain.Event_old;
 import guiatv.persistence.domain.Programme;
 import guiatv.persistence.domain.Schedule;
 import guiatv.persistence.repository.ScheduleRepository;
-import guiatv.realtime.service.CapturedFramesGateway;
+import guiatv.realtime.servicegateway.CapturedFramesGateway;
 import guiatv.schedule.loader.ScheduleLoader;
 import guiatv.schedule.utils.ListScheduleCreator;
 import guiatv.xmltv.transformer.XMLTVTransformer_old1;

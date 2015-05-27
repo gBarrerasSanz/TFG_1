@@ -1,4 +1,4 @@
-package guiatv.realtime.service;
+package guiatv.realtime.servicegateway;
 
 import guiatv.common.datatypes.Frame;
 import guiatv.persistence.domain.Event_old;

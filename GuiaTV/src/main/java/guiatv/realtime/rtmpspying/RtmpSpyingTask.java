@@ -21,7 +21,7 @@ import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
 
 
-public abstract class RtmpSpier {
+public class RtmpSpyingTask implements Runnable {
 	
 	@Value("${platform}")
 	private String platform;
@@ -31,11 +31,16 @@ public abstract class RtmpSpier {
 	
 	protected String rtmpSource;
 	
-	public RtmpSpier(String rtmpSource) {
+	public RtmpSpyingTask(String rtmpSource) {
 		this.rtmpSource = rtmpSource;
 	}
-	
-	public void doRtmpSpying() {
+
+	@Override
+	public void run() throws InstantiationError {
+		
+		if (rtmpSource == null) {
+			throw new InstantiationError("No rtmpSource set");
+		}
 		URL binDirUrl = this.getClass().getClassLoader()
 				.getResource("META-INF/ffmpeg/windows_bin/ffmpeg-win64/bin");
 		
@@ -120,5 +125,6 @@ public abstract class RtmpSpier {
 		default:
 			break;
 		}
+		
 	}
 }

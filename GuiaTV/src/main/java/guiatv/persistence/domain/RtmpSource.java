@@ -53,6 +53,13 @@ public class RtmpSource implements Serializable {
      * 					GETTERS / SETTERS
      *********************************************************/
 	
+	public RtmpSource() {
+	}
+
+	public RtmpSource(Channel ch, String rtmpUrl) {
+		this.channel = ch;
+		this.rtmpUrl = rtmpUrl;
+	}
 	public Channel getChannel() {
 		return channel;
 	}

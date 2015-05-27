@@ -17,6 +17,14 @@ public class Frame {
 	
 	public Frame() {
 	}
+	
+	public Frame(byte[] frameImg, Channel ch, RtmpSource rtmp, Date takenDate) {
+		this.frameImg = frameImg;
+		this.channel = ch;
+		this.rtmp = rtmp;
+		this.rtmp = rtmp;
+		this.takenDate = takenDate;
+	}
 
 	public byte[] getFrameImg() {
 		return frameImg;

@@ -1,4 +1,4 @@
-package guiatv.realtime.rtmpspying;
+package guiatv.realtime.router;
 
 import static org.junit.Assert.*;
 
@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.io.Resource;
+import org.springframework.integration.channel.QueueChannel;
 import org.springframework.integration.support.MessageBuilder;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageHandler;
@@ -33,7 +34,9 @@ import guiatv.Application;
 import guiatv.ApplicationTest;
 import guiatv.common.CommonUtility;
 import guiatv.common.datatypes.Frame;
+import guiatv.persistence.domain.Channel;
 import guiatv.persistence.domain.Event_old;
+import guiatv.persistence.domain.RtmpSource;
 import guiatv.persistence.domain.Schedule;
 import guiatv.persistence.repository.ScheduleRepository;
 import guiatv.realtime.servicegateway.CapturedFramesGateway;
@@ -45,37 +48,36 @@ import guiatv.xmltv.transformer.XMLTVTransformer_old1;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = ApplicationTest.class)
-@ActiveProfiles("RtmpSpyingTests")
-public class RtmpSpyingTests extends AbstractTransactionalJUnit4SpringContextTests {
+@ActiveProfiles("FrameCustomRouterTests")
+public class FrameCustomRouterTests extends AbstractTransactionalJUnit4SpringContextTests {
 	
 	private static final Logger logger = Logger.getLogger("debugLog");
 	
-	@Autowired
-	private ThreadPoolTaskExecutor rtmpSpyingTaskExecutor;
 	
 	@Autowired
-	private ApplicationContext ctx;
+	FrameCustomRouter frameCustomRouter;
 	
-    @Autowired
-    private MessageHandler rtmpSpyingOutputHandler; 
-	
-    String[] rtmpSources = {
-    	"rtmp://antena3fms35livefs.fplive.net/antena3fms35live-live/stream-antena3_1",
-    	"rtmp://antena3fms35livefs.fplive.net:1935/antena3fms35live-live/stream-lasexta_1"
-    };
-    
 	@Test
-	public void rtmpSpyingTest() {
-		try {
-			
-			for (String rtmpSource: rtmpSources) {
-				rtmpSpyingTaskExecutor.execute(ctx.getBean(RtmpSpyingTask.class, rtmpSource));
-			}
-	        Mockito.verify(rtmpSpyingOutputHandler).handleMessage(Mockito.any(Message.class));
-		}
-		catch(Exception e) {
-			e.printStackTrace();
-			fail();
-		}
+	public void routeClassificationFrameTest() {
+		// TODO: 
+//			Hacer bien la persistencia de learnedChannel
+//			Testear la petición learnedChRepImpl.isTrained
+//			Mockear learnedChRep para que learnedChRepImpl.isTrained devuelva true
+		
+		// Construir frame tal que exista un registro en LearnedChannel lc con:
+		// 	lc.channel = frame.getChannel(), lc.rtmpSource == frame.getRtmpSource() y ch.learned == true
+		Frame frame = new Frame();
+		assertEquals("classificationChIn", frameCustomRouter.processFrame(frame));
 	}
+	
+//	@Test
+//	public void routeTrainingFrameTest() {
+//		// Construir frame tal que NO exista un registro en LearnedChannel lc con:
+//		// 	lc.channel = frame.getChannel(), lc.rtmpSource == frame.getRtmpSource() y ch.learned == true
+//		//	o en un caso raro, que sí exista pero con ch.learned == false
+//		Frame frame = new Frame();
+//		assertEquals("traningChIn", frameCustomRouter.processFrame(frame));
+//	}
+	
+	
 }

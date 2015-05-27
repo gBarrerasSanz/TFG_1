@@ -29,7 +29,7 @@ import guiatv.ApplicationTest;
 import guiatv.common.CommonUtility;
 import guiatv.persistence.domain.Event_old;
 import guiatv.persistence.domain.Schedule;
-import guiatv.realtime.service.CapturedFramesGateway;
+import guiatv.realtime.servicegateway.CapturedFramesGateway;
 import guiatv.schedule.publisher.SchedulePublisher;
 import guiatv.schedule.utils.ListScheduleCreator;
 import guiatv.xmltv.transformer.XMLTVTransformer_old1;

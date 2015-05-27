@@ -11,7 +11,7 @@ import org.springframework.messaging.Message;
 import guiatv.persistence.domain.Event_old;
 import guiatv.persistence.domain.Schedule;
 import guiatv.persistence.repository.ScheduleRepository;
-import guiatv.realtime.service.CapturedFramesGateway;
+import guiatv.realtime.servicegateway.CapturedFramesGateway;
 
 public class SchedulePoller {
 	

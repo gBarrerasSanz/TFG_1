@@ -5,8 +5,7 @@
 	xmlns:int-jpa="http://www.springframework.org/schema/integration/jpa"
 	xmlns:jdbc="http://www.springframework.org/schema/jdbc" xmlns:tx="http://www.springframework.org/schema/tx"
 	xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:rabbit="http://www.springframework.org/schema/rabbit"
-	xmlns:task="http://www.springframework.org/schema/task"
+	xmlns:rabbit="http://www.springframework.org/schema/rabbit" xmlns:task="http://www.springframework.org/schema/task"
 	xsi:schemaLocation="http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-4.1.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.1.xsd
@@ -23,13 +22,6 @@
 
 	<!-- ******************************** SHARED CHANNELS ***************************************** -->
 
-	<!-- ** TRANSFORMER -> SCHEDULE LOADER ** -->
-	<int:channel id="transformerChOut" />
-
-	<!-- ** SCHEDULE POLLER -> SCHEDULE PUBLISHER ** -->
-	<int:channel id="schedPollerChOut">
-		<int:queue capacity="10" />
-	</int:channel>
 
 	<!-- **************************************** PERSISTENCE ***************************************** -->
 
@@ -127,7 +119,7 @@
 		</int-file:inbound-channel-adapter>
 	</beans>
 	<!-- **************************************** TRANSFORMER POLLER ***************************************** -->
-	<beans profile="dev, default">
+	<beans profile="XMLTVTransformerTests, dev, default">
 
 		<!-- <int:channel id="transformerChOut"/> -->
 
@@ -136,9 +128,12 @@
 		<int:transformer id="transformerXmlToPojo" ref="xmltvTransformerBean"
 			input-channel="transformerChIn" method="transform" output-channel="transformerChOut" />
 
-
 	</beans>
-
+	
+	<!-- ** TRANSFORMER -> SCHEDULE LOADER ** -->
+	<beans profile="XMLTVTransformerTests, ScheduleLoaderTests, dev, default">
+		<int:channel id="transformerChOut" />
+	</beans>
 	<!-- **************************************** SCHEDULE LOADER ***************************************** -->
 
 	<beans profile="ScheduleLoaderTests, dev, default">
@@ -175,7 +170,13 @@
 
 	<!-- <int:outbound-channel-adapter id="eventPollerOutbound" channel="eventPollerChOut" 
 		ref="eventPollerReply" method="receive"> </int:outbound-channel-adapter> -->
-
+	
+	<!-- ** SCHEDULE POLLER -> SCHEDULE PUBLISHER ** -->
+	<beans profile="SchedulePollerTests, SchedulePublisherTests, dev, default">
+		<int:channel id="schedPollerChOut">
+			<int:queue />
+		</int:channel>
+	</beans>
 	<!-- **************************************** SCHEDULE PUBLISHER ***************************************** -->
 	<beans profile="SchedulePublisherTests, dev, default">
 
@@ -213,33 +214,78 @@
 	<!-- ******************************** RTMP SPYING ***************************************** -->
 	<beans profile="RtmpSpyingTests, dev, default">
 		<int:channel id="rtmpSpierChOut" />
-		
-		<bean id="RtmpSpierWorker1" class="guiatv.realtime.rtmpspying.RtmpSpierWorker">
-			<constructor-arg value="${rtmp.a3}"/>
+
+		<bean id="rtmpSpyingTaskExecutor"
+			class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+			<property name="corePoolSize" value="5" />
+			<property name="maxPoolSize" value="5" />
+			<property name="queueCapacity" value="5" />
 		</bean>
 		
-		<task:scheduled-tasks scheduler="RtmpSpyingScheduler">
-			<task:scheduled ref="RtmpSpierWorker1" method="doRtmpSpying" />
-		</task:scheduled-tasks>
+		<bean id="rtmpSpyingTask" class="guiatv.realtime.rtmpspying.RtmpSpyingTask"
+			scope="prototype">
+			<constructor-arg ref="rtmpSpyingTaskExecutor" />
+		</bean>
 
-		<task:scheduler id="RtmpSpyingScheduler" pool-size="10" />
 	</beans>
-	<!-- ** DUMMY OUTBOUND (SchedulePollerTests) ** -->
+	<!-- ** MOCK GATEWAY (RtmpSpyingTests) ** -->
 	<beans profile="RtmpSpyingTests">
-		<bean id="rtmpSpierOutDummy" class="guiatv.realtime.rtmpspying.RtmpSpierOutDummy" />
-
-		<int:service-activator id="rtmpSpierServAct" input-channel="rtmpSpierChOut"
-			ref="rtmpSpierOutDummy" method="receiveDummy">
-			<int:poller fixed-rate="5000"></int:poller>
-		</int:service-activator>
+		<int:outbound-channel-adapter channel="rtmpSpierChOut"
+			ref="rtmpSpyingOutputHandler" method="handleMessage" />
+		<bean id="rtmpSpyingOutputHandler" class="org.mockito.Mockito"
+			factory-method="mock">
+			<constructor-arg
+				value="org.springframework.messaging.MessageHandler" />
+		</bean>
 	</beans>
-	<beans profile="RealTimeTests">
-		<int:channel id="sendFrameChOut" />
-
+	<!-- ******************************** CAPTURED FRAMES GATEWAY ***************************************** -->
+	<beans profile="CapturedFramesGatewayTests, dev, default">
+		<int:gateway id="capturedFramesGateway" service-interface="guiatv.realtime.servicegateway.CapturedFramesGateway"
+			default-request-timeout="5000" default-reply-timeout="5000">
+			<int:method name="sendFrame" request-channel="sendFrameChOut" />
+		</int:gateway>
+	</beans>
+	
+	<!-- ** CAPTURED FRAMES SERVICE GATEWAY -> FRAME CUSTOM ROUTER ** -->
+	<beans profile="CapturedFramesGatewayTests, FrameCustomRouterTests, dev, default">
+		<int:channel id="sendFrameChOut" >
+			<int:queue/>
+		</int:channel>
+	</beans>
+	
+	<!-- ******************************** FRAME CUSTOM ROUTER ***************************************** -->
+	<beans profile="FrameCustomRouterTests, dev, default">
+		
+		<int:bridge input-channel="classificationChBridgeIn"
+			output-channel="classificationChIn" />
+		
+		<int:bridge input-channel="trainingChBridgeIn"
+			output-channel="trainingChIn" />
+			
+		<int:channel id="classificationChIn" >
+			<int:queue/>
+		</int:channel>
+		
+		<int:channel id="trainingChIn" >
+			<int:queue/>
+		</int:channel>
+		
+		<bean id="customFrameRouter" class="guiatv.realtime.router.FrameCustomRouter" />
+		
+		<int:router id="frameRouter" input-channel="sendFrameChOut"
+			ref="customFrameRouter" method="processFrame" >
+				<int:poller fixed-rate="5000"></int:poller>
+			</int:router>
+			
+	</beans>
+			
+	<beans profile="dev, default">
+	
 		<int:channel id="sendFrameChOut">
 			<int:dispatcher task-executor="taskExecutor"
 				load-balancer="round-robin" />
 		</int:channel>
+		
 
 
 
@@ -254,23 +300,12 @@
 
 		<bean id="trainingWorker" class="guiatv.cv.trainer.TrainingWorker" />
 
-		<bean id="customFrameRouter" class="guiatv.eventmanager.FrameRouter" />
+		
 
 
-		<int:gateway id="imgProcessingGateway" service-interface="guiatv.eventmanager.ImgProcessingGateway"
-			default-request-timeout="5000" default-reply-timeout="5000">
-			<int:method name="sendFrame" request-channel="sendFrameChOut" />
-		</int:gateway>
+		
 
-		<int:router id="frameRouter" input-channel="sendFrameChOut"
-			ref="customFrameRouter" method="processFrame" />
-
-		<int:channel id="classificationChBridgeIn" />
-		<int:bridge input-channel="classificationChBridgeIn"
-			output-channel="classificationChIn" />
-		<int:channel id="trainingChBridgeIn" />
-		<int:bridge input-channel="trainingChBridgeIn"
-			output-channel="trainingChIn" />
+		
 
 		<int:channel id="classificationChIn">
 			<int:dispatcher task-executor="taskExecutor"
@@ -298,7 +333,7 @@
 			<property name="queueCapacity" value="2" />
 		</bean>
 		<bean id="mqttClientWorker" class="guiatv.schedule.publisher.TaskExecutorMQTTClient"
-			scope="prototype">
+			scope="prototype" >
 			<constructor-arg ref="mqttClientWorkerTaskExecutor" />
 		</bean>
 	</beans>

@@ -13,25 +13,20 @@ import org.springframework.messaging.MessageChannel;
 
 public class FrameCustomRouter {
 	
-	@Autowired
-	MessageChannel classificationChBridgeIn;
-	
-	@Autowired
-	MessageChannel trainingChBridgeIn;
 	
 	@Autowired
 	LearnedChannelRepositoryImpl learnedChRepImpl;
 	
     @Router
-    public MessageChannel processFrame(Frame frame) {
+    public String processFrame(Frame frame) {
     	// TODO: Implementar
-        boolean trained = learnedChRepImpl.isTrained(frame.getChannel(), frame.getRtmp());
-        
+//        boolean trained = learnedChRepImpl.isTrained(frame.getChannel(), frame.getRtmp());
+        boolean trained = true; // TODO: REMOVE THIS
         if (trained) {
-        	return classificationChBridgeIn;
+        	return "classificationChIn";
         }
         else {
-        	return trainingChBridgeIn;
+        	return "trainingChIn";
         }
     }
 
