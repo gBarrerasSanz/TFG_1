@@ -1,4 +1,4 @@
-package guiatv.cv.trainer;
+package guiatv.realtime.training;
 
 import java.io.File;
 import java.net.URISyntaxException;

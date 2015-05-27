@@ -6,6 +6,7 @@
 	xmlns:jdbc="http://www.springframework.org/schema/jdbc" xmlns:tx="http://www.springframework.org/schema/tx"
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:rabbit="http://www.springframework.org/schema/rabbit"
+	xmlns:task="http://www.springframework.org/schema/task"
 	xsi:schemaLocation="http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-4.1.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.1.xsd
@@ -13,7 +14,8 @@
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.1.xsd
 		http://www.springframework.org/schema/integration/jpa http://www.springframework.org/schema/integration/jpa/spring-integration-jpa-4.1.xsd
 		http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration-4.1.xsd
-		http://www.springframework.org/schema/rabbit http://www.springframework.org/schema/rabbit/spring-rabbit-1.4.xsd">
+		http://www.springframework.org/schema/rabbit http://www.springframework.org/schema/rabbit/spring-rabbit-1.4.xsd
+		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-4.1.xsd">
 
 	<!-- <import resource="classpath:/META-INF/spring/integration/hibernate-context.xml" 
 		/> -->
@@ -33,7 +35,7 @@
 
 	<beans
 		profile="ScheduleLoaderTests, SchedulePollerTests, PersistenceTests, default">
-		
+
 		<jdbc:embedded-database id="dataSource" type="H2" />
 
 		<!-- <jdbc:initialize-database data-source="dataSource" ignore-failures="DROPS"> 
@@ -70,11 +72,11 @@
 			class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"
 			parent="abstractVendorAdaptor">
 		</bean>
-		
+
 		<context:annotation-config />
-    	<tx:annotation-driven />
-    	<context:component-scan base-package="guiatv.persistence" />
-    	
+		<tx:annotation-driven />
+		<context:component-scan base-package="guiatv.persistence" />
+
 	</beans>
 
 	<!-- **************************************** GRABBER ***************************************** -->
@@ -184,13 +186,14 @@
 			host="localhost" virtual-host="/" username="user" password="userp"
 			port="5672" />
 
-		<rabbit:topic-exchange name="amq.topic" ></rabbit:topic-exchange>
+		<rabbit:topic-exchange name="amq.topic"></rabbit:topic-exchange>
 
-<!-- 		<rabbit:template id="amqpTemplate" connection-factory="connectionFactory"
-			exchange="amq.topic"  /> -->
+		<!-- <rabbit:template id="amqpTemplate" connection-factory="connectionFactory" 
+			exchange="amq.topic" /> -->
 		<rabbit:template id="amqpTemplate" connection-factory="connectionFactory"
-			exchange="amq.topic" message-converter="jsonMessageConverter" encoding="UTF-8"/>
-			
+			exchange="amq.topic" message-converter="jsonMessageConverter"
+			encoding="UTF-8" />
+
 		<rabbit:admin connection-factory="connectionFactory" />
 
 		<!-- ** PUBLISHER ** -->
@@ -199,12 +202,38 @@
 
 		<int:outbound-channel-adapter id="schedPublisherOutbound"
 			ref="schedPublisher" method="publishTopics" channel="schedPollerChOut">
-			<int:poller fixed-rate="5000"/>
+			<int:poller fixed-rate="5000" />
 		</int:outbound-channel-adapter>
 
 	</beans>
-	<!-- ******************************** IMAGE PROCESSING GATEWAY ***************************************** -->
-	<beans profile="dev2">
+	<!-- ******************************** REAL TIME EVENTS ***************************************** 
+		*********************************************************************************************** -->
+
+
+	<!-- ******************************** RTMP SPYING ***************************************** -->
+	<beans profile="RtmpSpyingTests, dev, default">
+		<int:channel id="rtmpSpierChOut" />
+		
+		<bean id="RtmpSpierWorker1" class="guiatv.realtime.rtmpspying.RtmpSpierWorker">
+			<constructor-arg value="${rtmp.a3}"/>
+		</bean>
+		
+		<task:scheduled-tasks scheduler="RtmpSpyingScheduler">
+			<task:scheduled ref="RtmpSpierWorker1" method="doRtmpSpying" />
+		</task:scheduled-tasks>
+
+		<task:scheduler id="RtmpSpyingScheduler" pool-size="10" />
+	</beans>
+	<!-- ** DUMMY OUTBOUND (SchedulePollerTests) ** -->
+	<beans profile="RtmpSpyingTests">
+		<bean id="rtmpSpierOutDummy" class="guiatv.realtime.rtmpspying.RtmpSpierOutDummy" />
+
+		<int:service-activator id="rtmpSpierServAct" input-channel="rtmpSpierChOut"
+			ref="rtmpSpierOutDummy" method="receiveDummy">
+			<int:poller fixed-rate="5000"></int:poller>
+		</int:service-activator>
+	</beans>
+	<beans profile="RealTimeTests">
 		<int:channel id="sendFrameChOut" />
 
 		<int:channel id="sendFrameChOut">
@@ -262,15 +291,15 @@
 
 	<!-- ************************** MQTT CLIENT (ScheduleProducerTests) ************************************ -->
 	<beans profile="SchedulePublisherTests">
-		<bean id="taskExecutor"
+		<bean id="mqttClientWorkerTaskExecutor"
 			class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
 			<property name="corePoolSize" value="2" />
 			<property name="maxPoolSize" value="2" />
 			<property name="queueCapacity" value="2" />
 		</bean>
-		<bean id="taskExecutorClient" class="guiatv.schedule.publisher.TaskExecutorMQTTClient"
+		<bean id="mqttClientWorker" class="guiatv.schedule.publisher.TaskExecutorMQTTClient"
 			scope="prototype">
-			<constructor-arg ref="taskExecutor" />
+			<constructor-arg ref="mqttClientWorkerTaskExecutor" />
 		</bean>
 	</beans>
 

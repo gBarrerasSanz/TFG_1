@@ -32,7 +32,7 @@ public class CallbackFunction implements MqttCallback {
 	@Override
 	public void messageArrived(String arg0, MqttMessage arg1) throws Exception {
 		log.debug("MQTT Client id="+clientId+"; messageArrived = "+arg1.toString());
-		// TODO: BUSCAR UNA FORMA MÁS LIMPIA DE HACER ESTO
+		// TODO: BUSCAR UNA FORMA Mï¿½S LIMPIA DE HACER ESTO
 		byte ptext[] = arg1.toString().getBytes(ISO_8859_1); 
 		String value = new String(ptext, UTF_8); 
 		clientThread.addReceivedMessage(value);

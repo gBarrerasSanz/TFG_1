@@ -1,4 +1,4 @@
-package guiatv.cv.classificator;
+package guiatv.realtime.classification;
 
 import java.io.File;
 import java.net.URISyntaxException;

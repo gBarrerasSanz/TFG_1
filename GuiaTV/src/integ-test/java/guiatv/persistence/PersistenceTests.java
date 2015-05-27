@@ -11,8 +11,8 @@ import guiatv.persistence.domain.Channel;
 import guiatv.persistence.domain.Programme;
 import guiatv.persistence.domain.Schedule;
 import guiatv.persistence.repository.ScheduleRepository;
-import guiatv.persistence.repository.notused.ChannelRepository;
-import guiatv.persistence.repository.notused.ProgrammeRepository;
+import guiatv.persistence.repository.NOTUSED.ChannelRepository;
+import guiatv.persistence.repository.NOTUSED.ProgrammeRepository;
 import guiatv.schedule.utils.ListScheduleCreator;
 
 import org.apache.log4j.Logger;

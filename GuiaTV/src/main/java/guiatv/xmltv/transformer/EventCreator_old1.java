@@ -5,8 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.Message;
 
-import guiatv.eventmanager.ImgProcessingGateway;
 import guiatv.persistence.domain.Event_old;
+import guiatv.realtime.service.CapturedFramesGateway;
 
 //public class EventCreator_old1 {
 //	

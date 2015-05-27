@@ -1,4 +1,4 @@
-package guiatv.cv.rtmpspy;
+package guiatv.realtime.rtmpspying;
 
 import guiatv.common.CommonUtility;
 import guiatv.cv.classificator.Imshow;
@@ -21,9 +21,9 @@ import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
 
 
-public class RtmpSpy {
+public class RtmpSpy_old1 {
 	
-	@Value("${platform}") // TODO: Averiguar por que no funciona 
+	@Value("${platform}")
 	String platform;
 	
 	@Autowired
@@ -35,7 +35,7 @@ public class RtmpSpy {
 	"rtmp://antena3fms35livefs.fplive.net:1935/antena3fms35live-live/stream-lasexta_1"
 	};
 	
-	public RtmpSpy() {
+	public RtmpSpy_old1() {
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 	}
 	
@@ -46,7 +46,6 @@ public class RtmpSpy {
 		try {
 			capDir = new File(capDirUrl.toURI());
 		} catch (URISyntaxException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		

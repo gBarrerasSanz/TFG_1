@@ -1,4 +1,4 @@
-package guiatv.eventmanager;
+package guiatv.realtime.service;
 
 import guiatv.common.datatypes.Frame;
 import guiatv.persistence.domain.Event_old;
@@ -10,7 +10,7 @@ import java.util.concurrent.Future;
 
 import org.springframework.messaging.handler.annotation.Payload;
 
-public interface ImgProcessingGateway {
+public interface CapturedFramesGateway {
 
 
 	Future<Frame> sendFrame(Frame frame);

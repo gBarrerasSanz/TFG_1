@@ -1,4 +1,4 @@
-package guiatv.schedule.poller;
+package guiatv.realtime.rtmpspying;
 
 import static org.junit.Assert.*;
 
@@ -28,6 +28,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import guiatv.Application;
 import guiatv.ApplicationTest;
 import guiatv.common.CommonUtility;
+import guiatv.common.datatypes.Frame;
 import guiatv.persistence.domain.Event_old;
 import guiatv.persistence.domain.Schedule;
 import guiatv.persistence.repository.ScheduleRepository;
@@ -41,49 +42,18 @@ import guiatv.xmltv.transformer.XMLTVTransformer_old1;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = ApplicationTest.class)
 @ActiveProfiles("SchedulePollerTests")
-public class SchedulePollerTests extends AbstractTransactionalJUnit4SpringContextTests {
+public class RtmpSpyingTests extends AbstractTransactionalJUnit4SpringContextTests {
 	
 	private static final Logger logger = Logger.getLogger("debugLog");
 	
-	@Autowired
-	ScheduleRepository schedRep;
 	
 	@Autowired
-	SchedulePoller schedPoller;
+	RtmpSpyingOutDummy rtmpSpyingOutDummy;
 	
-	@Autowired
-	SchedulePollerOutDummy schedPollerOutDummy;
-	
-	/**
-	 * Comprobar que los schedules que devuelve el SchedulePoller son los mismos que se han introducido
-	 * en la base de datos.
-	 * ATENCION: Este test requiere que la persistencia funcione correctamente.
-	 */
 	@Test
 	public void pollForSchedulesTest() {
 		try {
-			// Cargar valores de prueba en la base de datos
-			List<Schedule> listSchedExpected = ListScheduleCreator.getListSchedule();
-			schedRep.save(listSchedExpected);
-			
-			List<Schedule> listSchedPolled = schedPoller.askForSchedules();
-			
-			Assert.assertEquals(listSchedExpected, listSchedPolled);
-			
-//			boolean found = false;
-//			for(Schedule schedPolled: listSchedPolled) {
-//				found = false;
-//				for (Schedule schedExp: listSchedExpected) {
-//					if (schedPolled.getProgramme().getNomProg().equals(schedRep.getProgramme().getNomProg())) {
-//						found = true;
-////						logger.info("Found programme with name"+schedExp.getProgramme().getNomProg());
-//						break;
-//					}
-//				}
-//				Assert.assertEquals(true, found);
-//			}
-//			Assert.assertEquals(true, found);
-			
+			List<Frame> listFramesRecv = new ArrayList<Frame>();
 		}
 		catch(Exception e) {
 			e.printStackTrace();

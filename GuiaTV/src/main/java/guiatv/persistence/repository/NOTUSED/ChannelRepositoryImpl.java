@@ -1,4 +1,4 @@
-package guiatv.persistence.repository.notused;
+package guiatv.persistence.repository.NOTUSED;
 
 import guiatv.persistence.domain.Channel;
 

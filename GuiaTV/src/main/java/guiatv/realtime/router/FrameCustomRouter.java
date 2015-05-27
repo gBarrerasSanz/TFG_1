@@ -1,4 +1,4 @@
-package guiatv.eventmanager;
+package guiatv.realtime.router;
 
 import guiatv.common.datatypes.Frame;
 import guiatv.cv.common.OpenCvUtils;
@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.integration.annotation.Router;
 import org.springframework.messaging.MessageChannel;
 
-public class FrameRouter {
+public class FrameCustomRouter {
 	
 	@Autowired
 	MessageChannel classificationChBridgeIn;

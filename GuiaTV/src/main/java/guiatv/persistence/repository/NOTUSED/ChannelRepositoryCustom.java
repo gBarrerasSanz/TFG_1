@@ -1,8 +1,8 @@
-package guiatv.persistence.repository.notused;
+package guiatv.persistence.repository.NOTUSED;
 
 import guiatv.persistence.domain.Channel;
 
-public interface ScheduleRepositoryCustom {
+public interface ChannelRepositoryCustom {
 
 	/**
 	 * Method actually triggering a finder but being overridden.
@@ -15,6 +15,4 @@ public interface ScheduleRepositoryCustom {
 	 * @param user
 	 */
 //	void someCustomMethod(Channel ch);
-	
-//	public boolean isTrained(Channel ch, String rtmpUrl);
 }
