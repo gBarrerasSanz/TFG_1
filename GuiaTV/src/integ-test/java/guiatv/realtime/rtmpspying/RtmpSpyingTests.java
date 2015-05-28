@@ -32,6 +32,8 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import guiatv.Application;
 import guiatv.ApplicationTest;
@@ -74,6 +76,9 @@ public class RtmpSpyingTests extends AbstractTransactionalJUnit4SpringContextTes
     @Autowired
     QueueChannel sendFrameChOut;
     
+    @Autowired
+    AsyncTransactionService asyncTransactionService;
+    
     String[] nameIdChannels = {
     	"nameIdChTest_a3",
     	"nameIdChTest_laSexta"
@@ -84,22 +89,33 @@ public class RtmpSpyingTests extends AbstractTransactionalJUnit4SpringContextTes
     	"rtmp://antena3fms35livefs.fplive.net:1935/antena3fms35live-live/stream-lasexta_1"
     };
     
-	@Test(timeout = 120000)
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    private void insertRtmpSources(List<RtmpSource> listRtmpSources) {
+    	rtmpRep.save(listRtmpSources);
+    }
+    
+	@Test(timeout = 60000)
 	public void rtmpSpyingTest() {
 		try {
 			// Crear dos RtmpSources (uno para Antena3 y otro para laSexta)
-			Channel chA3 = new Channel(nameIdChannels[0]);
-			RtmpSource rtmpSourceA3 = new RtmpSource(chA3, rtmpSources[0]);
-			Channel chLa6 = new Channel(nameIdChannels[1]);
-			RtmpSource rtmpSourceLa6 = new RtmpSource(chLa6, rtmpSources[1]);
-			
+			List<RtmpSource> listRtmpSources = new ArrayList<RtmpSource>();
+			for (int i=0; i<rtmpSources.length; i++) {
+				Channel ch = new Channel(nameIdChannels[i]);
+				RtmpSource rtmpSource = new RtmpSource(ch, rtmpSources[i]);
+				listRtmpSources.add(rtmpSource);
+			}
+//			Channel chA3 = new Channel(nameIdChannels[0]);
+//			RtmpSource rtmpSourceA3 = new RtmpSource(chA3, rtmpSources[0]);
+//			Channel chLa6 = new Channel(nameIdChannels[1]);
+//			RtmpSource rtmpSourceLa6 = new RtmpSource(chLa6, rtmpSources[1]);
+			asyncTransactionService.insertRtmpSources(listRtmpSources);
 			
 			// Meterlos en la base de datos para que los pueda leer el RtmpSpyingTask
-			rtmpRep.save(rtmpSourceA3);
-			rtmpRep.save(rtmpSourceLa6);
-			rtmpRep.flush();
+//			rtmpRep.save(rtmpSourceA3);
+//			rtmpRep.save(rtmpSourceLa6);
+//			rtmpRep.flush();
 			
-			List<RtmpSource> ListrtmpSource = rtmpRep.findAll();
+//			List<RtmpSource> ListrtmpSource = rtmpRep.findAll();
 			
 			for (int i=0; i<rtmpSources.length; i++) {
 				// Ejecutar la task de RtmpSpyingTask
@@ -109,16 +125,22 @@ public class RtmpSpyingTests extends AbstractTransactionalJUnit4SpringContextTes
 			}
 			
 			Message<?> inMessage;
-			int numRcvMsg = 0;
-			while (numRcvMsg < 2) {
+			int numMsgFromRtmp0 = 0;
+			int numMsgFromRtmp1 = 0;
+			while (numMsgFromRtmp0 < 1 || numMsgFromRtmp1 < 1 ) {
 				inMessage = sendFrameChOut.receive();
 				assertNotNull("Expected a message", inMessage);
 				Frame frameActual = (Frame) inMessage.getPayload();
 				assertNotNull(frameActual);
+				if (frameActual.getRtmp().equals(listRtmpSources.get(0))){
+					numMsgFromRtmp0++;
+				}
+				else if (frameActual.getRtmp().equals(listRtmpSources.get(1))) {
+					numMsgFromRtmp1++;
+				}
 			}
-			
-			
-			
+			logger.info("numMsgFromRtmp0 = "+numMsgFromRtmp0);
+			logger.info("numMsgFromRtmp1 = "+numMsgFromRtmp1);
 		}
 		catch(Exception e) {
 			e.printStackTrace();

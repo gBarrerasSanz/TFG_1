@@ -19,6 +19,7 @@ import java.net.URL;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
@@ -33,6 +34,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 public class RtmpSpyingTask implements Runnable {
+	
+	private static final Logger logger = Logger.getLogger("debugLog"); 
 	
 	@Value("${platform}")
 	private String platform;
@@ -59,6 +62,8 @@ public class RtmpSpyingTask implements Runnable {
 		this.rtmpUrl = rtmpUrl;
 	}
 	
+	
+	
 //	@Transactional(readOnly=false)
 	@Override
 	public void run() throws InstantiationError {
@@ -69,7 +74,7 @@ public class RtmpSpyingTask implements Runnable {
 		RtmpSource rtmpSource = asyncTransactionService.
 				getRtmpSourceFromNameIdChAndRtmpUrl(nameIdCh, rtmpUrl);
 		
-		List<RtmpSource> ListrtmpSource = rtmpRep.findAll();
+//		List<RtmpSource> ListrtmpSource = rtmpRep.findAll();
 		
 		
 		
@@ -86,7 +91,7 @@ public class RtmpSpyingTask implements Runnable {
 				File binDir = new File(binDirUrl.toURI());
 				String[] cmd = { 
 					binDir.getAbsolutePath()+File.separator+"ffmpeg.exe",
-					"-i", rtmpSource+" live=1",
+					"-i", rtmpSource.getRtmpUrl()+" live=1",
 					"-vcodec", "mjpeg",
 					"-f", "image2pipe",
 					"-pix_fmt", "yuvj420p",
@@ -128,7 +133,9 @@ public class RtmpSpyingTask implements Runnable {
 		        		if (imgReady) {
 		        			if (data.size() != 0) {
 		        				Frame frame = new Frame(data.toByteArray(), rtmpSource, new Date());
+//		        				logger.info("Sending frame from "+this.toString());
 		        				capturedFramesGateway.sendFrame(frame);
+		        				
 //		        				Mat dataMat = new Mat(512, 512, CvType.CV_8UC1);
 //		        				dataMat.put(0, 0, data.toByteArray());
 //		        				Mat frameMat = Highgui.imdecode(dataMat, 1);

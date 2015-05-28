@@ -1,5 +1,7 @@
 package guiatv.persistence.repository;
 
+import java.util.List;
+
 import guiatv.persistence.domain.Channel;
 import guiatv.persistence.domain.RtmpSource;
 
@@ -24,4 +26,9 @@ public class AsyncTransactionService {
 		RtmpSource rtmpSource = rtmpRep.findByChannelAndRtmpUrl(ch, rtmpUrl);
 		return rtmpSource;
 	}
+	
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void insertRtmpSources(List<RtmpSource> ListRtmpSources) {
+    	rtmpRep.save(ListRtmpSources);
+    }
 }
