@@ -9,8 +9,6 @@ public class Frame {
 	
 	private byte[] frameImg;
 	
-	private Channel channel;
-	
 	private RtmpSource rtmp;
 	
 	private Date takenDate;
@@ -18,9 +16,8 @@ public class Frame {
 	public Frame() {
 	}
 	
-	public Frame(byte[] frameImg, Channel ch, RtmpSource rtmp, Date takenDate) {
+	public Frame(byte[] frameImg, RtmpSource rtmp, Date takenDate) {
 		this.frameImg = frameImg;
-		this.channel = ch;
 		this.rtmp = rtmp;
 		this.rtmp = rtmp;
 		this.takenDate = takenDate;
@@ -32,15 +29,6 @@ public class Frame {
 
 	public void setFrameImg(byte[] frameImg) {
 		this.frameImg = frameImg;
-	}
-
-
-	public Channel getChannel() {
-		return channel;
-	}
-
-	public void setChannel(Channel channel) {
-		this.channel = channel;
 	}
 
 	public RtmpSource getRtmp() {

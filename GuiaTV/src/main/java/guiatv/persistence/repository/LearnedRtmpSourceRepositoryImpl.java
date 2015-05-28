@@ -1,7 +1,7 @@
 package guiatv.persistence.repository;
 
 import guiatv.persistence.domain.Channel;
-import guiatv.persistence.domain.LearnedChannel;
+import guiatv.persistence.domain.LearnedRtmpSource;
 import guiatv.persistence.domain.RtmpSource;
 
 import java.sql.Connection;
@@ -14,6 +14,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 import org.apache.log4j.Logger;
 import org.hibernate.service.spi.InjectService;
@@ -29,23 +30,34 @@ import org.springframework.stereotype.Repository;
 
 
 @Repository
-public class LearnedChannelRepositoryImpl implements LearnedChannelRepositoryCustom {
+public class LearnedRtmpSourceRepositoryImpl implements LearnedRtmpSourceRepositoryCustom {
 	private static Logger logger = Logger.getLogger("debugLog");
-	
 	
 	// TODO: Poner @Autowired o @PersistenceContext? Y por qué?
 	@PersistenceContext
     private EntityManager em;
 
 	@Override
-	public boolean isTrained(Channel ch, RtmpSource rtmp) {
-		LearnedChannel learnedCh = (LearnedChannel) em.createQuery(
-				"Select lc from learnedChannel lc"+
-						"where lc.idCh = "+ch.getIdCh()+" and "+
-						"lc.rtmpUrl like '"+rtmp.getRtmpUrl()+"'"
-				).getSingleResult();
-
-		return learnedCh.isLearned();	
+	public boolean isTrained(RtmpSource rtmpSource) {
+		return true;
+//		Query query = em.createQuery(
+//				"SELECT a FROM Account a"
+//                + "WHERE a.username LIKE ?1 "
+//                +"OR a.namefirst LIKE ?1 "
+//                +"OR a.namelast LIKE ?1");
+//        query.setParameter(1, "%"+check+"%");
+//        List accounts = query.getResultList();
+//        if (accounts.size() == 0) {
+//            return null;
+//        } else {
+//            return new AccountList(accounts);
+//        }
+		///
+//		LearnedRtmpSource learnedCh = (LearnedRtmpSource) em.createQuery(
+//				"Select * from learnedChannel lc"+
+//						"where lc.rtmpSource like '"+rtmpSource+"'"
+//				).getSingleResult();
+//		return learnedCh.isLearned();	
 	}
 
 	//	@Override

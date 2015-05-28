@@ -8,10 +8,15 @@ import java.util.List;
 
 import guiatv.Application;
 import guiatv.persistence.domain.Channel;
+import guiatv.persistence.domain.LearnedRtmpSource;
 import guiatv.persistence.domain.Programme;
+import guiatv.persistence.domain.RtmpSource;
 import guiatv.persistence.domain.Schedule;
+import guiatv.persistence.repository.ChannelRepository;
+import guiatv.persistence.repository.LearnedRtmpSourceRepository;
+import guiatv.persistence.repository.LearnedRtmpSourceRepositoryImpl;
+import guiatv.persistence.repository.RtmpSourceRepository;
 import guiatv.persistence.repository.ScheduleRepository;
-import guiatv.persistence.repository.NOTUSED.ChannelRepository;
 import guiatv.persistence.repository.NOTUSED.ProgrammeRepository;
 import guiatv.schedule.utils.ListScheduleCreator;
 
@@ -45,8 +50,14 @@ public class PersistenceTests extends AbstractTransactionalJUnit4SpringContextTe
 	@Autowired
 	ProgrammeRepository progRep;
 	
+	@Autowired
+	RtmpSourceRepository rtmpRep;
+	
+	@Autowired
+	LearnedRtmpSourceRepository learnedRtmpRep;
+	
 	@Test
-	public void simplePersistenceTest() {
+	public void schedulePersistenceTest() {
 		try {
 			// Cargar valores de prueba en la base de datos
 			List<Schedule> listSchedExpected = ListScheduleCreator.getListSchedule();
@@ -54,6 +65,98 @@ public class PersistenceTests extends AbstractTransactionalJUnit4SpringContextTe
 			
 			List<Schedule> listSchedRetrieved = schedRep.findAll();
 			Assert.assertEquals(listSchedExpected, listSchedRetrieved);
+		} catch(Exception e) {
+			e.printStackTrace();
+			fail();
+		}
+	}
+	
+	@Test
+	public void channelPersistenceTest() {
+		try {
+			// Cargar valores de prueba en la base de datos
+			Channel chExpected = new Channel("testNameIdCh1");
+			chRep.save(chExpected);
+			
+			Channel chActual = chRep.findByNameIdCh(chExpected.getNameIdCh());
+			Assert.assertEquals(chExpected, chActual);
+		} catch(Exception e) {
+			e.printStackTrace();
+			fail();
+		}
+	}
+	
+	@Test
+	public void programmePersistenceTest() {
+		try {
+			// Cargar valores de prueba en la base de datos
+			Programme progExpected = new Programme("testNameProg1");
+			progRep.save(progExpected);
+			
+			Programme progActual = progRep.findByNameProg(progExpected.getNameProg());
+			Assert.assertEquals(progExpected, progActual);
+		} catch(Exception e) {
+			e.printStackTrace();
+			fail();
+		}
+	}
+	
+	@Test
+	public void rtmpSourcePersistenceTest() {
+		try {
+			// Cargar valores de prueba en la base de datos
+			Channel chExpected = new Channel("testNameIdCh1");
+			RtmpSource rtmpExpected = new RtmpSource(chExpected, "testRtmpSource1");
+			rtmpRep.save(rtmpExpected);
+			
+			RtmpSource rtmpActual = rtmpRep.findByChannelAndRtmpUrl(
+					rtmpExpected.getChannel(), rtmpExpected.getRtmpUrl());
+			Assert.assertEquals(rtmpExpected, rtmpActual);
+		} catch(Exception e) {
+			e.printStackTrace();
+			fail();
+		}
+	}
+	
+	@Test
+	public void learnedRtmpSourcePersistenceTest() {
+		try {
+			// Cargar valores de prueba en la base de datos
+			Channel chExpected = new Channel("testNameIdCh1");
+			RtmpSource rtmpExpected = new RtmpSource(chExpected, "testRtmpSource1");
+			LearnedRtmpSource learnedRtmpExpected = new LearnedRtmpSource(
+					rtmpExpected, "testMethod1", true);
+			learnedRtmpRep.save(learnedRtmpExpected);
+			
+			LearnedRtmpSource learnedRtmpActual = learnedRtmpRep.findByRtmpSourceAndMethodAndLearned(
+					learnedRtmpExpected.getRtmpSource(),
+					learnedRtmpExpected.getMethod(),
+					learnedRtmpExpected.isLearned());
+			Assert.assertEquals(learnedRtmpExpected, learnedRtmpActual);
+		} catch(Exception e) {
+			e.printStackTrace();
+			fail();
+		}
+	}
+	
+	@Test
+	public void learnedRtmpSourceCustomPersistenceTest() {
+		try {
+			// Cargar valores de prueba en la base de datos
+			Channel chExpected = new Channel("testNameIdCh1");
+			RtmpSource rtmpExpected = new RtmpSource(chExpected, "testRtmpSource1");
+			LearnedRtmpSource learnedRtmpExpected = new LearnedRtmpSource(
+					rtmpExpected, "testMethod1", true);
+			learnedRtmpRep.save(learnedRtmpExpected);
+			
+			LearnedRtmpSource learnedRtmpActual = 
+					learnedRtmpRep.findByRtmpSourceAndLearnedTrue(rtmpExpected);
+			Assert.assertEquals(learnedRtmpExpected, learnedRtmpActual);
+			
+			LearnedRtmpSource learnedRtmpNotExpected = 
+					learnedRtmpRep.findByRtmpSourceAndLearnedFalse(rtmpExpected);
+			Assert.assertNull(learnedRtmpNotExpected);
+			
 		} catch(Exception e) {
 			e.printStackTrace();
 			fail();
@@ -107,5 +210,7 @@ public class PersistenceTests extends AbstractTransactionalJUnit4SpringContextTe
 		schedRep.save(sched1);
 		schedRep.save(sched2);
 	}
+	
+	
 
 }

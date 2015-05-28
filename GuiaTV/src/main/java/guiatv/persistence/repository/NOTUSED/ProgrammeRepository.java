@@ -12,4 +12,6 @@ public interface ProgrammeRepository extends JpaRepository<Programme, Long>,
 		JpaSpecificationExecutor<Programme>, ChannelRepositoryCustom {
 
 	Programme findByIdProg(Long idProg);
+	
+	Programme findByNameProg(String nameProg);
 }

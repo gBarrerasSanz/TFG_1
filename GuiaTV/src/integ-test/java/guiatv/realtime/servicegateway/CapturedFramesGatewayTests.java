@@ -64,9 +64,9 @@ public class CapturedFramesGatewayTests extends AbstractTransactionalJUnit4Sprin
 	public void rtmpSpyingTest() {
 		try {
 			byte[] payload = new byte[1024]; 
-			Channel ch1 = new Channel("testCh1");
-			Frame frameExpected = new Frame(payload, ch1, 
-					new RtmpSource(ch1, "someurl"), new Date());
+			Channel ch1 = new Channel("someTestCh1");
+			RtmpSource rtmpSource = new RtmpSource(ch1, "someTestUrl1");
+			Frame frameExpected = new Frame(payload, rtmpSource, new Date());
 			capturedFramesGateway.sendFrame(frameExpected);
 			
 			Message<?> inMessage = sendFrameChOut.receive(100);

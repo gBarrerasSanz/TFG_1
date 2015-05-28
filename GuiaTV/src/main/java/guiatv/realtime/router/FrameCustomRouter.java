@@ -4,8 +4,8 @@ import guiatv.common.datatypes.Frame;
 import guiatv.cv.common.OpenCvUtils;
 import guiatv.persistence.domain.Channel;
 import guiatv.persistence.domain.RtmpSource;
-import guiatv.persistence.repository.LearnedChannelRepository;
-import guiatv.persistence.repository.LearnedChannelRepositoryImpl;
+import guiatv.persistence.repository.LearnedRtmpSourceRepository;
+import guiatv.persistence.repository.LearnedRtmpSourceRepositoryImpl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.integration.annotation.Router;
@@ -15,7 +15,7 @@ public class FrameCustomRouter {
 	
 	
 	@Autowired
-	LearnedChannelRepositoryImpl learnedChRepImpl;
+	LearnedRtmpSourceRepositoryImpl learnedChRepImpl;
 	
     @Router
     public String processFrame(Frame frame) {

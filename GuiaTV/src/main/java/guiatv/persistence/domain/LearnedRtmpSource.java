@@ -11,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
@@ -30,9 +31,9 @@ import org.hibernate.annotations.CascadeType;
  * debe ser único(@UniqueConstraint) y está compuesto de campos que deben ser inmutables:
  * 
  */
-//@Table(uniqueConstraints={@UniqueConstraint(columnNames = {"channel", "start", "end"})})
-@Entity(name = "learnedChannel")
-public class LearnedChannel implements Serializable {
+@Table(uniqueConstraints={@UniqueConstraint(columnNames = {"rtmpSource", "method", "learned"})})
+@Entity(name = "learnedRtmpSource")
+public class LearnedRtmpSource implements Serializable {
 
 	private static final long serialVersionUID = -5158218062363768675L;
     
@@ -40,16 +41,14 @@ public class LearnedChannel implements Serializable {
     @Column(name = "idLearnedCh", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idLearnedCh;
-	
-	@OneToOne(fetch=FetchType.EAGER)
-	@JoinColumn(name="idCh")
-	@Cascade(value=CascadeType.ALL)
-	private Channel channel;
     
-	@OneToOne(fetch=FetchType.EAGER)
-	@JoinColumn(name="idRtmpSource")
 	@Cascade(value=CascadeType.ALL)
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="rtmpSource")
 	private RtmpSource rtmpSource;
+	
+	@Column(name = "method", nullable = false)
+	private String method;
 	
 	@Column(name = "learned", nullable = false)
 	private boolean learned;
@@ -62,16 +61,15 @@ public class LearnedChannel implements Serializable {
     /**********************************************************
      * 					GETTERS / SETTERS
      *********************************************************/
+    public LearnedRtmpSource() {
+    }
+
+    public LearnedRtmpSource(RtmpSource rtmpSource, String method, boolean learned) {
+    	this.rtmpSource = rtmpSource;
+    	this.method = method;
+    	this.learned = learned;
+    }
     
-
-	public Channel getChannel() {
-		return channel;
-	}
-
-	public void setChannel(Channel channel) {
-		this.channel = channel;
-	}
-
 	public RtmpSource getRtmpSource() {
 		return rtmpSource;
 	}
@@ -94,6 +92,22 @@ public class LearnedChannel implements Serializable {
 
 	public void setTemplateImg(byte[] templateImg) {
 		this.templateImg = templateImg;
+	}
+
+	public Long getIdLearnedCh() {
+		return idLearnedCh;
+	}
+
+	public void setIdLearnedCh(Long idLearnedCh) {
+		this.idLearnedCh = idLearnedCh;
+	}
+
+	public String getMethod() {
+		return method;
+	}
+
+	public void setMethod(String method) {
+		this.method = method;
 	}
     
 	

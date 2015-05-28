@@ -1,7 +1,14 @@
 package guiatv.realtime.rtmpspying;
 
 import guiatv.common.CommonUtility;
+import guiatv.common.datatypes.Frame;
 import guiatv.cv.classificator.Imshow;
+import guiatv.persistence.domain.Channel;
+import guiatv.persistence.domain.RtmpSource;
+import guiatv.persistence.repository.AsyncTransactionService;
+import guiatv.persistence.repository.ChannelRepository;
+import guiatv.persistence.repository.RtmpSourceRepository;
+import guiatv.realtime.servicegateway.CapturedFramesGateway;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
@@ -9,6 +16,8 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.Date;
+import java.util.List;
 
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
@@ -19,6 +28,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.integration.support.MessageBuilder;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
+import org.springframework.transaction.annotation.Transactional;
+
 
 
 public class RtmpSpyingTask implements Runnable {
@@ -27,16 +38,40 @@ public class RtmpSpyingTask implements Runnable {
 	private String platform;
 	
 	@Autowired
-	protected MessageChannel rtmpSpierChOut;
+	ChannelRepository chRep;
 	
-	protected String rtmpSource;
+	@Autowired
+	RtmpSourceRepository rtmpRep;
 	
-	public RtmpSpyingTask(String rtmpSource) {
-		this.rtmpSource = rtmpSource;
+	@Autowired
+	CapturedFramesGateway capturedFramesGateway;
+	
+    @Autowired
+    AsyncTransactionService asyncTransactionService;
+    
+	private String nameIdCh;
+	private String rtmpUrl;
+	
+	
+	
+	public RtmpSpyingTask(String nameIdCh, String rtmpUrl) {
+		this.nameIdCh = nameIdCh;
+		this.rtmpUrl = rtmpUrl;
 	}
-
+	
+//	@Transactional(readOnly=false)
 	@Override
 	public void run() throws InstantiationError {
+		
+//		Channel ch = chRep.findByNameIdCh(nameIdCh);
+//		RtmpSource rtmpSource = rtmpRep.findByChannelAndRtmpUrl(ch, rtmpUrl);
+		
+		RtmpSource rtmpSource = asyncTransactionService.
+				getRtmpSourceFromNameIdChAndRtmpUrl(nameIdCh, rtmpUrl);
+		
+		List<RtmpSource> ListrtmpSource = rtmpRep.findAll();
+		
+		
 		
 		if (rtmpSource == null) {
 			throw new InstantiationError("No rtmpSource set");
@@ -92,14 +127,16 @@ public class RtmpSpyingTask implements Runnable {
 		        		}
 		        		if (imgReady) {
 		        			if (data.size() != 0) {
-		        				Mat dataMat = new Mat(512, 512, CvType.CV_8UC1);
-		        				dataMat.put(0, 0, data.toByteArray());
-		        				Mat frameMat = Highgui.imdecode(dataMat, 1);
+		        				Frame frame = new Frame(data.toByteArray(), rtmpSource, new Date());
+		        				capturedFramesGateway.sendFrame(frame);
+//		        				Mat dataMat = new Mat(512, 512, CvType.CV_8UC1);
+//		        				dataMat.put(0, 0, data.toByteArray());
+//		        				Mat frameMat = Highgui.imdecode(dataMat, 1);
 		        		        
 //		        				im.showImage(frameMat);
-		        				Message<?> frameMsg = MessageBuilder.
-		        						withPayload(frameMat).build();
-		        				rtmpSpierChOut.send(frameMsg);
+//		        				Message<?> frameMsg = MessageBuilder.
+//		        						withPayload(frameMat).build();
+		        				
 		        				
 		        		        // Reinicializar 
 		        		        skip = true;

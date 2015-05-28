@@ -34,7 +34,7 @@ public class Channel implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idCh;
     
-    @Column(name = "nameIdCh", nullable = true, length = 50)
+    @Column(name = "nameIdCh", nullable = false, length = 50)
     private String nameIdCh;
     
     @Column(name = "nomCh", nullable = true, length = 50)
@@ -42,6 +42,9 @@ public class Channel implements Serializable {
     
     @OneToMany(mappedBy="channel", fetch=FetchType.LAZY)
     private Set<Schedule> setSchedules;
+    
+    @OneToMany(mappedBy="channel", fetch=FetchType.LAZY)
+    private Set<Schedule> setRtmpSources;
     
     // country no se usa de momento
     @Column(name = "country", nullable = true, length = 50)

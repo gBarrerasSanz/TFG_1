@@ -13,8 +13,8 @@ import guiatv.cv.common.OpenCvUtils;
 import guiatv.persistence.domain.RtEvent;
 import guiatv.persistence.domain.RtEvent.EventType;
 import guiatv.persistence.domain.RtEvent;
-import guiatv.persistence.repository.LearnedChannelRepository;
-import guiatv.persistence.repository.LearnedChannelRepositoryImpl;
+import guiatv.persistence.repository.LearnedRtmpSourceRepository;
+import guiatv.persistence.repository.LearnedRtmpSourceRepositoryImpl;
 
 import org.opencv.core.Core;
 import org.opencv.core.Core.MinMaxLocResult;
@@ -32,19 +32,19 @@ import org.springframework.core.io.Resource;
 public class ClassificationWorker {
 	
 	@Autowired
-	LearnedChannelRepository learnedChRep;
+	LearnedRtmpSourceRepository learnedChRep;
 	
 	public ClassificationWorker() {
 	}	
 
 	public RtEvent classify(Frame frame) {
 		RtEvent ev = new RtEvent();
-		ev.setChannel(frame.getChannel());
+		ev.setChannel(frame.getRtmp().getChannel());
 		ev.setStart(new Timestamp(new Date().getTime()));
 		ev.setType(EventType.UNKNOWN);
 		
 		byte[] templateByteArr = learnedChRep.
-				findTemplateImgByChannelAndRtmpSource(frame.getChannel(), frame.getRtmp());
+				findTemplateImgByRtmpSource(frame.getRtmp());
 		
 		if (templateByteArr == null) {
 			return ev;
