@@ -1,5 +1,8 @@
 package guiatv.persistence.domain;
 
+import guiatv.catalog.serializers.ScheduleChannelSerializer;
+import guiatv.catalog.serializers.ScheduleProgrammeSerializer;
+
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Date;
@@ -24,11 +27,20 @@ import javax.persistence.Version;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 /*
  * El business-Id sobre el que se implementan los métodos de equals() y hashCode() 
  * debe ser único(@UniqueConstraint) y está compuesto de campos que deben ser inmutables:
  * business-Id: (channel, programme, start, end)
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(Include.NON_NULL)
 @Table(uniqueConstraints={@UniqueConstraint(columnNames = {"channel", "programme", "start", "end"})})
 @Entity(name = "schedule")
 public class Schedule implements Serializable {
@@ -42,21 +54,23 @@ public class Schedule implements Serializable {
     
 	
 	// @Cascade modificado por esto: // http://www.mkyong.com/hibernate/cascade-jpa-hibernate-annotation-common-mistake/
+	@JsonSerialize(using=ScheduleChannelSerializer.class)
 	@Cascade(value=CascadeType.ALL)
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="channel")
 	private Channel channel;
     
+	@JsonSerialize(using=ScheduleProgrammeSerializer.class)
 	@Cascade(value=CascadeType.ALL)
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="programme")
 	private Programme programme;
 	
-//	@Temporal(TemporalType.TIMESTAMP)
+	@JsonProperty
 	@Column(name = "start", nullable = false)
 	private Timestamp start;
 	
-//	@Temporal(TemporalType.TIMESTAMP)
+	@JsonProperty
 	@Column(name = "end", nullable = false)
 	private Timestamp end;
 

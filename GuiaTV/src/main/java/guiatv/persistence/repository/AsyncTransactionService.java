@@ -2,8 +2,6 @@ package guiatv.persistence.repository;
 
 import java.util.List;
 
-import guiatv.catalog.datatypes.ListChannels;
-import guiatv.catalog.datatypes.ListProgrammes;
 import guiatv.persistence.domain.Channel;
 import guiatv.persistence.domain.Programme;
 import guiatv.persistence.domain.RtmpSource;
@@ -48,12 +46,34 @@ public class AsyncTransactionService {
     }
 	
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void insertProgrammes(ListProgrammes lProg) {
+    public void deleteSchedules(List<Schedule> lSchedules) {
+    	schedRep.delete(lSchedules);
+    }
+	
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void insertProgrammes(List<Programme> lProg) {
     	progRep.save(lProg);
     }
 	
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void insertChannels(ListChannels lCh) {
+    public void deleteProgrammes(List<Programme> lProg) {
+    	progRep.delete(lProg);
+    }
+	
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void insertChannels(List<Channel> lCh) {
     	chRep.save(lCh);
+    }
+	
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void deleteChannels(List<Channel> lCh) {
+    	chRep.delete(lCh);
+    }
+	
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void deleteAllData() {
+    	schedRep.deleteAll();
+    	chRep.deleteAll();
+    	progRep.deleteAll();
     }
 }

@@ -25,11 +25,4 @@ public interface LearnedRtmpSourceRepository extends JpaRepository<LearnedRtmpSo
 	
 	byte[] findTemplateImgByRtmpSource(RtmpSource rtmp);
 	
-	
-//	Schedule findByIdSched(Long idSched);
-//
-//	List<Schedule> findByChannel(Channel ch);
-//	
-//	List<Programme> findByProgramme(Programme prog);
-	
 }

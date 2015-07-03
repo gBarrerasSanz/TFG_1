@@ -3,6 +3,7 @@ package guiatv.persistence.domain;
 import java.io.Serializable;
 import java.sql.Date;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -19,9 +20,12 @@ import javax.persistence.Version;
 
 import org.springframework.hateoas.ResourceSupport;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 //@Entity(name = "channel")
 
@@ -30,31 +34,33 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
  * debe ser único(@UniqueConstraint) y está compuesto de campos que deben ser inmutables:
  * business-Id: nameIdCh
  */
-@JsonInclude(Include.NON_NULL)
 @Table(uniqueConstraints={@UniqueConstraint(columnNames = {"nameIdCh"})})
 @Entity(name = "channel")
 public class Channel extends ResourceSupport implements Serializable {
 	private static final long serialVersionUID = 6291049572278425446L;
 	
-	@JsonIgnore
+	@JsonCreator
+	public Channel() {
+	}
 	@Id
     @Column(name = "idChPersistence", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idChPersistence;
     
+	@JsonProperty
     @Column(name = "nameIdCh", nullable = false, length = 50)
     private String idChBusiness;
     
+	@JsonProperty
     @Column(name = "nameCh", nullable = true, length = 50)
     private String nameCh;
     
-    @JsonIgnore
+	@JsonIgnore
     @OneToMany(mappedBy="channel", fetch=FetchType.LAZY)
-    private Set<Schedule> setSchedules;
+    private List<Schedule> listSchedules;
     
-    @JsonIgnore
     @OneToMany(mappedBy="channel", fetch=FetchType.LAZY)
-    private Set<Schedule> setRtmpSources;
+    private List<Schedule> listRtmpSources;
     
     // country no se usa de momento
     @Column(name = "country", nullable = true, length = 50)
@@ -69,8 +75,7 @@ public class Channel extends ResourceSupport implements Serializable {
     /**********************************************************
      * 					GETTERS / SETTERS
      *********************************************************/
-    public Channel() {
-    }
+    
     
     public Channel(String nameIdCh) {
     	this.idChBusiness = nameIdCh;
@@ -80,12 +85,12 @@ public class Channel extends ResourceSupport implements Serializable {
 		return idChPersistence;
 	}
 
-	public Set<Schedule> getSetSchedules() {
-		return setSchedules;
+	public List<Schedule> getListSchedules() {
+		return listSchedules;
 	}
 
-	public void setSetSchedules(Set<Schedule> setSchedules) {
-		this.setSchedules = setSchedules;
+	public void setSetSchedules(List<Schedule> listSchedules) {
+		this.listSchedules = listSchedules;
 	}
 
 	public void setIdChPersistence(Long idChPersistence) {

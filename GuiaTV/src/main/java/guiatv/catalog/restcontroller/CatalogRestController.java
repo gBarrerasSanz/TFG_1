@@ -128,7 +128,7 @@ public class CatalogRestController {
 						prog.getNameProg())).withSelfRel());
 		// Devolver los enlaces de los channels en los que se emite
 		// De cada schedule del programme, coger el channel al que pertenece
-		for (Schedule sched: prog.getSetSchedules()){
+		for (Schedule sched: prog.getListSchedules()){
 			prog.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(
 					CatalogRestController.class).getChannelByIdChBusiness(
 							sched.getChannel().getIdChBusiness())).withRel("channels"));

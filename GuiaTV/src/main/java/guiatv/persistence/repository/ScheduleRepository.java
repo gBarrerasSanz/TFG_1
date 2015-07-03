@@ -15,6 +15,8 @@ import guiatv.persistence.domain.Schedule;
 public interface ScheduleRepository extends JpaRepository<Schedule, Long>,
 		JpaSpecificationExecutor<Schedule> {
 	
+	List<Schedule> findAll();
+	
 	Schedule findByIdSched(Long idSched);
 
 	List<Schedule> findByChannel(Channel ch);

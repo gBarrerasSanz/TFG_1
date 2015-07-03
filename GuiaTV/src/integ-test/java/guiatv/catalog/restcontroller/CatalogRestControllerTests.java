@@ -34,6 +34,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.TestRestTemplate;
@@ -49,90 +50,173 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
+
+
+
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 @ActiveProfiles("CatalogRestControllerTests")
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = ApplicationTest.class)
 @WebIntegrationTest
-public class CatalogRestControllerTests extends AbstractTransactionalJUnit4SpringContextTests {
-	
+public class CatalogRestControllerTests extends
+		AbstractTransactionalJUnit4SpringContextTests {
+
 	private static Logger logger = Logger.getLogger("debugLog");
-	
+
 	@Autowired
 	ScheduleRepository schedRep;
-	
+
 	@Autowired
 	ProgrammeRepository progRep;
-	
+
+	@Autowired
+	ChannelRepository chRep;
+
 	@Autowired
 	AsyncTransactionService transService;
+	
+	@Autowired
+	ObjectMapper mapper;
 	
 	@Value("${host.addr:http://127.0.0.1}")
 	private String HOST_ADDR;
 	@Value("${host.port:8080}")
 	private String HOST_PORT;
-	
-	
-	@Test
+
+//	@Test
 	public void catalogTest() {
-		String CATALOG_URI = HOST_ADDR+":"+HOST_PORT+"/"+"catalog";
+		String CATALOG_URI = HOST_ADDR + ":" + HOST_PORT + "/" + "catalog";
 		try {
 			ResponseEntity<Catalog> resp = new TestRestTemplate().getForEntity(
 					CATALOG_URI, Catalog.class);
 			assertEquals(HttpStatus.OK, resp.getStatusCode());
-		} catch(Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			fail();
 		}
 	}
-	
-	@Test
+
+//	@Test
 	public void channelsTest() {
-		String CATALOG_URI = HOST_ADDR+":"+HOST_PORT+"/"+"catalog";
+		String CATALOG_URI = HOST_ADDR + ":" + HOST_PORT + "/" + "catalog";
 		try {
 			// Cargar valores de prueba en la base de datos
-			List<Schedule> listSchedExpected = ListScheduleCreator.getListSchedule();
-			ListChannels lCh = new ListChannels();
-			for (Schedule sched: listSchedExpected) {
+			List<Schedule> listSchedExpected = ListScheduleCreator
+					.getListSchedule();
+			List<Channel> lCh = new ArrayList<Channel>();
+			for (Schedule sched : listSchedExpected) {
 				Channel ch = sched.getChannel();
-				if ( ! lCh.contains(ch)){
+				if (!lCh.contains(ch)) {
 					lCh.add(ch);
 				}
 			}
 			transService.insertChannels(lCh);
-			ResponseEntity<ListChannels> resp = new TestRestTemplate().getForEntity(
-					CATALOG_URI+"/channels/", ListChannels.class);
-			
+			ResponseEntity<ListChannels> resp = new TestRestTemplate()
+					.getForEntity(CATALOG_URI + "/channels/",(ListChannels.class));
+
 			assertEquals(HttpStatus.OK, resp.getStatusCode());
 			assertEquals(lCh, resp.getBody());
-			
-		} catch(Exception e) {
+			transService.deleteAllData();
+
+		} catch (Exception e) {
 			e.printStackTrace();
 			fail();
 		}
 	}
 	
-	@Test
-	public void programmesTest() {
-		String CATALOG_URI = HOST_ADDR+":"+HOST_PORT+"/"+"catalog";
+//	@Test
+	public void singleChannelTest() {
+		String CATALOG_URI = HOST_ADDR + ":" + HOST_PORT + "/" + "catalog";
 		try {
 			// Cargar valores de prueba en la base de datos
-			List<Schedule> listSchedExpected = ListScheduleCreator.getListSchedule();
-			
-			ListProgrammes lProg = new ListProgrammes();
-			for (Schedule sched: listSchedExpected) {
+			List<Schedule> listSchedExpected = ListScheduleCreator
+					.getListSchedule();
+			List<Channel> lCh = new ArrayList<Channel>();
+			for (Schedule sched : listSchedExpected) {
+				Channel ch = sched.getChannel();
+				if (!lCh.contains(ch)) {
+					lCh.add(ch);
+				}
+			}
+			transService.insertChannels(lCh);
+			ResponseEntity<Channel> resp = new TestRestTemplate()
+					.getForEntity(CATALOG_URI + "/channels/"+lCh.get(0).getIdChBusiness(),Channel.class);
+
+			assertEquals(HttpStatus.OK, resp.getStatusCode());
+			assertEquals(lCh, resp.getBody());
+			transService.deleteAllData();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail();
+		}
+	}
+
+	@Test
+	public void programmesTest() {
+		String CATALOG_URI = HOST_ADDR + ":" + HOST_PORT + "/" + "catalog";
+		try {
+			// Cargar valores de prueba en la base de datos
+			List<Schedule> listSchedExpected = ListScheduleCreator
+					.getListSchedule();
+
+			List<Programme> lProg = new ArrayList<Programme>();
+			for (Schedule sched : listSchedExpected) {
 				Programme prog = sched.getProgramme();
-				if ( ! lProg.contains(prog)){
+				if (!lProg.contains(prog)) {
 					lProg.add(prog);
 				}
 			}
 			transService.insertProgrammes(lProg);
-			ResponseEntity<ListProgrammes> resp = new TestRestTemplate().getForEntity(
-					CATALOG_URI+"/programmes/", ListProgrammes.class);
 			
+			ResponseEntity<ListProgrammes> resp = new TestRestTemplate()
+					.getForEntity(CATALOG_URI + "/programmes/",
+							ListProgrammes.class);
+			
+
 			assertEquals(HttpStatus.OK, resp.getStatusCode());
 			assertEquals(lProg, resp.getBody());
+			transService.deleteAllData();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail();
+		}
+	}
+
+	@Test
+	public void programmeSchedulesTest() {
+		String CATALOG_URI = HOST_ADDR + ":" + HOST_PORT + "/" + "catalog";
+		try {
+			// Cargar valores de prueba en la base de datos
+			List<Schedule> listSchedExpected = ListScheduleCreator
+					.getListSchedule();
+			// listSchedExpected.getlSched().get(0).getProgramme().setNameProg("1");
+			transService.insertSchedules(listSchedExpected);
+			ResponseEntity<ListProgrammes> resp = new TestRestTemplate()
+					.getForEntity(CATALOG_URI + "/programmes/",
+							ListProgrammes.class);
+
+			assertEquals(HttpStatus.OK, resp.getStatusCode());
+
+			List<Schedule> lSchedReturned = new ArrayList<Schedule>();
+			for (Programme prog : resp.getBody()) {
+				for (Schedule sched : prog.getListSchedules()) {
+					if (!lSchedReturned.contains(sched)) {
+						lSchedReturned.add(sched);
+					}
+				}
+			}
+			assertEquals(listSchedExpected.size(), lSchedReturned.size());
+			for (int i=0; i<listSchedExpected.size(); i++) {
+				assertEquals(listSchedExpected.get(i), lSchedReturned.get(i));
+			}
 			
-		} catch(Exception e) {
+			transService.deleteAllData();
+
+		} catch (Exception e) {
 			e.printStackTrace();
 			fail();
 		}

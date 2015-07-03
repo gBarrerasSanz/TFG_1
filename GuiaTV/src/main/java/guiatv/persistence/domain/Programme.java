@@ -2,6 +2,7 @@ package guiatv.persistence.domain;
 
 import java.io.Serializable;
 import java.sql.Date;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -19,8 +20,10 @@ import javax.persistence.Version;
 import org.springframework.hateoas.ResourceSupport;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 
 /*
@@ -28,7 +31,9 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
  * debe ser único(@UniqueConstraint) y está compuesto de campos que deben ser inmutables:
  * business-Id: nameProg
  */
-@JsonInclude(Include.NON_NULL)
+
+//@JsonIgnoreProperties(ignoreUnknown = true)
+//@JsonInclude(Include.NON_NULL)
 @Table(uniqueConstraints={@UniqueConstraint(columnNames = {"nameProg"})})
 @Entity(name = "programme")
 public class Programme extends ResourceSupport implements Serializable {
@@ -38,18 +43,18 @@ public class Programme extends ResourceSupport implements Serializable {
 	 */
 	private static final long serialVersionUID = 7540103864705903738L;
 	
-	@JsonIgnore
 	@Id
     @Column(name = "idProgPersistence", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idProgPersistence;
     
+	@JsonProperty
     @Column(name = "nameProg", nullable = false, length = 70)
     private String nameProg;
     
-    @JsonIgnore
+	@JsonProperty(value="listSchedules")
     @OneToMany(mappedBy="programme", fetch=FetchType.LAZY)
-    private Set<Schedule> setSchedules;
+    private List<Schedule> listSchedules;
     
     
     /**********************************************************
@@ -77,12 +82,12 @@ public class Programme extends ResourceSupport implements Serializable {
 		this.nameProg = nameProg;
 	}
 
-	public Set<Schedule> getSetSchedules() {
-		return setSchedules;
+	public List<Schedule> getListSchedules() {
+		return listSchedules;
 	}
 
-	public void setSetSchedules(Set<Schedule> setSchedules) {
-		this.setSchedules = setSchedules;
+	public void setListSchedules(List<Schedule> listSchedules) {
+		this.listSchedules = listSchedules;
 	}
 
 	@Override

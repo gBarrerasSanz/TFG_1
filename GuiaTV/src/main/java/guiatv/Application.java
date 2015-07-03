@@ -1,6 +1,8 @@
 package guiatv;
 
 
+import guiatv.conf.mvc.WebConfig;
+
 import org.opencv.core.Core;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -14,6 +16,8 @@ import org.springframework.test.context.web.WebAppConfiguration;
 //@ImportResource({"classpath:/META-INF/spring/integration/spring-integration-context.xml",
 //	"classpath:/WEB-INF/spring/appServlet/servlet-context.xml"})
 @ImportResource("classpath:/META-INF/spring/integration/spring-integration-context.xml")
+@ComponentScan(basePackageClasses = { WebConfig.class })
+@Configuration
 @SpringBootApplication
 public class Application {
 	public static void main(String[] args) {

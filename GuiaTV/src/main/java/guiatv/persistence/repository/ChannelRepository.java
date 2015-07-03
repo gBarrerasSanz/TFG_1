@@ -19,7 +19,7 @@ public interface ChannelRepository extends JpaRepository<Channel, Long>,
 	
 	Channel findByIdChBusiness(String idChBusiness);
 	
-	ListChannels findByCountry(String country);
+	List<Channel> findByCountry(String country);
 	
 	<S extends Channel> Channel save(Channel ch);
 }
