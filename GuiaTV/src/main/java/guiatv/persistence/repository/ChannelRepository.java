@@ -5,17 +5,21 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
+import guiatv.catalog.datatypes.ListChannels;
 import guiatv.persistence.domain.Channel;
+import guiatv.persistence.domain.Programme;
 import guiatv.persistence.repository.NOTUSED.ChannelRepositoryCustom;
 
 public interface ChannelRepository extends JpaRepository<Channel, Long>,
 		JpaSpecificationExecutor<Channel>, ChannelRepositoryCustom {
 
-	Channel findByIdCh(Long idCh);
+//	Channel findByIdChPersistence(Long idChPersistence);
 	
-	Channel findByNameIdCh(String nameIdCh);
+	ListChannels findAll();
 	
-	List<Channel> findByCountry(String country);
-
+	Channel findByIdChBusiness(String idChBusiness);
+	
+	ListChannels findByCountry(String country);
+	
 	<S extends Channel> Channel save(Channel ch);
 }

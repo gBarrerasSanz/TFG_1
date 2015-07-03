@@ -6,6 +6,7 @@
 	xmlns:jdbc="http://www.springframework.org/schema/jdbc" xmlns:tx="http://www.springframework.org/schema/tx"
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:rabbit="http://www.springframework.org/schema/rabbit" xmlns:task="http://www.springframework.org/schema/task"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
 	xsi:schemaLocation="http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-4.1.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.1.xsd
@@ -14,19 +15,27 @@
 		http://www.springframework.org/schema/integration/jpa http://www.springframework.org/schema/integration/jpa/spring-integration-jpa-4.1.xsd
 		http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration-4.1.xsd
 		http://www.springframework.org/schema/rabbit http://www.springframework.org/schema/rabbit/spring-rabbit-1.4.xsd
-		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-4.1.xsd">
+		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-4.1.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.1.xsd">
 
 	<!-- <import resource="classpath:/META-INF/spring/integration/hibernate-context.xml" 
 		/> -->
-
+	
 
 	<!-- ******************************** SHARED CHANNELS ***************************************** -->
-
-
+	
+	<!-- **************************************** CATALOG REST CONTROLLER ***************************************** -->
+	<beans profile="CatalogRestControllerTests, dev, default">
+		<import resource="classpath:/WEB-INF/spring/appServlet/servlet-context.xml"/>
+		<!-- <import resource="file:D:/GitHub/TFG_1/GuiaTV/src/main/webapp/WEB-INF/spring/root-context.xml"/> -->
+		<!-- <import resource="file:D:/GitHub/TFG_1/GuiaTV/src/main/webapp/WEB-INF/web.xml"/> -->
+		<bean id="catalogRestController" class="guiatv.catalog.restcontroller.CatalogRestController"/>
+	</beans>
+	
 	<!-- **************************************** PERSISTENCE ***************************************** -->
 
 	<beans
-		profile="ScheduleLoaderTests, SchedulePollerTests, PersistenceTests, RtmpSpyingTests, dev, default">
+		profile="ScheduleLoaderTests, SchedulePollerTests, PersistenceTests, RtmpSpyingTests, CatalogRestControllerTests, dev, default">
 		<!-- Antes -->
 		<!-- <jdbc:embedded-database id="dataSource" type="H2" /> -->
 		
@@ -74,10 +83,11 @@
 			class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"
 			parent="abstractVendorAdaptor">
 		</bean>
-
+		
+		<!-- <mvc:annotation-driven /> -->
 		<context:annotation-config />
 		<tx:annotation-driven />
-		<context:component-scan base-package="guiatv.persistence" />
+		<context:component-scan base-package="guiatv" />
 
 	</beans>
 
@@ -261,6 +271,7 @@
 	</beans>
 
 	<!-- ******************************** FRAME CUSTOM ROUTER ***************************************** -->
+	<!--
 	<beans profile="FrameCustomRouterTests, dev, default">
 
 		<int:bridge input-channel="classificationChBridgeIn"
@@ -307,13 +318,6 @@
 
 		<bean id="trainingWorker" class="guiatv.cv.trainer.TrainingWorker" />
 
-
-
-
-
-
-
-
 		<int:channel id="classificationChIn">
 			<int:dispatcher task-executor="taskExecutor"
 				load-balancer="round-robin" />
@@ -329,7 +333,7 @@
 		<int:outbound-channel-adapter id="trainingWorkerOutbound"
 			channel="trainingChIn" ref="trainingWorker" method="train" />
 	</beans>
-
+	-->
 
 	<!-- ************************** MQTT CLIENT (ScheduleProducerTests) ************************************ -->
 	<beans profile="SchedulePublisherTests">

@@ -16,28 +16,38 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.persistence.Version;
 
+import org.springframework.hateoas.ResourceSupport;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
+
 /*
  * El business-Id sobre el que se implementan los métodos de equals() y hashCode() 
  * debe ser único(@UniqueConstraint) y está compuesto de campos que deben ser inmutables:
  * business-Id: nameProg
  */
+@JsonInclude(Include.NON_NULL)
 @Table(uniqueConstraints={@UniqueConstraint(columnNames = {"nameProg"})})
 @Entity(name = "programme")
-public class Programme implements Serializable {
+public class Programme extends ResourceSupport implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 7540103864705903738L;
-
+	
+	@JsonIgnore
 	@Id
-    @Column(name = "idProg", nullable = false)
+    @Column(name = "idProgPersistence", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idProg;
+    private Long idProgPersistence;
     
-    @Column(name = "nameProg", nullable = true, length = 50)
+    @Column(name = "nameProg", nullable = false, length = 70)
     private String nameProg;
     
+    @JsonIgnore
     @OneToMany(mappedBy="programme", fetch=FetchType.LAZY)
     private Set<Schedule> setSchedules;
     
@@ -51,12 +61,12 @@ public class Programme implements Serializable {
     public Programme(String nameProg) {
     	this.nameProg = nameProg;
     }
-	public Long getIdProg() {
-		return idProg;
+	public Long getIdProgPersistence() {
+		return idProgPersistence;
 	}
 
-	public void setIdProg(Long idProg) {
-		this.idProg = idProg;
+	public void setIdProgPersistence(Long idProgPersistence) {
+		this.idProgPersistence = idProgPersistence;
 	}
 
 	public String getNameProg() {
@@ -65,6 +75,14 @@ public class Programme implements Serializable {
 
 	public void setNameProg(String nameProg) {
 		this.nameProg = nameProg;
+	}
+
+	public Set<Schedule> getSetSchedules() {
+		return setSchedules;
+	}
+
+	public void setSetSchedules(Set<Schedule> setSchedules) {
+		this.setSchedules = setSchedules;
 	}
 
 	@Override

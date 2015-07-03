@@ -15,9 +15,9 @@ import guiatv.persistence.domain.Schedule;
 import guiatv.persistence.repository.ChannelRepository;
 import guiatv.persistence.repository.LearnedRtmpSourceRepository;
 import guiatv.persistence.repository.LearnedRtmpSourceRepositoryImpl;
+import guiatv.persistence.repository.ProgrammeRepository;
 import guiatv.persistence.repository.RtmpSourceRepository;
 import guiatv.persistence.repository.ScheduleRepository;
-import guiatv.persistence.repository.NOTUSED.ProgrammeRepository;
 import guiatv.schedule.utils.ListScheduleCreator;
 
 import org.apache.log4j.Logger;
@@ -75,10 +75,10 @@ public class PersistenceTests extends AbstractTransactionalJUnit4SpringContextTe
 	public void channelPersistenceTest() {
 		try {
 			// Cargar valores de prueba en la base de datos
-			Channel chExpected = new Channel("testNameIdCh1");
+			Channel chExpected = new Channel("testIdChBusiness1");
 			chRep.save(chExpected);
 			
-			Channel chActual = chRep.findByNameIdCh(chExpected.getNameIdCh());
+			Channel chActual = chRep.findByIdChBusiness(chExpected.getIdChBusiness());
 			Assert.assertEquals(chExpected, chActual);
 		} catch(Exception e) {
 			e.printStackTrace();

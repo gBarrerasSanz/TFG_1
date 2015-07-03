@@ -165,7 +165,7 @@ public class Schedule implements Serializable {
 	@Override
 	public String toString() {
 		return "Schedule {"+
-				"channel="+channel.getNameIdCh()+", "+
+				"channel="+channel.getIdChBusiness()+", "+
 				"programme="+programme.getNameProg()+", "+
 				"start="+start+", "+
 				"end="+end+", "+

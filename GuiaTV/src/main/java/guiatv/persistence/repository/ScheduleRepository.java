@@ -18,7 +18,4 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long>,
 	Schedule findByIdSched(Long idSched);
 
 	List<Schedule> findByChannel(Channel ch);
-	
-	List<Programme> findByProgramme(Programme prog);
-	
 }

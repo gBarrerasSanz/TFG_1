@@ -17,6 +17,12 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.persistence.Version;
 
+import org.springframework.hateoas.ResourceSupport;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
 //@Entity(name = "channel")
 
 /*
@@ -24,25 +30,29 @@ import javax.persistence.Version;
  * debe ser único(@UniqueConstraint) y está compuesto de campos que deben ser inmutables:
  * business-Id: nameIdCh
  */
+@JsonInclude(Include.NON_NULL)
 @Table(uniqueConstraints={@UniqueConstraint(columnNames = {"nameIdCh"})})
 @Entity(name = "channel")
-public class Channel implements Serializable {
+public class Channel extends ResourceSupport implements Serializable {
 	private static final long serialVersionUID = 6291049572278425446L;
-
+	
+	@JsonIgnore
 	@Id
-    @Column(name = "idCh", nullable = false)
+    @Column(name = "idChPersistence", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idCh;
+    private Long idChPersistence;
     
     @Column(name = "nameIdCh", nullable = false, length = 50)
-    private String nameIdCh;
+    private String idChBusiness;
     
-    @Column(name = "nomCh", nullable = true, length = 50)
+    @Column(name = "nameCh", nullable = true, length = 50)
     private String nameCh;
     
+    @JsonIgnore
     @OneToMany(mappedBy="channel", fetch=FetchType.LAZY)
     private Set<Schedule> setSchedules;
     
+    @JsonIgnore
     @OneToMany(mappedBy="channel", fetch=FetchType.LAZY)
     private Set<Schedule> setRtmpSources;
     
@@ -63,11 +73,11 @@ public class Channel implements Serializable {
     }
     
     public Channel(String nameIdCh) {
-    	this.nameIdCh = nameIdCh;
+    	this.idChBusiness = nameIdCh;
     }
     
-	public Long getIdCh() {
-		return idCh;
+	public Long getIdChPersistence() {
+		return idChPersistence;
 	}
 
 	public Set<Schedule> getSetSchedules() {
@@ -78,16 +88,16 @@ public class Channel implements Serializable {
 		this.setSchedules = setSchedules;
 	}
 
-	public void setIdCh(Long idCh) {
-		this.idCh = idCh;
+	public void setIdChPersistence(Long idChPersistence) {
+		this.idChPersistence = idChPersistence;
 	}
 
-	public String getNameIdCh() {
-		return nameIdCh;
+	public String getIdChBusiness() {
+		return idChBusiness;
 	}
 
-	public void setNameIdCh(String nameIdCh) {
-		this.nameIdCh = nameIdCh;
+	public void setIdChBusiness(String idChBusiness) {
+		this.idChBusiness = idChBusiness;
 	}
 
 	public String getNameCh() {
@@ -118,7 +128,7 @@ public class Channel implements Serializable {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((nameIdCh == null) ? 0 : nameIdCh.hashCode());
+		result = prime * result + ((idChBusiness == null) ? 0 : idChBusiness.hashCode());
 		return result;
 	}
 
@@ -131,17 +141,17 @@ public class Channel implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		Channel other = (Channel) obj;
-		if (nameIdCh == null) {
-			if (other.nameIdCh != null)
+		if (idChBusiness == null) {
+			if (other.idChBusiness != null)
 				return false;
-		} else if (!nameIdCh.equals(other.nameIdCh))
+		} else if (!idChBusiness.equals(other.idChBusiness))
 			return false;
 		return true;
 	}
 
 	public String toString() {
 		return "Channel {"+
-				"nomIdCh="+this.getNameIdCh()+", "+
+				"nomIdCh="+this.getIdChBusiness()+", "+
 				"country="+this.getCountry()+"}";
 	}
 	

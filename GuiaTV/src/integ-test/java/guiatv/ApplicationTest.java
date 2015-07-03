@@ -10,10 +10,14 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 	
 
 @SpringBootApplication 
+//@ImportResource({"classpath:/META-INF/spring/integration/spring-integration-context.xml",
+//	"classpath:/WEB-INF/spring/appServlet/servlet-context.xml"})
 @ImportResource("classpath:/META-INF/spring/integration/spring-integration-context.xml")
 public class ApplicationTest {
 	public static void main(String[] args) {

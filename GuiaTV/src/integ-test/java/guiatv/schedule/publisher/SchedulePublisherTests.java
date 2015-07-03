@@ -67,9 +67,9 @@ public class SchedulePublisherTests {
 			
 			// Hacer la suscripción por parte de los clientes
 			String[] cl1MsgsArr = new String[]{
-					lSchedPub.get(0).getChannel().getNameIdCh()+"."+lSchedPub.get(0).getProgramme().getNameProg()};
+					lSchedPub.get(0).getChannel().getIdChBusiness()+"."+lSchedPub.get(0).getProgramme().getNameProg()};
 			String[] cl2MsgsArr = new String[]{
-					lSchedPub.get(1).getChannel().getNameIdCh()+"."+lSchedPub.get(1).getProgramme().getNameProg()};
+					lSchedPub.get(1).getChannel().getIdChBusiness()+"."+lSchedPub.get(1).getProgramme().getNameProg()};
 			client1.connectAndSubscribe("client1", cl1MsgsArr);
 			client2.connectAndSubscribe("client2", cl2MsgsArr);
 			

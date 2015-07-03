@@ -16,7 +16,7 @@ public class ListScheduleCreator {
 		List<Schedule> listScheduleExpected = new ArrayList<Schedule>();
 		// Crear channels
 		Channel chNeox = new Channel();
-		chNeox.setNameIdCh("neox-722.laguiatv.com");
+		chNeox.setIdChBusiness("neox-722.laguiatv.com");
 		// Crear programmes
 		Programme progMadre = new Programme();
 		progMadre.setNameProg("Cómo conocí a vuestra Madre");
