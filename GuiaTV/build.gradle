@@ -26,13 +26,14 @@ tasks.withType(JavaCompile) {
 apply plugin: 'spring-boot'
 
 repositories {
-    mavenCentral()
-    maven {
+	maven {
     	url "https://repo.eclipse.org/content/repositories/paho-releases/"
     }
-    //maven {
-    //	url "https://github.com/spring-projects/spring-hateoas"
-    //}
+    maven {
+    	//url "http://repo.gradle.org/gradle/repo"
+    	url "https://repo.spring.io/libs-snapshot"
+    }
+    mavenCentral()
 }
 
 // Para incluir OpenCV-2.4.9, seguir estos pasos:
@@ -122,8 +123,10 @@ dependencies {
     compile 'org.springframework:spring-web:4.1.7.RELEASE'
     
     
-    compile('org.springframework.hateoas:spring-hateoas:0.17.0.RELEASE')
-    //compile 'com.github.org.springframework.hateoas:spring-hateoas:+'
+    //compile('org.springframework.hateoas:spring-hateoas:0.17.0.RELEASE')
+    //compile('org.springframework.hateoas:spring-hateoas:0.18.0.AFFORDANCES-SNAPSHOT')
+    compile('org.springframework.hateoas:spring-hateoas:0.18.0.BUILD-SNAPSHOT')
+    
     
     compile("org.springframework.plugin:spring-plugin-core:1.2.0.RELEASE")
     compile('com.jayway.jsonpath:json-path:2.0.0')

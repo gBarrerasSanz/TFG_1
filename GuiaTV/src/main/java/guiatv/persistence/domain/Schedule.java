@@ -26,6 +26,7 @@ import javax.persistence.Version;
 
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
+import org.springframework.hateoas.Link;
 import org.springframework.hateoas.ResourceSupport;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -45,8 +46,10 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 @Table(uniqueConstraints={@UniqueConstraint(columnNames = {"channel", "programme", "start", "end"})})
 @Entity(name = "schedule")
 public class Schedule extends ResourceSupport implements Serializable {
-
+	
+	
 	private static final long serialVersionUID = -8835185421528324020L;
+	
 	
 	@Id
     @Column(name = "idSched", nullable = false)
