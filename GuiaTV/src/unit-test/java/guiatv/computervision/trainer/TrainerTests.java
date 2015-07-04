@@ -28,12 +28,12 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 public class TrainerTests {
 
-	@Before
+//	@Before
 	public void init() {
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 	}
 	
-	@Test
+//	@Test
 	public void test() {
 		
 		RtmpSpy2 spy = new RtmpSpy2();

@@ -28,7 +28,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 
 @Configuration
 @EnableWebMvc
-@ComponentScan(basePackageClasses = { CatalogRestController.class })
+@ComponentScan({"guiatv"})
 public class WebConfig extends WebMvcConfigurerAdapter {
 
 //	@Override

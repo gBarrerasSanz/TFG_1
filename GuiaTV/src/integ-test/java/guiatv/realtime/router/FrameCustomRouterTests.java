@@ -18,6 +18,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.WebIntegrationTest;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.io.Resource;
 import org.springframework.integration.channel.QueueChannel;
@@ -49,6 +50,7 @@ import guiatv.xmltv.transformer.XMLTVTransformer_old1;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = ApplicationTest.class)
 @ActiveProfiles("FrameCustomRouterTests")
+@WebIntegrationTest
 public class FrameCustomRouterTests extends AbstractTransactionalJUnit4SpringContextTests {
 	
 	private static final Logger logger = Logger.getLogger("debugLog");

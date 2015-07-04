@@ -26,36 +26,19 @@
 
 	<!-- **************************************** CATALOG REST CONTROLLER ***************************************** -->
 
-	<!-- <beans profile="CatalogRestControllerTests, dev, default">
-		<import resource="classpath:/WEB-INF/spring/root-context.xml" />
-		<import resource="classpath:/WEB-INF/spring/appServlet/servlet-context.xml" />
-		<import resource="file:D:/GitHub/TFG_1/GuiaTV/src/main/webapp/WEB-INF/spring/root-context.xml"/>
-		<import resource="file:D:/GitHub/TFG_1/GuiaTV/src/main/webapp/WEB-INF/web.xml"/>
-
-		<bean id="catalogRestController" class="guiatv.catalog.restcontroller.CatalogRestController" />
-
-		<mvc:annotation-driven>
-			<mvc:message-converters register-defaults="true">
-				<bean
-					class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
-					<property name="objectMapper" ref="myJacksonObjectMapper" />
-				</bean>
-			</mvc:message-converters>
-		</mvc:annotation-driven>
-
-		<bean id="myJacksonObjectMapper" class="com.fasterxml.jackson.databind.ObjectMapper" />
-		<bean
-			class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
-			<property name="targetObject" ref="myJacksonObjectMapper" />
-			<property name="targetMethod" value="configure" />
-			<property name="arguments">
-				<list>
-					<value type="com.fasterxml.jackson.databind.DeserializationFeature">UNWRAP_SINGLE_VALUE_ARRAYS</value>
-					<value>true</value>
-				</list>
-			</property>
-		</bean>
-	</beans> -->
+	<!-- <beans profile="CatalogRestControllerTests, dev, default"> <import 
+		resource="classpath:/WEB-INF/spring/root-context.xml" /> <import resource="classpath:/WEB-INF/spring/appServlet/servlet-context.xml" 
+		/> <import resource="file:D:/GitHub/TFG_1/GuiaTV/src/main/webapp/WEB-INF/spring/root-context.xml"/> 
+		<import resource="file:D:/GitHub/TFG_1/GuiaTV/src/main/webapp/WEB-INF/web.xml"/> 
+		<bean id="catalogRestController" class="guiatv.catalog.restcontroller.CatalogRestController" 
+		/> <mvc:annotation-driven> <mvc:message-converters register-defaults="true"> 
+		<bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"> 
+		<property name="objectMapper" ref="myJacksonObjectMapper" /> </bean> </mvc:message-converters> 
+		</mvc:annotation-driven> <bean id="myJacksonObjectMapper" class="com.fasterxml.jackson.databind.ObjectMapper" 
+		/> <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean"> 
+		<property name="targetObject" ref="myJacksonObjectMapper" /> <property name="targetMethod" 
+		value="configure" /> <property name="arguments"> <list> <value type="com.fasterxml.jackson.databind.DeserializationFeature">UNWRAP_SINGLE_VALUE_ARRAYS</value> 
+		<value>true</value> </list> </property> </bean> </beans> -->
 
 
 	<!-- **************************************** PERSISTENCE ***************************************** -->
@@ -298,27 +281,49 @@
 	</beans>
 
 	<!-- ******************************** FRAME CUSTOM ROUTER ***************************************** -->
-	<!-- <beans profile="FrameCustomRouterTests, dev, default"> <int:bridge 
-		input-channel="classificationChBridgeIn" output-channel="classificationChIn" 
-		/> <int:bridge input-channel="trainingChBridgeIn" output-channel="trainingChIn" 
-		/> <int:channel id="classificationChIn"> <int:queue /> </int:channel> <int:channel 
-		id="trainingChIn"> <int:queue /> </int:channel> <bean id="customFrameRouter" 
-		class="guiatv.realtime.router.FrameCustomRouter" /> <int:router id="frameRouter" 
-		input-channel="sendFrameChOut" ref="customFrameRouter" method="processFrame"> 
-		<int:poller fixed-rate="5000"></int:poller> </int:router> </beans> <beans 
-		profile="dev, default"> <int:channel id="sendFrameChOut"> <int:dispatcher 
-		task-executor="taskExecutor" load-balancer="round-robin" /> </int:channel> 
-		<bean id="taskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor"> 
-		<property name="corePoolSize" value="5" /> <property name="maxPoolSize" value="10" 
-		/> <property name="queueCapacity" value="25" /> </bean> <bean id="classificationWorker" 
-		class="guiatv.cv.classificator.ClassificationWorker" /> <bean id="trainingWorker" 
-		class="guiatv.cv.trainer.TrainingWorker" /> <int:channel id="classificationChIn"> 
-		<int:dispatcher task-executor="taskExecutor" load-balancer="round-robin" 
-		/> </int:channel> <int:channel id="trainingChIn"> <int:dispatcher task-executor="taskExecutor" 
-		load-balancer="round-robin" /> </int:channel> <int:outbound-channel-adapter 
-		id="classificationWorkerOutbound" channel="classificationChIn" ref="classificationWorker" 
-		method="classify" /> <int:outbound-channel-adapter id="trainingWorkerOutbound" 
-		channel="trainingChIn" ref="trainingWorker" method="train" /> </beans> -->
+	<beans profile="FrameCustomRouterTests, dev, default">
+		<int:bridge input-channel="classificationChBridgeIn"
+			output-channel="classificationChIn" />
+		<int:bridge input-channel="trainingChBridgeIn"
+			output-channel="trainingChIn" />
+		<int:channel id="classificationChIn">
+			<int:queue />
+		</int:channel>
+		<int:channel id="trainingChIn">
+			<int:queue />
+		</int:channel>
+		<bean id="customFrameRouter" class="guiatv.realtime.router.FrameCustomRouter" />
+		<int:router id="frameRouter" input-channel="sendFrameChOut"
+			ref="customFrameRouter" method="processFrame">
+			<int:poller fixed-rate="5000"></int:poller>
+		</int:router>
+	</beans>
+	<beans profile="dev, default">
+		<int:channel id="sendFrameChOut">
+			<int:dispatcher task-executor="taskExecutor"
+				load-balancer="round-robin" />
+		</int:channel>
+		<bean id="taskExecutor"
+			class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+			<property name="corePoolSize" value="5" />
+			<property name="maxPoolSize" value="10" />
+			<property name="queueCapacity" value="25" />
+		</bean>
+		<bean id="classificationWorker" class="guiatv.cv.classificator.ClassificationWorker" />
+		<bean id="trainingWorker" class="guiatv.cv.trainer.TrainingWorker" />
+		<int:channel id="classificationChIn">
+			<int:dispatcher task-executor="taskExecutor"
+				load-balancer="round-robin" />
+		</int:channel>
+		<int:channel id="trainingChIn">
+			<int:dispatcher task-executor="taskExecutor"
+				load-balancer="round-robin" />
+		</int:channel>
+		<int:outbound-channel-adapter id="classificationWorkerOutbound"
+			channel="classificationChIn" ref="classificationWorker" method="classify" />
+		<int:outbound-channel-adapter id="trainingWorkerOutbound"
+			channel="trainingChIn" ref="trainingWorker" method="train" />
+	</beans>
 
 	<!-- ************************** MQTT CLIENT (ScheduleProducerTests) ************************************ -->
 	<beans profile="SchedulePublisherTests">

@@ -11,8 +11,8 @@ public class WebInit implements WebApplicationInitializer {
 
 	@Override
 	public void onStartup(ServletContext container) throws ServletException {
-		container.setInitParameter("spring.profiles.default",
-				"{CatalogRestControllerTests, dev, default}");
+//		container.setInitParameter("spring.profiles.default",
+//				"{CatalogRestControllerTests, PersistenceTests, dev, default}");
 		// Creates the root application context
 		AnnotationConfigWebApplicationContext appContext = new AnnotationConfigWebApplicationContext();
 		// Registers the application configuration with the root context

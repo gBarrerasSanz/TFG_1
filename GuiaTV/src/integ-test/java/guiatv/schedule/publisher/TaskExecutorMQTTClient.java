@@ -27,8 +27,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class TaskExecutorMQTTClient {
 	
+//	@Autowired
+//	Jackson2JsonMessageConverter jackson;
+	
 	@Autowired
-	Jackson2JsonMessageConverter jackson;
+	ObjectMapper mapper;
 	
 	static Logger log = Logger.getLogger(TaskExecutorMQTTClient.class.getName());
 	
@@ -135,7 +138,6 @@ public class TaskExecutorMQTTClient {
     
     public List<Schedule> getReceivedListSchedules() {
     	List<Schedule> listSchedules = new ArrayList<Schedule>();
-    	ObjectMapper mapper = new ObjectMapper();
     	
     	try {
 	    	for (String msgStr: mqttClientWorker.receivedMessages) {

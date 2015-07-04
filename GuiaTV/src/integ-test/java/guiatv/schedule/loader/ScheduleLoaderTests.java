@@ -17,6 +17,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.WebIntegrationTest;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.io.Resource;
@@ -44,6 +45,7 @@ import guiatv.xmltv.transformer.XMLTVTransformer_old1;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = ApplicationTest.class)
 @ActiveProfiles("ScheduleLoaderTests")
+@WebIntegrationTest
 public class ScheduleLoaderTests extends
 		AbstractTransactionalJUnit4SpringContextTests {
 

@@ -1,9 +1,14 @@
 package guiatv.catalog.serializers;
 
+import guiatv.catalog.restcontroller.CatalogRestController;
 import guiatv.persistence.domain.Programme;
 
 import java.io.IOException;
 
+
+
+
+import org.springframework.hateoas.mvc.ControllerLinkBuilder;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonSerializer;

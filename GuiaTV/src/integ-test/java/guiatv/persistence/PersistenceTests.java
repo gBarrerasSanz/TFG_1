@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.List;
 
 import guiatv.Application;
+import guiatv.ApplicationTest;
 import guiatv.persistence.domain.Channel;
 import guiatv.persistence.domain.LearnedRtmpSource;
 import guiatv.persistence.domain.Programme;
@@ -27,6 +28,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.WebIntegrationTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
@@ -35,8 +37,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = Application.class)
+@SpringApplicationConfiguration(classes = ApplicationTest.class)
 @ActiveProfiles("PersistenceTests")
+@WebIntegrationTest
 public class PersistenceTests extends AbstractTransactionalJUnit4SpringContextTests {
 	
 	private static Logger logger = Logger.getLogger("debugLog");
