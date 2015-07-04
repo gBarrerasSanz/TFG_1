@@ -103,7 +103,7 @@
 
 	<!-- **************************************** GRABBER ***************************************** -->
 
-	<beans profile="dev2">
+	<beans profile="dev, default">
 		<int:channel id="grabberChOut" fixed-subscriber="true" />
 
 		<bean id="xmltvGrabber" class="guiatv.xmltv.grabber.XMLTVGrabber" />
@@ -295,9 +295,15 @@
 		<bean id="customFrameRouter" class="guiatv.realtime.router.FrameCustomRouter" />
 		<int:router id="frameRouter" input-channel="sendFrameChOut"
 			ref="customFrameRouter" method="processFrame">
-			<!-- <int:poller fixed-rate="5000"></int:poller> -->
 		</int:router>
 	</beans>
+	
+	<!-- DUMMY CHANNEL (FrameCustomRouterTests) -->
+	<beans profile="FrameCustomRouterTests">
+		<int:channel id="sendFrameChOut">
+		</int:channel>
+	</beans>
+	
 	<beans profile="dev, default">
 		<int:channel id="sendFrameChOut">
 			<int:dispatcher task-executor="taskExecutor"

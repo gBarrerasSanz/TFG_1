@@ -1,5 +1,6 @@
 package guiatv.persistence.repository;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.context.annotation.Profile;
@@ -21,4 +22,5 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long>,
 
 	List<Schedule> findByChannel(Channel ch);
 	
+	List<Schedule> findByStartBetween(Timestamp msNow, Timestamp msFromStart);
 }

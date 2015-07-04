@@ -14,6 +14,7 @@ import guiatv.persistence.repository.service.ChannelService;
 import guiatv.persistence.repository.service.ProgrammeService;
 import guiatv.persistence.repository.service.ScheduleService;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -99,10 +100,13 @@ public class CatalogRestController {
 		ch.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(
 				CatalogRestController.class).getChannelByIdChBusiness(idChBusiness)).withSelfRel());
 		List<Schedule> lSched =  schedServ.findByChannel(ch, true);
+		HashMap<String, Integer> hmProg = new HashMap<String, Integer>();
 		for (Schedule sched: lSched) {
-			ch.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(
-					CatalogRestController.class)
-					.getProgrammeByNameProg(sched.getProgramme().getNameProg())).withRel("programmes"));
+			if (hmProg.putIfAbsent(sched.getProgramme().getNameProg(), 1) == null) {
+				ch.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(
+						CatalogRestController.class)
+						.getProgrammeByNameProg(sched.getProgramme().getNameProg())).withRel("programmes"));
+			}
 		}
 		
 		return new ResponseEntity<Channel>(ch, HttpStatus.OK);

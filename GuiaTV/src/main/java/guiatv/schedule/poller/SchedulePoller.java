@@ -19,9 +19,13 @@ public class SchedulePoller {
 	@Autowired
 	ScheduleService schedServ;
 	
+	private final int SECONDS_FROM_START = 60 * 10;
+	
 	public List<Schedule> askForSchedules() {
-		// TODO: De momento devuelve todos los schedules
-		List<Schedule> lSched = schedServ.findAll(true);
+//		List<Schedule> lSched = schedServ.findAll(true);
+		List<Schedule> lSched = schedServ.findBySecondsFromStart(SECONDS_FROM_START, true);
 		return lSched;
 	}
+	
+	
 }

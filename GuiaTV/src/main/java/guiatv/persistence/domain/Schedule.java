@@ -58,14 +58,14 @@ public class Schedule extends ResourceSupport implements Serializable {
     
 	
 	// @Cascade modificado por esto: // http://www.mkyong.com/hibernate/cascade-jpa-hibernate-annotation-common-mistake/
-	@JsonSerialize(using=ScheduleChannelSerializer.class)
 	@Cascade(value=CascadeType.ALL)
+	@JsonSerialize(using=ScheduleChannelSerializer.class)
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="channel")
 	private Channel channel;
     
-	@JsonSerialize(using=ScheduleProgrammeSerializer.class)
 	@Cascade(value=CascadeType.ALL)
+	@JsonSerialize(using=ScheduleProgrammeSerializer.class)
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="programme")
 	private Programme programme;

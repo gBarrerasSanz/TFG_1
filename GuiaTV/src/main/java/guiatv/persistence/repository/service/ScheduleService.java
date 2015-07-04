@@ -1,5 +1,7 @@
 package guiatv.persistence.repository.service;
 
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 import guiatv.persistence.domain.Channel;
@@ -42,6 +44,20 @@ public class ScheduleService {
 	@Transactional(readOnly = true)
 	public List<Schedule> findByChannel(Channel ch, boolean refs) {
 		List<Schedule> lSched = schedRep.findByChannel(ch);
+		if (refs){
+			for (Schedule sched: lSched) {
+				Hibernate.initialize(sched.getChannel());
+				Hibernate.initialize(sched.getProgramme());
+			}
+		}
+		return lSched;
+	}
+	
+	@Transactional(readOnly = true)
+	public List<Schedule> findBySecondsFromStart(int secsFromStart, boolean refs) {
+		Timestamp now = new Timestamp(new Date().getTime());
+		Timestamp afterStart = new Timestamp(now.getTime() + (long)(1000 * secsFromStart));
+		List<Schedule> lSched = schedRep.findByStartBetween(now, afterStart);
 		if (refs){
 			for (Schedule sched: lSched) {
 				Hibernate.initialize(sched.getChannel());
