@@ -1,5 +1,8 @@
 package guiatv.persistence.domain;
 
+
+import guiatv.catalog.datatypes.Views;
+
 import java.io.Serializable;
 import java.sql.Date;
 import java.util.List;
@@ -24,6 +27,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonView;
 
 
 /*
@@ -37,7 +41,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @Table(uniqueConstraints={@UniqueConstraint(columnNames = {"nameProg"})})
 @Entity(name = "programme")
 public class Programme extends ResourceSupport implements Serializable {
-
+	
 	/**
 	 * 
 	 */
@@ -48,12 +52,12 @@ public class Programme extends ResourceSupport implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idProgPersistence;
     
-	@JsonProperty
+	@JsonView({Views.MultipleProgrammes.class, Views.SingleProgramme.class})
     @Column(name = "nameProg", nullable = false, length = 70)
     private String nameProg;
     
-	@JsonProperty(value="listSchedules")
-    @OneToMany(mappedBy="programme", fetch=FetchType.LAZY)
+	@JsonView(Views.SingleProgramme.class)
+    @OneToMany(mappedBy="programme", fetch=FetchType.LAZY, orphanRemoval=true)
     private List<Schedule> listSchedules;
     
     

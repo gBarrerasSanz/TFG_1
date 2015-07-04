@@ -3,12 +3,16 @@ package guiatv.catalog.restcontroller;
 import guiatv.catalog.datatypes.Catalog;
 import guiatv.catalog.datatypes.ListChannels;
 import guiatv.catalog.datatypes.ListProgrammes;
+import guiatv.catalog.datatypes.Views;
 import guiatv.persistence.domain.Channel;
 import guiatv.persistence.domain.Programme;
 import guiatv.persistence.domain.Schedule;
 import guiatv.persistence.repository.ChannelRepository;
 import guiatv.persistence.repository.ProgrammeRepository;
 import guiatv.persistence.repository.ScheduleRepository;
+import guiatv.persistence.repository.service.ChannelService;
+import guiatv.persistence.repository.service.ProgrammeService;
+import guiatv.persistence.repository.service.ScheduleService;
 
 import java.util.List;
 
@@ -29,7 +33,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationConfig;
 
 @RestController
 @RequestMapping("/catalog")
@@ -38,11 +44,14 @@ public class CatalogRestController {
 	private static final Logger logger = LoggerFactory.getLogger(CatalogRestController.class);
 	
 	@Autowired
-	ScheduleRepository schedRep;
+	ScheduleService schedServ;
 	@Autowired
-	ChannelRepository chRep;
+	ChannelService chServ;
 	@Autowired
-	ProgrammeRepository progRep;
+	ProgrammeService progServ;
+	@Autowired
+	ObjectMapper mapper;
+	
 	
 	@RequestMapping(
 			value = "", 
@@ -68,7 +77,7 @@ public class CatalogRestController {
 	@ResponseBody
 	public ResponseEntity<ListChannels> getChannels()
 	{
-		ListChannels lChannels = chRep.findAll();
+		ListChannels lChannels = chServ.findAll();
 		for (Channel ch: lChannels) {
 			ch.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(
 					CatalogRestController.class).getChannelByIdChBusiness(
@@ -83,13 +92,13 @@ public class CatalogRestController {
 	public ResponseEntity<Channel> getChannelByIdChBusiness(@PathVariable(value = "idChBusiness") String idChBusiness)
 	{
 	
-		Channel ch = chRep.findByIdChBusiness(idChBusiness);
+		Channel ch = chServ.findByIdChBusiness(idChBusiness);
 		if (ch == null){
 			return new ResponseEntity<Channel>(new Channel(), HttpStatus.OK);
 		}
 		ch.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(
 				CatalogRestController.class).getChannelByIdChBusiness(idChBusiness)).withSelfRel());
-		List<Schedule> lSched =  schedRep.findByChannel(ch);
+		List<Schedule> lSched =  schedServ.findByChannel(ch, true);
 		for (Schedule sched: lSched) {
 			ch.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(
 					CatalogRestController.class)
@@ -99,13 +108,14 @@ public class CatalogRestController {
 		return new ResponseEntity<Channel>(ch, HttpStatus.OK);
 	}
 	
+//	@JsonView(Views.MultipleProgrammes.class)
 	@RequestMapping(
 			value = "/programmes", 
 			method = RequestMethod.GET)
 	@ResponseBody
 	public ResponseEntity<ListProgrammes> getProgrammes()
 	{
-		ListProgrammes lProgrammes = progRep.findAll();
+		ListProgrammes lProgrammes = progServ.findAll();
 		for (Programme prog: lProgrammes) {
 			prog.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(
 					CatalogRestController.class).getProgrammeByNameProg(
@@ -114,12 +124,13 @@ public class CatalogRestController {
 		return new ResponseEntity<ListProgrammes>(lProgrammes, HttpStatus.OK);
 	}
 	
+//	@JsonView(Views.SingleProgramme.class)
 	@RequestMapping(
 			value = "/programmes/{nameProg}", 
 			method = RequestMethod.GET)
 	public ResponseEntity<Programme> getProgrammeByNameProg(@PathVariable(value = "nameProg") String nameProg)
 	{
-		Programme prog =  progRep.findByNameProg(nameProg);
+		Programme prog =  progServ.findByNameProg(nameProg);
 		if (prog == null) {
 			return new ResponseEntity<Programme>(new Programme(), HttpStatus.OK);
 		}

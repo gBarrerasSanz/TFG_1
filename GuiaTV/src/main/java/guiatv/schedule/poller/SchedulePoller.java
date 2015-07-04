@@ -11,16 +11,17 @@ import org.springframework.messaging.Message;
 import guiatv.persistence.domain.Event_old;
 import guiatv.persistence.domain.Schedule;
 import guiatv.persistence.repository.ScheduleRepository;
+import guiatv.persistence.repository.service.ScheduleService;
 import guiatv.realtime.servicegateway.CapturedFramesGateway;
 
 public class SchedulePoller {
 	
 	@Autowired
-	ScheduleRepository schedRep;
+	ScheduleService schedServ;
 	
 	public List<Schedule> askForSchedules() {
 		// TODO: De momento devuelve todos los schedules
-		List<Schedule> lSched = schedRep.findAll();
+		List<Schedule> lSched = schedServ.findAll(true);
 		return lSched;
 	}
 }

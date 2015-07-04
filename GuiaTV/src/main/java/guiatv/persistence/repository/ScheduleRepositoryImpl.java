@@ -1,6 +1,7 @@
-package guiatv.persistence.repository.NOTUSED;
+package guiatv.persistence.repository;
 
 import guiatv.persistence.domain.Channel;
+import guiatv.persistence.domain.Schedule;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -8,7 +9,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
+import java.util.Iterator;
 import java.util.List;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,22 +31,22 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class ScheduleRepositoryImpl implements ScheduleRepositoryCustom {
 	
+	@PersistenceContext
+    private EntityManager em;
+	
 	public ScheduleRepositoryImpl() {
 	}
-//	@Override
-//	public void findByOverrridingMethod() {
-//		// TODO Auto-generated method stub
-//		
-//	}
 
-//	@Override
-//	public void someCustomMethod(Channel ch) {
-//		// TODO Auto-generated method stub
-//		
-//	}
-	
-//	public boolean isChannelTrained(Channel ch, String rtmpUrl) {
-//	}
+
+	@Override
+	public void merge(List<Schedule> lSched) {
+        for (Iterator<Schedule> it = lSched.iterator(); it.hasNext();) {
+            Schedule sched = em.merge(it.next());
+            em.flush();
+            em.clear();
+        }
+	}
+
 
 
 }

@@ -17,13 +17,13 @@ import guiatv.persistence.domain.LearnedRtmpSource;
 import guiatv.persistence.domain.Programme;
 import guiatv.persistence.domain.RtmpSource;
 import guiatv.persistence.domain.Schedule;
-import guiatv.persistence.repository.AsyncTransactionService;
 import guiatv.persistence.repository.ChannelRepository;
 import guiatv.persistence.repository.LearnedRtmpSourceRepository;
 import guiatv.persistence.repository.LearnedRtmpSourceRepositoryImpl;
 import guiatv.persistence.repository.ProgrammeRepository;
 import guiatv.persistence.repository.RtmpSourceRepository;
 import guiatv.persistence.repository.ScheduleRepository;
+import guiatv.persistence.repository.service.AsyncTransactionService;
 import guiatv.schedule.utils.ListScheduleCreator;
 
 import org.apache.log4j.Logger;
@@ -49,6 +49,9 @@ import org.springframework.test.context.junit4.AbstractTransactionalJUnit4Spring
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
+
+
+
 
 
 

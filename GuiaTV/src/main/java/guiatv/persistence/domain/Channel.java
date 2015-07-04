@@ -1,5 +1,6 @@
 package guiatv.persistence.domain;
 
+
 import java.io.Serializable;
 import java.sql.Date;
 import java.util.Arrays;
@@ -56,11 +57,11 @@ public class Channel extends ResourceSupport implements Serializable {
     private String nameCh;
     
 	@JsonIgnore
-    @OneToMany(mappedBy="channel", fetch=FetchType.LAZY)
+    @OneToMany(mappedBy="channel", fetch=FetchType.LAZY, orphanRemoval=true)
     private List<Schedule> listSchedules;
     
-    @OneToMany(mappedBy="channel", fetch=FetchType.LAZY)
-    private List<Schedule> listRtmpSources;
+    @OneToMany(mappedBy="channel", fetch=FetchType.LAZY, orphanRemoval=true)
+    private List<RtmpSource> listRtmpSources;
     
     // country no se usa de momento
     @Column(name = "country", nullable = true, length = 50)

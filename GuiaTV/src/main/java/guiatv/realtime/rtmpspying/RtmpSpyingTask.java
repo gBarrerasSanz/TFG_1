@@ -5,9 +5,9 @@ import guiatv.common.datatypes.Frame;
 import guiatv.cv.classificator.Imshow;
 import guiatv.persistence.domain.Channel;
 import guiatv.persistence.domain.RtmpSource;
-import guiatv.persistence.repository.AsyncTransactionService;
 import guiatv.persistence.repository.ChannelRepository;
 import guiatv.persistence.repository.RtmpSourceRepository;
+import guiatv.persistence.repository.service.AsyncTransactionService;
 import guiatv.realtime.servicegateway.CapturedFramesGateway;
 
 import java.io.BufferedInputStream;

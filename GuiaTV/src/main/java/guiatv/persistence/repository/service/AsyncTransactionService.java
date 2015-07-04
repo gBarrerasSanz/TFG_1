@@ -1,4 +1,4 @@
-package guiatv.persistence.repository;
+package guiatv.persistence.repository.service;
 
 import java.util.List;
 
@@ -6,6 +6,10 @@ import guiatv.persistence.domain.Channel;
 import guiatv.persistence.domain.Programme;
 import guiatv.persistence.domain.RtmpSource;
 import guiatv.persistence.domain.Schedule;
+import guiatv.persistence.repository.ChannelRepository;
+import guiatv.persistence.repository.ProgrammeRepository;
+import guiatv.persistence.repository.RtmpSourceRepository;
+import guiatv.persistence.repository.ScheduleRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -295,7 +295,7 @@
 		<bean id="customFrameRouter" class="guiatv.realtime.router.FrameCustomRouter" />
 		<int:router id="frameRouter" input-channel="sendFrameChOut"
 			ref="customFrameRouter" method="processFrame">
-			<int:poller fixed-rate="5000"></int:poller>
+			<!-- <int:poller fixed-rate="5000"></int:poller> -->
 		</int:router>
 	</beans>
 	<beans profile="dev, default">
@@ -309,8 +309,8 @@
 			<property name="maxPoolSize" value="10" />
 			<property name="queueCapacity" value="25" />
 		</bean>
-		<bean id="classificationWorker" class="guiatv.cv.classificator.ClassificationWorker" />
-		<bean id="trainingWorker" class="guiatv.cv.trainer.TrainingWorker" />
+		<bean id="classificationWorker" class="guiatv.realtime.classification.ClassificationWorker" />
+		<bean id="trainingWorker" class="guiatv.realtime.training.TrainingWorker" />
 		<int:channel id="classificationChIn">
 			<int:dispatcher task-executor="taskExecutor"
 				load-balancer="round-robin" />
