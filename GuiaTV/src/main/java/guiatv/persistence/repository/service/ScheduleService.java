@@ -27,6 +27,12 @@ public class ScheduleService {
 	ScheduleRepository schedRep;
 	
 	@Autowired
+	ScheduleRepository chRep;
+	
+	@Autowired
+	ScheduleRepository progRep;
+	
+	@Autowired
 	ScheduleRepositoryImpl schedRepImpl;
 	
 	@Transactional(readOnly = true)
