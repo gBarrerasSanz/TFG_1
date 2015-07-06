@@ -35,6 +35,9 @@ public class ScheduleLoader {
 	
 	public void loadListSchedules(List<Schedule> lSched) {
 		
+		schedServ.insertSchedules(lSched);
+		System.out.println("Done");
+		
 //		for (Schedule sched: lSched) {
 //			Channel ch = chServ.findByIdChBusiness(sched.getChannel().getIdChBusiness());
 //			Programme prog = progServ.findByNameProg(sched.getProgramme().getNameProg());
@@ -47,17 +50,17 @@ public class ScheduleLoader {
 //			schedServ.saveSchedule(sched);
 //		}
 		
-		for (Schedule sched: lSched) {
-			Channel ch = chServ.findByIdChBusiness(sched.getChannel().getIdChBusiness());
-			Programme prog = progServ.findByNameProg(sched.getProgramme().getNameProg());
-			if (ch != null) {
-				chServ.deleteChannel(ch);
-			}
-			if (prog != null) {
-				progServ.deleteProgramme(prog);
-			}
-			schedServ.insertSchedule(sched);
-		}
+//		for (Schedule sched: lSched) {
+//			Channel ch = chServ.findByIdChBusiness(sched.getChannel().getIdChBusiness());
+//			Programme prog = progServ.findByNameProg(sched.getProgramme().getNameProg());
+//			if (ch != null) {
+//				chServ.deleteChannel(ch);
+//			}
+//			if (prog != null) {
+//				progServ.deleteProgramme(prog);
+//			}
+//			schedServ.insertSchedule(sched);
+//		}
 		
 	}
 }

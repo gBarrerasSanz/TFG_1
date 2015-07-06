@@ -3,6 +3,7 @@ package guiatv.persistence.domain;
 
 import java.io.Serializable;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
@@ -43,6 +44,7 @@ public class Channel extends ResourceSupport implements Serializable {
 	
 	@JsonCreator
 	public Channel() {
+		listSchedules = new ArrayList<Schedule>();
 	}
 	@Id
     @Column(name = "idChPersistence", nullable = false)
@@ -58,8 +60,7 @@ public class Channel extends ResourceSupport implements Serializable {
     private String nameCh;
     
 	@JsonIgnore
-    //@OneToMany(mappedBy="channel", fetch=FetchType.LAZY)
-	@OneToMany(targetEntity=Schedule.class, mappedBy="channel", fetch=FetchType.LAZY, cascade=CascadeType.ALL, orphanRemoval=true)
+	@OneToMany(targetEntity=Schedule.class, mappedBy="channel", fetch=FetchType.LAZY, orphanRemoval=true)
 	private List<Schedule> listSchedules;
     
     @OneToMany(mappedBy="channel", fetch=FetchType.LAZY)
@@ -95,7 +96,7 @@ public class Channel extends ResourceSupport implements Serializable {
 	public void setSetSchedules(List<Schedule> listSchedules) {
 		this.listSchedules = listSchedules;
 	}
-
+	
 	public void setIdChPersistence(Long idChPersistence) {
 		this.idChPersistence = idChPersistence;
 	}
@@ -130,6 +131,15 @@ public class Channel extends ResourceSupport implements Serializable {
 
 	public void setImgIcon(byte[] imgIcon) {
 		this.imgIcon = imgIcon;
+	}
+	
+	
+	public void addListSchedules(List<Schedule> lSched) {
+		this.listSchedules.addAll(lSched);
+	}
+	
+	public void addSchedule(Schedule sched) {
+		this.listSchedules.add(sched);
 	}
 	
 	@Override

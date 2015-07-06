@@ -23,4 +23,6 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long>,
 	List<Schedule> findByChannel(Channel ch);
 	
 	List<Schedule> findByStartBetween(Timestamp msNow, Timestamp msFromStart);
+	
+	Schedule findByChannelAndProgrammeAndStartAndEnd(Channel ch, Programme prog, Timestamp start, Timestamp end);
 }

@@ -73,8 +73,39 @@ public class ScheduleService {
 	}
 	
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void mergeSchedules(List<Schedule> lSched) {
-		schedRepImpl.merge(lSched);
+    public void insertSchedules(List<Schedule> lSched) {
+		for (Schedule sched: lSched) {
+			try {
+				Channel ch = chRep.findByIdChBusiness(sched.getChannel().getIdChBusiness());
+				Programme prog = progRep.findByNameProg(sched.getProgramme().getNameProg());
+				if (ch != null) {
+					sched.setChannel(ch);
+				}
+				else {
+					ch = sched.getChannel();
+					chRep.saveAndFlush(ch);
+				}
+				if (prog != null) {
+					sched.setProgramme(prog);
+				}
+				else {
+					prog = sched.getProgramme();
+					progRep.saveAndFlush(prog);
+				}
+				Schedule schedIn = schedRep.findByChannelAndProgrammeAndStartAndEnd(
+						sched.getChannel(), sched.getProgramme(), sched.getStart(), sched.getEnd());
+				if (schedIn == null) {
+					ch.addSchedule(sched);
+					prog.addSchedule(sched);
+					chRep.saveAndFlush(ch);
+					progRep.saveAndFlush(prog);
+					schedRep.saveAndFlush(sched);
+					System.out.println("Done");
+				}
+			} catch(Exception e) {
+				e.printStackTrace();
+			}
+		}
     }
 	
 	@Transactional(propagation = Propagation.REQUIRES_NEW)

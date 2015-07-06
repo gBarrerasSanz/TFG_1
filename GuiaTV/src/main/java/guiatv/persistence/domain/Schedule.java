@@ -5,7 +5,6 @@ import guiatv.catalog.serializers.ScheduleProgrammeSerializer;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.util.Date;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -42,7 +41,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(Include.NON_NULL)
-@Table(uniqueConstraints={@UniqueConstraint(columnNames = {"channel", "programme", "start", "end"})})
+@Table(uniqueConstraints={@UniqueConstraint(columnNames = {"channel_fk", "programme_fk", "start", "end"})})
 @Entity(name = "schedule")
 public class Schedule extends ResourceSupport implements Serializable {
 	
@@ -56,19 +55,14 @@ public class Schedule extends ResourceSupport implements Serializable {
     private Long idSched;
     
 	
-	// @Cascade modificado por esto: // http://www.mkyong.com/hibernate/cascade-jpa-hibernate-annotation-common-mistake/
 	@JsonSerialize(using=ScheduleChannelSerializer.class)
-//	@ManyToOne(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
-//	@JoinColumn(name="channel")
 	@ManyToOne(targetEntity=Channel.class, fetch=FetchType.LAZY)
-	@JoinColumn(name="channel")
+	@JoinColumn(name="channel_fk", referencedColumnName="idChPersistence")
 	private Channel channel;
     
 	@JsonSerialize(using=ScheduleProgrammeSerializer.class)
-//	@ManyToOne(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
-//	@JoinColumn(name="programme")
 	@ManyToOne(targetEntity=Programme.class, fetch=FetchType.LAZY)
-	@JoinColumn(name="programme")
+	@JoinColumn(name="programme_fk", referencedColumnName="idProgPersistence")
 	private Programme programme;
 	
 	@JsonProperty
@@ -118,7 +112,7 @@ public class Schedule extends ResourceSupport implements Serializable {
 		this.programme = programme;
 	}
 
-	public Date getStart() {
+	public Timestamp getStart() {
 		return start;
 	}
 

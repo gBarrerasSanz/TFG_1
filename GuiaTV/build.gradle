@@ -27,17 +27,14 @@ apply plugin: 'spring-boot'
 
 repositories {
  	mavenCentral()
-    mavenLocal()
+ 	mavenLocal()
 	maven {
     	url "https://repo.eclipse.org/content/repositories/paho-releases/"
     }
-    maven {
-    	//url "http://repo.gradle.org/gradle/repo"
-    	url "https://repo.spring.io/libs-snapshot"
-    }
     // Repositorio local
     maven {
-    	url 'C:/Users/Gabriel/.m2/repository'
+    	// url 'C:/Users/Gabriel/.m2/repository' // ASUS 
+    	url 'C:/Users/VAIO/.m2/repository' // VAIO
     }
 }
 

@@ -6,6 +6,7 @@ import guiatv.catalog.restcontroller.CatalogRestController;
 
 import java.io.Serializable;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -24,6 +25,7 @@ import javax.persistence.Version;
 
 import org.springframework.hateoas.ResourceSupport;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -49,6 +51,11 @@ public class Programme extends ResourceSupport implements Serializable {
 	 */
 	private static final long serialVersionUID = 7540103864705903738L;
 	
+	@JsonCreator
+	public Programme() {
+    	listSchedules = new ArrayList<Schedule>();
+    }
+	
 	@Id
     @Column(name = "idProgPersistence", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -59,7 +66,6 @@ public class Programme extends ResourceSupport implements Serializable {
     private String nameProg;
     
 	@JsonView(CatalogRestController.SingleProgramme.class)
-    //@OneToMany(mappedBy="programme", fetch=FetchType.LAZY)
 	@OneToMany(targetEntity=Schedule.class, mappedBy="programme", fetch=FetchType.LAZY, orphanRemoval=true)
 	private List<Schedule> listSchedules;
     
@@ -67,8 +73,6 @@ public class Programme extends ResourceSupport implements Serializable {
     /**********************************************************
      * 					GETTERS / SETTERS
      *********************************************************/
-    public Programme() {
-    }
 
     public Programme(String nameProg) {
     	this.nameProg = nameProg;
@@ -96,7 +100,16 @@ public class Programme extends ResourceSupport implements Serializable {
 	public void setListSchedules(List<Schedule> listSchedules) {
 		this.listSchedules = listSchedules;
 	}
-
+	
+	
+	public void addListSchedules(List<Schedule> lSched) {
+		this.listSchedules.addAll(lSched);
+	}
+	
+	public void addSchedule(Schedule sched) {
+		this.listSchedules.add(sched);
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
