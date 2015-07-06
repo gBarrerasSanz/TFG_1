@@ -33,6 +33,10 @@ public class ChannelService {
 		return chRep.findByIdChBusiness(idBusiness);
 	}
 	
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void deleteChannel(Channel ch) {
+    	chRep.delete(ch);
+    }
 	
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
     public void insertChannels(ListChannels lCh) {

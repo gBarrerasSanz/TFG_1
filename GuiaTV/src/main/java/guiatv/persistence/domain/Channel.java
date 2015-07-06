@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -35,7 +36,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * debe ser único(@UniqueConstraint) y está compuesto de campos que deben ser inmutables:
  * business-Id: nameIdCh
  */
-@Table(uniqueConstraints={@UniqueConstraint(columnNames = {"nameIdCh"})})
+@Table(uniqueConstraints={@UniqueConstraint(columnNames = {"idChBusiness"})})
 @Entity(name = "channel")
 public class Channel extends ResourceSupport implements Serializable {
 	private static final long serialVersionUID = 6291049572278425446L;
@@ -49,7 +50,7 @@ public class Channel extends ResourceSupport implements Serializable {
     private Long idChPersistence;
     
 	@JsonProperty
-    @Column(name = "nameIdCh", nullable = false, length = 50)
+    @Column(name = "idChBusiness", nullable = false, length = 50)
     private String idChBusiness;
     
 	@JsonProperty
@@ -57,10 +58,11 @@ public class Channel extends ResourceSupport implements Serializable {
     private String nameCh;
     
 	@JsonIgnore
-    @OneToMany(mappedBy="channel", fetch=FetchType.LAZY, orphanRemoval=true)
-    private List<Schedule> listSchedules;
+    //@OneToMany(mappedBy="channel", fetch=FetchType.LAZY)
+	@OneToMany(targetEntity=Schedule.class, mappedBy="channel", fetch=FetchType.LAZY, cascade=CascadeType.ALL, orphanRemoval=true)
+	private List<Schedule> listSchedules;
     
-    @OneToMany(mappedBy="channel", fetch=FetchType.LAZY, orphanRemoval=true)
+    @OneToMany(mappedBy="channel", fetch=FetchType.LAZY)
     private List<RtmpSource> listRtmpSources;
     
     // country no se usa de momento

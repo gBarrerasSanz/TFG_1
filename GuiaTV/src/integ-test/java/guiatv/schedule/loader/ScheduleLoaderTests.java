@@ -37,6 +37,7 @@ import guiatv.persistence.domain.Event_old;
 import guiatv.persistence.domain.Programme;
 import guiatv.persistence.domain.Schedule;
 import guiatv.persistence.repository.ScheduleRepository;
+import guiatv.persistence.repository.service.ScheduleService;
 import guiatv.realtime.servicegateway.CapturedFramesGateway;
 import guiatv.schedule.loader.ScheduleLoader;
 import guiatv.schedule.utils.ListScheduleCreator;
@@ -58,7 +59,7 @@ public class ScheduleLoaderTests extends
 	ScheduleLoader schedLoader;
 
 	@Autowired
-	ScheduleRepository shedRep;
+	ScheduleService shedServ;
 
 	@Before
 	public void doNothing() {
@@ -73,7 +74,7 @@ public class ScheduleLoaderTests extends
 					.getListSchedule();
 
 			schedLoader.loadListSchedules(listScheduleExpected);
-			List<Schedule> listScheduleReturned = shedRep.findAll();
+			List<Schedule> listScheduleReturned = shedServ.findAll(true);
 
 			Assert.assertNotNull(
 					"Expected a non null instance of List<Evento>, got null",

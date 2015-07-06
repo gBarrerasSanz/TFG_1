@@ -26,6 +26,8 @@ tasks.withType(JavaCompile) {
 apply plugin: 'spring-boot'
 
 repositories {
+ 	mavenCentral()
+    mavenLocal()
 	maven {
     	url "https://repo.eclipse.org/content/repositories/paho-releases/"
     }
@@ -33,7 +35,10 @@ repositories {
     	//url "http://repo.gradle.org/gradle/repo"
     	url "https://repo.spring.io/libs-snapshot"
     }
-    mavenCentral()
+    // Repositorio local
+    maven {
+    	url 'C:/Users/Gabriel/.m2/repository'
+    }
 }
 
 // Para incluir OpenCV-2.4.9, seguir estos pasos:
@@ -89,6 +94,7 @@ task integTest(type: Test) {
     // always run integration tests after unit tests in order to fail fast
     mustRunAfter test
 }
+
 
 dependencies {
 	compile 'org.springframework.boot:spring-boot-gradle-plugin:1.2.2.RELEASE'

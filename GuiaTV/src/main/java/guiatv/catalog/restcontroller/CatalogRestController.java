@@ -3,7 +3,6 @@ package guiatv.catalog.restcontroller;
 import guiatv.catalog.datatypes.Catalog;
 import guiatv.catalog.datatypes.ListChannels;
 import guiatv.catalog.datatypes.ListProgrammes;
-import guiatv.catalog.datatypes.Views;
 import guiatv.persistence.domain.Channel;
 import guiatv.persistence.domain.Programme;
 import guiatv.persistence.domain.Schedule;
@@ -21,6 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
+import org.springframework.hateoas.ResourcesLinksVisible;
 import org.springframework.hateoas.mvc.ControllerLinkBuilder;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -41,6 +41,9 @@ import com.fasterxml.jackson.databind.SerializationConfig;
 @RestController
 @RequestMapping("/catalog")
 public class CatalogRestController {
+	
+	public interface MultipleProgrammes extends ResourcesLinksVisible {}
+	public interface SingleProgramme extends ResourcesLinksVisible {}
 	
 	private static final Logger logger = LoggerFactory.getLogger(CatalogRestController.class);
 	
@@ -112,7 +115,7 @@ public class CatalogRestController {
 		return new ResponseEntity<Channel>(ch, HttpStatus.OK);
 	}
 	
-//	@JsonView(Views.MultipleProgrammes.class)
+	@JsonView(MultipleProgrammes.class)
 	@RequestMapping(
 			value = "/programmes", 
 			method = RequestMethod.GET)
@@ -128,7 +131,7 @@ public class CatalogRestController {
 		return new ResponseEntity<ListProgrammes>(lProgrammes, HttpStatus.OK);
 	}
 	
-//	@JsonView(Views.SingleProgramme.class)
+	@JsonView(SingleProgramme.class)
 	@RequestMapping(
 			value = "/programmes/{nameProg}", 
 			method = RequestMethod.GET)

@@ -21,16 +21,15 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 public class ScheduleService {
 	
 	@Autowired
 	ScheduleRepository schedRep;
-	
 	@Autowired
-	ScheduleRepository chRep;
-	
+	ChannelRepository chRep;
 	@Autowired
-	ScheduleRepository progRep;
+	ProgrammeRepository progRep;
 	
 	@Autowired
 	ScheduleRepositoryImpl schedRepImpl;
@@ -80,7 +79,13 @@ public class ScheduleService {
 	
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
     public void saveSchedules(List<Schedule> lSched){
-    	schedRep.save(lSched);
+		
+		//schedRep.save(lSched);
+    }
+	
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void insertSchedule(Schedule sched){
+    	schedRep.save(sched);
     }
 	
 	@Transactional(propagation = Propagation.REQUIRES_NEW)

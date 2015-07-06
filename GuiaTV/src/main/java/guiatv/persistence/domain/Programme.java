@@ -1,13 +1,15 @@
 package guiatv.persistence.domain;
 
 
-import guiatv.catalog.datatypes.Views;
+
+import guiatv.catalog.restcontroller.CatalogRestController;
 
 import java.io.Serializable;
 import java.sql.Date;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -52,13 +54,14 @@ public class Programme extends ResourceSupport implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idProgPersistence;
     
-	@JsonView({Views.MultipleProgrammes.class, Views.SingleProgramme.class})
+	@JsonView({CatalogRestController.MultipleProgrammes.class, CatalogRestController.SingleProgramme.class})
     @Column(name = "nameProg", nullable = false, length = 70)
     private String nameProg;
     
-	@JsonView(Views.SingleProgramme.class)
-    @OneToMany(mappedBy="programme", fetch=FetchType.LAZY, orphanRemoval=true)
-    private List<Schedule> listSchedules;
+	@JsonView(CatalogRestController.SingleProgramme.class)
+    //@OneToMany(mappedBy="programme", fetch=FetchType.LAZY)
+	@OneToMany(targetEntity=Schedule.class, mappedBy="programme", fetch=FetchType.LAZY, orphanRemoval=true)
+	private List<Schedule> listSchedules;
     
     
     /**********************************************************

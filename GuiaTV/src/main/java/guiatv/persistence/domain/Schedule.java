@@ -7,6 +7,7 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -24,8 +25,6 @@ import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
 import javax.persistence.Version;
 
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.ResourceSupport;
 
@@ -58,15 +57,17 @@ public class Schedule extends ResourceSupport implements Serializable {
     
 	
 	// @Cascade modificado por esto: // http://www.mkyong.com/hibernate/cascade-jpa-hibernate-annotation-common-mistake/
-	@Cascade(value=CascadeType.ALL)
 	@JsonSerialize(using=ScheduleChannelSerializer.class)
-	@ManyToOne(fetch=FetchType.LAZY)
+//	@ManyToOne(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
+//	@JoinColumn(name="channel")
+	@ManyToOne(targetEntity=Channel.class, fetch=FetchType.LAZY)
 	@JoinColumn(name="channel")
 	private Channel channel;
     
-	@Cascade(value=CascadeType.ALL)
 	@JsonSerialize(using=ScheduleProgrammeSerializer.class)
-	@ManyToOne(fetch=FetchType.LAZY)
+//	@ManyToOne(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
+//	@JoinColumn(name="programme")
+	@ManyToOne(targetEntity=Programme.class, fetch=FetchType.LAZY)
 	@JoinColumn(name="programme")
 	private Programme programme;
 	

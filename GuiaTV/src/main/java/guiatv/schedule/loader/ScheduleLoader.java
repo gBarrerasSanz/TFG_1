@@ -1,8 +1,13 @@
 package guiatv.schedule.loader;
 
+import guiatv.persistence.domain.Channel;
+import guiatv.persistence.domain.Programme;
 import guiatv.persistence.domain.Schedule;
 import guiatv.persistence.repository.ScheduleRepository;
+import guiatv.persistence.repository.service.ChannelService;
+import guiatv.persistence.repository.service.ProgrammeService;
 import guiatv.persistence.repository.service.ScheduleService;
+import guiatv.schedule.utils.ListScheduleCreator;
 
 import java.util.List;
 
@@ -19,17 +24,40 @@ public class ScheduleLoader {
 	
 	@Autowired
 	ScheduleService schedServ;
+	@Autowired
+	ChannelService chServ;
+	@Autowired
+	ProgrammeService progServ;
 	
 	public ScheduleLoader() {
 		
 	}
 	
 	public void loadListSchedules(List<Schedule> lSched) {
-//		schedServ.mergeSchedules(lSched);
-		try{
-			schedServ.saveSchedules(lSched);
-		} catch(Exception e) {
-			
+		
+//		for (Schedule sched: lSched) {
+//			Channel ch = chServ.findByIdChBusiness(sched.getChannel().getIdChBusiness());
+//			Programme prog = progServ.findByNameProg(sched.getProgramme().getNameProg());
+//			if (ch != null) {
+//				sched.setChannel(ch);
+//			}
+//			if (prog != null) {
+//				sched.setProgramme(prog);
+//			}
+//			schedServ.saveSchedule(sched);
+//		}
+		
+		for (Schedule sched: lSched) {
+			Channel ch = chServ.findByIdChBusiness(sched.getChannel().getIdChBusiness());
+			Programme prog = progServ.findByNameProg(sched.getProgramme().getNameProg());
+			if (ch != null) {
+				chServ.deleteChannel(ch);
+			}
+			if (prog != null) {
+				progServ.deleteProgramme(prog);
+			}
+			schedServ.insertSchedule(sched);
 		}
+		
 	}
 }
