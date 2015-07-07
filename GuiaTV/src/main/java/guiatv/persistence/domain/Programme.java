@@ -68,15 +68,15 @@ public class Programme extends ResourceSupport implements Serializable {
     @Column(name = "idProgPersistence", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idProgPersistence;
-    
-//	@JsonView({MultipleProgrammes.class, SingleProgramme.class})
-	@JsonProperty
+
+//	@JsonProperty
+	@JsonView({MultipleProgrammes.class, SingleProgramme.class})
 	@Column(name = "nameProg", nullable = false, length = 70)
     private String nameProg;
 	
 //	@JsonSerialize(using=ListSchedulesSerializer.class)
-//	@JsonView({SingleProgramme.class})
-	@JsonProperty
+//	@JsonProperty
+	@JsonView({SingleProgramme.class})
 	@OneToMany(targetEntity=Schedule.class, cascade=CascadeType.ALL, mappedBy="programme", fetch=FetchType.LAZY)
 	private List<Schedule> listSchedules;
     

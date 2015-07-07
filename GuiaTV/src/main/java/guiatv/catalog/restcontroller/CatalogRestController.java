@@ -118,7 +118,7 @@ public class CatalogRestController {
 	@RequestMapping(
 			value = "/programmes", 
 			method = RequestMethod.GET)
-//	@JsonView(MultipleProgrammes.class)
+	@JsonView(Programme.MultipleProgrammes.class)
 	@ResponseBody
 	public ResponseEntity<ListProgrammes> getProgrammes()
 	{
@@ -134,7 +134,7 @@ public class CatalogRestController {
 	@RequestMapping(
 			value = "/programmes/{nameProg:.*}", 
 			method = RequestMethod.GET)
-//	@JsonView(SingleProgramme.class)
+	@JsonView(Programme.SingleProgramme.class)
 	public ResponseEntity<Programme> getProgrammeByNameProg(@PathVariable(value = "nameProg") String nameProg)
 	{
 		Programme prog =  progServ.findByNameProg(nameProg, true);
