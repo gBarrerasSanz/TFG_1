@@ -12,6 +12,7 @@ import guiatv.persistence.repository.ProgrammeRepository;
 import guiatv.persistence.repository.RtmpSourceRepository;
 import guiatv.persistence.repository.ScheduleRepository;
 
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -29,8 +30,12 @@ public class ProgrammeService {
 	}
 	
 	@Transactional(readOnly = true)
-	public Programme findByNameProg(String nameProg) {
-		return progRep.findByNameProg(nameProg);
+	public Programme findByNameProg(String nameProg, boolean refs) {
+		Programme prog = progRep.findByNameProg(nameProg);
+		if (refs) {
+			Hibernate.initialize(prog.getListSchedules());
+		}
+		return prog;
 	}
 	
 	@Transactional(propagation = Propagation.REQUIRES_NEW)

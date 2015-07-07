@@ -56,12 +56,12 @@ public class Schedule extends ResourceSupport implements Serializable {
     
 	
 	@JsonSerialize(using=ScheduleChannelSerializer.class)
-	@ManyToOne(targetEntity=Channel.class, fetch=FetchType.LAZY)
+	@ManyToOne(targetEntity=Channel.class, cascade=CascadeType.ALL, fetch=FetchType.LAZY)
 	@JoinColumn(name="channel_fk", referencedColumnName="idChPersistence")
 	private Channel channel;
     
 	@JsonSerialize(using=ScheduleProgrammeSerializer.class)
-	@ManyToOne(targetEntity=Programme.class, fetch=FetchType.LAZY)
+	@ManyToOne(targetEntity=Programme.class, cascade=CascadeType.ALL, fetch=FetchType.LAZY)
 	@JoinColumn(name="programme_fk", referencedColumnName="idProgPersistence")
 	private Programme programme;
 	
@@ -116,9 +116,6 @@ public class Schedule extends ResourceSupport implements Serializable {
 		return start;
 	}
 
-	
-	
-	
 	public Timestamp getEnd() {
 		return end;
 	}

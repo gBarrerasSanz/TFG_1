@@ -78,29 +78,22 @@ public class ScheduleService {
 			try {
 				Channel ch = chRep.findByIdChBusiness(sched.getChannel().getIdChBusiness());
 				Programme prog = progRep.findByNameProg(sched.getProgramme().getNameProg());
-				if (ch != null) {
+				if (ch != null) { // Ya existe canal
 					sched.setChannel(ch);
 				}
-				else {
-					ch = sched.getChannel();
-					chRep.saveAndFlush(ch);
+				else { // No existe canal
+					chRep.saveAndFlush(sched.getChannel());
 				}
-				if (prog != null) {
+				if (prog != null) { // Ya existe programa
 					sched.setProgramme(prog);
 				}
-				else {
-					prog = sched.getProgramme();
-					progRep.saveAndFlush(prog);
+				else { // No existe programa
+					progRep.saveAndFlush(sched.getProgramme());
 				}
 				Schedule schedIn = schedRep.findByChannelAndProgrammeAndStartAndEnd(
 						sched.getChannel(), sched.getProgramme(), sched.getStart(), sched.getEnd());
 				if (schedIn == null) {
-					ch.addSchedule(sched);
-					prog.addSchedule(sched);
-					chRep.saveAndFlush(ch);
-					progRep.saveAndFlush(prog);
 					schedRep.saveAndFlush(sched);
-					System.out.println("Done");
 				}
 			} catch(Exception e) {
 				e.printStackTrace();

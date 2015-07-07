@@ -3,6 +3,7 @@ package guiatv.persistence.domain;
 
 
 import guiatv.catalog.restcontroller.CatalogRestController;
+import guiatv.catalog.serializers.ListSchedulesSerializer;
 
 import java.io.Serializable;
 import java.sql.Date;
@@ -23,7 +24,10 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.persistence.Version;
 
+import jdk.nashorn.internal.objects.annotations.Getter;
+
 import org.springframework.hateoas.ResourceSupport;
+import org.springframework.hateoas.ResourcesLinksVisible;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -32,6 +36,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 
 /*
@@ -45,6 +50,9 @@ import com.fasterxml.jackson.annotation.JsonView;
 @Table(uniqueConstraints={@UniqueConstraint(columnNames = {"nameProg"})})
 @Entity(name = "programme")
 public class Programme extends ResourceSupport implements Serializable {
+	
+	public interface MultipleProgrammes extends ResourcesLinksVisible {}
+	public interface SingleProgramme extends ResourcesLinksVisible {}
 	
 	/**
 	 * 
@@ -61,12 +69,15 @@ public class Programme extends ResourceSupport implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idProgPersistence;
     
-	@JsonView({CatalogRestController.MultipleProgrammes.class, CatalogRestController.SingleProgramme.class})
-    @Column(name = "nameProg", nullable = false, length = 70)
+//	@JsonView({MultipleProgrammes.class, SingleProgramme.class})
+	@JsonProperty
+	@Column(name = "nameProg", nullable = false, length = 70)
     private String nameProg;
-    
-	@JsonView(CatalogRestController.SingleProgramme.class)
-	@OneToMany(targetEntity=Schedule.class, mappedBy="programme", fetch=FetchType.LAZY, orphanRemoval=true)
+	
+//	@JsonSerialize(using=ListSchedulesSerializer.class)
+//	@JsonView({SingleProgramme.class})
+	@JsonProperty
+	@OneToMany(targetEntity=Schedule.class, cascade=CascadeType.ALL, mappedBy="programme", fetch=FetchType.LAZY)
 	private List<Schedule> listSchedules;
     
     
@@ -84,7 +95,7 @@ public class Programme extends ResourceSupport implements Serializable {
 	public void setIdProgPersistence(Long idProgPersistence) {
 		this.idProgPersistence = idProgPersistence;
 	}
-
+	
 	public String getNameProg() {
 		return nameProg;
 	}
@@ -92,7 +103,7 @@ public class Programme extends ResourceSupport implements Serializable {
 	public void setNameProg(String nameProg) {
 		this.nameProg = nameProg;
 	}
-
+	
 	public List<Schedule> getListSchedules() {
 		return listSchedules;
 	}

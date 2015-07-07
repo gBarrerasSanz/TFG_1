@@ -29,8 +29,12 @@ public class ChannelService {
 	}
 	
 	@Transactional(readOnly = true)
-	public Channel findByIdChBusiness(String idBusiness) {
-		return chRep.findByIdChBusiness(idBusiness);
+	public Channel findByIdChBusiness(String idBusiness, boolean refs) {
+		Channel ch = chRep.findByIdChBusiness(idBusiness);
+		if (refs) {
+			Hibernate.initialize(ch.getListSchedules());
+		}
+		return ch;
 	}
 	
 	@Transactional(propagation = Propagation.REQUIRES_NEW)

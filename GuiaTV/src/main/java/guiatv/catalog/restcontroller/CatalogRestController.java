@@ -5,6 +5,8 @@ import guiatv.catalog.datatypes.ListChannels;
 import guiatv.catalog.datatypes.ListProgrammes;
 import guiatv.persistence.domain.Channel;
 import guiatv.persistence.domain.Programme;
+import guiatv.persistence.domain.Programme.MultipleProgrammes;
+import guiatv.persistence.domain.Programme.SingleProgramme;
 import guiatv.persistence.domain.Schedule;
 import guiatv.persistence.repository.ChannelRepository;
 import guiatv.persistence.repository.ProgrammeRepository;
@@ -42,8 +44,6 @@ import com.fasterxml.jackson.databind.SerializationConfig;
 @RequestMapping("/catalog")
 public class CatalogRestController {
 	
-	public interface MultipleProgrammes extends ResourcesLinksVisible {}
-	public interface SingleProgramme extends ResourcesLinksVisible {}
 	
 	private static final Logger logger = LoggerFactory.getLogger(CatalogRestController.class);
 	
@@ -96,7 +96,7 @@ public class CatalogRestController {
 	public ResponseEntity<Channel> getChannelByIdChBusiness(@PathVariable(value = "idChBusiness") String idChBusiness)
 	{
 	
-		Channel ch = chServ.findByIdChBusiness(idChBusiness);
+		Channel ch = chServ.findByIdChBusiness(idChBusiness, false);
 		if (ch == null){
 			return new ResponseEntity<Channel>(new Channel(), HttpStatus.OK);
 		}
@@ -115,10 +115,10 @@ public class CatalogRestController {
 		return new ResponseEntity<Channel>(ch, HttpStatus.OK);
 	}
 	
-	@JsonView(MultipleProgrammes.class)
 	@RequestMapping(
 			value = "/programmes", 
 			method = RequestMethod.GET)
+//	@JsonView(MultipleProgrammes.class)
 	@ResponseBody
 	public ResponseEntity<ListProgrammes> getProgrammes()
 	{
@@ -131,13 +131,13 @@ public class CatalogRestController {
 		return new ResponseEntity<ListProgrammes>(lProgrammes, HttpStatus.OK);
 	}
 	
-	@JsonView(SingleProgramme.class)
 	@RequestMapping(
-			value = "/programmes/{nameProg}", 
+			value = "/programmes/{nameProg:.*}", 
 			method = RequestMethod.GET)
+//	@JsonView(SingleProgramme.class)
 	public ResponseEntity<Programme> getProgrammeByNameProg(@PathVariable(value = "nameProg") String nameProg)
 	{
-		Programme prog =  progServ.findByNameProg(nameProg);
+		Programme prog =  progServ.findByNameProg(nameProg, true);
 		if (prog == null) {
 			return new ResponseEntity<Programme>(new Programme(), HttpStatus.OK);
 		}
@@ -147,14 +147,15 @@ public class CatalogRestController {
 		// Devolver los enlaces de los channels en los que se emite
 		// De cada schedule del programme, coger el channel al que pertenece
 		for (Schedule sched: prog.getListSchedules()){
+			System.out.println(sched);
 			// Enlaces de los channels en los que se emite el programa
 //			prog.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(
 //					CatalogRestController.class).getChannelByIdChBusiness(
 //							sched.getChannel().getIdChBusiness())).withRel("channels"));
 			// Enlaces del channel de la emisión concreta del programme
-//			prog.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(
-//			CatalogRestController.class).getChannelByIdChBusiness(
-//					sched.getChannel().getIdChBusiness())).withRel("channels"));
+			prog.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(
+			CatalogRestController.class).getChannelByIdChBusiness(
+					sched.getChannel().getIdChBusiness())).withRel("channels"));
 		}
 		
 		return new ResponseEntity<Programme>(prog, HttpStatus.OK);
