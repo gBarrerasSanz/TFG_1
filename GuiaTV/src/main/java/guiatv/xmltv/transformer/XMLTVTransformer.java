@@ -33,7 +33,6 @@ public class XMLTVTransformer implements Transformer {
 	
 	static Logger log = Logger.getLogger("debugLog");
 	
-	@Override
 	public Message<List<Schedule>> transform(Message<?> message) {
 		Message<List<Schedule>> listSchedulesResult = null;
 		if (message.getPayload() instanceof File) {
@@ -58,6 +57,7 @@ public class XMLTVTransformer implements Transformer {
 					chNodeMap = chNode.getAttributes();
 					ch = new Channel();
 					ch.setIdChBusiness(chNodeMap.getNamedItem("id").getNodeValue()); // Coger id
+					ch.computeHashIdChBusiness();
 					ch.setNameCh(itCh.next()); // Coger nombre
 					mapCh.put(ch.getIdChBusiness(), ch); // Meter channel en el mapa hash
 					chItIdx++;
@@ -75,6 +75,7 @@ public class XMLTVTransformer implements Transformer {
 					progNodeMap = progNode.getAttributes();
 					prog = new Programme();
 					prog.setNameProg(itProg.next()); // Coger el nombre del programa
+					prog.computeHashNameProg();
 					mapProg.put(prog.getNameProg(), prog); // Meter programme en el mapa hash
 					progItIdx++;
 				}
@@ -91,10 +92,10 @@ public class XMLTVTransformer implements Transformer {
 					schedNode = listSchedNodes.get(schedItIdx);
 					schedNodeMap= schedNode.getAttributes();
 					sched = new Schedule();
-					String nombreProg = itSched.next();
-					String nomIdChannel = schedNodeMap.getNamedItem("channel").getNodeValue();
-					sched.setChannel(mapCh.get(nomIdChannel));
-					sched.setProgramme(mapProg.get(nombreProg));
+					String nameProg = itSched.next();
+					String idChBusiness = schedNodeMap.getNamedItem("channel").getNodeValue();
+					sched.setChannel(mapCh.get(idChBusiness));
+					sched.setProgramme(mapProg.get(nameProg));
 					sched.setStart(CommonUtility.strToTimestamp(schedNodeMap.getNamedItem("start").getNodeValue()));
 					sched.setEnd(CommonUtility.strToTimestamp(schedNodeMap.getNamedItem("stop").getNodeValue()));
 					lSched.add(sched);

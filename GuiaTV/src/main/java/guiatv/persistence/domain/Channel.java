@@ -2,6 +2,7 @@ package guiatv.persistence.domain;
 
 
 import java.io.Serializable;
+import java.nio.charset.StandardCharsets;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,6 +30,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.common.hash.Hashing;
 
 //@Entity(name = "channel")
 
@@ -55,6 +57,10 @@ public class Channel extends ResourceSupport implements Serializable {
     @Column(name = "idChBusiness", nullable = false, length = 50)
     private String idChBusiness;
     
+	@JsonProperty
+	@Column(name="hashIdChBusiness", nullable=false)
+	private String hashIdChBusiness;
+	
 	@JsonProperty
     @Column(name = "nameCh", nullable = true, length = 50)
     private String nameCh;
@@ -134,6 +140,14 @@ public class Channel extends ResourceSupport implements Serializable {
 	}
 	
 	
+	public void computeHashIdChBusiness() {
+		hashIdChBusiness = Hashing.murmur3_32().hashString(idChBusiness, StandardCharsets.UTF_8).toString();
+	}
+	
+	public String getHashIdChBusiness() {
+		return hashIdChBusiness;
+	}
+
 	public void addListSchedules(List<Schedule> lSched) {
 		this.listSchedules.addAll(lSched);
 	}

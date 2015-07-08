@@ -59,6 +59,11 @@ public class ScheduleService {
 	}
 	
 	@Transactional(readOnly = true)
+	public List<Schedule> findByChannelAndProgramme(Channel ch, Programme prog) {
+		return schedRep.findByChannelAndProgramme(ch, prog);
+	}
+	
+	@Transactional(readOnly = true)
 	public List<Schedule> findBySecondsFromStart(int secsFromStart, boolean refs) {
 		Timestamp now = new Timestamp(new Date().getTime());
 		Timestamp afterStart = new Timestamp(now.getTime() + (long)(1000 * secsFromStart));
@@ -71,6 +76,14 @@ public class ScheduleService {
 		}
 		return lSched;
 	}
+	
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
+    public Schedule findByChannelAndProgrammeAndStartAndEnd(Channel ch, 
+    		Programme prog, Timestamp start, Timestamp end)
+ 	{
+		return schedRep.findByChannelAndProgrammeAndStartAndEnd(ch, 
+				prog, start, end);
+    }
 	
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
     public void insertSchedules(List<Schedule> lSched) {

@@ -19,6 +19,8 @@ public interface ChannelRepository extends JpaRepository<Channel, Long>,
 	
 	Channel findByIdChBusiness(String idChBusiness);
 	
+	Channel findByHashIdChBusiness(String hashIdChBusiness);
+	
 	List<Channel> findByCountry(String country);
 	
 	<S extends Channel> Channel save(Channel ch);

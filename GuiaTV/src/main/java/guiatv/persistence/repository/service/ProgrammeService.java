@@ -38,6 +38,15 @@ public class ProgrammeService {
 		return prog;
 	}
 	
+	@Transactional(readOnly = true)
+	public Programme findByHashNameProg(String hashNameProg, boolean refs) {
+		Programme prog = progRep.findByHashNameProg(hashNameProg);
+		if (refs) {
+			Hibernate.initialize(prog.getListSchedules());
+		}
+		return prog;
+	}
+	
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
     public void deleteProgramme(Programme prog) {
     	progRep.delete(prog);

@@ -2,6 +2,7 @@ package guiatv.persistence.domain;
 
 import guiatv.catalog.serializers.ScheduleChannelSerializer;
 import guiatv.catalog.serializers.ScheduleProgrammeSerializer;
+import guiatv.catalog.serializers.TimestampDateSerializer;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -65,10 +66,12 @@ public class Schedule extends ResourceSupport implements Serializable {
 	@JoinColumn(name="programme_fk", referencedColumnName="idProgPersistence")
 	private Programme programme;
 	
+	@JsonSerialize(using=TimestampDateSerializer.class)
 	@JsonProperty
 	@Column(name = "start", nullable = false)
 	private Timestamp start;
 	
+	@JsonSerialize(using=TimestampDateSerializer.class)
 	@JsonProperty
 	@Column(name = "end", nullable = false)
 	private Timestamp end;

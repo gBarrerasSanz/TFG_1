@@ -22,4 +22,6 @@ public interface ProgrammeRepository extends JpaRepository<Programme, Long>,
 	
 	Programme findByNameProg(String nameProg);
 	
+	Programme findByHashNameProg(String hashNameProg);
+	
 }

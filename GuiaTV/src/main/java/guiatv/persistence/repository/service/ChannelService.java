@@ -37,6 +37,15 @@ public class ChannelService {
 		return ch;
 	}
 	
+	@Transactional(readOnly = true)
+	public Channel findByHashIdChBusiness(String hashIdChBusiness, boolean refs) {
+		Channel ch = chRep.findByHashIdChBusiness(hashIdChBusiness);
+		if (refs) {
+			Hibernate.initialize(ch.getListSchedules());
+		}
+		return ch;
+	}
+	
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
     public void deleteChannel(Channel ch) {
     	chRep.delete(ch);

@@ -6,6 +6,7 @@ import guiatv.catalog.restcontroller.CatalogRestController;
 import guiatv.catalog.serializers.ListSchedulesSerializer;
 
 import java.io.Serializable;
+import java.nio.charset.StandardCharsets;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +38,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.google.common.hash.Hashing;
 
 
 /*
@@ -74,8 +76,12 @@ public class Programme extends ResourceSupport implements Serializable {
 	@Column(name = "nameProg", nullable = false, length = 70)
     private String nameProg;
 	
-//	@JsonSerialize(using=ListSchedulesSerializer.class)
+	@JsonView({MultipleProgrammes.class, SingleProgramme.class})
+	@Column(name="hashNameProg", nullable=false)
+	private String hashNameProg;
+
 //	@JsonProperty
+	@JsonSerialize(using=ListSchedulesSerializer.class)
 	@JsonView({SingleProgramme.class})
 	@OneToMany(targetEntity=Schedule.class, cascade=CascadeType.ALL, mappedBy="programme", fetch=FetchType.LAZY)
 	private List<Schedule> listSchedules;
@@ -121,6 +127,12 @@ public class Programme extends ResourceSupport implements Serializable {
 		this.listSchedules.add(sched);
 	}
 	
+	public String getHashNameProg() {
+		return hashNameProg;
+	}
+	public void computeHashNameProg() {
+		hashNameProg = Hashing.murmur3_32().hashString(nameProg, StandardCharsets.UTF_8).toString();
+	}
 	@Override
 	public int hashCode() {
 		final int prime = 31;
