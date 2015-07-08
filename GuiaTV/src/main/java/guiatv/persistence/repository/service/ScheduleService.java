@@ -64,6 +64,30 @@ public class ScheduleService {
 	}
 	
 	@Transactional(readOnly = true)
+	public List<Schedule> findByChannelAndProgrammeAndStartGreaterOrEqualThan(Channel ch, Programme prog, Timestamp start, boolean refs) {
+		List<Schedule> lSched = schedRep.findByChannelAndProgrammeAndStartGreaterOrEqualThan(ch, prog, start);
+		if (refs){
+			for (Schedule sched: lSched) {
+				Hibernate.initialize(sched.getChannel());
+				Hibernate.initialize(sched.getProgramme());
+			}
+		}
+		return lSched;
+	}
+	
+	@Transactional(readOnly = true)
+	public List<Schedule> findByChannelAndProgrammeAndEndLessThan(Channel ch, Programme prog, Timestamp end, boolean refs) {
+		List<Schedule> lSched = schedRep.findByChannelAndProgrammeAndEndLessThan(ch, prog, end);
+		if (refs){
+			for (Schedule sched: lSched) {
+				Hibernate.initialize(sched.getChannel());
+				Hibernate.initialize(sched.getProgramme());
+			}
+		}
+		return lSched;
+	}
+	
+	@Transactional(readOnly = true)
 	public List<Schedule> findBySecondsFromStart(int secsFromStart, boolean refs) {
 		Timestamp now = new Timestamp(new Date().getTime());
 		Timestamp afterStart = new Timestamp(now.getTime() + (long)(1000 * secsFromStart));

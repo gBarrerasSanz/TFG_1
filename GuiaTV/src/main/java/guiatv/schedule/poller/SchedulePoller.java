@@ -19,7 +19,8 @@ public class SchedulePoller {
 	@Autowired
 	ScheduleService schedServ;
 	
-	private final int SECONDS_FROM_START = 60 * 10;
+	private final int SECS_PER_MIN = 60;
+	private final int SECONDS_FROM_START = SECS_PER_MIN * 50;
 	
 	public List<Schedule> askForSchedules() {
 //		List<Schedule> lSched = schedServ.findAll(true);

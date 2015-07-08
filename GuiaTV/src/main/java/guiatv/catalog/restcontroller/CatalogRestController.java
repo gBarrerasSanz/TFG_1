@@ -7,6 +7,7 @@ import guiatv.persistence.domain.Channel;
 import guiatv.persistence.domain.Programme;
 import guiatv.persistence.domain.Programme.MultipleProgrammes;
 import guiatv.persistence.domain.Programme.SingleProgramme;
+import guiatv.persistence.domain.Schedule.CustomSchedule;
 import guiatv.persistence.domain.Schedule;
 import guiatv.persistence.repository.ChannelRepository;
 import guiatv.persistence.repository.ProgrammeRepository;
@@ -164,19 +165,28 @@ public class CatalogRestController {
 	@RequestMapping(
 			value = "/schedules/", 
 			method = RequestMethod.GET)
-	@JsonView(Programme.SingleProgramme.class)
+	@JsonView(Schedule.CustomSchedule.class)
 	public ResponseEntity<List<Schedule>> getSchedulesByHashIdChBusinessAndHashNameProgAndStartAndEnd(
 			@RequestParam(value="hashIdChBusiness", defaultValue="", required=false) String hashIdChBusiness,
 			@RequestParam(value="hashNameProg", defaultValue="", required=false) String hashNameProg,
-			@RequestParam(value="start", defaultValue="", required=false) String startStr,
-			@RequestParam(value="end", defaultValue="", required=false) String endStr)
+			@RequestParam(value="start", defaultValue="", required=false) @DateTimeFormat(pattern="yyyy-MM-dd hh:mm:ss a z") Date startDate,
+			@RequestParam(value="end", defaultValue="", required=false) @DateTimeFormat(pattern="yyyy-MM-dd hh:mm:ss a z") Date endDate)
 	{
 		ResponseEntity<List<Schedule>> response;
 		ResponseEntity<List<Schedule>> errorResp = new ResponseEntity<List<Schedule>>(new ArrayList<Schedule>(), HttpStatus.BAD_REQUEST);
-		Timestamp start = Timestamp.valueOf(startStr);
-		Timestamp end = Timestamp.valueOf(endStr);
+		Timestamp start, end;
+		try {
+			start = new Timestamp(startDate.getTime());
+			end = new Timestamp(endDate.getTime());
+		} catch(Exception e) {
+			start = null;
+			end = null;
+		}
+		/**
+		 * CHANNEL, PROGRAMME, START, END -> DEVOLVER SCHEDULE ÚNICO
+		 */
 		if (hashNameProg.length()>0 && hashIdChBusiness.length()>0 
-				&& start.toString().length()>0 && end.toString().length()>0) {
+				&& start != null && end != null) {
 			// Si se especifican todos los parámetros -> Devolver el schedule (debe ser único 
 			// según la restricción de unicidad)
 			Channel ch = chServ.findByHashIdChBusiness(hashIdChBusiness, true);
@@ -184,37 +194,74 @@ public class CatalogRestController {
 			if (ch != null && prog != null) {
 				Schedule sched = schedServ.findByChannelAndProgrammeAndStartAndEnd(ch, prog, 
 						new Timestamp(start.getTime()), new Timestamp(end.getTime()));
-				List<Schedule> lSched = new ArrayList<Schedule>(1);
-				lSched.set(0, sched);
-				response = new ResponseEntity<List<Schedule>>(lSched, HttpStatus.OK);
+				if(sched != null) { // Si se ha encontrado un schedule
+					List<Schedule> lSched = new ArrayList<Schedule>();
+					lSched.add(sched);
+					response = new ResponseEntity<List<Schedule>>(lSched, HttpStatus.OK);
+				}
+				else { // Si NO se ha encontrado ningún schedule
+					response = new ResponseEntity<List<Schedule>>(new ArrayList<Schedule>(), HttpStatus.NOT_FOUND);
+				}
 			}
 			else {
 				response = errorResp;
 			}
 		}
-		else if (hashNameProg.length()>0 && hashIdChBusiness.length()>0) {
-			// Si se especifica solamente canal y programa -> Devolver todos los schedules desde ahora
+		/**
+		 * CHANNEL, PROGRAMME, START -> DEVOLVER SCHEDULES A PARTIR DE START
+		 */
+		else if (hashNameProg.length()>0 && hashIdChBusiness.length()>0 
+				&& start != null && end == null) {
+			// Si se especifica canal, programa y start -> Devolver todos los schedules a partir de start
 			Channel ch = chServ.findByHashIdChBusiness(hashIdChBusiness, true);
 			Programme prog = progServ.findByHashNameProg(hashNameProg, true);
 			if (ch != null && prog != null) {
-				List<Schedule> lSched = schedServ.findByChannelAndProgramme(ch, prog);
+				List<Schedule> lSched = schedServ.findByChannelAndProgrammeAndStartGreaterOrEqualThan(
+						ch, prog, start, true);
 				response = new ResponseEntity<List<Schedule>>(lSched, HttpStatus.OK);
 			}
 			else {
 				response = errorResp;
 			}
-				
 		}
-		else if (hashIdChBusiness.length()>0 && hashNameProg.length()==0 
-				&& start.toString().length()==0 && end.toString().length()==0) {
-			// Si solo se especifica el Channel -> Devolver error
-			response = errorResp;
+		/**
+		 * CHANNEL, PROGRAMME, END -> DEVOLVER SCHEDULES ANTES DE END
+		 */
+		else if (hashNameProg.length()>0 && hashIdChBusiness.length()>0 
+				&& start == null && end != null) {
+			// Si se especifica canal, programa y end -> Devolver todos los schedules antes de end
+			Channel ch = chServ.findByHashIdChBusiness(hashIdChBusiness, true);
+			Programme prog = progServ.findByHashNameProg(hashNameProg, true);
+			if (ch != null && prog != null) {
+				List<Schedule> lSched = schedServ.findByChannelAndProgrammeAndEndLessThan(
+						ch, prog, end, true);
+				response = new ResponseEntity<List<Schedule>>(lSched, HttpStatus.OK);
+			}
+			else {
+				response = errorResp;
+			}
 		}
-		else if (hashNameProg.length()>0 && hashIdChBusiness.length()==0 
-				&& start.toString().length()==0 && end.toString().length()==0) {
-			// Si solo se especifica el Programme -> Devolver error
-			response = errorResp;
+		/**
+		 * CHANNEL, PROGRAMME -> DEVOLVER SCHEDULES DESPUES DE NOW()
+		 */
+		else if (hashNameProg.length()>0 && hashIdChBusiness.length()>0 
+				&& start == null && end == null) {
+			// Si se especifica canal, programa y start -> Devolver todos los schedules a partir de start
+			Channel ch = chServ.findByHashIdChBusiness(hashIdChBusiness, true);
+			Programme prog = progServ.findByHashNameProg(hashNameProg, true);
+			Timestamp now = new Timestamp(new Date().getTime());
+			if (ch != null && prog != null) {
+				List<Schedule> lSched = schedServ.findByChannelAndProgrammeAndStartGreaterOrEqualThan(
+						ch, prog, now, true);
+				response = new ResponseEntity<List<Schedule>>(lSched, HttpStatus.OK);
+			}
+			else {
+				response = errorResp;
+			}
 		}
+		/**
+		 * EN CUALAQUIER OTRO CASO
+		 */
 		else { 
 			// En cualquier otro caso -> Devolver error
 			response = errorResp;

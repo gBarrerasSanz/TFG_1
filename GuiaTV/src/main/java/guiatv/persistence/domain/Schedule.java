@@ -27,12 +27,14 @@ import javax.persistence.Version;
 
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.ResourceSupport;
+import org.springframework.hateoas.ResourcesLinksVisible;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 /*
@@ -46,31 +48,37 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 @Entity(name = "schedule")
 public class Schedule extends ResourceSupport implements Serializable {
 	
+	public interface CustomSchedule extends ResourcesLinksVisible {}
 	
 	private static final long serialVersionUID = -8835185421528324020L;
 	
 	
+	@JsonView(CustomSchedule.class)
 	@Id
     @Column(name = "idSched", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idSched;
     
 	
+	@JsonView(CustomSchedule.class)
 	@JsonSerialize(using=ScheduleChannelSerializer.class)
 	@ManyToOne(targetEntity=Channel.class, cascade=CascadeType.ALL, fetch=FetchType.LAZY)
 	@JoinColumn(name="channel_fk", referencedColumnName="idChPersistence")
 	private Channel channel;
     
+	@JsonView(CustomSchedule.class)
 	@JsonSerialize(using=ScheduleProgrammeSerializer.class)
 	@ManyToOne(targetEntity=Programme.class, cascade=CascadeType.ALL, fetch=FetchType.LAZY)
 	@JoinColumn(name="programme_fk", referencedColumnName="idProgPersistence")
 	private Programme programme;
 	
+	@JsonView(CustomSchedule.class)
 	@JsonSerialize(using=TimestampDateSerializer.class)
 	@JsonProperty
 	@Column(name = "start", nullable = false)
 	private Timestamp start;
 	
+	@JsonView(CustomSchedule.class)
 	@JsonSerialize(using=TimestampDateSerializer.class)
 	@JsonProperty
 	@Column(name = "end", nullable = false)
