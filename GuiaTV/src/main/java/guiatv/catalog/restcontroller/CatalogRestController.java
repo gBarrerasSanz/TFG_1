@@ -115,10 +115,10 @@ public class CatalogRestController {
 		for (Programme prog: ch.getListProgrammes()){
 			prog.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(
 					CatalogRestController.class)
-					.getChannelByHashIdChBusiness(ch.getHashIdChBusiness())).withRel("channel"));
+					.getProgrammeByHashNameProg(prog.getHashNameProg())).withSelfRel());
 			prog.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(
 					CatalogRestController.class)
-					.getProgrammeByHashNameProg(prog.getHashNameProg())).withRel("programme"));
+					.getChannelByHashIdChBusiness(ch.getHashIdChBusiness())).withRel("channel"));
 		}
 //		HashMap<String, Integer> hmProg = new HashMap<String, Integer>();
 //		for (Schedule sched: lSched) {
