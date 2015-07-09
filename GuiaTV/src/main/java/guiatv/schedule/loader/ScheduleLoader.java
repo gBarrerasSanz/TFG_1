@@ -7,7 +7,6 @@ import guiatv.persistence.repository.ScheduleRepository;
 import guiatv.persistence.repository.service.ChannelService;
 import guiatv.persistence.repository.service.ProgrammeService;
 import guiatv.persistence.repository.service.ScheduleService;
-import guiatv.schedule.utils.ListScheduleCreator;
 
 import java.util.List;
 
