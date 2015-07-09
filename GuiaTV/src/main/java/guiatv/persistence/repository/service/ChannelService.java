@@ -41,7 +41,10 @@ public class ChannelService {
 	public Channel findByHashIdChBusiness(String hashIdChBusiness, boolean refs) {
 		Channel ch = chRep.findByHashIdChBusiness(hashIdChBusiness);
 		if (refs) {
-			Hibernate.initialize(ch.getListSchedules());
+			for (Schedule sched: ch.getListSchedules()) {
+				Hibernate.initialize(sched.getChannel());
+				Hibernate.initialize(sched.getProgramme());
+			}
 		}
 		return ch;
 	}

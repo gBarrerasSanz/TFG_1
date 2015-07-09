@@ -83,7 +83,7 @@ public class CatalogRestController {
 	@RequestMapping(
 			value = "/channels", 
 			method = RequestMethod.GET)
-	@ResponseBody
+	@JsonView(Channel.MultipleChannels.class)
 	public ResponseEntity<ListChannels> getChannels()
 	{
 		ListChannels lChannels = chServ.findAll();
@@ -98,24 +98,26 @@ public class CatalogRestController {
 	@RequestMapping(
 			value = "/channels/{hashIdChBusiness}", 
 			method = RequestMethod.GET)
+	@JsonView(Channel.SingleChannel.class)
 	public ResponseEntity<Channel> getChannelByHashIdChBusiness(@PathVariable(value = "hashIdChBusiness") String hashIdChBusiness)
 	{
 	
-		Channel ch = chServ.findByHashIdChBusiness(hashIdChBusiness, false);
+		Channel ch = chServ.findByHashIdChBusiness(hashIdChBusiness, true);
 		if (ch == null){
 			return new ResponseEntity<Channel>(new Channel(), HttpStatus.OK);
 		}
 		ch.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(
 				CatalogRestController.class).getChannelByHashIdChBusiness(hashIdChBusiness)).withSelfRel());
-		List<Schedule> lSched =  schedServ.findByChannel(ch, true);
-		HashMap<String, Integer> hmProg = new HashMap<String, Integer>();
-		for (Schedule sched: lSched) {
-			if (hmProg.putIfAbsent(sched.getProgramme().getHashNameProg(), 1) == null) {
-				ch.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(
-						CatalogRestController.class)
-						.getProgrammeByHashNameProg(sched.getProgramme().getHashNameProg())).withRel("programmes"));
-			}
-		}
+		List<Schedule> lSched = schedServ.findByChannel(ch, true);
+		ch.setListSchedules(lSched);
+//		HashMap<String, Integer> hmProg = new HashMap<String, Integer>();
+//		for (Schedule sched: lSched) {
+//			if (hmProg.putIfAbsent(sched.getProgramme().getHashNameProg(), 1) == null) {
+//				ch.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(
+//						CatalogRestController.class)
+//						.getProgrammeByHashNameProg(sched.getProgramme().getHashNameProg())).withRel("programmes"));
+//			}
+//		}
 		
 		return new ResponseEntity<Channel>(ch, HttpStatus.OK);
 	}
@@ -124,7 +126,6 @@ public class CatalogRestController {
 			value = "/programmes", 
 			method = RequestMethod.GET)
 	@JsonView(Programme.MultipleProgrammes.class)
-	@ResponseBody
 	public ResponseEntity<ListProgrammes> getProgrammes()
 	{
 		ListProgrammes lProgrammes = progServ.findAll();
@@ -149,15 +150,16 @@ public class CatalogRestController {
 		prog.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(
 				CatalogRestController.class).getProgrammeByHashNameProg(
 						prog.getHashNameProg())).withSelfRel());
+		
 		// Devolver los enlaces de los channels en los que se emite
 		// De cada schedule del programme, coger el channel al que pertenece
-		for (Schedule sched: prog.getListSchedules()){
-			System.out.println(sched);
+//		for (Schedule sched: prog.getListSchedules()){
+//			System.out.println(sched);
 	//			// Enlaces del channel de la emisión concreta del programme
 	//			prog.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(
 	//			CatalogRestController.class).getChannelByHashIdChBusiness(
 	//					sched.getChannel().getHashIdChBusiness())).withRel("channels"));
-		}
+//		}
 		
 		return new ResponseEntity<Programme>(prog, HttpStatus.OK);
 	}

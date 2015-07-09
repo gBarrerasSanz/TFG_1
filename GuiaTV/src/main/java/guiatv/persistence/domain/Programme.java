@@ -27,6 +27,7 @@ import javax.persistence.Version;
 
 import jdk.nashorn.internal.objects.annotations.Getter;
 
+import org.codehaus.jackson.annotate.JsonValue;
 import org.springframework.hateoas.ResourceSupport;
 import org.springframework.hateoas.ResourcesLinksVisible;
 
@@ -71,12 +72,11 @@ public class Programme extends ResourceSupport implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idProgPersistence;
 
-//	@JsonProperty
-	@JsonView({MultipleProgrammes.class, SingleProgramme.class})
+	@JsonView({MultipleProgrammes.class, SingleProgramme.class, Channel.SingleChannel.class})
 	@Column(name = "nameProg", nullable = false, length = 70)
     private String nameProg;
 	
-	@JsonView({MultipleProgrammes.class, SingleProgramme.class})
+	@JsonView({MultipleProgrammes.class, SingleProgramme.class, Channel.SingleChannel.class})
 	@Column(name="hashNameProg", nullable=false)
 	private String hashNameProg;
 

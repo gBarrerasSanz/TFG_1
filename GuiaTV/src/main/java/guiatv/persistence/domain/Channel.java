@@ -1,6 +1,8 @@
 package guiatv.persistence.domain;
 
 
+import guiatv.catalog.serializers.ListProgFromSchedSerializer;
+
 import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
 import java.sql.Date;
@@ -23,6 +25,7 @@ import javax.persistence.UniqueConstraint;
 import javax.persistence.Version;
 
 import org.springframework.hateoas.ResourceSupport;
+import org.springframework.hateoas.ResourcesLinksVisible;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -30,6 +33,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonView;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.common.hash.Hashing;
 
 //@Entity(name = "channel")
@@ -44,6 +49,9 @@ import com.google.common.hash.Hashing;
 public class Channel extends ResourceSupport implements Serializable {
 	private static final long serialVersionUID = 6291049572278425446L;
 	
+	public interface MultipleChannels extends ResourcesLinksVisible {}
+	public interface SingleChannel extends ResourcesLinksVisible {}
+	
 	@JsonCreator
 	public Channel() {
 		listSchedules = new ArrayList<Schedule>();
@@ -53,19 +61,21 @@ public class Channel extends ResourceSupport implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idChPersistence;
     
-	@JsonProperty
+	@JsonView({SingleChannel.class, MultipleChannels.class})
     @Column(name = "idChBusiness", nullable = false, length = 50)
     private String idChBusiness;
     
-	@JsonProperty
+	@JsonView({SingleChannel.class, MultipleChannels.class})
 	@Column(name="hashIdChBusiness", nullable=false)
 	private String hashIdChBusiness;
 	
-	@JsonProperty
+	@JsonView({SingleChannel.class, MultipleChannels.class})
     @Column(name = "nameCh", nullable = true, length = 50)
     private String nameCh;
     
-	@JsonIgnore
+//	@JsonProperty(value="listProgrammes")
+	@JsonSerialize(using=ListProgFromSchedSerializer.class)
+	@JsonView(SingleChannel.class)
 	@OneToMany(targetEntity=Schedule.class, cascade=CascadeType.ALL, mappedBy="channel", fetch=FetchType.LAZY, orphanRemoval=true)
 	private List<Schedule> listSchedules;
     
@@ -99,7 +109,7 @@ public class Channel extends ResourceSupport implements Serializable {
 		return listSchedules;
 	}
 
-	public void setSetSchedules(List<Schedule> listSchedules) {
+	public void setListSchedules(List<Schedule> listSchedules) {
 		this.listSchedules = listSchedules;
 	}
 	
