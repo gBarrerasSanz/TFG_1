@@ -110,6 +110,16 @@ public class CatalogRestController {
 				CatalogRestController.class).getChannelByHashIdChBusiness(hashIdChBusiness)).withSelfRel());
 		List<Schedule> lSched = schedServ.findByChannel(ch, true);
 		ch.setListSchedules(lSched);
+		// Computar listProgrammes
+		ch.computeListProgrammesFromListSchedules();
+		for (Programme prog: ch.getListProgrammes()){
+			prog.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(
+					CatalogRestController.class)
+					.getChannelByHashIdChBusiness(ch.getHashIdChBusiness())).withRel("channel"));
+			prog.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(
+					CatalogRestController.class)
+					.getProgrammeByHashNameProg(prog.getHashNameProg())).withRel("programme"));
+		}
 //		HashMap<String, Integer> hmProg = new HashMap<String, Integer>();
 //		for (Schedule sched: lSched) {
 //			if (hmProg.putIfAbsent(sched.getProgramme().getHashNameProg(), 1) == null) {

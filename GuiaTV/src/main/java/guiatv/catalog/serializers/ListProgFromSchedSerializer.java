@@ -30,7 +30,6 @@ public class ListProgFromSchedSerializer extends JsonSerializer<List<Schedule>> 
 			throws IOException, JsonProcessingException {
 		
 		HashMap<String, Integer> hmProg = new HashMap<String, Integer>();
-		
 		jgen.writeStartArray();
 		for (Schedule sched: lSched) {
 			Programme prog = sched.getProgramme();

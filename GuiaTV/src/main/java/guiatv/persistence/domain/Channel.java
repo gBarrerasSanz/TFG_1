@@ -1,6 +1,7 @@
 package guiatv.persistence.domain;
 
 
+import guiatv.catalog.restcontroller.CatalogRestController;
 import guiatv.catalog.serializers.ListProgFromSchedSerializer;
 
 import java.io.Serializable;
@@ -8,6 +9,7 @@ import java.nio.charset.StandardCharsets;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
@@ -21,11 +23,13 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
 import javax.persistence.Version;
 
 import org.springframework.hateoas.ResourceSupport;
 import org.springframework.hateoas.ResourcesLinksVisible;
+import org.springframework.hateoas.mvc.ControllerLinkBuilder;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -74,11 +78,15 @@ public class Channel extends ResourceSupport implements Serializable {
     private String nameCh;
     
 //	@JsonProperty(value="listProgrammes")
-	@JsonSerialize(using=ListProgFromSchedSerializer.class)
-	@JsonView(SingleChannel.class)
+//	@JsonSerialize(using=ListProgFromSchedSerializer.class)
+//	@JsonView(SingleChannel.class)
 	@OneToMany(targetEntity=Schedule.class, cascade=CascadeType.ALL, mappedBy="channel", fetch=FetchType.LAZY, orphanRemoval=true)
 	private List<Schedule> listSchedules;
     
+	@Transient
+	@JsonView(SingleChannel.class)
+	private List<Programme> listProgrammes;
+	
     @OneToMany(mappedBy="channel", fetch=FetchType.LAZY)
     private List<RtmpSource> listRtmpSources;
     
@@ -164,6 +172,25 @@ public class Channel extends ResourceSupport implements Serializable {
 	
 	public void addSchedule(Schedule sched) {
 		this.listSchedules.add(sched);
+	}
+	
+	public void setListProgrammes(List<Programme> lProg) {
+		listProgrammes = lProg;
+	}
+	
+	public List<Programme> getListProgrammes() {
+		return listProgrammes;
+	}
+	
+	public void computeListProgrammesFromListSchedules() {
+		listProgrammes = new ArrayList<Programme>();
+		HashMap<String, Integer> hmProg = new HashMap<String, Integer>();
+		for (Schedule sched: listSchedules) {
+			Programme prog = sched.getProgramme();
+			if (hmProg.putIfAbsent(prog.getHashNameProg(), 1) == null) {
+				listProgrammes.add(prog);
+			}
+		}
 	}
 	
 	@Override
