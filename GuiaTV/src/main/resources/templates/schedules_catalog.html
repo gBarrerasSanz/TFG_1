@@ -1,0 +1,24 @@
+<html>
+<head>
+<script>
+function fillAllProgrammes(){
+	var client = new CatalogClient(); 
+	result = client.fillAllProgrammes('localhost:8080/catalog/programmes/');
+	for(var i = 0; i < result.length(); i++) {
+	        $('table').append('<tr></tr>');
+	        for(var j = 0; j < cols; j++) {
+	            $('table').find('tr').eq(i).append('<td></td>');
+	            $('table').find('tr').eq(i).find('td').eq(j).attr('data-row',i).attr('data-col', j);
+	        }
+	}
+}
+</script>
+</head>
+<body>
+<table style="width:100%">
+<script>
+fillAllProgrammes();
+</script>
+</table>
+</body>
+</html>

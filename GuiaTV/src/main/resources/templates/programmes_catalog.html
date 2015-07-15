@@ -1,0 +1,21 @@
+<html>
+<head>
+<script>
+function fillAllProgrammes(){
+	var client = new CatalogClient(); 
+	var result = client.fillAllProgrammes('localhost:8080/catalog/programmes/');
+    var table = $("#tableProgrammes");
+    $.each(data, function(idx, elem){
+    	var link = 'localhost:8080/catalog/schedules_catalog/?hashNameProg='+elem.hashNameProg;
+        table.append("<tr><td>"+elem.nameProg+"</td><td>"+link+"</td></tr>");
+    });
+}
+</script>
+</head>
+<body>
+<table id="tableProgrammes"/>
+<script>
+fillAllProgrammes();
+</script>
+</body>
+</html>

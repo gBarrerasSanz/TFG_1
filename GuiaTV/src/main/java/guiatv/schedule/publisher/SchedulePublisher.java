@@ -1,5 +1,6 @@
 package guiatv.schedule.publisher;
 
+import guiatv.catalog.restcontroller.PublisherRestController;
 import guiatv.persistence.domain.Event_old;
 import guiatv.persistence.domain.Schedule;
 
@@ -7,6 +8,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
@@ -20,7 +22,7 @@ import org.springframework.integration.support.MessageBuilder;
 import org.springframework.messaging.Message;
 import org.springframework.stereotype.Service;
 import org.springframework.test.context.ActiveProfiles;
-
+import org.apache.log4j.Logger;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
@@ -32,6 +34,8 @@ public class SchedulePublisher {
 //	@Autowired
 //	TopicExchange topicExch;
 	
+	private static Logger logger = Logger.getLogger("debugLog");
+	
 	@Autowired
 	AmqpTemplate amqpTmp;
 	
@@ -39,8 +43,9 @@ public class SchedulePublisher {
 		try {
 			String routKey = null;
 			for (Schedule sched: listSchedMsg.getPayload()) {
-				routKey = sched.getChannel().getIdChPersistence()+"."+sched.getProgramme().getNameProg();
+				routKey = sched.getChannel().getHashIdChBusiness()+"."+sched.getProgramme().getHashNameProg();
 				amqpTmp.convertAndSend(routKey, sched);
+				logger.debug("Published topic with name="+sched.getProgramme().getNameProg());
 			}
 		} catch (Exception e1) {
 			e1.printStackTrace();

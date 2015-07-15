@@ -120,7 +120,7 @@ public class RtmpSpyBeta {
 		        		        
 		        		        Highgui.imwrite("a3.jpeg", frameMat);
 		        				im.showImage(frameMat);
-		        				System.out.println("Done");
+//		        				System.out.println("Done");
 		        				System.exit(0);
 //		        				Message<?> frameMsg = MessageBuilder.
 //		        						withPayload(frameMat).build();
