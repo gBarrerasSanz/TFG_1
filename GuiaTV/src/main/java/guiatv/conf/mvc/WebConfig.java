@@ -10,6 +10,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Description;
+import org.springframework.context.annotation.Import;
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -17,8 +20,12 @@ import org.springframework.integration.support.json.Jackson2JsonObjectMapper;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
+import org.thymeleaf.spring4.SpringTemplateEngine;
+import org.thymeleaf.spring4.view.ThymeleafViewResolver;
+import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
 import com.fasterxml.jackson.core.JsonFactory.Feature;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -43,13 +50,18 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
         configurer.enable();
     }
- 
-    @Bean
-    public InternalResourceViewResolver getInternalResourceViewResolver() {
-        InternalResourceViewResolver resolver = new InternalResourceViewResolver();
-        resolver.setPrefix("/WEB-INF/pages/");
-        resolver.setSuffix(".jsp");
-        return resolver;
+	
+//    @Bean
+//    public InternalResourceViewResolver getInternalResourceViewResolver() {
+//        InternalResourceViewResolver resolver = new InternalResourceViewResolver();
+//        resolver.setPrefix("/WEB-INF/pages/");
+//        resolver.setSuffix(".jsp");
+//        return resolver;
+//    }
+    
+    @Override
+    public void addViewControllers(ViewControllerRegistry registry) {
+        registry.addViewController("/programmes_catalog").setViewName("programmes_catalog");
     }
     
     @Override
@@ -77,6 +89,53 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         return springHateoasObjectMapper;
     }
     
+    /**
+     * THYMELEAF CONFIGURATION
+     */
+    
+//    @Bean
+//	@Description("Thymeleaf template resolver serving HTML 5")
+//	public ServletContextTemplateResolver templateResolver() {
+//		ServletContextTemplateResolver templateResolver = new ServletContextTemplateResolver();
+//		templateResolver.setPrefix("/templates/");
+//		templateResolver.setSuffix(".html");
+//		templateResolver.setTemplateMode("HTML5");
+//
+//		return templateResolver;
+//	}
+//	
+//	@Bean
+//	@Description("Thymeleaf template engine with Spring integration")
+//	public SpringTemplateEngine templateEngine() {
+//		SpringTemplateEngine templateEngine = new SpringTemplateEngine();
+//		templateEngine.setTemplateResolver(templateResolver());
+//		
+//		return templateEngine;
+//	}
+//	
+//	@Bean
+//	@Description("Thymeleaf view resolver")
+//	public ThymeleafViewResolver viewResolver() {
+//		ThymeleafViewResolver viewResolver = new ThymeleafViewResolver();
+//		viewResolver.setTemplateEngine(templateEngine());
+//		
+//		return viewResolver;
+//	}
+//	
+//	@Bean
+//	@Description("Spring message resolver")
+//    public ResourceBundleMessageSource messageSource() {  
+//        ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();  
+//        messageSource.setBasename("i18n/messages");  
+//
+//        return messageSource;  
+//    }
+//	
+//	@Override
+//	public void addResourceHandlers(ResourceHandlerRegistry registry) {
+//		registry.addResourceHandler("/resources/**").addResourceLocations("/WEB-INF/resources/");
+//    }
+	
 //	springHateoasObjectMapper.configure(SerializationFeature.INDENT_OUTPUT, true);
 //	springHateoasObjectMapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
 //	springHateoasObjectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true);

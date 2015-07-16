@@ -90,6 +90,18 @@ public class ScheduleService {
 	}
 	
 	@Transactional(readOnly = true)
+	public List<Schedule> findByProgramme(Programme prog, boolean refs) {
+		List<Schedule> lSched = schedRep.findByProgramme(prog);
+		if (refs){
+			for (Schedule sched: lSched) {
+				Hibernate.initialize(sched.getChannel());
+				Hibernate.initialize(sched.getProgramme());
+			}
+		}
+		return lSched;
+	}
+	
+	@Transactional(readOnly = true)
 	public List<Schedule> findByChannelAndProgrammeAndEndLessThan(Channel ch, Programme prog, Timestamp end, boolean refs) {
 		List<Schedule> lSched = schedRep.findByChannelAndProgrammeAndEndLessThanOrderByStartAsc(ch, prog, end);
 		if (refs){

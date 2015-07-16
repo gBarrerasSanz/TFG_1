@@ -3,6 +3,7 @@ package guiatv.catalog.webapp;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.velocity.app.VelocityEngine;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -15,15 +16,19 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.google.common.base.Charsets;
+
 @RestController
-@RequestMapping("/catalog")
-public class CatalogWebappController {
+@RequestMapping("/catalogView")
+public class CatalogViewController {
 	
 	@Autowired
 	private VelocityEngine velocityEngine;
 	
-	@RequestMapping(value = "/programmes_catalog", method = RequestMethod.GET)
-	public ResponseEntity<String> getProgrammesCatalog(){
+	@RequestMapping(value = "/schedulesCatalog", method = RequestMethod.GET)
+	public ResponseEntity<String> getProgrammesCatalog(
+		@RequestParam(value="hashNameProg", defaultValue="", required=true) String hashNameProg)
+	{
 		Map<String, Object> model = null;
 		String html_text = null;
 		
@@ -32,32 +37,14 @@ public class CatalogWebappController {
 		 *************************************/
 		
 		model = new HashMap<String, Object>();
-		
+		model.put("hashNameProg", hashNameProg);
 		html_text = VelocityEngineUtils.mergeTemplateIntoString(velocityEngine,
-				"programmes_catalog.html", "UTF-8", model);
+				"schedules_catalog_tpt.html", "UTF-8", model);
+		html_text = html_text.replace("\n", "").replace("\t", "").replace("\r", "");
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.TEXT_HTML);
 		ResponseEntity<String> re = new ResponseEntity<>(html_text, headers, HttpStatus.OK); 
 		return re;
 	}
 	
-	@RequestMapping(value = "/schedules_catalog", method = RequestMethod.GET)
-	public ResponseEntity<String> getSchedulesCatalog(
-			@RequestParam(value="hashNameProg", defaultValue="", required=true) String hashNameProg){
-		Map<String, Object> model = null;
-		String html_text = null;
-		
-		/*************************************
-		 * Inyectar info en el template
-		 *************************************/
-		
-		model = new HashMap<String, Object>();
-		
-		html_text = VelocityEngineUtils.mergeTemplateIntoString(velocityEngine,
-				"stats.html", "UTF-8", model);
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.TEXT_HTML);
-		ResponseEntity<String> re = new ResponseEntity<>(html_text, headers, HttpStatus.OK); 
-		return re;
-	}
 }

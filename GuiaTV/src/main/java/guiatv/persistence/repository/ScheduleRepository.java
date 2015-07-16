@@ -31,6 +31,8 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long>,
 	List<Schedule> findByChannelAndProgrammeAndStartGreaterOrEqualThan(Channel ch, 
 			Programme prog, Timestamp start);
 	
+	List<Schedule> findByProgramme(Programme prog);
+	
 	List<Schedule> findByChannelAndProgrammeAndEndLessThanOrderByStartAsc(Channel ch, Programme prog, Timestamp end);
 	
 	List<Schedule> findByStartBetweenOrderByStartAsc(Timestamp start, Timestamp end);

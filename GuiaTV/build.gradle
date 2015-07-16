@@ -97,6 +97,7 @@ dependencies {
 	compile 'org.springframework.boot:spring-boot-gradle-plugin:1.2.2.RELEASE'
 	compile 'org.springframework.boot:spring-boot-starter:1.2.2.RELEASE'
 	compile 'org.springframework.amqp:spring-rabbit:1.4.3.RELEASE'
+	compile 'org.springframework.boot:spring-boot-starter-parent:1.2.5.RELEASE'
 	
    	compile 'org.springframework:spring-core:4.1.6.RELEASE'
    	compile 'org.springframework:spring-context-support:4.1.6.RELEASE'
@@ -131,6 +132,7 @@ dependencies {
     compile('org.springframework.hateoas:spring-hateoas:0.18.0.BUILD-SNAPSHOT')
     
     compile 'org.apache.velocity:velocity:1.7'
+    compile 'org.springframework.boot:spring-boot-starter-thymeleaf:1.2.5.RELEASE'
     
     compile("org.springframework.plugin:spring-plugin-core:1.2.0.RELEASE")
     compile('com.jayway.jsonpath:json-path:2.0.0')

@@ -31,6 +31,7 @@ import org.springframework.hateoas.ResourcesLinksVisible;
 import org.springframework.hateoas.mvc.ControllerLinkBuilder;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -134,7 +135,8 @@ public class CatalogRestController {
 	
 	@RequestMapping(
 			value = "/programmes", 
-			method = RequestMethod.GET)
+			method = RequestMethod.GET,
+			produces=MediaType.APPLICATION_JSON_VALUE)
 	@JsonView(Programme.MultipleProgrammes.class)
 	public ResponseEntity<ListProgrammes> getProgrammes()
 	{
@@ -265,6 +267,21 @@ public class CatalogRestController {
 			if (ch != null && prog != null) {
 				List<Schedule> lSched = schedServ.findByChannelAndProgrammeAndStartGreaterOrEqualThan(
 						ch, prog, now, true);
+				response = new ResponseEntity<List<Schedule>>(lSched, HttpStatus.OK);
+			}
+			else {
+				response = errorResp;
+			}
+		}
+		/**
+		 * PROGRAMME -> DEVOLVER SCHEDULES DESPUES DE NOW()
+		 */
+		else if (hashNameProg.length()>0 && hashIdChBusiness.length()==0 
+				&& start == null && end == null) {
+			Programme prog = progServ.findByHashNameProg(hashNameProg, true);
+			if (prog != null) {
+				List<Schedule> lSched = schedServ.findByProgramme(
+						prog, true);
 				response = new ResponseEntity<List<Schedule>>(lSched, HttpStatus.OK);
 			}
 			else {

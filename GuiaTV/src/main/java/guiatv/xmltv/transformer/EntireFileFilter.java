@@ -23,7 +23,7 @@ public class EntireFileFilter<File> extends AbstractFileListFilter<File> {
 			// Validación que no entiendo
 			FileInputStream fStream = new FileInputStream(f);
 			//If file is entirely OK the stream can be created
-			logger.debug("File is ready:"+f.getName());
+//			logger.debug("File is ready:"+f.getName());
 			fStream.close();
 			// Mi validación: intentar parsear el dom
 			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
