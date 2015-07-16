@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
+import guiatv.common.CommonUtility;
 import guiatv.persistence.domain.Channel;
 import guiatv.persistence.domain.Programme;
 import guiatv.persistence.domain.RtmpSource;
@@ -138,6 +139,10 @@ public class ScheduleService {
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
     public void insertSchedules(List<Schedule> lSched) {
 		for (Schedule sched: lSched) {
+			// Si el final del schedule NO es posterior al momento actual -> Saltarse el schedule
+			if ( ! CommonUtility.isScheduleOnTime(sched)) {
+				break;
+			}
 			try {
 				Channel ch = chRep.findByIdChBusiness(sched.getChannel().getIdChBusiness());
 				Programme prog = progRep.findByNameProg(sched.getProgramme().getNameProg());

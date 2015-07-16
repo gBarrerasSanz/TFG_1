@@ -23,7 +23,6 @@ public class SchedulePoller {
 	private final int SECONDS_FROM_START = SECS_PER_MIN * 200;
 	
 	public List<Schedule> askForSchedules() {
-//		List<Schedule> lSched = schedServ.findAll(true);
 		List<Schedule> lSched = schedServ.findBySecondsFromStart(SECONDS_FROM_START, true);
 		return lSched;
 	}

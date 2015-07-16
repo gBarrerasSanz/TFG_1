@@ -45,7 +45,8 @@ public class SchedulePublisher {
 			for (Schedule sched: listSchedMsg.getPayload()) {
 				routKey = sched.getChannel().getHashIdChBusiness()+"."+sched.getProgramme().getHashNameProg();
 				amqpTmp.convertAndSend(routKey, sched);
-				logger.debug("Published topic with name="+sched.getProgramme().getNameProg());
+				logger.debug("Published: "+sched.getProgramme().getNameProg()
+						+" -> "+sched.getStart()+" --- "+sched.getEnd());
 			}
 		} catch (Exception e1) {
 			e1.printStackTrace();

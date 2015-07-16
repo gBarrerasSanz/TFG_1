@@ -31,7 +31,7 @@ public class EntireFileFilter<File> extends AbstractFileListFilter<File> {
 			Document doc = dBuilder.parse(f);
 			return true;
 		} catch (Exception e) {
-			logger.debug("File is not ready yet! "+(f).getName());
+//			logger.debug("File is not ready yet! "+(f).getName());
 			return false;
 		}
 	}

@@ -7,6 +7,7 @@ import guiatv.persistence.domain.Programme;
 import guiatv.persistence.domain.Schedule;
 
 import java.io.File;
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -98,7 +99,13 @@ public class XMLTVTransformer implements Transformer {
 					sched.setProgramme(mapProg.get(nameProg));
 					sched.setStart(CommonUtility.strToTimestamp(schedNodeMap.getNamedItem("start").getNodeValue()));
 					sched.setEnd(CommonUtility.strToTimestamp(schedNodeMap.getNamedItem("stop").getNodeValue()));
-					lSched.add(sched);
+					
+					/**
+					 * Añadir el schedule siempre que el horario sea NO pasado
+					 */
+					if (CommonUtility.isScheduleOnTime(sched)) {
+						lSched.add(sched);
+					}
 					schedItIdx++;
 				}
 //				log.debug("listProgNodes.size() = "+String.valueOf(listProgNodes.size()));
@@ -108,13 +115,13 @@ public class XMLTVTransformer implements Transformer {
 			}
 			catch(Exception e) {
 				e.printStackTrace();
-				log.debug("**** File content: ****");
-				log.debug(CommonUtility.getFileString(file));
+//				log.debug("**** File content: ****");
+//				log.debug(CommonUtility.getFileString(file));
 				return null;
 			}
 		}
 		else {
-			log.debug("Not an instance of File");
+//			log.debug("Not an instance of File");
 		}
 		return listSchedulesResult;
 	}

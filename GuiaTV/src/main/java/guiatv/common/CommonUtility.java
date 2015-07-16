@@ -1,6 +1,7 @@
 package guiatv.common;
 
 import guiatv.persistence.domain.Event_old;
+import guiatv.persistence.domain.Schedule;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -68,7 +69,7 @@ public class CommonUtility {
 	public static String getDateString() {
 		Date date = new Date();
 		final Locale SPAIN_LOCALE = new Locale("es", "ES");
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss", SPAIN_LOCALE);
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy_MM_dd_HH_mm", SPAIN_LOCALE);
 		return formatter.format(date);
 	}
 	
@@ -139,6 +140,13 @@ public class CommonUtility {
 			e.printStackTrace();
 		}
 		return unit;
+	}
+	/**
+	 * Si el final del schedule es posterior al momento actual
+	 * -> Entonces devolver TRUE (a tiempo)
+	 */
+	public static boolean isScheduleOnTime(Schedule sched) {
+		return sched.getEnd().after((new Timestamp(new Date().getTime())));
 	}
 	
 }
