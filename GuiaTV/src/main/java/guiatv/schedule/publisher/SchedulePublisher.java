@@ -43,7 +43,7 @@ public class SchedulePublisher {
 		try {
 			String routKey = null;
 			for (Schedule sched: listSchedMsg.getPayload()) {
-				routKey = sched.getChannel().getHashIdChBusiness()+"."+sched.getProgramme().getHashNameProg();
+				routKey = sched.getProgramme().getHashNameProg();
 				amqpTmp.convertAndSend(routKey, sched);
 				logger.debug("Published: "+sched.getProgramme().getNameProg()
 						+" -> "+sched.getStart()+" --- "+sched.getEnd());
