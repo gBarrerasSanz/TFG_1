@@ -50,7 +50,7 @@ public class CommonUtility {
 	
 	public static boolean checkFileNameDate(String grabFileName, Date realDate) {
 		final Locale SPAIN_LOCALE = new Locale("es", "ES");
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss", SPAIN_LOCALE);
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy_MM_dd_HH_mm", SPAIN_LOCALE);
 		String dateStr = grabFileName.substring(
 				grabFileName.indexOf("_")+1, grabFileName.indexOf("."));
 		try {

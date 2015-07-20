@@ -137,7 +137,8 @@ public class ScheduleService {
     }
 	
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void insertSchedules(List<Schedule> lSched) {
+    public int insertSchedules(List<Schedule> lSched) {
+		int numSched = 0;
 		for (Schedule sched: lSched) {
 			// Si el final del schedule NO es posterior al momento actual -> Saltarse el schedule
 			if ( ! CommonUtility.isScheduleOnTime(sched)) {
@@ -162,11 +163,13 @@ public class ScheduleService {
 						sched.getChannel(), sched.getProgramme(), sched.getStart(), sched.getEnd());
 				if (schedIn == null) {
 					schedRep.saveAndFlush(sched);
+					numSched++;
 				}
 			} catch(Exception e) {
 				e.printStackTrace();
 			}
 		}
+		return numSched;
     }
 	
 	@Transactional(propagation = Propagation.REQUIRES_NEW)

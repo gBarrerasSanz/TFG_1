@@ -48,6 +48,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationConfig;
 
+@Profile({"CatalogRestControllerTests, dev, default"})
 @RestController
 @RequestMapping("/publisher")
 public class PublisherRestController {

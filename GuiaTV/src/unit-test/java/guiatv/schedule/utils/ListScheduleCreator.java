@@ -17,19 +17,22 @@ public class ListScheduleCreator {
 		// Crear channels
 		Channel chNeox = new Channel();
 		chNeox.setIdChBusiness("neox-722.laguiatv.com");
+		chNeox.computeHashIdChBusiness();
 		// Crear programmes
 		Programme progMadre = new Programme();
 		progMadre.setNameProg("Cómo conocí a vuestra Madre");
+		progMadre.computeHashNameProg();
 		Programme progSimpsons = new Programme();
 		progSimpsons.setNameProg("Los Simpson");
+		progSimpsons.computeHashNameProg();
 		// Crear schedules
 		Schedule schedMadre = new Schedule();
 		schedMadre.setChannel(chNeox);
 		schedMadre.setProgramme(progMadre);
 //		schedMadre.setStart(CommonUtility.strToDate("20150316173500 +0100"));
 //		schedMadre.setEnd(CommonUtility.strToDate("20150316175400 +0100"));
-		schedMadre.setStart(CommonUtility.strToTimestamp("20150316173500 +0100"));
-		schedMadre.setEnd(CommonUtility.strToTimestamp("20150316175400 +0100"));
+		schedMadre.setStart(CommonUtility.strToTimestamp("20170316173500 +0100"));
+		schedMadre.setEnd(CommonUtility.strToTimestamp("20170316175400 +0100"));
 		
 		
 		Schedule schedSimpsons = new Schedule();
@@ -37,8 +40,8 @@ public class ListScheduleCreator {
 		schedSimpsons.setProgramme(progSimpsons);
 //		schedSimpsons.setStart(CommonUtility.strToDate("20150316214500 +0100"));
 //		schedSimpsons.setEnd(CommonUtility.strToDate("20150316220000 +0100"));
-		schedSimpsons.setStart(CommonUtility.strToTimestamp("20150316214500 +0100"));
-		schedSimpsons.setEnd(CommonUtility.strToTimestamp("20150316220000 +0100"));
+		schedSimpsons.setStart(CommonUtility.strToTimestamp("20170316214500 +0100"));
+		schedSimpsons.setEnd(CommonUtility.strToTimestamp("20170316220000 +0100"));
 		
 		listScheduleExpected.add(schedMadre);
 		listScheduleExpected.add(schedSimpsons);

@@ -34,8 +34,8 @@ public class ScheduleLoader {
 	
 	public void loadListSchedules(List<Schedule> lSched) {
 		
-		schedServ.insertSchedules(lSched);
-//		System.out.println("Done");
+		int numInserted = schedServ.insertSchedules(lSched);
+		System.out.println("Loaded "+numInserted+" schedules");
 		
 //		for (Schedule sched: lSched) {
 //			Channel ch = chServ.findByIdChBusiness(sched.getChannel().getIdChBusiness());
