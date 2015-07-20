@@ -117,11 +117,15 @@ public class ScheduleService {
 		return lSched;
 	}
 	
+	/**
+	 * Devuelve y elimina de la base de datos, los schedules que empiezan secsFromStart
+	 * segundos después del momento actual, y aquellos schedules en curso
+	 */
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public List<Schedule> popBySecondsFromStart(int secsFromStart) {
 		Timestamp now = new Timestamp(new Date().getTime());
 		Timestamp afterStart = new Timestamp(now.getTime() + (long)(1000 * secsFromStart));
-		List<Schedule> lSched = schedRep.findByStartBetweenOrderByStartAsc(now, afterStart);
+		List<Schedule> lSched = schedRep.findByStartBetweenOrStartBeforeAndEndAfterOrderByStartAsc(now, afterStart, now, now);
 		for (Schedule sched: lSched) {
 			Hibernate.initialize(sched.getChannel());
 			Hibernate.initialize(sched.getProgramme());
@@ -129,23 +133,10 @@ public class ScheduleService {
 		/**
 		 * Borrar los schedules de la BD
 		 */
-//		for (Schedule sched: lSched) {
-//			Channel ch = chRep.findOne(sched.getChannel().getIdChPersistence());
-//			ch.getListSchedules().remove(sched);
-//			int numRefCh = ch.getListSchedules().size();
-//			if (numRefCh == 1) {
-//				chRep.delete(ch);
-//			}
-//			Programme prog = progRep.findOne(sched.getProgramme().getIdProgPersistence());
-//			prog.getListSchedules().remove(sched);
-//			int numRefProg = prog.getListSchedules().size();
-//			if (numRefProg == 1) {
-//				progRep.delete(prog);
-//			}
-////			sched.setChannel(null);
-//			schedRep.delete(sched);
+		for (Schedule sched: lSched) {
+			schedRep.delete(sched);
 //			logger.debug(schedRep.exists(sched.getIdSched()));
-//		}
+		}
 		return lSched;
 	}
 	

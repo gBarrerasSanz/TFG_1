@@ -80,7 +80,8 @@ public class Channel extends ResourceSupport implements Serializable {
 //	@JsonProperty(value="listProgrammes")
 //	@JsonSerialize(using=ListProgFromSchedSerializer.class)
 //	@JsonView(SingleChannel.class)
-	@OneToMany(targetEntity=Schedule.class, cascade=CascadeType.ALL, mappedBy="channel", fetch=FetchType.LAZY, orphanRemoval=true)
+//	@OneToMany(targetEntity=Schedule.class, cascade=CascadeType.ALL, mappedBy="channel", fetch=FetchType.LAZY, orphanRemoval=true)
+	@OneToMany(targetEntity=Schedule.class, mappedBy="channel", fetch=FetchType.LAZY, orphanRemoval=true)
 	private List<Schedule> listSchedules;
     
 	@Transient

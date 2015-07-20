@@ -83,7 +83,8 @@ public class Programme extends ResourceSupport implements Serializable {
 //	@JsonProperty
 	@JsonSerialize(using=ListSchedulesSerializer.class)
 	@JsonView({SingleProgramme.class})
-	@OneToMany(targetEntity=Schedule.class, cascade=CascadeType.ALL, mappedBy="programme", fetch=FetchType.LAZY)
+//	@OneToMany(targetEntity=Schedule.class, cascade=CascadeType.ALL, mappedBy="programme", fetch=FetchType.LAZY)
+	@OneToMany(targetEntity=Schedule.class, mappedBy="programme", fetch=FetchType.LAZY)
 	private List<Schedule> listSchedules;
     
     

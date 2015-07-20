@@ -25,6 +25,8 @@ import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
 import javax.persistence.Version;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.ResourceSupport;
 import org.springframework.hateoas.ResourcesLinksVisible;
@@ -62,13 +64,15 @@ public class Schedule extends ResourceSupport implements Serializable {
 	
 	@JsonView(CustomSchedule.class)
 	@JsonSerialize(using=ScheduleChannelSerializer.class)
-	@ManyToOne(targetEntity=Channel.class, cascade=CascadeType.ALL, fetch=FetchType.LAZY)
+//	@ManyToOne(targetEntity=Channel.class, cascade=CascadeType.ALL, fetch=FetchType.LAZY)
+	@ManyToOne(targetEntity=Channel.class, fetch=FetchType.LAZY)
 	@JoinColumn(name="channel_fk", referencedColumnName="idChPersistence")
 	private Channel channel;
     
 	@JsonView(CustomSchedule.class)
 	@JsonSerialize(using=ScheduleProgrammeSerializer.class)
-	@ManyToOne(targetEntity=Programme.class, cascade=CascadeType.ALL, fetch=FetchType.LAZY)
+//	@ManyToOne(targetEntity=Programme.class, cascade=CascadeType.ALL, fetch=FetchType.LAZY)
+	@ManyToOne(targetEntity=Programme.class, fetch=FetchType.LAZY)
 	@JoinColumn(name="programme_fk", referencedColumnName="idProgPersistence")
 	private Programme programme;
 	

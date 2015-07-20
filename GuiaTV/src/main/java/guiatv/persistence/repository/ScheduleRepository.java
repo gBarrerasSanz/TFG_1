@@ -38,7 +38,8 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long>,
 //	@Query("Select s from schedule s where s.start >= ?1 and s.end <= ?2")
 //	List<Schedule> findCloserSchedules(Timestamp start, Timestamp end);
 	
-	List<Schedule> findByStartBetweenOrderByStartAsc(Timestamp start, Timestamp end);
+	// Devolver los schedules con start en [start, end] o los schedules con (start < start2 AND end > start2) (schedules en curso)
+	List<Schedule> findByStartBetweenOrStartBeforeAndEndAfterOrderByStartAsc(Timestamp start, Timestamp end, Timestamp start2, Timestamp start3);
 	
 	List<Schedule> findByChannelAndProgrammeOrderByStartAsc(Channel ch, Programme prog);
 	
