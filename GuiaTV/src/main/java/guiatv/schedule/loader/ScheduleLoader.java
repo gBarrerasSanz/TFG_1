@@ -15,6 +15,7 @@ import javax.validation.ConstraintViolationException;
 import org.apache.log4j.Logger;
 import org.h2.jdbc.JdbcSQLException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional // Es necesario

@@ -51,8 +51,16 @@ public class XMLTVGrabber {
 				.getResource("META-INF/xmltv/grabber/windows_bin/xmltv-0.5.66-win32");
 		
 		File resFile = null, errFile = null;
+		/**
+		 * Asignar nombre en función de la fecha de obtención
+		 */
 		resFile = new File(tmpDir.getAbsolutePath()+
 				File.separator+"xmltvDump_"+CommonUtility.getDateString()+".xml");
+		/**
+		 * Asignar nombre (el mismo para todos, con lo que se reemplazará)
+		 */
+//		resFile = new File(tmpDir.getAbsolutePath()+
+//				File.separator+"xmltvDump.xml");
 		errFile = new File(tmpDir.getAbsolutePath()+
 				File.separator+"errorLog_"+CommonUtility.getDateString()+".txt");
 		switch(platform) {
