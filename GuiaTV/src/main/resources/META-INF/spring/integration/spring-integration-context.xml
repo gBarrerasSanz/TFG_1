@@ -116,8 +116,7 @@
 
 		<int-file:outbound-channel-adapter
 			id="grabberOutbound" channel="grabberChOut" directory="file:xmltv_cap"
-			auto-create-directory="true" mode="REPLACE" temporary-file-suffix=".writing"
-			delete-source-files="true">
+			auto-create-directory="true" mode="REPLACE" temporary-file-suffix=".writing">
 		</int-file:outbound-channel-adapter>
 	</beans>
 
@@ -132,8 +131,10 @@
 				<list>
 					<bean
 						class="org.springframework.integration.file.filters.RegexPatternFileListFilter">
+						<!-- <constructor-arg
+							value="xmltvDump_[0-9][0-9][0-9][0-9]_[0-9][0-9]_[0-9][0-9]_[0-9][0-9]_[0-9][0-9]\.xml" /> -->
 						<constructor-arg
-							value="xmltvDump_[0-9][0-9][0-9][0-9]_[0-9][0-9]_[0-9][0-9]_[0-9][0-9]_[0-9][0-9]\.xml" />
+							value="xmltvDump.xml" />
 					</bean>
 					<bean
 						class="org.springframework.integration.file.filters.AcceptOnceFileListFilter" />

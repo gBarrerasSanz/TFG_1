@@ -47,4 +47,6 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long>,
 //	List<Schedule> findByChannelAndProgrammeFromNow(Channel ch, Programme prog);
 	
 	Schedule findByChannelAndProgrammeAndStartAndEnd(Channel ch, Programme prog, Timestamp start, Timestamp end);
+	
+//	void delete(Schedule sched);
 }

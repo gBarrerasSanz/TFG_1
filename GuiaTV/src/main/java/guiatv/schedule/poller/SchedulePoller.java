@@ -20,10 +20,10 @@ public class SchedulePoller {
 	ScheduleService schedServ;
 	
 	private final int SECS_PER_MIN = 60;
-	private final int SECONDS_FROM_START = SECS_PER_MIN * 2; // 2 min
+	private final int SECONDS_FROM_START = SECS_PER_MIN * 100; // 2 min
 	
 	public List<Schedule> askForSchedules() {
-		List<Schedule> lSched = schedServ.findBySecondsFromStart(SECONDS_FROM_START, true);
+		List<Schedule> lSched = schedServ.popBySecondsFromStart(SECONDS_FROM_START);
 		return lSched;
 	}
 	
