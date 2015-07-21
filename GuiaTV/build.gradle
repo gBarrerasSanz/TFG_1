@@ -28,8 +28,14 @@ apply plugin: 'spring-boot'
 repositories {
  	mavenCentral()
  	mavenLocal()
-	maven {
+	maven { // Para eclipse paho MQTT
     	url "https://repo.eclipse.org/content/repositories/paho-releases/"
+    }
+    maven { // Para una dependencia del plugin Trainable Segmentation
+    	url "http://maven.imagej.net/content/groups/public"
+    }
+    maven { // Para el plugin Trainable Segmentation
+    	url "http://maven.imagej.net/service/local/repositories/snapshots/content/"
     }
     // Repositorio local
     maven {
@@ -137,6 +143,8 @@ dependencies {
     compile("org.springframework.plugin:spring-plugin-core:1.2.0.RELEASE")
     compile('com.jayway.jsonpath:json-path:2.0.0')
     
+    compile 'nz.ac.waikato.cms.weka:weka-stable:3.6.12'
+    compile 'sc.fiji:Trainable_Segmentation:2.2.2-SNAPSHOT'
     
     compile 'org.springframework.boot:spring-boot-starter-web:1.2.3.RELEASE'
     //compile 'commons-io:commons-io:2.4'
