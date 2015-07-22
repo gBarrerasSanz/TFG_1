@@ -15,7 +15,7 @@
 	    $.getJSON(url, function(jsonContent) {
 	        $.each(jsonContent, function(idx, elem) {
 	            var link =
-	                'http://localhost:8080/catalogView/schedulesCatalog/?hashNameProg=' +
+	                'http://localhost:8080/publisherCatalog/schedulesCatalog/?hashNameProg=' +
 	                elem.hashNameProg;
 	            //table.append("<tr><td><strong><a href='" + link + "' >" + elem.nameProg + "</a></strong></td></tr>" );
 	            table.append('<tr><td><strong><a href="'+ link + '" >'+elem.nameProg+'</a></strong></td></tr>');

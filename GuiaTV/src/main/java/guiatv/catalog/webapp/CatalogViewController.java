@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.google.common.base.Charsets;
 
 @Controller
-@RequestMapping("/catalogView")
+@RequestMapping("/publisherCatalog")
 public class CatalogViewController {
 	
 	@RequestMapping(value = "/schedulesCatalog", method = RequestMethod.GET)

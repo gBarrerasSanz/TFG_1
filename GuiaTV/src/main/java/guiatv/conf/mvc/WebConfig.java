@@ -78,7 +78,9 @@ public class WebConfig extends WebMvcConfigurerAdapter {
   
   @Override
   public void addViewControllers(ViewControllerRegistry registry) {
-	  registry.addViewController("/staticweb").setViewName("staticweb");
+//	  registry.addViewController("/staticweb").setViewName("staticweb");
+	  registry.addViewController("/publisherCatalog").setViewName("programmes_catalog");
+	  registry.addViewController("/publisherCatalog/").setViewName("programmes_catalog");
 	  registry.addViewController("/programmes_catalog.html").setViewName("programmes_catalog");
 //	  registry.addViewController("/ml/home").setViewName("home");
 //      registry.addViewController("/ml/home").setViewName("home");
@@ -116,7 +118,8 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-    	registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
+    	registry.addResourceHandler("static/**").addResourceLocations("/WEB-INF/static/");
+//    	registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
     }
     
  // Only needed if we are using @Value and ${...} when referencing properties
