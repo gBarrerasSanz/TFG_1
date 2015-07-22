@@ -31,17 +31,20 @@ repositories {
 	maven { // Para eclipse paho MQTT
     	url "https://repo.eclipse.org/content/repositories/paho-releases/"
     }
-    maven { // Para una dependencia del plugin Trainable Segmentation
-    	url "http://maven.imagej.net/content/groups/public"
-    }
-    maven { // Para el plugin Trainable Segmentation
-    	url "http://maven.imagej.net/service/local/repositories/snapshots/content/"
-    }
-    // Repositorio local
     maven {
+    	url "http://www.edwardraff.com/maven-repo/"
+    }
+    maven { // Repositorio local
     	// url 'C:/Users/Gabriel/.m2/repository' // ASUS 
     	url 'C:/Users/VAIO/.m2/repository' // VAIO
     }
+    
+    //maven { // Para una dependencia del plugin Trainable Segmentation
+    //	url "http://maven.imagej.net/content/groups/public"
+    //}
+    //maven { // Para el plugin Trainable Segmentation
+    //	url "http://maven.imagej.net/service/local/repositories/snapshots/content/"
+    //}
 }
 
 // Para incluir OpenCV-2.4.9, seguir estos pasos:
@@ -143,8 +146,11 @@ dependencies {
     compile("org.springframework.plugin:spring-plugin-core:1.2.0.RELEASE")
     compile('com.jayway.jsonpath:json-path:2.0.0')
     
+    
+    //compile 'sc.fiji:Trainable_Segmentation:2.2.2-SNAPSHOT'
+    
     compile 'nz.ac.waikato.cms.weka:weka-stable:3.6.12'
-    compile 'sc.fiji:Trainable_Segmentation:2.2.2-SNAPSHOT'
+    compile 'com.edwardraff:JSAT:0.0.2'
     
     compile 'org.springframework.boot:spring-boot-starter-web:1.2.3.RELEASE'
     //compile 'commons-io:commons-io:2.4'
