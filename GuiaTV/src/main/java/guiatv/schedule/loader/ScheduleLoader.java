@@ -15,8 +15,10 @@ import javax.validation.ConstraintViolationException;
 import org.apache.log4j.Logger;
 import org.h2.jdbc.JdbcSQLException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.core.env.Environment;
 import org.springframework.transaction.annotation.Transactional;
+import org.thymeleaf.spring4.SpringTemplateEngine;
 
 @Transactional // Es necesario
 public class ScheduleLoader {
@@ -28,6 +30,10 @@ public class ScheduleLoader {
 	ChannelService chServ;
 	@Autowired
 	ProgrammeService progServ;
+	
+	@Autowired 
+	ApplicationContext appCtx;
+	
 	
 	public ScheduleLoader() {
 		

@@ -140,7 +140,7 @@ dependencies {
     //compile('org.springframework.hateoas:spring-hateoas:0.18.0.AFFORDANCES-SNAPSHOT')
     compile('org.springframework.hateoas:spring-hateoas:0.18.0.BUILD-SNAPSHOT')
     
-    compile 'org.apache.velocity:velocity:1.7'
+    //compile 'org.apache.velocity:velocity:1.7'
     compile 'org.springframework.boot:spring-boot-starter-thymeleaf:1.2.5.RELEASE'
     
     compile("org.springframework.plugin:spring-plugin-core:1.2.0.RELEASE")

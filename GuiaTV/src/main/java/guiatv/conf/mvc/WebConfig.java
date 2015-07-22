@@ -12,11 +12,15 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Description;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.context.support.ResourceBundleMessageSource;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.integration.support.json.Jackson2JsonObjectMapper;
+import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -37,33 +41,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 @EnableWebMvc
 @ComponentScan({"guiatv"})
 public class WebConfig extends WebMvcConfigurerAdapter {
-
-//	@Override
-//    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-//        registry.addResourceHandler("/assets/**").addResourceLocations("classpath:/META-INF/resources/webjars/").setCachePeriod(31556926);
-//        registry.addResourceHandler("/css/**").addResourceLocations("/css/").setCachePeriod(31556926);
-//        registry.addResourceHandler("/img/**").addResourceLocations("/img/").setCachePeriod(31556926);
-//        registry.addResourceHandler("/js/**").addResourceLocations("/js/").setCachePeriod(31556926);
-//    }
  
-    @Override
-    public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
-        configurer.enable();
-    }
-	
-//    @Bean
-//    public InternalResourceViewResolver getInternalResourceViewResolver() {
-//        InternalResourceViewResolver resolver = new InternalResourceViewResolver();
-//        resolver.setPrefix("/WEB-INF/pages/");
-//        resolver.setSuffix(".jsp");
-//        return resolver;
-//    }
-    
-    @Override
-    public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addViewController("/programmes_catalog").setViewName("programmes_catalog");
-    }
-    
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
         converters.add(converter());
@@ -93,51 +71,70 @@ public class WebConfig extends WebMvcConfigurerAdapter {
      * THYMELEAF CONFIGURATION
      */
     
-//    @Bean
-//	@Description("Thymeleaf template resolver serving HTML 5")
-//	public ServletContextTemplateResolver templateResolver() {
-//		ServletContextTemplateResolver templateResolver = new ServletContextTemplateResolver();
-//		templateResolver.setPrefix("/templates/");
-//		templateResolver.setSuffix(".html");
-//		templateResolver.setTemplateMode("HTML5");
-//
-//		return templateResolver;
-//	}
-//	
-//	@Bean
-//	@Description("Thymeleaf template engine with Spring integration")
-//	public SpringTemplateEngine templateEngine() {
-//		SpringTemplateEngine templateEngine = new SpringTemplateEngine();
-//		templateEngine.setTemplateResolver(templateResolver());
-//		
-//		return templateEngine;
-//	}
-//	
-//	@Bean
-//	@Description("Thymeleaf view resolver")
-//	public ThymeleafViewResolver viewResolver() {
-//		ThymeleafViewResolver viewResolver = new ThymeleafViewResolver();
-//		viewResolver.setTemplateEngine(templateEngine());
-//		
-//		return viewResolver;
-//	}
-//	
-//	@Bean
-//	@Description("Spring message resolver")
-//    public ResourceBundleMessageSource messageSource() {  
-//        ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();  
-//        messageSource.setBasename("i18n/messages");  
-//
-//        return messageSource;  
-//    }
-//	
-//	@Override
-//	public void addResourceHandlers(ResourceHandlerRegistry registry) {
-//		registry.addResourceHandler("/resources/**").addResourceLocations("/WEB-INF/resources/");
-//    }
-	
-//	springHateoasObjectMapper.configure(SerializationFeature.INDENT_OUTPUT, true);
-//	springHateoasObjectMapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
-//	springHateoasObjectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true);
-//	return new ObjectMapper();
+  @Override
+  public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
+      configurer.enable();
+  }
+  
+  @Override
+  public void addViewControllers(ViewControllerRegistry registry) {
+	  registry.addViewController("/staticweb").setViewName("staticweb");
+	  registry.addViewController("/programmes_catalog.html").setViewName("programmes_catalog");
+//	  registry.addViewController("/ml/home").setViewName("home");
+//      registry.addViewController("/ml/home").setViewName("home");
+//      registry.addViewController("/ml/").setViewName("home");
+//      registry.addViewController("/home").setViewName("home");
+  }
+    
+    @Bean
+    ServletContextTemplateResolver templateResolver() {
+        ServletContextTemplateResolver templateResolver = new ServletContextTemplateResolver();
+        templateResolver.setPrefix("/WEB-INF/templates/");
+        templateResolver.setSuffix(".html");
+        templateResolver.setTemplateMode("HTML5");
+        templateResolver.setOrder(1);
+        return templateResolver;
+        
+    }
+
+    @Bean
+    SpringTemplateEngine templateEngine() {
+        SpringTemplateEngine templateEngine = new SpringTemplateEngine();
+        templateEngine.setTemplateResolver(templateResolver());
+        return templateEngine;
+    }
+
+    @Bean
+    ThymeleafViewResolver viewResolver() {
+        ThymeleafViewResolver resolver = new ThymeleafViewResolver();
+        resolver.setOrder(1);
+        resolver.setTemplateEngine(templateEngine());
+        resolver.setViewNames(new String[] { "*" });
+        resolver.setCache(false);
+        return resolver;
+    }
+
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+    	registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
+    }
+    
+ // Only needed if we are using @Value and ${...} when referencing properties
+ 	@Bean
+ 	public static PropertySourcesPlaceholderConfigurer properties() {
+ 		PropertySourcesPlaceholderConfigurer propertySources = new PropertySourcesPlaceholderConfigurer();
+ 		Resource[] resources = new ClassPathResource[] { 
+ 				new ClassPathResource("application.properties") };
+ 		propertySources.setLocations(resources);
+ 		propertySources.setIgnoreUnresolvablePlaceholders(true);
+ 		return propertySources;
+ 	}
+ 	
+ 	// Provides internationalization of messages
+ 	@Bean
+ 	public ResourceBundleMessageSource messageSource() {
+ 		ResourceBundleMessageSource source = new ResourceBundleMessageSource();
+ 		source.setBasename("messages");
+ 		return source;
+ 	}
 }

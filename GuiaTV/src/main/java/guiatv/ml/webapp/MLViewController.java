@@ -1,4 +1,4 @@
-package guiatv.catalog.webapp;
+package guiatv.ml.webapp;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,18 +18,17 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.google.common.base.Charsets;
 
-@Controller
-@RequestMapping("/catalogView")
-public class CatalogViewController {
+@Controller // ATENCIÓN: CON @RestController NO FUNCIONA
+@RequestMapping("/ml")
+public class MLViewController {
 	
-	@RequestMapping(value = "/schedulesCatalog", method = RequestMethod.GET)
-	public String getProgrammesCatalog(
-		@RequestParam(value="hashNameProg", defaultValue="", required=true) String hashNameProg, Model model)
+	
+	@RequestMapping(value = "/home", method = RequestMethod.GET)
+	public String viewHomePage(Model model)
 	{
-		model.addAttribute("hashNameProg", hashNameProg);
-		return "schedules_catalog_tpt";
+		model.addAttribute("header", "My header message");
+		return "home";
 	}
 	
 }
