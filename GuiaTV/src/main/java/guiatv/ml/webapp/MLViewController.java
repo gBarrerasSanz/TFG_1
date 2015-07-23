@@ -3,8 +3,6 @@ package guiatv.ml.webapp;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.lang.StringEscapeUtils;
-import org.apache.velocity.app.VelocityEngine;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;

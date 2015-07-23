@@ -139,7 +139,7 @@ dependencies {
     //compile('org.springframework.hateoas:spring-hateoas:0.17.0.RELEASE')
     //compile('org.springframework.hateoas:spring-hateoas:0.18.0.AFFORDANCES-SNAPSHOT')
     compile('org.springframework.hateoas:spring-hateoas:0.18.0.BUILD-SNAPSHOT')
-    
+    compile 'org.apache.commons:commons-lang3:3.4'
     //compile 'org.apache.velocity:velocity:1.7'
     compile 'org.springframework.boot:spring-boot-starter-thymeleaf:1.2.5.RELEASE'
     

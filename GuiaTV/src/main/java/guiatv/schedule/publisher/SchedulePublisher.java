@@ -23,7 +23,7 @@ import org.springframework.integration.support.MessageBuilder;
 import org.springframework.messaging.Message;
 import org.springframework.stereotype.Service;
 import org.springframework.test.context.ActiveProfiles;
-import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.log4j.Logger;
 
 import com.fasterxml.jackson.core.JsonGenerator;
