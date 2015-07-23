@@ -1,3 +1,4 @@
+package guiatv.persistence.repository.NOTUSED;
 //package guiatv.persistence.repository;
 //
 //import guiatv.persistence.domain.Channel;

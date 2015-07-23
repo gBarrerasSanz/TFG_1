@@ -28,6 +28,10 @@ public class StreamSource {
 	public StreamSource(){
 	}
 	
+	public StreamSource(String url) {
+		this.url = url;
+	}
+	
     /**********************************************************
      * 					GETTERS / SETTERS
      *********************************************************/

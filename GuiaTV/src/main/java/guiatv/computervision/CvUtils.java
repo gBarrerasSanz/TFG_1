@@ -6,15 +6,18 @@ import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.highgui.Highgui;
 import org.opencv.imgproc.Imgproc;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 
 public class CvUtils {
-	
-	private final static int imgRows = 720;
+
+	/** CONFIGURATION PARAMS */
 	private final static int imgCols = 1280;
+	private final static int imgRows = 720;
+	
 	
 	public static Mat getMatFromByteArray(byte[] byteArr) {
-		Mat dataMat = new Mat(imgRows, imgCols, CvType.CV_8UC1);
+		Mat dataMat = new Mat(imgCols, imgRows, CvType.CV_8UC1);
 		dataMat.put(0, 0, byteArr);
 		Mat mat = Highgui.imdecode(dataMat, 1);
 		return mat;

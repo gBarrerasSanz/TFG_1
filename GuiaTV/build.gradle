@@ -112,7 +112,9 @@ dependencies {
    	compile 'org.springframework:spring-context-support:4.1.6.RELEASE'
    	compile 'org.springframework.integration:spring-integration-core:4.1.4.RELEASE'
    	compile 'org.springframework:spring-beans:4.1.6.RELEASE'
-   	
+
+   	compile 'com.fasterxml:jackson-xml-databind:0.6.2'
+
    	//compile 'org.springframework.integration:spring-integration-xml:4.1.2'
    	compile 'org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.0.2' // it is only needed for testing purposes
     compile 'org.eclipse.persistence:javax.persistence:2.0.0'

@@ -7,6 +7,7 @@ import guiatv.persistence.domain.Channel;
 import guiatv.persistence.domain.MLChannel;
 import guiatv.persistence.repository.ChannelRepository;
 import guiatv.persistence.repository.service.AsyncTransactionService;
+import guiatv.realtime.rtmpspying.serializable.ChannelData;
 import guiatv.realtime.servicegateway.CapturedFramesGateway;
 
 import java.io.BufferedInputStream;
@@ -47,15 +48,14 @@ public class RtmpSpyingTask implements Runnable {
 	
     @Autowired
     AsyncTransactionService asyncTransactionService;
+	
+	@Autowired
+	MutexMonitor monitor;
+	
+	ChannelData chData;
     
-	private String nameIdCh;
-	private String rtmpUrl;
-	
-	
-	
-	public RtmpSpyingTask(String nameIdCh, String rtmpUrl) {
-		this.nameIdCh = nameIdCh;
-		this.rtmpUrl = rtmpUrl;
+	public RtmpSpyingTask() {
+		this.chData = monitor.getAnAvailableChannel();
 	}
 	
 	
@@ -87,10 +87,11 @@ public class RtmpSpyingTask implements Runnable {
 				File binDir = new File(binDirUrl.toURI());
 				String[] cmd = { 
 					binDir.getAbsolutePath()+File.separator+"ffmpeg.exe",
-					"-i", "UNA_URL_CUALQUIERA"+" live=1", // ********************* TODO: URL
+					"-i", chData.getUrl(), // ********************* TODO: URL
 					"-vcodec", "mjpeg",
 					"-f", "image2pipe",
 					"-pix_fmt", "yuvj420p",
+					"-vf", "scale="+chData.getCols()+":"+chData.getRows(),
 					"-r", "1",
 					"-"
 				};
@@ -108,7 +109,7 @@ public class RtmpSpyingTask implements Runnable {
 				int readBytes = -1;
 				/////////////////////////
 				p = pb.start();
-//				Imshow im = new Imshow("Image");
+				Imshow im = new Imshow("Image");
 				in = new BufferedInputStream(p.getInputStream());
 		        while ((readBytes = in.read(readData, 0, BUFFSIZE)) != -1) {
 		        	for (byte b: readData) {
@@ -131,12 +132,14 @@ public class RtmpSpyingTask implements Runnable {
 		        				Frame frame = new Frame(data.toByteArray(), new MLChannel(), new Date());
 //		        				logger.info("Sending frame from "+this.toString());
 		        				capturedFramesGateway.sendFrame(frame);
-		        				
-//		        				Mat dataMat = new Mat(512, 512, CvType.CV_8UC1);
-//		        				dataMat.put(0, 0, data.toByteArray());
-//		        				Mat frameMat = Highgui.imdecode(dataMat, 1);
-		        		        
-//		        				im.showImage(frameMat);
+		    
+		        				/**
+		        				 * DEBUG: Show Image
+		        				 */
+		        				Mat dataMat = new Mat(512, 512, CvType.CV_8UC1);
+		        				dataMat.put(0, 0, data.toByteArray());
+		        				Mat frameMat = Highgui.imdecode(dataMat, 1);
+		        				im.showImage(frameMat);
 //		        				Message<?> frameMsg = MessageBuilder.
 //		        						withPayload(frameMat).build();
 		        				
