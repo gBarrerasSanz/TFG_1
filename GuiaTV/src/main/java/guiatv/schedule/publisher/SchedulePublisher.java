@@ -18,11 +18,16 @@ import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.core.TopicExchange;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.ResourcesLinksVisible;
 import org.springframework.integration.support.MessageBuilder;
 import org.springframework.messaging.Message;
 import org.springframework.stereotype.Service;
 import org.springframework.test.context.ActiveProfiles;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.log4j.Logger;
+
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
@@ -36,15 +41,24 @@ public class SchedulePublisher {
 	
 	private static Logger logger = Logger.getLogger("debugLog");
 	
+	public interface PublisherView {};
+	
 	@Autowired
 	AmqpTemplate amqpTmp;
+	
+	@Autowired
+	ObjectMapper mapper;
 	
 	public void publishTopics(Message<List<Schedule>> listSchedMsg ) {
 		try {
 			String routKey = null;
 			for (Schedule sched: listSchedMsg.getPayload()) {
 				routKey = sched.getProgramme().getHashNameProg();
-				amqpTmp.convertAndSend(routKey, sched);
+//				String schedJson = mapper.writerWithView(PublisherView.class).writeValueAsString(sched);
+				String schedJson = sched.toStringPublisher();
+//				schedJson = schedJson.replace("\\", ""); // DEBUG
+				schedJson = StringEscapeUtils.unescapeJava(schedJson);
+				amqpTmp.convertAndSend(routKey, schedJson);
 				logger.debug("Published: "+sched.getProgramme().getNameProg()
 						+" -> "+sched.getStart()+" --- "+sched.getEnd());
 			}

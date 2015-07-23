@@ -3,6 +3,7 @@ package guiatv.persistence.domain;
 
 import guiatv.catalog.restcontroller.CatalogRestController;
 import guiatv.catalog.serializers.ListProgFromSchedSerializer;
+import guiatv.schedule.publisher.SchedulePublisher;
 
 import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
@@ -65,15 +66,15 @@ public class Channel extends ResourceSupport implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idChPersistence;
     
-	@JsonView({SingleChannel.class, MultipleChannels.class})
+	@JsonView({SingleChannel.class, MultipleChannels.class, SchedulePublisher.PublisherView.class})
     @Column(name = "idChBusiness", nullable = false, length = 50)
     private String idChBusiness;
     
-	@JsonView({SingleChannel.class, MultipleChannels.class})
+	@JsonView({SingleChannel.class, MultipleChannels.class, SchedulePublisher.PublisherView.class})
 	@Column(name="hashIdChBusiness", nullable=false)
 	private String hashIdChBusiness;
 	
-	@JsonView({SingleChannel.class, MultipleChannels.class})
+	@JsonView({SingleChannel.class, MultipleChannels.class, SchedulePublisher.PublisherView.class})
     @Column(name = "nameCh", nullable = true, length = 50)
     private String nameCh;
     

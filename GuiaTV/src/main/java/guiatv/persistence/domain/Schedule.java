@@ -3,9 +3,14 @@ package guiatv.persistence.domain;
 import guiatv.catalog.serializers.ScheduleChannelSerializer;
 import guiatv.catalog.serializers.ScheduleProgrammeSerializer;
 import guiatv.catalog.serializers.TimestampDateSerializer;
+import guiatv.schedule.publisher.SchedulePublisher;
+import guiatv.schedule.publisher.SchedulePublisher.PublisherView;
 
 import java.io.Serializable;
+import java.sql.Date;
 import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -25,8 +30,11 @@ import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
 import javax.persistence.Version;
 
+import net.minidev.json.JSONObject;
+
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.ResourceSupport;
 import org.springframework.hateoas.ResourcesLinksVisible;
@@ -37,6 +45,9 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.MapperFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 /*
@@ -55,34 +66,34 @@ public class Schedule extends ResourceSupport implements Serializable {
 	private static final long serialVersionUID = -8835185421528324020L;
 	
 	
-	@JsonView(CustomSchedule.class)
+	@JsonView({CustomSchedule.class, SchedulePublisher.PublisherView.class})
 	@Id
     @Column(name = "idSched", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idSched;
     
 	
-	@JsonView(CustomSchedule.class)
+	@JsonView({CustomSchedule.class, SchedulePublisher.PublisherView.class})
 	@JsonSerialize(using=ScheduleChannelSerializer.class)
 //	@ManyToOne(targetEntity=Channel.class, cascade=CascadeType.ALL, fetch=FetchType.LAZY)
 	@ManyToOne(targetEntity=Channel.class, fetch=FetchType.LAZY)
 	@JoinColumn(name="channel_fk", referencedColumnName="idChPersistence")
 	private Channel channel;
     
-	@JsonView(CustomSchedule.class)
+	@JsonView({CustomSchedule.class, SchedulePublisher.PublisherView.class})
 	@JsonSerialize(using=ScheduleProgrammeSerializer.class)
 //	@ManyToOne(targetEntity=Programme.class, cascade=CascadeType.ALL, fetch=FetchType.LAZY)
 	@ManyToOne(targetEntity=Programme.class, fetch=FetchType.LAZY)
 	@JoinColumn(name="programme_fk", referencedColumnName="idProgPersistence")
 	private Programme programme;
 	
-	@JsonView(CustomSchedule.class)
+	@JsonView({CustomSchedule.class, SchedulePublisher.PublisherView.class})
 	@JsonSerialize(using=TimestampDateSerializer.class)
 	@JsonProperty
 	@Column(name = "start", nullable = false)
 	private Timestamp start;
 	
-	@JsonView(CustomSchedule.class)
+	@JsonView({CustomSchedule.class, SchedulePublisher.PublisherView.class})
 	@JsonSerialize(using=TimestampDateSerializer.class)
 	@JsonProperty
 	@Column(name = "end", nullable = false)
@@ -195,6 +206,37 @@ public class Schedule extends ResourceSupport implements Serializable {
 				"start="+start+", "+
 				"end="+end+", "+
 				"}";
+	}
+	
+	
+	public String toStringPublisher() throws JsonProcessingException {
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.disable(MapperFeature.DEFAULT_VIEW_INCLUSION);
+//		String chString = mapper.writerWithView(PublisherView.class).writeValueAsString(channel);
+//		String progString = mapper.writerWithView(PublisherView.class).writeValueAsString(programme);
+//		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss a CEST", SPAIN_LOCALE);
+		
+		JSONObject schedJson = new JSONObject();
+		schedJson.put("idSched", idSched);
+		// Channel
+		JSONObject chJson = new JSONObject();
+		chJson.put("idChBusiness", channel.getIdChBusiness());
+		chJson.put("hashIdChBusiness", channel.getHashIdChBusiness());
+		chJson.put("nameCh", channel.getNameCh());
+		schedJson.put("channel", chJson);
+		// Programme
+		JSONObject progJson = new JSONObject();
+		progJson.put("nameProg", programme.getNameProg());
+		progJson.put("hashNameProg", programme.getHashNameProg());
+		schedJson.put("programme", progJson);
+		
+		
+//		DateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss a z");
+		schedJson.put("start", df.format(new Date(start.getTime())));
+		schedJson.put("end", df.format(new Date(end.getTime())));
+		String schedString = schedJson.toJSONString();
+		return schedString;
 	}
 	
 }

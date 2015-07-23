@@ -4,6 +4,7 @@ package guiatv.persistence.domain;
 
 import guiatv.catalog.restcontroller.CatalogRestController;
 import guiatv.catalog.serializers.ListSchedulesSerializer;
+import guiatv.schedule.publisher.SchedulePublisher;
 
 import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
@@ -72,11 +73,11 @@ public class Programme extends ResourceSupport implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idProgPersistence;
 
-	@JsonView({MultipleProgrammes.class, SingleProgramme.class, Channel.SingleChannel.class})
+	@JsonView({MultipleProgrammes.class, SingleProgramme.class, Channel.SingleChannel.class, SchedulePublisher.PublisherView.class})
 	@Column(name = "nameProg", nullable = false, length = 70)
     private String nameProg;
 	
-	@JsonView({MultipleProgrammes.class, SingleProgramme.class, Channel.SingleChannel.class})
+	@JsonView({MultipleProgrammes.class, SingleProgramme.class, Channel.SingleChannel.class, SchedulePublisher.PublisherView.class})
 	@Column(name="hashNameProg", nullable=false)
 	private String hashNameProg;
 
