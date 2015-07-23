@@ -3,12 +3,14 @@ package guiatv.schedule.publisher;
 import guiatv.catalog.restcontroller.PublisherRestController;
 import guiatv.persistence.domain.Event_old;
 import guiatv.persistence.domain.Schedule;
+import guiatv.persistence.repository.service.ScheduleService;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.LoggerFactory;
+import org.springframework.amqp.AmqpException;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
@@ -47,25 +49,28 @@ public class SchedulePublisher {
 	AmqpTemplate amqpTmp;
 	
 	@Autowired
-	ObjectMapper mapper;
+	ScheduleService schedServ;
 	
 	public void publishTopics(Message<List<Schedule>> listSchedMsg ) {
-		try {
-			String routKey = null;
-			for (Schedule sched: listSchedMsg.getPayload()) {
+		List<Schedule> publishedSched = new ArrayList<Schedule>();
+		String routKey = null;
+		for (Schedule sched: listSchedMsg.getPayload()) {
+			try {
 				routKey = sched.getProgramme().getHashNameProg();
-//				String schedJson = mapper.writerWithView(PublisherView.class).writeValueAsString(sched);
 				String schedJson = sched.toStringPublisher();
-//				schedJson = schedJson.replace("\\", ""); // DEBUG
 				schedJson = StringEscapeUtils.unescapeJava(schedJson);
 				amqpTmp.convertAndSend(routKey, schedJson);
+				publishedSched.add(sched);
 				logger.debug("Published: "+sched.getProgramme().getNameProg()
 						+" -> "+sched.getStart()+" --- "+sched.getEnd());
+			
+			} catch (AmqpException e) {
+				logger.error("ERROR: Could NOT connect to RabbitMQ");
+			} catch(Exception e) {
+				logger.error("ERROR: Unknown error");
 			}
-		} catch (Exception e1) {
-			e1.printStackTrace();
 		}
-		
+		schedServ.deleteSchedules(publishedSched);
 	}
 	
 //	public void declareQueue(String queueName) {

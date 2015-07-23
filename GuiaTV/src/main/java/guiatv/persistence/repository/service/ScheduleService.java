@@ -118,11 +118,11 @@ public class ScheduleService {
 	}
 	
 	/**
-	 * Devuelve y elimina de la base de datos, los schedules que empiezan secsFromStart
+	 * Devuelve de la base de datos, los schedules que empiezan secsFromStart
 	 * segundos después del momento actual, y aquellos schedules en curso
 	 */
-	@Transactional(propagation = Propagation.REQUIRES_NEW)
-	public List<Schedule> popBySecondsFromStart(int secsFromStart) {
+	@Transactional(readOnly = true)
+	public List<Schedule> findBySecondsFromStart(int secsFromStart) {
 		Timestamp now = new Timestamp(new Date().getTime());
 		Timestamp afterStart = new Timestamp(now.getTime() + (long)(1000 * secsFromStart));
 		List<Schedule> lSched = schedRep.findByStartBetweenOrStartBeforeAndEndAfterOrderByStartAsc(now, afterStart, now, now);
@@ -130,15 +130,13 @@ public class ScheduleService {
 			Hibernate.initialize(sched.getChannel());
 			Hibernate.initialize(sched.getProgramme());
 		}
-		/**
-		 * Borrar los schedules de la BD
-		 */
-		for (Schedule sched: lSched) {
-			schedRep.delete(sched);
-//			logger.debug(schedRep.exists(sched.getIdSched()));
-		}
 		return lSched;
 	}
+	
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void deleteSchedules(List<Schedule> lSched) {
+    	schedRep.delete(lSched);
+    }
 	
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
     public Schedule findByChannelAndProgrammeAndStartAndEnd(Channel ch, 
@@ -193,10 +191,5 @@ public class ScheduleService {
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
     public void insertSchedule(Schedule sched){
     	schedRep.save(sched);
-    }
-	
-	@Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void deleteSchedules(List<Schedule> lSched) {
-    	schedRep.delete(lSched);
     }
 }
