@@ -1,7 +1,7 @@
 package guiatv.common.datatypes;
 
 import guiatv.persistence.domain.Channel;
-import guiatv.persistence.domain.RtmpSource;
+import guiatv.persistence.domain.MLChannel;
 
 import java.util.Date;
 
@@ -9,17 +9,16 @@ public class Frame {
 	
 	private byte[] frameImg;
 	
-	private RtmpSource rtmp;
+	private MLChannel mlCh;
 	
 	private Date takenDate;
 	
 	public Frame() {
 	}
 	
-	public Frame(byte[] frameImg, RtmpSource rtmp, Date takenDate) {
+	public Frame(byte[] frameImg, MLChannel mlCh, Date takenDate) {
 		this.frameImg = frameImg;
-		this.rtmp = rtmp;
-		this.rtmp = rtmp;
+		this.mlCh = mlCh;
 		this.takenDate = takenDate;
 	}
 
@@ -29,14 +28,6 @@ public class Frame {
 
 	public void setFrameImg(byte[] frameImg) {
 		this.frameImg = frameImg;
-	}
-
-	public RtmpSource getRtmp() {
-		return rtmp;
-	}
-
-	public void setRtmp(RtmpSource rtmp) {
-		this.rtmp = rtmp;
 	}
 
 	public Date getTakenDate() {

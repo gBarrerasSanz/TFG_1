@@ -8,13 +8,8 @@ import java.util.Date;
 
 import guiatv.common.datatypes.Frame;
 import guiatv.cv.classificator.Classif_old;
-import guiatv.cv.classificator.ClassificationHelper;
 import guiatv.cv.common.OpenCvUtils;
-import guiatv.persistence.domain.RtEvent;
-import guiatv.persistence.domain.RtEvent.EventType;
-import guiatv.persistence.domain.RtEvent;
-import guiatv.persistence.repository.LearnedRtmpSourceRepository;
-import guiatv.persistence.repository.LearnedRtmpSourceRepositoryImpl;
+import guiatv.persistence.domain.Schedule;
 
 import org.opencv.core.Core;
 import org.opencv.core.Core.MinMaxLocResult;
@@ -31,31 +26,32 @@ import org.springframework.core.io.Resource;
 
 public class ClassificationWorker {
 	
-	@Autowired
-	LearnedRtmpSourceRepository learnedChRep;
 	
 	public ClassificationWorker() {
 	}	
-
-	public RtEvent classify(Frame frame) {
-		RtEvent ev = new RtEvent();
-		ev.setChannel(frame.getRtmp().getChannel());
-		ev.setStart(new Timestamp(new Date().getTime()));
-		ev.setType(EventType.UNKNOWN);
-		
-		byte[] templateByteArr = learnedChRep.
-				findTemplateImgByRtmpSource(frame.getRtmp());
-		
-		if (templateByteArr == null) {
-			return ev;
-		}
-		else {
-			EventType type = ClassificationHelper.classifyByTemplateMatching(frame.getFrameImg(), templateByteArr);
-			ev.setType(type);
-			return ev;
-		}
-		
+	
+	public Schedule classify(Frame frame) {
+		return null;
 	}
+//	public RtEvent classify(Frame frame) {
+//		RtEvent ev = new RtEvent();
+//		ev.setChannel(frame.getRtmp().getChannel());
+//		ev.setStart(new Timestamp(new Date().getTime()));
+//		ev.setType(EventType.UNKNOWN);
+//		
+//		byte[] templateByteArr = learnedChRep.
+//				findTemplateImgByRtmpSource(frame.getRtmp());
+//		
+//		if (templateByteArr == null) {
+//			return ev;
+//		}
+//		else {
+//			EventType type = ClassificationHelper.classifyByTemplateMatching(frame.getFrameImg(), templateByteArr);
+//			ev.setType(type);
+//			return ev;
+//		}
+//		
+//	}
 	
 
 }

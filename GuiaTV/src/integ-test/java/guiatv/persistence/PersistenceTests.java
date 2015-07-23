@@ -9,15 +9,10 @@ import java.util.List;
 import guiatv.Application;
 import guiatv.ApplicationTest;
 import guiatv.persistence.domain.Channel;
-import guiatv.persistence.domain.LearnedRtmpSource;
 import guiatv.persistence.domain.Programme;
-import guiatv.persistence.domain.RtmpSource;
 import guiatv.persistence.domain.Schedule;
 import guiatv.persistence.repository.ChannelRepository;
-import guiatv.persistence.repository.LearnedRtmpSourceRepository;
-import guiatv.persistence.repository.LearnedRtmpSourceRepositoryImpl;
 import guiatv.persistence.repository.ProgrammeRepository;
-import guiatv.persistence.repository.RtmpSourceRepository;
 import guiatv.persistence.repository.ScheduleRepository;
 import guiatv.schedule.utils.ListScheduleCreator;
 
@@ -53,11 +48,6 @@ public class PersistenceTests extends AbstractTransactionalJUnit4SpringContextTe
 	@Autowired
 	ProgrammeRepository progRep;
 	
-	@Autowired
-	RtmpSourceRepository rtmpRep;
-	
-	@Autowired
-	LearnedRtmpSourceRepository learnedRtmpRep;
 	
 	@Test
 	public void schedulePersistenceTest() {

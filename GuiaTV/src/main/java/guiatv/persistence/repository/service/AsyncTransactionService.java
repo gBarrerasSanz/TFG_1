@@ -4,11 +4,9 @@ import java.util.List;
 
 import guiatv.persistence.domain.Channel;
 import guiatv.persistence.domain.Programme;
-import guiatv.persistence.domain.RtmpSource;
 import guiatv.persistence.domain.Schedule;
 import guiatv.persistence.repository.ChannelRepository;
 import guiatv.persistence.repository.ProgrammeRepository;
-import guiatv.persistence.repository.RtmpSourceRepository;
 import guiatv.persistence.repository.ScheduleRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,21 +26,19 @@ public class AsyncTransactionService {
 	@Autowired
 	ProgrammeRepository progRep;
 	
-	@Autowired
-	RtmpSourceRepository rtmpRep;
 	
-//	@Transactional(propagation=Propagation.REQUIRES_NEW)
-	@Transactional(readOnly = true)
-	public RtmpSource getRtmpSourceFromNameIdChAndRtmpUrl(String idChBusiness, String rtmpUrl) {
-		Channel ch = chRep.findByIdChBusiness(idChBusiness);
-		RtmpSource rtmpSource = rtmpRep.findByChannelAndRtmpUrl(ch, rtmpUrl);
-		return rtmpSource;
-	}
+////	@Transactional(propagation=Propagation.REQUIRES_NEW)
+//	@Transactional(readOnly = true)
+//	public RtmpSource getRtmpSourceFromNameIdChAndRtmpUrl(String idChBusiness, String rtmpUrl) {
+//		Channel ch = chRep.findByIdChBusiness(idChBusiness);
+//		RtmpSource rtmpSource = rtmpRep.findByChannelAndRtmpUrl(ch, rtmpUrl);
+//		return rtmpSource;
+//	}
 	
-	@Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void insertRtmpSources(List<RtmpSource> ListRtmpSources) {
-    	rtmpRep.save(ListRtmpSources);
-    }
+//	@Transactional(propagation = Propagation.REQUIRES_NEW)
+//    public void insertRtmpSources(List<RtmpSource> ListRtmpSources) {
+//    	rtmpRep.save(ListRtmpSources);
+//    }
 	
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
     public void insertSchedules(List<Schedule> lSchedules) {

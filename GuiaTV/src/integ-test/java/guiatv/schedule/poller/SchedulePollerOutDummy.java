@@ -8,10 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.Message;
 
 import guiatv.common.CommonUtility;
-import guiatv.persistence.domain.Event_old;
 import guiatv.persistence.domain.Schedule;
 import guiatv.realtime.servicegateway.CapturedFramesGateway;
-import guiatv.xmltv.transformer.XMLTVTransformer_old1;
 
 public class SchedulePollerOutDummy {
 	

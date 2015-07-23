@@ -1,6 +1,5 @@
 package guiatv.common;
 
-import guiatv.persistence.domain.Event_old;
 import guiatv.persistence.domain.Schedule;
 
 import java.io.BufferedReader;
@@ -123,13 +122,13 @@ public class CommonUtility {
 		}
 	}
 	
-	public static String lEvtToStr(List<Event_old> lEvt) {
-		StringBuilder sb = new StringBuilder();
-		for (Event_old e: lEvt) {
-			sb.append(e.toString()+"\n");
-		}
-		return sb.toString();
-	}
+//	public static String lEvtToStr(List<Event_old> lEvt) {
+//		StringBuilder sb = new StringBuilder();
+//		for (Event_old e: lEvt) {
+//			sb.append(e.toString()+"\n");
+//		}
+//		return sb.toString();
+//	}
 	
 	public static TimeUnit getTimeUnit(String str){
 		TimeUnit unit = null;

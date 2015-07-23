@@ -1,7 +1,6 @@
 package guiatv.schedule.publisher;
 
 import guiatv.catalog.restcontroller.PublisherRestController;
-import guiatv.persistence.domain.Event_old;
 import guiatv.persistence.domain.Schedule;
 import guiatv.persistence.repository.service.ScheduleService;
 

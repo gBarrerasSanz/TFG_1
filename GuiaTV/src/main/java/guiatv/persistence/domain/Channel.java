@@ -89,8 +89,8 @@ public class Channel extends ResourceSupport implements Serializable {
 	@JsonView(SingleChannel.class)
 	private List<Programme> listProgrammes;
 	
-    @OneToMany(mappedBy="channel", fetch=FetchType.LAZY)
-    private List<RtmpSource> listRtmpSources;
+//    @OneToMany(mappedBy="channel", fetch=FetchType.LAZY)
+//    private List<RtmpSource> listRtmpSources;
     
     // country no se usa de momento
     @Column(name = "country", nullable = true, length = 50)

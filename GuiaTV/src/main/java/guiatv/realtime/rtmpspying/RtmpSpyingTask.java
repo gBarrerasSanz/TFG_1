@@ -4,9 +4,8 @@ import guiatv.common.CommonUtility;
 import guiatv.common.datatypes.Frame;
 import guiatv.cv.classificator.Imshow;
 import guiatv.persistence.domain.Channel;
-import guiatv.persistence.domain.RtmpSource;
+import guiatv.persistence.domain.MLChannel;
 import guiatv.persistence.repository.ChannelRepository;
-import guiatv.persistence.repository.RtmpSourceRepository;
 import guiatv.persistence.repository.service.AsyncTransactionService;
 import guiatv.realtime.servicegateway.CapturedFramesGateway;
 
@@ -44,9 +43,6 @@ public class RtmpSpyingTask implements Runnable {
 	ChannelRepository chRep;
 	
 	@Autowired
-	RtmpSourceRepository rtmpRep;
-	
-	@Autowired
 	CapturedFramesGateway capturedFramesGateway;
 	
     @Autowired
@@ -71,16 +67,16 @@ public class RtmpSpyingTask implements Runnable {
 //		Channel ch = chRep.findByNameIdCh(nameIdCh);
 //		RtmpSource rtmpSource = rtmpRep.findByChannelAndRtmpUrl(ch, rtmpUrl);
 		
-		RtmpSource rtmpSource = asyncTransactionService.
-				getRtmpSourceFromNameIdChAndRtmpUrl(nameIdCh, rtmpUrl);
+//		RtmpSource rtmpSource = asyncTransactionService.
+//				getRtmpSourceFromNameIdChAndRtmpUrl(nameIdCh, rtmpUrl);
 		
 //		List<RtmpSource> ListrtmpSource = rtmpRep.findAll();
 		
 		
 		
-		if (rtmpSource == null) {
-			throw new InstantiationError("No rtmpSource set");
-		}
+//		if (rtmpSource == null) {
+//			throw new InstantiationError("No rtmpSource set");
+//		}
 		URL binDirUrl = this.getClass().getClassLoader()
 				.getResource("META-INF/ffmpeg/windows_bin/ffmpeg-win64/bin");
 		
@@ -91,7 +87,7 @@ public class RtmpSpyingTask implements Runnable {
 				File binDir = new File(binDirUrl.toURI());
 				String[] cmd = { 
 					binDir.getAbsolutePath()+File.separator+"ffmpeg.exe",
-					"-i", rtmpSource.getRtmpUrl()+" live=1",
+					"-i", "UNA_URL_CUALQUIERA"+" live=1", // ********************* TODO: URL
 					"-vcodec", "mjpeg",
 					"-f", "image2pipe",
 					"-pix_fmt", "yuvj420p",
@@ -132,7 +128,7 @@ public class RtmpSpyingTask implements Runnable {
 		        		}
 		        		if (imgReady) {
 		        			if (data.size() != 0) {
-		        				Frame frame = new Frame(data.toByteArray(), rtmpSource, new Date());
+		        				Frame frame = new Frame(data.toByteArray(), new MLChannel(), new Date());
 //		        				logger.info("Sending frame from "+this.toString());
 		        				capturedFramesGateway.sendFrame(frame);
 		        				

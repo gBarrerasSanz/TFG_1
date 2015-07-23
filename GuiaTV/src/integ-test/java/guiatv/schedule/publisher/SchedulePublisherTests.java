@@ -28,12 +28,10 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import guiatv.Application;
 import guiatv.ApplicationTest;
 import guiatv.common.CommonUtility;
-import guiatv.persistence.domain.Event_old;
 import guiatv.persistence.domain.Schedule;
 import guiatv.realtime.servicegateway.CapturedFramesGateway;
 import guiatv.schedule.publisher.SchedulePublisher;
 import guiatv.schedule.utils.ListScheduleCreator;
-import guiatv.xmltv.transformer.XMLTVTransformer_old1;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = ApplicationTest.class)

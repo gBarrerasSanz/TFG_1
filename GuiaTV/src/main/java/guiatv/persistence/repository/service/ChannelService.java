@@ -5,7 +5,6 @@ import java.util.List;
 import guiatv.catalog.datatypes.ListChannels;
 import guiatv.persistence.domain.Channel;
 import guiatv.persistence.domain.Programme;
-import guiatv.persistence.domain.RtmpSource;
 import guiatv.persistence.domain.Schedule;
 import guiatv.persistence.repository.ChannelRepository;
 

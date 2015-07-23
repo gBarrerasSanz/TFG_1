@@ -5,11 +5,9 @@ import java.util.List;
 import guiatv.catalog.datatypes.ListProgrammes;
 import guiatv.persistence.domain.Channel;
 import guiatv.persistence.domain.Programme;
-import guiatv.persistence.domain.RtmpSource;
 import guiatv.persistence.domain.Schedule;
 import guiatv.persistence.repository.ChannelRepository;
 import guiatv.persistence.repository.ProgrammeRepository;
-import guiatv.persistence.repository.RtmpSourceRepository;
 import guiatv.persistence.repository.ScheduleRepository;
 
 import org.hibernate.Hibernate;

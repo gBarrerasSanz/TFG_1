@@ -36,8 +36,6 @@ import guiatv.ApplicationTest;
 import guiatv.common.CommonUtility;
 import guiatv.common.datatypes.Frame;
 import guiatv.persistence.domain.Channel;
-import guiatv.persistence.domain.Event_old;
-import guiatv.persistence.domain.RtmpSource;
 import guiatv.persistence.domain.Schedule;
 import guiatv.persistence.repository.ScheduleRepository;
 import guiatv.realtime.servicegateway.CapturedFramesGateway;
@@ -45,7 +43,6 @@ import guiatv.schedule.poller.SchedulePoller;
 import guiatv.schedule.publisher.SchedulePublisher;
 import guiatv.schedule.publisher.TaskExecutorMQTTClient;
 import guiatv.schedule.utils.ListScheduleCreator;
-import guiatv.xmltv.transformer.XMLTVTransformer_old1;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = ApplicationTest.class)

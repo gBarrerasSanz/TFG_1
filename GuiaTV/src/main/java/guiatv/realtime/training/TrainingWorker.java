@@ -6,7 +6,6 @@ import java.net.URL;
 
 import guiatv.common.datatypes.Frame;
 import guiatv.cv.classificator.Classif_old;
-import guiatv.persistence.domain.RtEvent;
 
 import org.opencv.core.Core;
 import org.opencv.core.Core.MinMaxLocResult;
