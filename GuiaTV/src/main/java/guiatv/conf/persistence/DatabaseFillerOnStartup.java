@@ -3,6 +3,8 @@ package guiatv.conf.persistence;
 import guiatv.computervision.CvUtils;
 import guiatv.persistence.domain.StreamSource;
 import guiatv.realtime.rtmpspying.MutexMonitor;
+import guiatv.realtime.rtmpspying.RtmpSpyingTask;
+import guiatv.schedule.publisher.TaskExecutorMQTTClient;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,8 @@ public class DatabaseFillerOnStartup implements ApplicationListener<ContextRefre
 	
 	@Value("${streamsources.urls}")
 	private String[] urls;
+	
+	
 	
 	@Override
     public void onApplicationEvent(ContextRefreshedEvent event) {

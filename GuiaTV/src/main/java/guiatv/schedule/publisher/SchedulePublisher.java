@@ -1,6 +1,7 @@
 package guiatv.schedule.publisher;
 
 import guiatv.catalog.restcontroller.PublisherRestController;
+import guiatv.common.CommonUtility;
 import guiatv.persistence.domain.Schedule;
 import guiatv.persistence.repository.service.ScheduleService;
 
@@ -61,7 +62,8 @@ public class SchedulePublisher {
 				amqpTmp.convertAndSend(routKey, schedJson);
 				publishedSched.add(sched);
 				logger.debug("Published: "+sched.getProgramme().getNameProg()
-						+" -> "+sched.getStart()+" --- "+sched.getEnd());
+						+" -> "+CommonUtility.timestampToString(sched.getStart())+
+						" --- "+CommonUtility.timestampToString(sched.getEnd()));
 			
 			} catch (AmqpException e) {
 				logger.error("ERROR: Could NOT connect to RabbitMQ");

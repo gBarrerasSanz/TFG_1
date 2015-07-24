@@ -8,6 +8,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.sql.Timestamp;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -41,6 +42,12 @@ public class CommonUtility {
 			e.printStackTrace();
 			return null;
 		}
+	}
+	
+	public static String timestampToString(Timestamp timestamp) {
+		/** IMPORTANTE: FORMATO DE FECHA */
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss z");
+		return df.format(new Date(timestamp.getTime()));
 	}
 	
 	public static Timestamp strToTimestamp(String str) {

@@ -110,6 +110,15 @@ public class XMLTVTransformer implements Transformer {
 //				log.debug("listProgNodes.size() = "+String.valueOf(listProgNodes.size()));
 //				log.debug("itIdx = "+String.valueOf(itIdx));
 //				assert(listProgNodes.size() == schedItIdx);
+				
+				/**
+				 * Imprimir lista de channels procesados
+				 */
+				String processedChannels = "Channels procesados = ";
+				for (Channel channel : mapCh.values()) {
+					processedChannels += channel.getIdChBusiness()+", ";
+				}
+			    log.debug(processedChannels);
 				listSchedulesResult = MessageBuilder.withPayload(lSched).copyHeaders(message.getHeaders()).build();
 			}
 			catch(Exception e) {

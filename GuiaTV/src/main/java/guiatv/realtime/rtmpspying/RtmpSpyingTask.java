@@ -29,6 +29,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.integration.support.MessageBuilder;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.transaction.annotation.Transactional;
 
 
@@ -58,25 +59,14 @@ public class RtmpSpyingTask implements Runnable {
 		this.chData = monitor.getAnAvailableChannel();
 	}
 	
+	public RtmpSpyingTask(String saludo) {
+		this.chData = monitor.getAnAvailableChannel();
+		logger.debug(saludo);
+	}
 	
 	
-//	@Transactional(readOnly=false)
 	@Override
 	public void run() throws InstantiationError {
-		
-//		Channel ch = chRep.findByNameIdCh(nameIdCh);
-//		RtmpSource rtmpSource = rtmpRep.findByChannelAndRtmpUrl(ch, rtmpUrl);
-		
-//		RtmpSource rtmpSource = asyncTransactionService.
-//				getRtmpSourceFromNameIdChAndRtmpUrl(nameIdCh, rtmpUrl);
-		
-//		List<RtmpSource> ListrtmpSource = rtmpRep.findAll();
-		
-		
-		
-//		if (rtmpSource == null) {
-//			throw new InstantiationError("No rtmpSource set");
-//		}
 		URL binDirUrl = this.getClass().getClassLoader()
 				.getResource("META-INF/ffmpeg/windows_bin/ffmpeg-win64/bin");
 		
