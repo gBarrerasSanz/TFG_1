@@ -27,10 +27,13 @@ public class EntireFileFilter<File> extends AbstractFileListFilter<File> {
 			fStream.close();
 			// Mi validación: intentar parsear el dom
 			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+			dbFactory.setValidating(false);
 			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 			Document doc = dBuilder.parse(f);
 			return true;
 		} catch (Exception e) {
+//			e.printStackTrace();
+			logger.debug(e.getMessage());
 //			logger.debug("File is not ready yet! "+(f).getName());
 			return false;
 		}

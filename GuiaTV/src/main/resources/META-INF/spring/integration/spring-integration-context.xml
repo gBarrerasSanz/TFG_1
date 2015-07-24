@@ -107,13 +107,22 @@
 		<int:channel id="grabberChOut" fixed-subscriber="true" />
 
 		<bean id="xmltvGrabber" class="guiatv.xmltv.grabber.XMLTVGrabber" />
+		
+		<!-- <int:transaction-synchronization-factory id="syncFactory">
+	    <int:after-commit expression="payload.delete()" channel="nullChannel"/>
+		</int:transaction-synchronization-factory> -->
 
 		<int:inbound-channel-adapter ref="xmltvGrabber"
 			method="doGrabbing" channel="grabberChOut" id="grabberInbound">
-			<int:poller max-messages-per-poll="1" cron="0 	*  *  *   *  ?  " />
+			<int:poller fixed-rate="30000" /> <!-- Cada 30 seg.  -->
+			<!-- <int:poller max-messages-per-poll="1" cron="0 	*  *  *   *  ?  " /> -->
+			<!-- <int:poller cron="0 	*  *  *   *  ?  ">
+         		<int:transactional transaction-manager="transactionManager" synchronization-factory="syncFactory" />
+   			 </int:poller> -->
 			<!-- sec m h dm m dw -->
 		</int:inbound-channel-adapter>
-
+		
+		
 		<int-file:outbound-channel-adapter
 			id="grabberOutbound" channel="grabberChOut" directory="file:xmltv_cap"
 			auto-create-directory="true" mode="REPLACE" temporary-file-suffix=".writing">
@@ -146,7 +155,7 @@
 		<int-file:inbound-channel-adapter id="filePollerInbound"
 			directory="file:xmltv_cap" channel="transformerChIn" auto-startup="true"
 			filter="compositeFilter">
-			<int:poller fixed-rate="10000" />
+			<int:poller fixed-rate="25000" /> <!-- Cada 25 seg. -->
 		</int-file:inbound-channel-adapter>
 	</beans>
 	<!-- **************************************** TRANSFORMER POLLER ***************************************** -->

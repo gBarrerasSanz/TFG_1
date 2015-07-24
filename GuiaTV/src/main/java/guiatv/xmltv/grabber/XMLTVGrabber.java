@@ -1,15 +1,32 @@
 package guiatv.xmltv.grabber;
 
 import guiatv.common.CommonUtility;
+import guiatv.common.datatypes.Frame;
+import guiatv.cv.classificator.Imshow;
+import guiatv.persistence.domain.MLChannel;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import org.apache.commons.io.IOUtils;
+import org.apache.log4j.Logger;
+import org.opencv.core.CvType;
+import org.opencv.core.Mat;
+import org.opencv.highgui.Highgui;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.io.Resource;
@@ -17,6 +34,7 @@ import org.springframework.core.io.Resource;
 
 public class XMLTVGrabber {
 	
+	static Logger logger = Logger.getLogger("debugLog");
 	
 	private enum Platform {
 		WINDOWS
@@ -66,6 +84,9 @@ public class XMLTVGrabber {
 				File.separator+"errorLog_"+CommonUtility.getDateString()+".txt");
 		switch(platform) {
 		case WINDOWS:
+//			BufferedInputStream in = null;
+			BufferedReader in = null;
+			Writer out = null; 
 			try {
 				File binDir = new File(binDirUrl.toURI());
 				String[] cmd = { 
@@ -75,19 +96,38 @@ public class XMLTVGrabber {
 				Process p = null;
 				ProcessBuilder pb = new ProcessBuilder(cmd);
 				pb.directory(binDir);
-				pb.redirectOutput(resFile);
+				
+//				pb.redirectOutput(resFile);
 				pb.redirectError(errFile);
+//				p = pb.start();
+//		        p.waitFor();
+/////////////////////////
+//				final int BUFFSIZE = 10240;
+//				byte[] readData = new byte[BUFFSIZE];
+//				int readBytes = -1;
+				/////////////////////////
 				p = pb.start();
-		        p.waitFor();
+				out = new BufferedWriter(new OutputStreamWriter(
+					    new FileOutputStream(resFile), "UTF-8"));
+				in = new BufferedReader(new InputStreamReader(p.getInputStream(), StandardCharsets.UTF_8));
+				String readLine = null;
+		        while ((readLine = in.readLine()) != null) {
+		        	// ELIMINAR LOS CARACTERES NO-ASCII (http://stackoverflow.com/questions/2869072/remove-non-utf-8-characters-from-xml-with-declared-encoding-utf-8-java)
+		        	readLine = readLine.replaceAll("[^\\x20-\\x7e]", "");
+		        	out.write(readLine+"\n");
+//		        	logger.debug(readData.toString());
+		        }
+		        
 			} catch (IOException e) {
-				e.printStackTrace();
-			} catch (InterruptedException e) {
-				System.out.println("Execution interrumpted");
 				e.printStackTrace();
 			} catch (URISyntaxException e) {
 				e.printStackTrace();
 			} finally {
-
+				try {
+					out.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
 			break;
 		default:
