@@ -41,19 +41,36 @@ public class MLChannel {
 	@Column(name="trainedClassifier", nullable=true)
 	private Classifier trainedClassifier;
 	
+	@Column(name="imgCols", nullable=false)
+	private int imgCols;
+	
+	@Column(name="imgRows", nullable=false)
+	private int imgRows;
+	
 	@Column(name="topLeft", nullable=false)
 	private int[] topLeft;
 	
 	@Column(name="botRight", nullable=false)
 	private int[] botRight;
 	
-	@OneToMany(targetEntity=StreamSource.class, mappedBy="mlChannel", fetch=FetchType.LAZY, orphanRemoval=true)
-	private List<StreamSource> listStreamSources;
+	@OneToOne(targetEntity=StreamSource.class, mappedBy="mlChannel", fetch=FetchType.LAZY, orphanRemoval=true)
+	private StreamSource streamSource;
 	
-	@OneToMany(targetEntity=RoiBlob.class, mappedBy="mlChannel", fetch=FetchType.LAZY, orphanRemoval=true)
+	@OneToMany(targetEntity=Blob.class, mappedBy="mlChannel", fetch=FetchType.LAZY, orphanRemoval=true)
 	private List<StreamSource> listRoiBlobs;
 	
 	public MLChannel() {
+	}
+	
+	public MLChannel(Channel channel, StreamSource streamSource, 
+			ArffObject arffObject, int imgCols, int imgRows, int[] topLeft, int[] botRight) {
+		this.channel = channel;
+		this.streamSource = streamSource;
+		this.arffObject = arffObject;
+		this.imgCols = imgCols;
+		this.imgRows = imgRows;
+		this.topLeft = topLeft;
+		this.botRight = botRight;
 	}
 	
     /**********************************************************
@@ -100,12 +117,28 @@ public class MLChannel {
 		this.botRight = botRight;
 	}
 
-	public List<StreamSource> getListStreamSources() {
-		return listStreamSources;
+	public int getImgCols() {
+		return imgCols;
 	}
 
-	public void setListStreamSources(List<StreamSource> listStreamSources) {
-		this.listStreamSources = listStreamSources;
+	public void setImgCols(int imgCols) {
+		this.imgCols = imgCols;
+	}
+
+	public int getImgRows() {
+		return imgRows;
+	}
+
+	public void setImgRows(int imgRows) {
+		this.imgRows = imgRows;
+	}
+
+	public StreamSource getStreamSource() {
+		return streamSource;
+	}
+
+	public void setStreamSource(StreamSource streamSource) {
+		this.streamSource = streamSource;
 	}
 
 	public List<StreamSource> getListRoiBlobs() {

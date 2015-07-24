@@ -27,4 +27,9 @@ public class MLChannelService {
 		return mlChRep.findAll();
 	}
 	
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void insertMlChannel(MLChannel mlCh) {
+		mlChRep.save(mlCh);
+    }
+	
 }

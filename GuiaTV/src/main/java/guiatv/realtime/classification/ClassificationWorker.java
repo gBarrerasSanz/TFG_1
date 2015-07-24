@@ -6,9 +6,8 @@ import java.net.URL;
 import java.sql.Timestamp;
 import java.util.Date;
 
-import guiatv.common.datatypes.Frame;
+import guiatv.common.datatypes.Frame_OLD;
 import guiatv.cv.classificator.Classif_old;
-import guiatv.cv.common.OpenCvUtils;
 import guiatv.persistence.domain.Schedule;
 
 import org.opencv.core.Core;
@@ -30,7 +29,7 @@ public class ClassificationWorker {
 	public ClassificationWorker() {
 	}	
 	
-	public Schedule classify(Frame frame) {
+	public Schedule classify(Frame_OLD frame) {
 		return null;
 	}
 //	public RtEvent classify(Frame frame) {

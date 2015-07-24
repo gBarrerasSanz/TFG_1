@@ -1,5 +1,7 @@
 package guiatv.computervision;
 
+import guiatv.common.datatypes.Frame_OLD;
+
 import java.io.IOException;
 
 import org.opencv.core.CvType;
@@ -12,11 +14,11 @@ import org.springframework.core.io.Resource;
 public class CvUtils {
 
 	/** CONFIGURATION PARAMS */
-	private final static int imgCols = 1280;
-	private final static int imgRows = 720;
+//	private final static int imgCols = 1280;
+//	private final static int imgRows = 720;
 	
 	
-	public static Mat getMatFromByteArray(byte[] byteArr) {
+	public static Mat getMatFromByteArray(byte[] byteArr, int imgCols, int imgRows) {
 		Mat dataMat = new Mat(imgCols, imgRows, CvType.CV_8UC1);
 		dataMat.put(0, 0, byteArr);
 		Mat mat = Highgui.imdecode(dataMat, 1);
@@ -49,4 +51,13 @@ public class CvUtils {
 			return null;
 		}
 	}
+	
+//	public static void showFrame(Frame_OLD frame) {
+//		Mat dataMat = new Mat(512, 512, CvType.CV_8UC1);
+//		dataMat.put(0, 0, data.toByteArray());
+//		Mat frameMat = Highgui.imdecode(dataMat, 1);
+//		im.showImage(frameMat);
+//	}
+	
+
 }

@@ -5,7 +5,7 @@ import guiatv.persistence.domain.MLChannel;
 
 import java.util.Date;
 
-public class Frame {
+public class Frame_OLD {
 	
 	private byte[] frameImg;
 	
@@ -13,10 +13,10 @@ public class Frame {
 	
 	private Date takenDate;
 	
-	public Frame() {
+	public Frame_OLD() {
 	}
 	
-	public Frame(byte[] frameImg, MLChannel mlCh, Date takenDate) {
+	public Frame_OLD(byte[] frameImg, MLChannel mlCh, Date takenDate) {
 		this.frameImg = frameImg;
 		this.mlCh = mlCh;
 		this.takenDate = takenDate;

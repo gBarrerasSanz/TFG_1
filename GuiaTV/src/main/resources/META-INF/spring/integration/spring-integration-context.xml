@@ -252,22 +252,22 @@
 
 
 	<!-- ******************************** RTMP SPYING ***************************************** -->
-	<beans profile="RtmpSpyingTests, dev, default">
-		<int:channel id="rtmpSpierChOut" />
-
-		<bean id="rtmpSpyingTaskExecutor"
+<!-- 	<beans profile="RtmpSpyingTests, dev, default">
+		<int:channel id="rtmpSpierChOut" /> -->
+		
+		<!-- <bean id="rtmpSpyingTaskExecutor"
 			class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
 			<property name="corePoolSize" value="5" />
 			<property name="maxPoolSize" value="10" />
 			<property name="queueCapacity" value="25" />
-		</bean>
+		</bean> -->
 
-		<bean id="rtmpSpyingTask" class="guiatv.realtime.rtmpspying.RtmpSpyingTask"
+		<!-- <bean id="rtmpSpyingTask" class="guiatv.realtime.rtmpspying.RtmpSpyingTask"
 			scope="prototype">
 			<constructor-arg ref="rtmpSpyingTaskExecutor" />
-		</bean>
+		</bean> -->
 
-	</beans>
+	<!-- </beans> -->
 	<!-- ** MOCK GATEWAY (RtmpSpyingTests) ** -->
 	<!-- <beans profile="RtmpSpyingTests"> <int:outbound-channel-adapter channel="rtmpSpierChOut" 
 		ref="rtmpSpyingOutputHandler" method="handleMessage" /> <bean id="rtmpSpyingOutputHandler" 
@@ -302,15 +302,15 @@
 		<int:channel id="trainingChIn">
 			<int:queue />
 		</int:channel>
-		<bean id="customFrameRouter" class="guiatv.realtime.router.FrameCustomRouter" />
-		<int:router id="frameRouter" input-channel="sendFrameChOut"
-			ref="customFrameRouter" method="processFrame">
+		<bean id="customBlobRouter" class="guiatv.realtime.router.BlobCustomRouter" />
+		<int:router id="blobRouter" input-channel="sendBlobChOut"
+			ref="customBlobRouter" method="routeBlob">
 		</int:router>
 	</beans>
 	
 	<!-- DUMMY CHANNEL (FrameCustomRouterTests) -->
 	<beans profile="FrameCustomRouterTests">
-		<int:channel id="sendFrameChOut">
+		<int:channel id="sendBlobChOut">
 		</int:channel>
 	</beans>
 	

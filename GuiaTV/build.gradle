@@ -216,6 +216,7 @@ test {
 // Hace que funcione "gradle run"
 run {
     jvmArgs = ['-Djava.library.path=./src/main/resources/META-INF/opencv-2.4.9/windows_bin/x64']
+    jvmArgs = ['-Djava.awt.headless=true']
 }
 
 

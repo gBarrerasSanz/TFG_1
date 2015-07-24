@@ -1,6 +1,6 @@
 package guiatv.persistence.repository;
 
-import guiatv.persistence.domain.RoiBlob;
+import guiatv.persistence.domain.Blob;
 import guiatv.persistence.domain.StreamSource;
 import guiatv.persistence.repository.NOTUSED.ChannelRepositoryCustom;
 

@@ -50,9 +50,9 @@ public class ArffObject implements Serializable {
 	 * blob: imagen de 3 canales correspondiente al Roi
 	 * truth: Clasificación humana del blob ( true => Emisión; false => Anuncios)
 	 */
-	public void addSample(byte[] blob, boolean truth) {
+	public void addSample(Blob blob, boolean truth) {
 		// Se saca el objecto mat del blob
-		Mat img = CvUtils.getMatFromByteArray(blob);
+		Mat img = CvUtils.getMatFromByteArray(blob.getBlob(), blob.getBlobCols(), blob.getBlobRows());
 		// Se binariza la imagen 
 		Mat binImg = CvUtils.thresholdImg(img);
 		// Se obtiene el array de bytes de la imagen binarizada
@@ -63,7 +63,7 @@ public class ArffObject implements Serializable {
 		}
 		
 		double[] vals = new double[data.numAttributes()];
-		for (int i=0; i < blob.length; i++) {
+		for (int i=0; i < blob.getBlob().length; i++) {
 			String val = (binBlob[i] == 0) ? "b" : "w";
 			vals[i] = pixelAttVals.indexOf(val);
 		}

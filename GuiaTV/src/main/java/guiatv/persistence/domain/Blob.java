@@ -1,5 +1,8 @@
 package guiatv.persistence.domain;
 
+import guiatv.computervision.CvUtils;
+import guiatv.realtime.rtmpspying.serializable.ChannelData;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -10,8 +13,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 
+import org.opencv.core.Mat;
+
 @Entity(name = "roiblob")
-public class RoiBlob {
+public class Blob {
 
 	@Id
     @Column(name = "idRoiBlobPersistence", nullable = false)
@@ -26,7 +31,23 @@ public class RoiBlob {
 	@Column(name = "blob", nullable = false)
 	private byte[] blob;
 	
-	public RoiBlob() {
+	@Column(name = "blobCols", nullable = false)
+	private int blobCols;
+
+	@Column(name = "blobRows", nullable = false)
+	private int blobRows;
+	
+	public Blob() {
+	}
+	
+	public Blob(byte[] img, MLChannel mlChannel) {
+		// Extraer ROI
+		Mat imgMat = CvUtils.getMatFromByteArray(img, mlChannel.getImgCols(), mlChannel.getImgRows());
+		Mat roiMat = CvUtils.getRoiFromMat(imgMat, mlChannel.getTopLeft(), mlChannel.getBotRight());
+		this.blob = CvUtils.getByteArrayFromMat(roiMat);
+		this.blobCols = mlChannel.getBotRight()[0] - mlChannel.getTopLeft()[0];
+		this.blobRows = mlChannel.getBotRight()[1] - mlChannel.getTopLeft()[1];
+		this.mlChannel = mlChannel;
 	}
 	
     /**********************************************************
@@ -53,6 +74,23 @@ public class RoiBlob {
 		return idRoiBlobPersistence;
 	}
 
+	public int getBlobCols() {
+		return blobCols;
+	}
+
+	public void setBlobCols(int blobCols) {
+		this.blobCols = blobCols;
+	}
+
+	public int getBlobRows() {
+		return blobRows;
+	}
+
+	public void setBlobRows(int blobRows) {
+		this.blobRows = blobRows;
+	}
+	
+	
 
 	
 	

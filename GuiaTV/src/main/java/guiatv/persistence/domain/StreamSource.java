@@ -8,6 +8,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 
 @Entity(name = "streamsource")
@@ -18,7 +19,7 @@ public class StreamSource {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idStreamSourcePersistence;
 	
-	@ManyToOne(targetEntity=MLChannel.class, fetch=FetchType.LAZY)
+	@OneToOne(targetEntity=MLChannel.class, fetch=FetchType.LAZY)
 	@JoinColumn(name="mlchannel_fk", referencedColumnName="idMlChPersistence")
 	private MLChannel mlChannel;
 	
