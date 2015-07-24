@@ -297,6 +297,7 @@
 		<bean id="customBlobRouter" class="guiatv.realtime.router.BlobCustomRouter" />
 		<int:router id="blobRouter" input-channel="sendBlobChOut"
 			ref="customBlobRouter" method="routeBlob">
+			<int:poller fixed-rate="500"></int:poller>
 		</int:router>
 	</beans>
 
@@ -305,18 +306,26 @@
 		<int:channel id="sendBlobChOut">
 		</int:channel>
 	</beans>
-
+	
+	<!-- ******************************** CLASSIFICATOR ***************************************** -->
 	<beans profile="dev, default">
-		<int:channel id="sendBlobChOut">
+		<int:channel id="classificationChIn">
 			<int:dispatcher task-executor="classificationTaskExecutor"
 				load-balancer="round-robin" />
 		</int:channel>
-		<!-- <bean id="taskExecutor"
+		<bean id="classificationWorker" class="guiatv.realtime.classification.ClassificationWorker" />
+		<int:service-activator 
+			input-channel="classificationChIn" ref="classificationWorker" method="classify"/>
+		<!-- <int:channel id="sendBlobChOut">
+			<int:dispatcher task-executor="classificationTaskExecutor"
+				load-balancer="round-robin" />
+		</int:channel>
+		<bean id="taskExecutor"
 			class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
 			<property name="corePoolSize" value="5" />
 			<property name="maxPoolSize" value="10" />
 			<property name="queueCapacity" value="25" />
-		</bean> -->
+		</bean>
 		<bean id="classificationWorker" class="guiatv.realtime.classification.ClassificationWorker" />
 		<bean id="trainingWorker" class="guiatv.realtime.training.TrainingWorker" />
 		<int:channel id="classificationChIn">
@@ -330,7 +339,7 @@
 		<int:outbound-channel-adapter id="classificationWorkerOutbound"
 			channel="classificationChIn" ref="classificationWorker" method="classify" />
 		<int:outbound-channel-adapter id="trainingWorkerOutbound"
-			channel="trainingChIn" ref="trainingWorker" method="train" />
+			channel="trainingChIn" ref="trainingWorker" method="train" /> -->
 	</beans>
 
 	<!-- ************************** MQTT CLIENT (ScheduleProducerTests) ************************************ -->
