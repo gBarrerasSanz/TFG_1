@@ -9,7 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import guiatv.computervision.CvUtils;
-import guiatv.cv.classificator.Imshow;
+import guiatv.computervision.Imshow;
 
 import org.opencv.core.Mat;
 import org.opencv.highgui.Highgui;

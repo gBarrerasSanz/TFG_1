@@ -131,21 +131,20 @@ public class ScheduleService {
 		return lSched;
 	}
 	
-	@Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void deleteSchedules(List<Schedule> lSched) {
-    	schedRep.delete(lSched);
-    }
-	
-	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	@Transactional(readOnly = true)
     public Schedule findByChannelAndProgrammeAndStartAndEnd(Channel ch, 
-    		Programme prog, Timestamp start, Timestamp end)
- 	{
+    		Programme prog, Timestamp start, Timestamp end) {
 		return schedRep.findByChannelAndProgrammeAndStartAndEnd(ch, 
 				prog, start, end);
     }
 	
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
-    public int insertSchedules(List<Schedule> lSched) {
+    public void delete(List<Schedule> lSched) {
+    	schedRep.delete(lSched);
+    }
+	
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
+    public int save(List<Schedule> lSched) {
 		int numSched = 0;
 		for (Schedule sched: lSched) {
 			// Si el final del schedule NO es posterior al momento actual -> Saltarse el schedule
@@ -181,13 +180,7 @@ public class ScheduleService {
     }
 	
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void saveSchedules(List<Schedule> lSched){
-		
-		//schedRep.save(lSched);
-    }
-	
-	@Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void insertSchedule(Schedule sched){
+    public void save(Schedule sched){
     	schedRep.save(sched);
     }
 }

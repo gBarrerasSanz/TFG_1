@@ -7,7 +7,9 @@ import guiatv.persistence.domain.Channel;
 import guiatv.persistence.domain.MLChannel;
 import guiatv.persistence.domain.Programme;
 import guiatv.persistence.domain.Schedule;
+import guiatv.persistence.domain.StreamSource;
 import guiatv.persistence.repository.MLChannelRepository;
+import guiatv.persistence.repository.StreamSourceRepository;
 
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,19 +19,19 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
-public class MLChannelService {
+public class StreamSourceService {
 	
 	@Autowired
-	MLChannelRepository mlChRep;
+	StreamSourceRepository streamSourceRep;
 	
 	@Transactional(readOnly = true)
-	public List<MLChannel> findAll() {
-		return mlChRep.findAll();
+	public List<StreamSource> findAll() {
+		return streamSourceRep.findAll();
 	}
 	
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void save(MLChannel mlCh) {
-		mlChRep.save(mlCh);
+    public void save(StreamSource streamSource) {
+		streamSourceRep.save(streamSource);
     }
 	
 }

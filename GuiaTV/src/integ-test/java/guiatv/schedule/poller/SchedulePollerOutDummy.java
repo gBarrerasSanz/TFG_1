@@ -9,7 +9,7 @@ import org.springframework.messaging.Message;
 
 import guiatv.common.CommonUtility;
 import guiatv.persistence.domain.Schedule;
-import guiatv.realtime.servicegateway.CapturedFramesGateway;
+import guiatv.realtime.servicegateway.CapturedBlobsGateway;
 
 public class SchedulePollerOutDummy {
 	

@@ -49,17 +49,17 @@ public class ChannelService {
 	}
 	
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void deleteChannel(Channel ch) {
+    public void delete(Channel ch) {
     	chRep.delete(ch);
     }
 	
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void insertChannels(ListChannels lCh) {
+    public void save(ListChannels lCh) {
     	chRep.save(lCh);
     }
 	
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void deleteChannels(ListChannels lCh) {
+    public void delete(ListChannels lCh) {
     	chRep.delete(lCh);
     }
 }

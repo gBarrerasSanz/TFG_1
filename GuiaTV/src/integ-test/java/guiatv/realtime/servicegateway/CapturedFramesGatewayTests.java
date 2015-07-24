@@ -39,7 +39,7 @@ import guiatv.persistence.domain.Channel;
 import guiatv.persistence.domain.MLChannel;
 import guiatv.persistence.domain.Schedule;
 import guiatv.persistence.repository.ScheduleRepository;
-import guiatv.realtime.servicegateway.CapturedFramesGateway;
+import guiatv.realtime.servicegateway.CapturedBlobsGateway;
 import guiatv.schedule.poller.SchedulePoller;
 import guiatv.schedule.publisher.SchedulePublisher;
 import guiatv.schedule.publisher.TaskExecutorMQTTClient;
@@ -54,7 +54,7 @@ public class CapturedFramesGatewayTests extends AbstractTransactionalJUnit4Sprin
 	private static final Logger logger = Logger.getLogger("debugLog");
 	
 	@Autowired
-	private CapturedFramesGateway capturedFramesGateway;
+	private CapturedBlobsGateway capturedFramesGateway;
 	
 	@Autowired
 	QueueChannel sendFrameChOut;

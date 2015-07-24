@@ -1,6 +1,6 @@
 package guiatv.computervision.classificator;
 
-import guiatv.cv.classificator.Imshow;
+import guiatv.computervision.Imshow;
 
 import org.opencv.core.Core;
 import org.opencv.core.Mat;

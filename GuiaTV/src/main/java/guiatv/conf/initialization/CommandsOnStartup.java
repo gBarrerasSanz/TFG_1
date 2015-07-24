@@ -5,8 +5,11 @@ import guiatv.persistence.domain.ArffObject;
 import guiatv.persistence.domain.Channel;
 import guiatv.persistence.domain.MLChannel;
 import guiatv.persistence.domain.StreamSource;
+import guiatv.persistence.repository.StreamSourceRepository;
+import guiatv.persistence.repository.service.ArffObjectService;
 import guiatv.persistence.repository.service.ChannelService;
 import guiatv.persistence.repository.service.MLChannelService;
+import guiatv.persistence.repository.service.StreamSourceService;
 import guiatv.realtime.rtmpspying.MutexMonitor;
 import guiatv.realtime.rtmpspying.RtmpSpyingService;
 import guiatv.realtime.rtmpspying.serializable.ChannelData;
@@ -26,6 +29,12 @@ public class CommandsOnStartup implements ApplicationListener<ContextRefreshedEv
 	
 	@Autowired
 	ChannelService chServ;
+	
+	@Autowired
+	ArffObjectService arffServ;
+	
+	@Autowired
+	StreamSourceService streamSourceServ;
 	
 	@Autowired
 	MLChannelService mlChServ;
@@ -55,11 +64,14 @@ public class CommandsOnStartup implements ApplicationListener<ContextRefreshedEv
 		while ((chData = monitor.acquireChannel()) != null) {
 			// Crear MlChannel 
 			StreamSource streamSource = new StreamSource(chData.getUrl());
+			ArffObject arffObject = new ArffObject();
 			Channel ch = chServ.findByIdChBusiness(chData.getChIdBusiness(), false);
-			MLChannel mlChannel = new MLChannel(ch, streamSource, new ArffObject(), 
+			MLChannel mlChannel = new MLChannel(ch, streamSource, arffObject, 
 					chData.getCols(), chData.getRows(), chData.getTopLeft(), chData.getBotRight());
 			// Meterlo en la BD
-			mlChServ.insertMlChannel(mlChannel);
+			streamSourceServ.save(streamSource);
+			arffServ.save(arffObject);
+			mlChServ.save(mlChannel);
 			// Espiar channel
 			rtmpSpyingServ.doSpying(mlChannel);
 		}

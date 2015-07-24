@@ -1,7 +1,7 @@
 package guiatv.computervision.rtmpspy;
 
 import guiatv.common.CommonUtility;
-import guiatv.cv.classificator.Imshow;
+import guiatv.computervision.Imshow;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
@@ -53,14 +53,15 @@ public class Test1 {
 				File binDir = new File(binDirStr);
 //				ffmpeg -i "rtmp://antena3fms35livefs.fplive.net:1935/antena3fms35live-live/stream-lasexta_1 live=1" -vcodec mjpeg -f image2pipe -pix_fmt yuvj420p -r 1 -
 				String[] cmd = { 
-					binDir.getAbsolutePath()+File.separator+"ffmpeg.exe",
-					"-i", rtmpSources[0]+" live=1",
-					"-vcodec", "mjpeg",
-					"-f", "image2pipe",
-					"-pix_fmt", "yuvj420p",
-					"-r", "1",
-					"-"
-				};
+						binDir.getAbsolutePath()+File.separator+"ffmpeg.exe",
+						"-i", "http://a3live-lh.akamaihd.net/i/antena3_1@35248/master.m3u8", // ********************* TODO: URL
+						"-vcodec", "mjpeg",
+						"-f", "image2pipe",
+						"-pix_fmt", "yuvj420p",
+						"-vf", "scale=1280:720",
+						"-r", "1",
+						"-"
+					};
 				Process p = null;
 				ProcessBuilder pb = new ProcessBuilder(cmd);
 				pb.directory(binDir);

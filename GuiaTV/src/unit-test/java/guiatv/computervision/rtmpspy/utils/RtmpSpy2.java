@@ -1,7 +1,7 @@
 package guiatv.computervision.rtmpspy.utils;
 
 import guiatv.common.CommonUtility;
-import guiatv.cv.classificator.Imshow;
+import guiatv.computervision.Imshow;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;

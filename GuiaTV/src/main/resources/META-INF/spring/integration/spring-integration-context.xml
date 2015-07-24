@@ -107,22 +107,20 @@
 		<int:channel id="grabberChOut" fixed-subscriber="true" />
 
 		<bean id="xmltvGrabber" class="guiatv.xmltv.grabber.XMLTVGrabber" />
-		
-		<!-- <int:transaction-synchronization-factory id="syncFactory">
-	    <int:after-commit expression="payload.delete()" channel="nullChannel"/>
-		</int:transaction-synchronization-factory> -->
+
+		<!-- <int:transaction-synchronization-factory id="syncFactory"> <int:after-commit 
+			expression="payload.delete()" channel="nullChannel"/> </int:transaction-synchronization-factory> -->
 
 		<int:inbound-channel-adapter ref="xmltvGrabber"
 			method="doGrabbing" channel="grabberChOut" id="grabberInbound">
-			<int:poller fixed-rate="30000" /> <!-- Cada 30 seg.  -->
-			<!-- <int:poller max-messages-per-poll="1" cron="0 	*  *  *   *  ?  " /> -->
-			<!-- <int:poller cron="0 	*  *  *   *  ?  ">
-         		<int:transactional transaction-manager="transactionManager" synchronization-factory="syncFactory" />
-   			 </int:poller> -->
+			<int:poller fixed-rate="30000" /> <!-- Cada 30 seg. -->
+			<!-- <int:poller max-messages-per-poll="1" cron="0 * * * * ? " /> -->
+			<!-- <int:poller cron="0 * * * * ? "> <int:transactional transaction-manager="transactionManager" 
+				synchronization-factory="syncFactory" /> </int:poller> -->
 			<!-- sec m h dm m dw -->
 		</int:inbound-channel-adapter>
-		
-		
+
+
 		<int-file:outbound-channel-adapter
 			id="grabberOutbound" channel="grabberChOut" directory="file:xmltv_cap"
 			auto-create-directory="true" mode="REPLACE" temporary-file-suffix=".writing">
@@ -140,10 +138,9 @@
 				<list>
 					<bean
 						class="org.springframework.integration.file.filters.RegexPatternFileListFilter">
-						<!-- <constructor-arg
-							value="xmltvDump_[0-9][0-9][0-9][0-9]_[0-9][0-9]_[0-9][0-9]_[0-9][0-9]_[0-9][0-9]\.xml" /> -->
-						<constructor-arg
-							value="xmltvDump.xml" />
+						<!-- <constructor-arg value="xmltvDump_[0-9][0-9][0-9][0-9]_[0-9][0-9]_[0-9][0-9]_[0-9][0-9]_[0-9][0-9]\.xml" 
+							/> -->
+						<constructor-arg value="xmltvDump.xml" />
 					</bean>
 					<bean
 						class="org.springframework.integration.file.filters.AcceptOnceFileListFilter" />
@@ -252,20 +249,15 @@
 
 
 	<!-- ******************************** RTMP SPYING ***************************************** -->
-<!-- 	<beans profile="RtmpSpyingTests, dev, default">
-		<int:channel id="rtmpSpierChOut" /> -->
-		
-		<!-- <bean id="rtmpSpyingTaskExecutor"
-			class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
-			<property name="corePoolSize" value="5" />
-			<property name="maxPoolSize" value="10" />
-			<property name="queueCapacity" value="25" />
-		</bean> -->
+	<!-- <beans profile="RtmpSpyingTests, dev, default"> <int:channel id="rtmpSpierChOut" 
+		/> -->
 
-		<!-- <bean id="rtmpSpyingTask" class="guiatv.realtime.rtmpspying.RtmpSpyingTask"
-			scope="prototype">
-			<constructor-arg ref="rtmpSpyingTaskExecutor" />
-		</bean> -->
+	<!-- <bean id="rtmpSpyingTaskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor"> 
+		<property name="corePoolSize" value="5" /> <property name="maxPoolSize" value="10" 
+		/> <property name="queueCapacity" value="25" /> </bean> -->
+
+	<!-- <bean id="rtmpSpyingTask" class="guiatv.realtime.rtmpspying.RtmpSpyingTask" 
+		scope="prototype"> <constructor-arg ref="rtmpSpyingTaskExecutor" /> </bean> -->
 
 	<!-- </beans> -->
 	<!-- ** MOCK GATEWAY (RtmpSpyingTests) ** -->
@@ -275,17 +267,17 @@
 		/> </bean> </beans> -->
 	<!-- ******************************** CAPTURED FRAMES GATEWAY ***************************************** -->
 	<beans profile="RtmpSpyingTests, CapturedFramesGatewayTests, dev, default">
-		<int:gateway id="capturedFramesGateway"
-			service-interface="guiatv.realtime.servicegateway.CapturedFramesGateway"
+		<int:gateway id="capturedBlobsGateway"
+			service-interface="guiatv.realtime.servicegateway.CapturedBlobsGateway"
 			default-request-timeout="5000" default-reply-timeout="5000">
-			<int:method name="sendFrame" request-channel="sendFrameChOut" />
+			<int:method name="sendBlob" request-channel="sendBlobChOut" />
 		</int:gateway>
 	</beans>
 
 	<!-- ** CAPTURED FRAMES SERVICE GATEWAY -> FRAME CUSTOM ROUTER ** -->
 	<beans
 		profile="RtmpSpyingTests, CapturedFramesGatewayTests, FrameCustomRouterTests, dev, default">
-		<int:channel id="sendFrameChOut">
+		<int:channel id="sendBlobChOut">
 			<int:queue />
 		</int:channel>
 	</beans>
@@ -307,32 +299,32 @@
 			ref="customBlobRouter" method="routeBlob">
 		</int:router>
 	</beans>
-	
+
 	<!-- DUMMY CHANNEL (FrameCustomRouterTests) -->
 	<beans profile="FrameCustomRouterTests">
 		<int:channel id="sendBlobChOut">
 		</int:channel>
 	</beans>
-	
+
 	<beans profile="dev, default">
-		<int:channel id="sendFrameChOut">
-			<int:dispatcher task-executor="taskExecutor"
+		<int:channel id="sendBlobChOut">
+			<int:dispatcher task-executor="classificationTaskExecutor"
 				load-balancer="round-robin" />
 		</int:channel>
-		<bean id="taskExecutor"
+		<!-- <bean id="taskExecutor"
 			class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
 			<property name="corePoolSize" value="5" />
 			<property name="maxPoolSize" value="10" />
 			<property name="queueCapacity" value="25" />
-		</bean>
+		</bean> -->
 		<bean id="classificationWorker" class="guiatv.realtime.classification.ClassificationWorker" />
 		<bean id="trainingWorker" class="guiatv.realtime.training.TrainingWorker" />
 		<int:channel id="classificationChIn">
-			<int:dispatcher task-executor="taskExecutor"
+			<int:dispatcher task-executor="classificationTaskExecutor"
 				load-balancer="round-robin" />
 		</int:channel>
 		<int:channel id="trainingChIn">
-			<int:dispatcher task-executor="taskExecutor"
+			<int:dispatcher task-executor="classificationTaskExecutor"
 				load-balancer="round-robin" />
 		</int:channel>
 		<int:outbound-channel-adapter id="classificationWorkerOutbound"

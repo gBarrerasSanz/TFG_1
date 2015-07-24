@@ -41,7 +41,7 @@ public class ScheduleLoader {
 	
 	public void loadListSchedules(List<Schedule> lSched) {
 		
-		int numInserted = schedServ.insertSchedules(lSched);
+		int numInserted = schedServ.save(lSched);
 		System.out.println("Loaded "+numInserted+" schedules");
 		
 //		for (Schedule sched: lSched) {

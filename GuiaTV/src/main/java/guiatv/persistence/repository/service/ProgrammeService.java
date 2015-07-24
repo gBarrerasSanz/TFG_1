@@ -51,12 +51,12 @@ public class ProgrammeService {
     }
 	
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void insertProgrammes(List<Programme> lProg) {
+    public void save(List<Programme> lProg) {
     	progRep.save(lProg);
     }
 	
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void deleteProgrammes(List<Programme> lProg) {
+    public void delete(List<Programme> lProg) {
     	progRep.delete(lProg);
     }
 	

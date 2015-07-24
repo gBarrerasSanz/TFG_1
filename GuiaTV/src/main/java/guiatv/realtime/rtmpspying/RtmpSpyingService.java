@@ -2,14 +2,14 @@ package guiatv.realtime.rtmpspying;
 
 import guiatv.common.CommonUtility;
 import guiatv.common.datatypes.Frame_OLD;
-import guiatv.cv.classificator.Imshow;
+import guiatv.computervision.Imshow;
 import guiatv.persistence.domain.Blob;
 import guiatv.persistence.domain.Channel;
 import guiatv.persistence.domain.MLChannel;
 import guiatv.persistence.repository.ChannelRepository;
 import guiatv.persistence.repository.service.AsyncTransactionService;
 import guiatv.realtime.rtmpspying.serializable.ChannelData;
-import guiatv.realtime.servicegateway.CapturedFramesGateway;
+import guiatv.realtime.servicegateway.CapturedBlobsGateway;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
@@ -48,7 +48,7 @@ public class RtmpSpyingService {
 	ChannelRepository chRep;
 	
 	@Autowired
-	CapturedFramesGateway capturedFramesGateway;
+	CapturedBlobsGateway capturedBlobsGateway;
 	
     @Autowired
     AsyncTransactionService asyncTransactionService;
@@ -102,6 +102,8 @@ public class RtmpSpyingService {
 				boolean ff = false;
 				int readBytes = -1;
 				/////////////////////////
+				File errFile = new File("errFile.txt");
+				pb.redirectError(errFile);
 				p = pb.start();
 //				Imshow im = new Imshow("Image");
 				in = new BufferedInputStream(p.getInputStream());
@@ -125,7 +127,7 @@ public class RtmpSpyingService {
 		        			if (data.size() != 0) {
 		        				Blob blob = new Blob(data.toByteArray(), mlChannel);
 //		        				logger.info("Sending frame from "+this.toString());
-		        				capturedFramesGateway.sendBlob(blob);
+		        				capturedBlobsGateway.sendBlob(blob);
 		    
 		        				/**
 		        				 * DEBUG: Show Image

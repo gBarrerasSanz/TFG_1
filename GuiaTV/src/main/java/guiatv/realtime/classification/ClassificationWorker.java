@@ -8,6 +8,7 @@ import java.util.Date;
 
 import guiatv.common.datatypes.Frame_OLD;
 import guiatv.cv.classificator.Classif_old;
+import guiatv.persistence.domain.Blob;
 import guiatv.persistence.domain.Schedule;
 
 import org.opencv.core.Core;
@@ -29,7 +30,7 @@ public class ClassificationWorker {
 	public ClassificationWorker() {
 	}	
 	
-	public Schedule classify(Frame_OLD frame) {
+	public Schedule classify(Blob blob) {
 		return null;
 	}
 //	public RtEvent classify(Frame frame) {

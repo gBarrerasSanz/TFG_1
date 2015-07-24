@@ -46,7 +46,7 @@ public class CommonUtility {
 	
 	public static String timestampToString(Timestamp timestamp) {
 		/** IMPORTANTE: FORMATO DE FECHA */
-		DateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss z");
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss a z");
 		return df.format(new Date(timestamp.getTime()));
 	}
 	

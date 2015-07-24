@@ -71,7 +71,7 @@ public class SchedulePublisher {
 				logger.error("ERROR: Unknown error");
 			}
 		}
-		schedServ.deleteSchedules(publishedSched);
+		schedServ.delete(publishedSched);
 	}
 	
 //	public void declareQueue(String queueName) {

@@ -1,6 +1,7 @@
 package guiatv.computervision;
 
 import guiatv.common.datatypes.Frame_OLD;
+import guiatv.persistence.domain.Blob;
 
 import java.io.IOException;
 
@@ -52,12 +53,11 @@ public class CvUtils {
 		}
 	}
 	
-//	public static void showFrame(Frame_OLD frame) {
-//		Mat dataMat = new Mat(512, 512, CvType.CV_8UC1);
-//		dataMat.put(0, 0, data.toByteArray());
-//		Mat frameMat = Highgui.imdecode(dataMat, 1);
-//		im.showImage(frameMat);
-//	}
+	public static void showBlob(Blob blob) {
+		Mat blobMat = getMatFromByteArray(blob.getBlob(), blob.getBlobCols(), blob.getBlobRows());
+		Imshow im = new Imshow("Image");
+		im.showImage(blobMat);
+	}
 	
 
 }

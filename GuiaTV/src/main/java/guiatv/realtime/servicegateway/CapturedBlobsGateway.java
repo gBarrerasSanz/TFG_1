@@ -9,6 +9,6 @@ import java.util.concurrent.Future;
 
 import org.springframework.messaging.handler.annotation.Payload;
 
-public interface CapturedFramesGateway {
+public interface CapturedBlobsGateway {
 	Future<Blob> sendBlob(Blob blob);
 }

@@ -4,6 +4,7 @@ import java.io.File;
 import java.net.URISyntaxException;
 import java.net.URL;
 
+import guiatv.computervision.Imshow;
 import guiatv.cv.classificator.Classif_old;
 
 import org.opencv.core.Core;

@@ -13,21 +13,32 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 @Configuration
 @EnableAsync
-public class TaskExecutorConfig implements AsyncConfigurer {
+public class TaskExecutorConfig {
 	
 	@Bean(name="rtmpSpyingTaskExecutor")
-	@Override
-	public Executor getAsyncExecutor() {
+	public Executor getRtmpSpyingTaskExecutor() {
 		ThreadPoolTaskExecutor taskExecutor = new ThreadPoolTaskExecutor();
-        taskExecutor.setMaxPoolSize(10);
+        taskExecutor.setCorePoolSize(5);
+		taskExecutor.setMaxPoolSize(10);
+		taskExecutor.setQueueCapacity(25);
+        taskExecutor.initialize();
+        return taskExecutor;
+	}
+	
+	@Bean(name="classificationTaskExecutor")
+	public Executor getClassificationTaskExecutor() {
+		ThreadPoolTaskExecutor taskExecutor = new ThreadPoolTaskExecutor();
+        taskExecutor.setCorePoolSize(5);
+		taskExecutor.setMaxPoolSize(10);
+		taskExecutor.setQueueCapacity(25);
         taskExecutor.initialize();
         return taskExecutor;
 	}
 
-	@Override
-	public AsyncUncaughtExceptionHandler getAsyncUncaughtExceptionHandler() {
-		return new SimpleAsyncUncaughtExceptionHandler();
-	}
+//	@Override
+//	public AsyncUncaughtExceptionHandler getAsyncUncaughtExceptionHandler() {
+//		return new SimpleAsyncUncaughtExceptionHandler();
+//	}
 	
 
 }

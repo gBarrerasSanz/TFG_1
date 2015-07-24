@@ -31,7 +31,7 @@ import guiatv.ApplicationTest;
 import guiatv.common.CommonUtility;
 import guiatv.persistence.domain.Schedule;
 import guiatv.persistence.repository.ScheduleRepository;
-import guiatv.realtime.servicegateway.CapturedFramesGateway;
+import guiatv.realtime.servicegateway.CapturedBlobsGateway;
 import guiatv.schedule.poller.SchedulePoller;
 import guiatv.schedule.publisher.SchedulePublisher;
 import guiatv.schedule.publisher.TaskExecutorMQTTClient;

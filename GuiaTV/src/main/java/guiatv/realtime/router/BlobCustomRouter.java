@@ -1,5 +1,6 @@
 package guiatv.realtime.router;
 
+import guiatv.computervision.CvUtils;
 import guiatv.persistence.domain.Blob;
 import guiatv.persistence.domain.Channel;
 
@@ -15,7 +16,10 @@ public class BlobCustomRouter {
     public String routeBlob(Blob blob) {
     	// TODO: Implementar
 //        boolean trained = learnedChRepImpl.isTrained(frame.getChannel(), frame.getRtmp());
-        boolean trained = true; // TODO: REMOVE THIS
+        // DEBUG: Mostrar imagen
+//    	CvUtils.showBlob(blob);
+    	
+    	boolean trained = true; // TODO: REMOVE THIS
         if (trained) {
         	return "classificationChIn";
         }
