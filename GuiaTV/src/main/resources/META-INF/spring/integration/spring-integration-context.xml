@@ -307,15 +307,35 @@
 		</int:channel>
 	</beans>
 	
+	<!-- ** CLASSIFICATOR -> REALTIME BRAIN ** -->
+	<beans profile="dev, default">
+	</beans>
+	
 	<!-- ******************************** CLASSIFICATOR ***************************************** -->
 	<beans profile="dev, default">
 		<int:channel id="classificationChIn">
 			<int:dispatcher task-executor="classificationTaskExecutor"
 				load-balancer="round-robin" />
 		</int:channel>
+
 		<bean id="classificationWorker" class="guiatv.realtime.classification.ClassificationWorker" />
 		<int:service-activator 
-			input-channel="classificationChIn" ref="classificationWorker" method="classify"/>
+			input-channel="classificationChIn" ref="classificationWorker" method="classify"
+			output-channel="realtimeBrainChIn"/>
+	</beans>	
+	<!-- ******************************** REAL TIME BRAIN ***************************************** -->
+	<beans profile="dev, default">
+		<int:channel id="realtimeBrainChIn">
+			<int:dispatcher task-executor="realtimeBrainTaskExecutor"
+				load-balancer="round-robin" />
+		</int:channel>
+		
+		<bean id="realtimeBrain" class="guiatv.realtime.brain.RealtimeBrain" />
+		
+		<int:outbound-channel-adapter id="realtimeBrainOutbound"
+				ref="realtimeBrain" method="manageSchedule" channel="realtimeBrainChIn" />
+	</beans>
+	
 		<!-- <int:channel id="sendBlobChOut">
 			<int:dispatcher task-executor="classificationTaskExecutor"
 				load-balancer="round-robin" />
@@ -340,7 +360,7 @@
 			channel="classificationChIn" ref="classificationWorker" method="classify" />
 		<int:outbound-channel-adapter id="trainingWorkerOutbound"
 			channel="trainingChIn" ref="trainingWorker" method="train" /> -->
-	</beans>
+	
 
 	<!-- ************************** MQTT CLIENT (ScheduleProducerTests) ************************************ -->
 	<beans profile="SchedulePublisherTests">

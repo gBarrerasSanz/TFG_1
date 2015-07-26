@@ -56,6 +56,7 @@ public class SchedulePublisher {
 		String routKey = null;
 		for (Schedule sched: listSchedMsg.getPayload()) {
 			try {
+				assert(sched != null);
 				routKey = sched.getProgramme().getHashNameProg();
 				String schedJson = sched.toStringPublisher();
 				schedJson = StringEscapeUtils.unescapeJava(schedJson);
@@ -68,7 +69,8 @@ public class SchedulePublisher {
 			} catch (AmqpException e) {
 				logger.error("ERROR: Could NOT connect to RabbitMQ");
 			} catch(Exception e) {
-				logger.error("ERROR: Unknown error");
+				e.printStackTrace();
+//				logger.error("ERROR: Unknown error");
 			}
 		}
 		schedServ.delete(publishedSched);

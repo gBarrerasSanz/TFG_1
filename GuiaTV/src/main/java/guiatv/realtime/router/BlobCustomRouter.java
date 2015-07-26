@@ -4,13 +4,14 @@ import guiatv.computervision.CvUtils;
 import guiatv.persistence.domain.Blob;
 import guiatv.persistence.domain.Channel;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.integration.annotation.Router;
 import org.springframework.messaging.MessageChannel;
 
 public class BlobCustomRouter {
 	
-	
+	private static final Logger logger = Logger.getLogger("debugLog");
 	
     @Router
     public String routeBlob(Blob blob) {
@@ -19,6 +20,7 @@ public class BlobCustomRouter {
         // DEBUG: Mostrar imagen
 //    	CvUtils.showBlob(blob);
     	
+    	assert(blob != null);
     	boolean trained = true; // TODO: REMOVE THIS
         if (trained) {
         	return "classificationChIn";

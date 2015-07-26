@@ -34,6 +34,16 @@ public class TaskExecutorConfig {
         taskExecutor.initialize();
         return taskExecutor;
 	}
+	
+	@Bean(name="realtimeBrainTaskExecutor")
+	public Executor getRealTimeBrainTaskExecutor() {
+		ThreadPoolTaskExecutor taskExecutor = new ThreadPoolTaskExecutor();
+        taskExecutor.setCorePoolSize(1);
+		taskExecutor.setMaxPoolSize(1);
+		taskExecutor.setQueueCapacity(1);
+        taskExecutor.initialize();
+        return taskExecutor;
+	}
 
 //	@Override
 //	public AsyncUncaughtExceptionHandler getAsyncUncaughtExceptionHandler() {

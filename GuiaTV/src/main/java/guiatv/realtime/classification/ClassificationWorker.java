@@ -9,8 +9,10 @@ import java.util.Date;
 import guiatv.common.datatypes.Frame_OLD;
 import guiatv.cv.classificator.Classif_old;
 import guiatv.persistence.domain.Blob;
+import guiatv.persistence.domain.MLChannel;
 import guiatv.persistence.domain.Schedule;
 
+import org.apache.log4j.Logger;
 import org.opencv.core.Core;
 import org.opencv.core.Core.MinMaxLocResult;
 import org.opencv.core.CvType;
@@ -26,12 +28,19 @@ import org.springframework.core.io.Resource;
 
 public class ClassificationWorker {
 	
+	private static final Logger logger = Logger.getLogger("debugLog");
 	
 	public ClassificationWorker() {
 	}	
 	
 	public Schedule classify(Blob blob) {
-		return null;
+		assert(blob != null);
+		assert(blob.getMlChannel() != null);
+		assert(blob.getMlChannel().getChannel() != null);
+		assert(blob.getMlChannel().getChannel().getIdChBusiness() != null);
+//		logger.debug("Classifying blob from "+blob.getMlChannel().getChannel().getIdChBusiness());
+		MLChannel mlChannel = blob.getMlChannel();
+		return new Schedule();
 	}
 //	public RtEvent classify(Frame frame) {
 //		RtEvent ev = new RtEvent();

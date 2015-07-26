@@ -125,9 +125,15 @@ public class RtmpSpyingService {
 		        		}
 		        		if (imgReady) {
 		        			if (data.size() != 0) {
-		        				Blob blob = new Blob(data.toByteArray(), mlChannel);
+		        				try {
+		        					Blob blob = new Blob(data.toByteArray(), mlChannel);
+		        					assert(blob != null);
+		        					capturedBlobsGateway.sendBlob(blob);
+		        				} catch(Exception e) {
+		        					e.printStackTrace();
+		        				}
 //		        				logger.info("Sending frame from "+this.toString());
-		        				capturedBlobsGateway.sendBlob(blob);
+		        				
 		    
 		        				/**
 		        				 * DEBUG: Show Image

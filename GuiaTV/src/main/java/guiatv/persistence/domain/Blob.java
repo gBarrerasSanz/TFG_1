@@ -40,7 +40,7 @@ public class Blob {
 	public Blob() {
 	}
 	
-	public Blob(byte[] img, MLChannel mlChannel) {
+	public Blob(byte[] img, MLChannel mlChannel) throws Exception {
 		// Extraer ROI
 		Mat imgMat = CvUtils.getMatFromByteArray(img, mlChannel.getImgCols(), mlChannel.getImgRows());
 		Mat roiMat = CvUtils.getRoiFromMat(imgMat, mlChannel.getTopLeft(), mlChannel.getBotRight());
