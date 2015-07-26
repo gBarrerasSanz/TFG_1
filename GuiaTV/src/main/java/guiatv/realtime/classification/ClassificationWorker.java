@@ -35,14 +35,14 @@ public class ClassificationWorker {
 	}	
 	
 	public RtSchedule classify(Blob blob) {
-		assert(blob != null);
-		assert(blob.getMlChannel() != null);
-		assert(blob.getMlChannel().getChannel() != null);
-		assert(blob.getMlChannel().getChannel().getIdChBusiness() != null);
-//		logger.debug("Classifying blob from "+blob.getMlChannel().getChannel().getIdChBusiness());
-		
-		RtSchedule rtSched = new RtSchedule(blob.getMlChannel().getChannel(), 
-								new Timestamp(new Date().getTime()));
+		RtSchedule rtSched = null;
+		try {
+	//		logger.debug("Classifying blob from "+blob.getMlChannel().getChannel().getIdChBusiness());
+			rtSched = new RtSchedule(blob.getMlChannel().getChannel(), 
+									new Timestamp(new Date().getTime()));
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
 		return rtSched;
 	}
 //	public RtEvent classify(Frame frame) {

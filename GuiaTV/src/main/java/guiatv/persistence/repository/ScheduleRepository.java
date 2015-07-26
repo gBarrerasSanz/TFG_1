@@ -21,10 +21,10 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long>,
 	
 	List<Schedule> findAll();
 	
+	Schedule findOneByIdSched(Long idSched);
+	
 	List<Schedule> findByChannelOrderByStartAsc(Channel ch);
 	
-	Schedule findByIdSched(Long idSched);
-
 	List<Schedule> findByChannel(Channel ch);
 	
 	@Query("SELECT s FROM schedule s WHERE s.channel = ?1 ORDER BY s.start ASC")
@@ -38,8 +38,13 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long>,
 //			+ "WHERE s.channel = ?1 AND s.start <= ?2 AND s.end >= ?2")
 //	Programme findOneByChannelAndInstant(Channel ch, Timestamp instant);
 	
-	Schedule findOneByChannelAndStartBeforeAndEndAfter(
-			Channel ch, Timestamp instant1, Timestamp instant2);
+//	Schedule findOneByChannelAndStartBeforeAndEndAfter(
+//			Channel ch, Timestamp instant1, Timestamp instant2);
+	
+	@Query("SELECT s.programme FROM schedule s "
+	+ "WHERE s.channel = ?1 AND s.start <= ?2 AND s.end >= ?2")
+	List<Schedule> findByChannelAndInstantBetweenStartAndEnd(
+			Channel ch, Timestamp instant);
 	
 	// DEBUG
 	Schedule findOneByStartBeforeAndEndAfter(Timestamp instant1, Timestamp instant2);
@@ -53,7 +58,13 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long>,
 //	List<Schedule> findCloserSchedules(Timestamp start, Timestamp end);
 	
 	// Devolver los schedules con start en [start, end] o los schedules con (start < start2 AND end > start2) (schedules en curso)
-	List<Schedule> findByPublishedFalseAndStartBetweenOrStartBeforeAndEndAfterOrderByStartAsc(Timestamp start, Timestamp end, Timestamp start2, Timestamp start3);
+	
+	List<Schedule> findByStartBetweenAndPublishedFalseOrStartBeforeAndEndAfterAndPublishedFalseOrderByStartAsc(Timestamp start, Timestamp end, Timestamp start2, Timestamp start3);
+	
+//	@Query("SELECT s from schedule s "
+//			+ "WHERE s.published >= false AND "
+//			+ "s.start <= ?2")
+//	List<Schedule> findByPublishedFalseAndInstantOnTime(Timestamp start);
 	
 	List<Schedule> findByChannelAndProgrammeOrderByStartAsc(Channel ch, Programme prog);
 	

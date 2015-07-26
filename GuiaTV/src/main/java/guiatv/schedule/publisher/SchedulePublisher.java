@@ -66,9 +66,10 @@ public class SchedulePublisher {
 				schedJson = StringEscapeUtils.unescapeJava(schedJson);
 				amqpTmp.convertAndSend(routKey, schedJson);
 				publishedSched.add(sched);
-				logger.debug("Published Schedule: "+sched.getProgramme().getNameProg()
+				logger.debug("Published Schedule ("+sched.getIdSched()+"): "+sched.getProgramme().getNameProg()
 						+" -> "+CommonUtility.timestampToString(sched.getStart())+
-						" --- "+CommonUtility.timestampToString(sched.getEnd()));
+						" --- "+CommonUtility.timestampToString(sched.getEnd())+
+						" ==> Published: "+sched.isPublished());
 			
 			} catch (AmqpException e) {
 				logger.error("ERROR: Could NOT connect to RabbitMQ");
@@ -80,9 +81,11 @@ public class SchedulePublisher {
 		/**
 		 * Actualizar el campo published de los schedules publicados a True.
 		 */
-		for (Schedule sched: publishedSched) {
-			schedServ.setTruePublishedWhereIdSched(sched.getIdSched());
-		}
+//		for (Schedule sched: publishedSched) {
+//			schedServ.setTruePublishedWhereIdSched(sched.getIdSched());
+////			Schedule updatedSched = schedServ.findOneByIdSched(sched.getIdSched(), false);
+////			logger.debug(updatedSched);
+//		}
 //		schedServ.delete(publishedSched);
 	}
 	

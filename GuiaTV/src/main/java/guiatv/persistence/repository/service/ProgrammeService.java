@@ -54,16 +54,16 @@ public class ProgrammeService {
 	@Transactional(readOnly = true)
 	public Programme findOneByChannelAndInstant(Channel ch, Timestamp instant) {
 //		Programme prog = schedRep.findOneByChannelAndInstant(ch, instant);
-		Schedule sched = schedRep.findOneByChannelAndStartBeforeAndEndAfter(ch, instant, instant);
 		Schedule sched2 = schedRep.findOneByStartBeforeAndEndAfter(instant, instant);
-		List<Schedule> lSched = schedRep.findByChannelOrderByStartAsc(ch);
-		List<Schedule> lSched2 = new ArrayList<Schedule>();
-		for (Schedule sc: lSched) {
+		List<Schedule> lSched2 = schedRep.findByChannelOrderByStartAsc(ch);
+		List<Schedule> lSched3 = new ArrayList<Schedule>();
+		for (Schedule sc: lSched2) {
 			if (CommonUtility.isScheduleBeingEmitedNow(sc)) {
-				lSched2.add(sc);
+				lSched3.add(sc);
 			}
 		}
-		return sched.getProgramme();
+		List<Schedule> lSched = schedRep.findByChannelAndInstantBetweenStartAndEnd(ch, instant);
+		return lSched.get(0).getProgramme();
 	}
 	
 	

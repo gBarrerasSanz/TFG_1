@@ -8,6 +8,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.integration.support.MessageBuilder;
 import org.springframework.messaging.Message;
+import org.springframework.scheduling.annotation.Async;
 
 import guiatv.persistence.domain.Programme;
 import guiatv.persistence.domain.RtSchedule;
@@ -29,9 +30,8 @@ public class RealtimeBrain {
 	 * - Descartarlo
 	 */
 	public void manageRtSchedule(RtSchedule rtsched) {
-		
-		
-		boolean send = true; // TODO: Tomar la decisión
+		// TODO: Tomar la decisión
+		boolean send = true; 
 		
 		if (send) {
 			// Determinar a qué programa afecta

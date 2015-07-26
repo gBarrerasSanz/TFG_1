@@ -48,6 +48,16 @@ public class ScheduleService {
 		return lSched;
 	}
 	
+	@Transactional(readOnly = true)
+	public Schedule findOneByIdSched(Long idSched, boolean refs) {
+		Schedule sched = schedRep.findOneByIdSched(idSched);
+		if (refs) {
+			Hibernate.initialize(sched.getChannel());
+			Hibernate.initialize(sched.getProgramme());
+		}
+		return sched;
+	}
+	
 	
 	@Transactional(readOnly = true)
 	public List<Schedule> findByChannel(Channel ch, boolean refs) {
@@ -145,16 +155,23 @@ public class ScheduleService {
 	 * Devuelve de la base de datos, los schedules que empiezan secsFromStart
 	 * segundos después del momento actual, y aquellos schedules en curso
 	 */
-	@Transactional(readOnly = true)
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public List<Schedule> findByPublishedFalseAndSecondsFromStart(int secsFromStart) {
 		Timestamp now = new Timestamp(new Date().getTime());
 		Timestamp afterStart = new Timestamp(now.getTime() + (long)(1000 * secsFromStart));
 		List<Schedule> lSched = 
-				schedRep.findByPublishedFalseAndStartBetweenOrStartBeforeAndEndAfterOrderByStartAsc(
+				schedRep.findByStartBetweenAndPublishedFalseOrStartBeforeAndEndAfterAndPublishedFalseOrderByStartAsc(
 						now, afterStart, now, now);
 		for (Schedule sched: lSched) {
 			Hibernate.initialize(sched.getChannel());
 			Hibernate.initialize(sched.getProgramme());
+			// Poner published a True
+			if (sched.isPublished()) {
+//				lSched.remove(sched);
+			}
+			else {
+				schedRep.setTruePublishedWhereIdSched(sched.getIdSched());
+			}
 		}
 		return lSched;
 	}

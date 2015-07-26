@@ -191,7 +191,7 @@
 
 		<int:inbound-channel-adapter id="schedPollerInbound"
 			ref="schedPoller" method="askForSchedules" channel="schedPollerChOut">
-			<int:poller fixed-rate="5000" />
+			<int:poller fixed-rate="10000" /> <!-- Cada 10 segundos -->
 		</int:inbound-channel-adapter>
 	</beans>
 
