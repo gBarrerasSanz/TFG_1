@@ -1,8 +1,11 @@
 package guiatv.persistence.repository.service;
 
+import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 import guiatv.catalog.datatypes.ListProgrammes;
+import guiatv.common.CommonUtility;
 import guiatv.persistence.domain.Channel;
 import guiatv.persistence.domain.Programme;
 import guiatv.persistence.domain.Schedule;
@@ -21,6 +24,9 @@ public class ProgrammeService {
 	
 	@Autowired
 	ProgrammeRepository progRep;
+	
+	@Autowired
+	ScheduleRepository schedRep;
 	
 	@Transactional(readOnly = true)
 	public ListProgrammes findAll() {
@@ -44,6 +50,22 @@ public class ProgrammeService {
 		}
 		return prog;
 	}
+	
+	@Transactional(readOnly = true)
+	public Programme findOneByChannelAndInstant(Channel ch, Timestamp instant) {
+//		Programme prog = schedRep.findOneByChannelAndInstant(ch, instant);
+		Schedule sched = schedRep.findOneByChannelAndStartBeforeAndEndAfter(ch, instant, instant);
+		Schedule sched2 = schedRep.findOneByStartBeforeAndEndAfter(instant, instant);
+		List<Schedule> lSched = schedRep.findByChannelOrderByStartAsc(ch);
+		List<Schedule> lSched2 = new ArrayList<Schedule>();
+		for (Schedule sc: lSched) {
+			if (CommonUtility.isScheduleBeingEmitedNow(sc)) {
+				lSched2.add(sc);
+			}
+		}
+		return sched.getProgramme();
+	}
+	
 	
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
     public void deleteProgramme(Programme prog) {

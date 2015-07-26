@@ -2,6 +2,8 @@ package guiatv.schedule.publisher;
 
 import guiatv.catalog.restcontroller.PublisherRestController;
 import guiatv.common.CommonUtility;
+import guiatv.persistence.domain.Programme;
+import guiatv.persistence.domain.RtSchedule;
 import guiatv.persistence.domain.Schedule;
 import guiatv.persistence.repository.service.ScheduleService;
 
@@ -43,7 +45,9 @@ public class SchedulePublisher {
 	
 	private static Logger logger = Logger.getLogger("debugLog");
 	
-	public interface PublisherView {};
+	public interface PublisherScheduleView {};
+	
+	public interface PublisherRtScheduleView {};
 	
 	@Autowired
 	AmqpTemplate amqpTmp;
@@ -51,7 +55,7 @@ public class SchedulePublisher {
 	@Autowired
 	ScheduleService schedServ;
 	
-	public void publishTopics(Message<List<Schedule>> listSchedMsg ) {
+	public void publishListSchedules(Message<List<Schedule>> listSchedMsg ) {
 		List<Schedule> publishedSched = new ArrayList<Schedule>();
 		String routKey = null;
 		for (Schedule sched: listSchedMsg.getPayload()) {
@@ -62,7 +66,7 @@ public class SchedulePublisher {
 				schedJson = StringEscapeUtils.unescapeJava(schedJson);
 				amqpTmp.convertAndSend(routKey, schedJson);
 				publishedSched.add(sched);
-				logger.debug("Published: "+sched.getProgramme().getNameProg()
+				logger.debug("Published Schedule: "+sched.getProgramme().getNameProg()
 						+" -> "+CommonUtility.timestampToString(sched.getStart())+
 						" --- "+CommonUtility.timestampToString(sched.getEnd()));
 			
@@ -76,30 +80,24 @@ public class SchedulePublisher {
 		schedServ.delete(publishedSched);
 	}
 	
-//	public void declareQueue(String queueName) {
-//		Queue queue = new Queue(queueName);
-//		this.rabbitAdmin.declareQueue(queue);
-//		TopicExchange topicExchange = new TopicExchange(queueName);
-//		this.rabbitAdmin.declareExchange(topicExchange);
-//		this.rabbitAdmin
-//		    .declareBinding(
-//		        BindingBuilder
-//		            .bind(queue)
-//		            .to(topicExchange)
-//		            .with(queueName));
-//	}
-//
-//	public boolean sendMessage(String message){ 
-//		try{ 
-//			amqpTemplate.convertAndSend("amq.topic", "amq.topic.*", message); 
-//	        return true;
-//	    }catch(Exception ex){ 
-//	    	return false;
-//	    }
-//	}
-	
-//	public String sendMsg(String id, String val) {
-//		amqpTemplate.convertAndSend(id, val);
-//		return (String) amqpTemplate.receiveAndConvert("myqueue");
-//	}
+	public void publishRtSchedule(Message<RtSchedule> rtScheduleMsg, Programme prog) {
+		RtSchedule rtSched = rtScheduleMsg.getPayload();
+		String routKey = null;
+		try {
+			assert(rtSched != null);
+			routKey = prog.getHashNameProg();
+			String rtSchedJsonString = rtSched.toString();
+//			schedJson = StringEscapeUtils.unescapeJava(schedJson);
+			amqpTmp.convertAndSend(routKey, rtSchedJsonString);
+			logger.debug("Published RtSchedule: "+rtSched.getChannel()
+					+" -> "+CommonUtility.timestampToString(rtSched.getInstant())
+					+" -> "+rtSched.getType());
+		
+			} catch (AmqpException e) {
+				logger.error("ERROR: Could NOT connect to RabbitMQ");
+			} catch(Exception e) {
+				e.printStackTrace();
+//				logger.error("ERROR: Unknown error");
+			}
+	}
 }

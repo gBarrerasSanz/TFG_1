@@ -69,6 +69,7 @@ public class RtmpSpyingService {
 	
 	@Async("rtmpSpyingTaskExecutor")
 	public void doSpying(MLChannel mlChannel) {
+		assert(mlChannel.getChannel() != null);
 //		ChannelData chData = null;
 //		chData = monitor.getAnAvailableChannel();
 		URL binDirUrl = this.getClass().getClassLoader()
@@ -127,7 +128,6 @@ public class RtmpSpyingService {
 		        			if (data.size() != 0) {
 		        				try {
 		        					Blob blob = new Blob(data.toByteArray(), mlChannel);
-		        					assert(blob != null);
 		        					capturedBlobsGateway.sendBlob(blob);
 		        				} catch(Exception e) {
 		        					e.printStackTrace();

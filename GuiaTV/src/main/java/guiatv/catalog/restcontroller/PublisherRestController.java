@@ -106,7 +106,7 @@ public class PublisherRestController {
 					 * PUBLICAR SCHEDULE
 					 *******************************************/
 					Message<List<Schedule>> schedMsg = MessageBuilder.withPayload(lSched).build();
-					publisher.publishTopics(schedMsg);
+					publisher.publishListSchedules(schedMsg);
 					response = new ResponseEntity<List<Schedule>>(lSched, HttpStatus.OK);
 				}
 				else { // Si NO se ha encontrado ningún schedule

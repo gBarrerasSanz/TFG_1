@@ -26,29 +26,10 @@ public class CommandsOnStartup implements ApplicationListener<ContextRefreshedEv
     
 	private static final Logger logger = Logger.getLogger("debugLog"); 
 	
-	
-	@Autowired
-	ChannelService chServ;
-	
-	@Autowired
-	ArffObjectService arffServ;
-	
-	@Autowired
-	StreamSourceService streamSourceServ;
-	
-	@Autowired
-	MLChannelService mlChServ;
-	
-	@Autowired
-	RtmpSpyingService rtmpSpyingServ;
-	
-	@Autowired
-	MutexMonitor monitor;
-	
 	@Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
 		
-		loadAndSpyChannels();
+//		loadAndSpyChannels();
     	// Crear un objeto MLChannel para cada canal y meterlo en el repositorio
 		
 //		for (int i=0; i<channels.length; i++) {
@@ -59,21 +40,4 @@ public class CommandsOnStartup implements ApplicationListener<ContextRefreshedEv
 //		}
     }
 	
-	private void loadAndSpyChannels() {
-		ChannelData chData = null;
-		while ((chData = monitor.acquireChannel()) != null) {
-			// Crear MlChannel 
-			StreamSource streamSource = new StreamSource(chData.getUrl());
-			ArffObject arffObject = new ArffObject();
-			Channel ch = chServ.findByIdChBusiness(chData.getChIdBusiness(), false);
-			MLChannel mlChannel = new MLChannel(ch, streamSource, arffObject, 
-					chData.getCols(), chData.getRows(), chData.getTopLeft(), chData.getBotRight());
-			// Meterlo en la BD
-			streamSourceServ.save(streamSource);
-			arffServ.save(arffObject);
-			mlChServ.save(mlChannel);
-			// Espiar channel
-			rtmpSpyingServ.doSpying(mlChannel);
-		}
-	}
 }

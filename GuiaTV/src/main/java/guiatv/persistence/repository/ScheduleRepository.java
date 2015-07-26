@@ -20,6 +20,8 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long>,
 	
 	List<Schedule> findAll();
 	
+	List<Schedule> findByChannelOrderByStartAsc(Channel ch);
+	
 	Schedule findByIdSched(Long idSched);
 
 	List<Schedule> findByChannel(Channel ch);
@@ -31,9 +33,20 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long>,
 	List<Schedule> findByChannelAndProgrammeAndStartGreaterOrEqualThan(Channel ch, 
 			Programme prog, Timestamp start);
 	
+//	@Query("SELECT s.programme FROM schedule s "
+//			+ "WHERE s.channel = ?1 AND s.start <= ?2 AND s.end >= ?2")
+//	Programme findOneByChannelAndInstant(Channel ch, Timestamp instant);
+	
+	Schedule findOneByChannelAndStartBeforeAndEndAfter(
+			Channel ch, Timestamp instant1, Timestamp instant2);
+	
+	// DEBUG
+	Schedule findOneByStartBeforeAndEndAfter(Timestamp instant1, Timestamp instant2);
+	
 	List<Schedule> findByProgramme(Programme prog);
 	
 	List<Schedule> findByChannelAndProgrammeAndEndLessThanOrderByStartAsc(Channel ch, Programme prog, Timestamp end);
+	
 	
 //	@Query("Select s from schedule s where s.start >= ?1 and s.end <= ?2")
 //	List<Schedule> findCloserSchedules(Timestamp start, Timestamp end);

@@ -73,11 +73,11 @@ public class Programme extends ResourceSupport implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idProgPersistence;
 
-	@JsonView({MultipleProgrammes.class, SingleProgramme.class, Channel.SingleChannel.class, SchedulePublisher.PublisherView.class})
+	@JsonView({MultipleProgrammes.class, SingleProgramme.class, Channel.SingleChannel.class, SchedulePublisher.PublisherScheduleView.class})
 	@Column(name = "nameProg", nullable = false, length = 70)
     private String nameProg;
 	
-	@JsonView({MultipleProgrammes.class, SingleProgramme.class, Channel.SingleChannel.class, SchedulePublisher.PublisherView.class})
+	@JsonView({MultipleProgrammes.class, SingleProgramme.class, Channel.SingleChannel.class, SchedulePublisher.PublisherScheduleView.class})
 	@Column(name="hashNameProg", nullable=false)
 	private String hashNameProg;
 
@@ -158,6 +158,14 @@ public class Programme extends ResourceSupport implements Serializable {
 		} else if (!nameProg.equals(other.nameProg))
 			return false;
 		return true;
+	}
+	
+	@Override
+	public String toString() {
+		return "Programme {"+
+				"nameProg="+this.getNameProg()+", "+
+				"hashNameProg="+this.getHashNameProg()+", "+
+				"}";
 	}
 
 	

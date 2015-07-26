@@ -48,9 +48,30 @@ public class ScheduleService {
 		return lSched;
 	}
 	
+	
 	@Transactional(readOnly = true)
 	public List<Schedule> findByChannel(Channel ch, boolean refs) {
 		List<Schedule> lSched = schedRep.findByChannel(ch);
+		if (refs){
+			Hibernate.initialize(lSched);
+			for (Schedule sched: lSched) {
+				// Lo siguiente lo hago porque Hibernate.initialize(sched.getProgramme()) NO hace
+				// lo que debería hacer
+				Programme prog = new Programme();
+				prog.setIdProgPersistence(sched.getProgramme().getIdProgPersistence());
+				prog.setNameProg(sched.getProgramme().getNameProg());
+				prog.computeHashNameProg();
+				sched.setProgramme(prog);
+//				Hibernate.initialize(sched.getProgramme());
+				Hibernate.initialize(sched.getChannel());
+			}
+		}
+		return lSched;
+	}
+	
+	@Transactional(readOnly = true)
+	public List<Schedule> findByChannelOrderByStartAsc(Channel ch, boolean refs) {
+		List<Schedule> lSched = schedRep.findByChannelOrderByStartAsc(ch);
 		if (refs){
 			Hibernate.initialize(lSched);
 			for (Schedule sched: lSched) {
@@ -146,10 +167,11 @@ public class ScheduleService {
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
     public int save(List<Schedule> lSched) {
 		int numSched = 0;
+		Schedule firstSched = null;
 		for (Schedule sched: lSched) {
 			// Si el final del schedule NO es posterior al momento actual -> Saltarse el schedule
 			if ( ! CommonUtility.isScheduleOnTime(sched)) {
-				break;
+				continue;
 			}
 			try {
 				Channel ch = chRep.findByIdChBusiness(sched.getChannel().getIdChBusiness());
@@ -170,11 +192,29 @@ public class ScheduleService {
 						sched.getChannel(), sched.getProgramme(), sched.getStart(), sched.getEnd());
 				if (schedIn == null) {
 					schedRep.saveAndFlush(sched);
+					// DEBUG
+					if (firstSched == null && sched.getChannel().getIdChBusiness().contains("neox")) {
+						firstSched = sched;
+					}
 					numSched++;
 				}
+				else {
+					logger.debug("Schedule REPETIDO: "+schedIn);
+				}
+				
 			} catch(Exception e) {
 				e.printStackTrace();
 			}
+		}
+		// DEBUG
+		if (schedRep.findByChannelAndProgrammeAndStartAndEnd(
+				firstSched.getChannel(), firstSched.getProgramme(), 
+				firstSched.getStart(), firstSched.getEnd()) == null) 
+		{
+			logger.debug("El schedule"+firstSched.toString()+" NO se ha guardado");
+		}
+		else {
+			logger.debug("El schedule"+firstSched.toString()+" SI se ha guardado");
 		}
 		return numSched;
     }

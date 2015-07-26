@@ -4,7 +4,7 @@ import guiatv.catalog.serializers.ScheduleChannelSerializer;
 import guiatv.catalog.serializers.ScheduleProgrammeSerializer;
 import guiatv.catalog.serializers.TimestampDateSerializer;
 import guiatv.schedule.publisher.SchedulePublisher;
-import guiatv.schedule.publisher.SchedulePublisher.PublisherView;
+import guiatv.schedule.publisher.SchedulePublisher.PublisherScheduleView;
 
 import java.io.Serializable;
 import java.sql.Date;
@@ -66,38 +66,38 @@ public class Schedule extends ResourceSupport implements Serializable {
 	private static final long serialVersionUID = -8835185421528324020L;
 	
 	
-	@JsonView({CustomSchedule.class, SchedulePublisher.PublisherView.class})
+	@JsonView({CustomSchedule.class, SchedulePublisher.PublisherScheduleView.class})
 	@Id
     @Column(name = "idSched", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idSched;
+    protected Long idSched;
     
 	
-	@JsonView({CustomSchedule.class, SchedulePublisher.PublisherView.class})
+	@JsonView({CustomSchedule.class, SchedulePublisher.PublisherScheduleView.class})
 	@JsonSerialize(using=ScheduleChannelSerializer.class)
 //	@ManyToOne(targetEntity=Channel.class, cascade=CascadeType.ALL, fetch=FetchType.LAZY)
 	@ManyToOne(targetEntity=Channel.class, fetch=FetchType.LAZY)
 	@JoinColumn(name="channel_fk", referencedColumnName="idChPersistence")
-	private Channel channel;
+	protected Channel channel;
     
-	@JsonView({CustomSchedule.class, SchedulePublisher.PublisherView.class})
+	@JsonView({CustomSchedule.class, SchedulePublisher.PublisherScheduleView.class})
 	@JsonSerialize(using=ScheduleProgrammeSerializer.class)
 //	@ManyToOne(targetEntity=Programme.class, cascade=CascadeType.ALL, fetch=FetchType.LAZY)
 	@ManyToOne(targetEntity=Programme.class, fetch=FetchType.LAZY)
 	@JoinColumn(name="programme_fk", referencedColumnName="idProgPersistence")
-	private Programme programme;
+	protected Programme programme;
 	
-	@JsonView({CustomSchedule.class, SchedulePublisher.PublisherView.class})
+	@JsonView({CustomSchedule.class, SchedulePublisher.PublisherScheduleView.class})
 	@JsonSerialize(using=TimestampDateSerializer.class)
 	@JsonProperty
 	@Column(name = "start", nullable = false)
-	private Timestamp start;
+	protected Timestamp start;
 	
-	@JsonView({CustomSchedule.class, SchedulePublisher.PublisherView.class})
+	@JsonView({CustomSchedule.class, SchedulePublisher.PublisherScheduleView.class})
 	@JsonSerialize(using=TimestampDateSerializer.class)
 	@JsonProperty
 	@Column(name = "end", nullable = false)
-	private Timestamp end;
+	protected Timestamp end;
 
     
     /**********************************************************

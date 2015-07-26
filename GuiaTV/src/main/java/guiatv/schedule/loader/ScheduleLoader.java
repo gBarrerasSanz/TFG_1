@@ -1,5 +1,6 @@
 package guiatv.schedule.loader;
 
+import guiatv.conf.initialization.RtmpSpyingLaunchService;
 import guiatv.persistence.domain.Channel;
 import guiatv.persistence.domain.Programme;
 import guiatv.persistence.domain.Schedule;
@@ -34,39 +35,17 @@ public class ScheduleLoader {
 	@Autowired 
 	ApplicationContext appCtx;
 	
+	@Autowired
+	RtmpSpyingLaunchService spyLaunchServ;
 	
 	public ScheduleLoader() {
-		
 	}
 	
 	public void loadListSchedules(List<Schedule> lSched) {
 		
 		int numInserted = schedServ.save(lSched);
 		System.out.println("Loaded "+numInserted+" schedules");
-		
-//		for (Schedule sched: lSched) {
-//			Channel ch = chServ.findByIdChBusiness(sched.getChannel().getIdChBusiness());
-//			Programme prog = progServ.findByNameProg(sched.getProgramme().getNameProg());
-//			if (ch != null) {
-//				sched.setChannel(ch);
-//			}
-//			if (prog != null) {
-//				sched.setProgramme(prog);
-//			}
-//			schedServ.saveSchedule(sched);
-//		}
-		
-//		for (Schedule sched: lSched) {
-//			Channel ch = chServ.findByIdChBusiness(sched.getChannel().getIdChBusiness());
-//			Programme prog = progServ.findByNameProg(sched.getProgramme().getNameProg());
-//			if (ch != null) {
-//				chServ.deleteChannel(ch);
-//			}
-//			if (prog != null) {
-//				progServ.deleteProgramme(prog);
-//			}
-//			schedServ.insertSchedule(sched);
-//		}
+		spyLaunchServ.loadAndSpyChannels();
 		
 	}
 }

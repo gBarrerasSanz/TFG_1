@@ -16,6 +16,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -23,6 +25,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import weka.classifiers.Classifier;
 
 @Entity(name = "mlchannel")
+@Table(uniqueConstraints={@UniqueConstraint(columnNames = {"channel_fk", "streamSource_fk"})})
 public class MLChannel {
 	
 	@Id
@@ -53,7 +56,8 @@ public class MLChannel {
 	@Column(name="botRight", nullable=false)
 	private int[] botRight;
 	
-	@OneToOne(targetEntity=StreamSource.class, mappedBy="mlChannel", fetch=FetchType.LAZY, orphanRemoval=true)
+	@OneToOne(targetEntity=StreamSource.class, fetch=FetchType.LAZY)
+	@JoinColumn(name="streamSource_fk", referencedColumnName="idStreamSourcePersistence")
 	private StreamSource streamSource;
 	
 	@OneToMany(targetEntity=Blob.class, mappedBy="mlChannel", fetch=FetchType.LAZY, orphanRemoval=true)

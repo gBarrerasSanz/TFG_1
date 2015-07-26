@@ -147,12 +147,32 @@ public class CommonUtility {
 		}
 		return unit;
 	}
+	
 	/**
 	 * Si el final del schedule es posterior al momento actual
 	 * -> Entonces devolver TRUE (a tiempo)
 	 */
 	public static boolean isScheduleOnTime(Schedule sched) {
 		return sched.getEnd().after((new Timestamp(new Date().getTime())));
+	}
+	
+	/**
+	 * Si el comienzo del schedule es anterior al momento actual
+	 * -> Entonces devolver TRUE (ha empezado)
+	 */
+	public static boolean isScheduleStarted(Schedule sched) {
+		return sched.getStart().before((new Timestamp(new Date().getTime())));
+	}
+	
+	/**
+	 * Si el comienzo del schedule es anterior al momento actual (isScheduleStarted() == TRUE)
+	 * y el final del schedule es posterior al momento actual (isScheduleOnTime() == TRUE)
+	 * -> Entonces devolver TRUE (está siendo emitido)
+	 * 
+	 */
+	public static boolean isScheduleBeingEmitedNow(Schedule sched) {
+		return isScheduleStarted(sched) 		// ha empezado
+				&& isScheduleOnTime(sched);		// todavía NO ha terminado
 	}
 	
 }

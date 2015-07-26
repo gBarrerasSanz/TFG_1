@@ -102,9 +102,14 @@ public class XMLTVTransformer implements Transformer {
 					/**
 					 * Añadir el schedule siempre que el horario sea NO pasado
 					 */
-					if (CommonUtility.isScheduleOnTime(sched)) {
-						lSched.add(sched);
-					}
+//					if (CommonUtility.isScheduleOnTime(sched)) {
+//						lSched.add(sched);
+//					}
+					/**
+					 * Añadir todos
+					 */
+					lSched.add(sched);
+					
 					schedItIdx++;
 				}
 //				log.debug("listProgNodes.size() = "+String.valueOf(listProgNodes.size()));

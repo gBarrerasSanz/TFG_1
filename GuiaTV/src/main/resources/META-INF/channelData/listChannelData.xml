@@ -1,6 +1,6 @@
 <listChannelsData>
-	<channelData id="tve-1-807">
-		<chIdBusiness>tve-1-807</chIdBusiness>
+	<channelData id="tve-1-807.laguiatv.com">
+		<chIdBusiness>tve-1-807.laguiatv.com</chIdBusiness>
 		<url>http://iphonelive.rtve.es/LA1_LV3_IPH/LA1_LV3_IPH.m3u8</url>
 		<cols>1280</cols>
 		<rows>720</rows>
@@ -14,8 +14,8 @@
 		</botRight>
 		<active>false</active>
 	</channelData>
-		<channelData id="antena-3-839">
-		<chIdBusiness>antena-3-839</chIdBusiness>
+		<channelData id="antena-3-839.laguiatv.com">
+		<chIdBusiness>antena-3-839.laguiatv.com</chIdBusiness>
 		<url>http://a3live-lh.akamaihd.net/i/antena3_1@35248/master.m3u8</url>
 		<cols>1280</cols>
 		<rows>720</rows>
@@ -44,8 +44,8 @@
 		</botRight>
 		<active>true</active>
 	</channelData>
-	<channelData id="aragon-tv-919">
-		<chIdBusiness>aragon-tv-919</chIdBusiness>
+	<channelData id="aragon-tv-919.laguiatv.com">
+		<chIdBusiness>aragon-tv-919.laguiatv.com</chIdBusiness>
 		<url>rtmp://aragontvlivefs.fplive.net/aragontvlive-live/stream_normal_abt live=1</url>
 		<cols>1280</cols>
 		<rows>720</rows>

@@ -239,7 +239,7 @@
 		<bean id="schedPublisher" class="guiatv.schedule.publisher.SchedulePublisher" />
 
 		<int:outbound-channel-adapter id="schedPublisherOutbound"
-			ref="schedPublisher" method="publishTopics" channel="schedPollerChOut">
+			ref="schedPublisher" method="publishListSchedules" channel="schedPollerChOut">
 			<int:poller fixed-rate="5000" />
 		</int:outbound-channel-adapter>
 
@@ -333,7 +333,7 @@
 		<bean id="realtimeBrain" class="guiatv.realtime.brain.RealtimeBrain" />
 		
 		<int:outbound-channel-adapter id="realtimeBrainOutbound"
-				ref="realtimeBrain" method="manageSchedule" channel="realtimeBrainChIn" />
+				ref="realtimeBrain" method="manageRtSchedule" channel="realtimeBrainChIn" />
 	</beans>
 	
 		<!-- <int:channel id="sendBlobChOut">

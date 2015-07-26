@@ -76,7 +76,7 @@ public class SchedulePublisherTests {
 			// Enviar schedules
 			Message<List<Schedule>> lSchedPubMsg = MessageBuilder.
 					withPayload(lSchedPub).build();
-			schedPublisher.publishTopics(lSchedPubMsg);
+			schedPublisher.publishListSchedules(lSchedPubMsg);
 			log.debug("Schedules publicados");
 			
 			// Confirmar que los consumidores lo han recibido

@@ -10,6 +10,7 @@ import guiatv.common.datatypes.Frame_OLD;
 import guiatv.cv.classificator.Classif_old;
 import guiatv.persistence.domain.Blob;
 import guiatv.persistence.domain.MLChannel;
+import guiatv.persistence.domain.RtSchedule;
 import guiatv.persistence.domain.Schedule;
 
 import org.apache.log4j.Logger;
@@ -33,14 +34,16 @@ public class ClassificationWorker {
 	public ClassificationWorker() {
 	}	
 	
-	public Schedule classify(Blob blob) {
+	public RtSchedule classify(Blob blob) {
 		assert(blob != null);
 		assert(blob.getMlChannel() != null);
 		assert(blob.getMlChannel().getChannel() != null);
 		assert(blob.getMlChannel().getChannel().getIdChBusiness() != null);
 //		logger.debug("Classifying blob from "+blob.getMlChannel().getChannel().getIdChBusiness());
-		MLChannel mlChannel = blob.getMlChannel();
-		return new Schedule();
+		
+		RtSchedule rtSched = new RtSchedule(blob.getMlChannel().getChannel(), 
+								new Timestamp(new Date().getTime()));
+		return rtSched;
 	}
 //	public RtEvent classify(Frame frame) {
 //		RtEvent ev = new RtEvent();
