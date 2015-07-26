@@ -90,6 +90,11 @@ public class ScheduleService {
 	}
 	
 	@Transactional(readOnly = true)
+	public int setTruePublishedWhereIdSched(Long idSched) {
+		return schedRep.setTruePublishedWhereIdSched(idSched);
+	}
+	
+	@Transactional(readOnly = true)
 	public List<Schedule> findByChannelEagerly(Channel ch) {
 		List<Schedule> lSched = schedRep.findByChannelEagerly(ch);
 		return lSched;
@@ -141,10 +146,12 @@ public class ScheduleService {
 	 * segundos después del momento actual, y aquellos schedules en curso
 	 */
 	@Transactional(readOnly = true)
-	public List<Schedule> findBySecondsFromStart(int secsFromStart) {
+	public List<Schedule> findByPublishedFalseAndSecondsFromStart(int secsFromStart) {
 		Timestamp now = new Timestamp(new Date().getTime());
 		Timestamp afterStart = new Timestamp(now.getTime() + (long)(1000 * secsFromStart));
-		List<Schedule> lSched = schedRep.findByStartBetweenOrStartBeforeAndEndAfterOrderByStartAsc(now, afterStart, now, now);
+		List<Schedule> lSched = 
+				schedRep.findByPublishedFalseAndStartBetweenOrStartBeforeAndEndAfterOrderByStartAsc(
+						now, afterStart, now, now);
 		for (Schedule sched: lSched) {
 			Hibernate.initialize(sched.getChannel());
 			Hibernate.initialize(sched.getProgramme());
@@ -167,7 +174,6 @@ public class ScheduleService {
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
     public int save(List<Schedule> lSched) {
 		int numSched = 0;
-		Schedule firstSched = null;
 		for (Schedule sched: lSched) {
 			// Si el final del schedule NO es posterior al momento actual -> Saltarse el schedule
 			if ( ! CommonUtility.isScheduleOnTime(sched)) {
@@ -192,10 +198,6 @@ public class ScheduleService {
 						sched.getChannel(), sched.getProgramme(), sched.getStart(), sched.getEnd());
 				if (schedIn == null) {
 					schedRep.saveAndFlush(sched);
-					// DEBUG
-					if (firstSched == null && sched.getChannel().getIdChBusiness().contains("neox")) {
-						firstSched = sched;
-					}
 					numSched++;
 				}
 				else {
@@ -205,16 +207,6 @@ public class ScheduleService {
 			} catch(Exception e) {
 				e.printStackTrace();
 			}
-		}
-		// DEBUG
-		if (schedRep.findByChannelAndProgrammeAndStartAndEnd(
-				firstSched.getChannel(), firstSched.getProgramme(), 
-				firstSched.getStart(), firstSched.getEnd()) == null) 
-		{
-			logger.debug("El schedule"+firstSched.toString()+" NO se ha guardado");
-		}
-		else {
-			logger.debug("El schedule"+firstSched.toString()+" SI se ha guardado");
 		}
 		return numSched;
     }

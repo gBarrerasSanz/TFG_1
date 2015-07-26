@@ -77,7 +77,13 @@ public class SchedulePublisher {
 //				logger.error("ERROR: Unknown error");
 			}
 		}
-		schedServ.delete(publishedSched);
+		/**
+		 * Actualizar el campo published de los schedules publicados a True.
+		 */
+		for (Schedule sched: publishedSched) {
+			schedServ.setTruePublishedWhereIdSched(sched.getIdSched());
+		}
+//		schedServ.delete(publishedSched);
 	}
 	
 	public void publishRtSchedule(Message<RtSchedule> rtScheduleMsg, Programme prog) {

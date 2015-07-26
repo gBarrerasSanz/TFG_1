@@ -89,15 +89,18 @@ public class Schedule extends ResourceSupport implements Serializable {
 	
 	@JsonView({CustomSchedule.class, SchedulePublisher.PublisherScheduleView.class})
 	@JsonSerialize(using=TimestampDateSerializer.class)
-	@JsonProperty
+	@JsonProperty // Creo que no hace falta con @JsonView
 	@Column(name = "start", nullable = false)
 	protected Timestamp start;
 	
 	@JsonView({CustomSchedule.class, SchedulePublisher.PublisherScheduleView.class})
 	@JsonSerialize(using=TimestampDateSerializer.class)
-	@JsonProperty
+	@JsonProperty // Creo que no hace falta con @JsonView
 	@Column(name = "end", nullable = false)
 	protected Timestamp end;
+	
+	@Column(name = "published", nullable = false)
+	protected boolean published;
 
     
     /**********************************************************
@@ -111,6 +114,7 @@ public class Schedule extends ResourceSupport implements Serializable {
     	this.programme = programme;
     	this.start = start;
     	this.end = end;
+    	this.published = false;
     }
 	
 	
@@ -197,6 +201,14 @@ public class Schedule extends ResourceSupport implements Serializable {
 			return false;
 		return true;
 	}
+	
+	public boolean isPublished() {
+		return published;
+	}
+
+	public void setPublished(boolean published) {
+		this.published = published;
+	}
 
 	@Override
 	public String toString() {
@@ -238,5 +250,6 @@ public class Schedule extends ResourceSupport implements Serializable {
 		String schedString = schedJson.toJSONString();
 		return schedString;
 	}
+	
 	
 }

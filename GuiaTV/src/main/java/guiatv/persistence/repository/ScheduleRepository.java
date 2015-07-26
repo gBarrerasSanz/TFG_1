@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -52,7 +53,7 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long>,
 //	List<Schedule> findCloserSchedules(Timestamp start, Timestamp end);
 	
 	// Devolver los schedules con start en [start, end] o los schedules con (start < start2 AND end > start2) (schedules en curso)
-	List<Schedule> findByStartBetweenOrStartBeforeAndEndAfterOrderByStartAsc(Timestamp start, Timestamp end, Timestamp start2, Timestamp start3);
+	List<Schedule> findByPublishedFalseAndStartBetweenOrStartBeforeAndEndAfterOrderByStartAsc(Timestamp start, Timestamp end, Timestamp start2, Timestamp start3);
 	
 	List<Schedule> findByChannelAndProgrammeOrderByStartAsc(Channel ch, Programme prog);
 	
@@ -61,6 +62,11 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long>,
 //	List<Schedule> findByChannelAndProgrammeFromNow(Channel ch, Programme prog);
 	
 	Schedule findByChannelAndProgrammeAndStartAndEnd(Channel ch, Programme prog, Timestamp start, Timestamp end);
+	
+	@Modifying
+	@Query("UPDATE schedule s SET s.published = true "
+			+ "WHERE s.idSched = ?1")
+	int setTruePublishedWhereIdSched(Long idSched);
 	
 //	void delete(Schedule sched);
 }
