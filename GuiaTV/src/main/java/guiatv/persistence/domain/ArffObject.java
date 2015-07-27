@@ -1,12 +1,16 @@
 package guiatv.persistence.domain;
 
 import java.io.Serializable;
+import java.util.List;
 
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 
 import guiatv.computervision.CvUtils;
 import guiatv.computervision.Imshow;
@@ -15,6 +19,7 @@ import org.opencv.core.Mat;
 import org.opencv.highgui.Highgui;
 import org.opencv.imgproc.Imgproc;
 
+import weka.classifiers.bayes.NaiveBayesUpdateable;
 import weka.core.Attribute;
 import weka.core.FastVector;
 import weka.core.Instance;
@@ -28,11 +33,17 @@ public class ArffObject implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idArffPersistence;
 	
-	@Column(name = "atts", nullable = true)
+	@Basic(fetch = FetchType.LAZY)
+	@Column(name = "atts", nullable = true, columnDefinition="BINARY(16777215)")
 	private FastVector atts; // Atributos
 	
-//	@Column(name = "data", nullable = true)
+	@Basic(fetch = FetchType.LAZY)
+	@Column(name = "data", nullable = true, columnDefinition="BINARY(16777215)")
 	private Instances data; // Muestras
+	
+	@Basic(fetch = FetchType.LAZY)
+	@Column(name="trainedClassifier", nullable=true, columnDefinition="BINARY(16777215)")
+	private NaiveBayesUpdateable trainedClassifier;
 	
 	private static FastVector pixelAttVals;
 	private static FastVector classAttVals;
@@ -83,15 +94,17 @@ public class ArffObject implements Serializable {
 //		Mat binImg = CvUtils.thresholdImg(img);
 //		// Se obtiene el array de bytes de la imagen binarizada
 //		byte[] binBlob = CvUtils.getByteArrayFromMat(binImg);
-		for (int r=0; r<img.rows(); r++) {
-			for (int c=0; c<img.cols(); c++) {
-				atts.addElement(new Attribute(r+"_"+c, pixelAttVals));
+		int numAtts = img.cols() * img.rows() + 1;
+		atts = new FastVector(numAtts);
+		for (int c=0; c<img.cols(); c++) {
+			for (int r=0; r<img.rows(); r++) {
+				atts.addElement(new Attribute(c+"_"+r, pixelAttVals));
 			}
 		}
 		// Atributo de clase		
 		Attribute classAtt = new Attribute("class", classAttVals);
 		atts.addElement(classAtt);
-		data = new Instances("MiRelacion", atts, 0);
+		data = new Instances("MyRel", atts, 0);
 		data.setClass(classAtt); // Establece el atributo classAtt como el atributo que indica la clase
 	}
 	
@@ -131,6 +144,81 @@ public class ArffObject implements Serializable {
 		this.data = data;
 	}
 	
+	public NaiveBayesUpdateable getTrainedClassifier() {
+		return trainedClassifier;
+	}
+
+	public void setTrainedClassifier(NaiveBayesUpdateable trainedClassifier) {
+		this.trainedClassifier = trainedClassifier;
+	}
+
+	public void updateClassifier(List<Instance> lInstances) {
+		for (Instance instance: lInstances) {
+			try {
+				trainedClassifier.updateClassifier(instance);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
 	
+	public void updateClassifier(Instance instance) {
+		try {
+			trainedClassifier.updateClassifier(instance);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void setupClassifierNaiveBayesUpdateable(Blob blob) {
+		trainedClassifier = new NaiveBayesUpdateable();
+		try {
+			trainedClassifier.buildClassifier(data);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void addSample(Blob blob, boolean truth) {
+		// Se saca el objecto mat del blob
+		Mat img = CvUtils.getMatFromByteArray(blob.getBlob(), blob.getBlobCols(), blob.getBlobRows());
+		// Se binariza la imagen 
+		CvUtils.threshold(img);
+		// Se obtiene el array de bytes de la imagen binarizada
+		byte[] binBlob = CvUtils.getByteArrayFromMat(img);
+		
+		if (data == null) {
+			setupAtts(blob);
+			setupClassifierNaiveBayesUpdateable(blob);
+		}
+		
+		Instance newInstance = getTrainingInstance(blob, binBlob, truth);
+		if (data.checkInstance(newInstance)) {
+//			data.add(newInstance); // TODO: No sé si hace falta (Ni se si hace falta conservar todas las muestras en data)
+			newInstance.setDataset(data);
+		}
+		else {
+			throw new IllegalArgumentException("newInstance IS NOT compatible with DataSet data");
+		}
+		
+//		Instances newDataSet = new Instances("sameRel", atts, 1);
+//		newDataSet.setClassIndex(newDataSet.numAttributes()-1);
+//		Instance newInstance = new Instance(1.0, vals);
+//		newDataSet.add(newInstance);
+		
+		
+		updateClassifier(newInstance);
+	}
+	
+	private Instance getTrainingInstance(Blob blob, byte[] binBlob, boolean truth) {
+		int numAtts = data.numAttributes();
+		double[] vals = new double[numAtts];
+		for (int i=0; i < blob.getBlob().length; i++) {
+			String val = (binBlob[i] == 0) ? "b" : "w";
+			vals[i] = pixelAttVals.indexOf(val);
+		}
+		vals[numAtts-1] = classAttVals.indexOf(String.valueOf(truth));
+		return new Instance(1.0, vals);
+	}
 	
 }

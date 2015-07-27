@@ -20,10 +20,10 @@ public class CvUtils {
 	
 	
 	public static Mat getMatFromByteArray(byte[] byteArr, int imgCols, int imgRows) {
-		Mat dataMat = new Mat(imgCols, imgRows, CvType.CV_8UC1);
+		Mat dataMat = new Mat(imgRows, imgCols, CvType.CV_8UC1);
 		dataMat.put(0, 0, byteArr);
-		Mat mat = Highgui.imdecode(dataMat, 1);
-		return mat;
+//		Mat mat = Highgui.imdecode(dataMat, 1);
+		return dataMat;
 	}
 	
 	public static byte[] getByteArrayFromMat(Mat mat) {
@@ -37,11 +37,16 @@ public class CvUtils {
 		return dst;
 	}
 	
-	public static Mat thresholdImg(Mat img) {
+	public static Mat getThresholdImg(Mat img) {
 		Mat dst = new Mat(img.rows(), img.cols(), img.type());
 		Imgproc.adaptiveThreshold(img, dst, 255,
 		         Imgproc.ADAPTIVE_THRESH_MEAN_C, Imgproc.THRESH_BINARY_INV, 11, 2);
 		return dst;
+	}
+	
+	public static void threshold(Mat img) {
+		Imgproc.adaptiveThreshold(img, img, 255,
+		         Imgproc.ADAPTIVE_THRESH_MEAN_C, Imgproc.THRESH_BINARY_INV, 11, 2);
 	}
 	
 	public static Mat loadMat(Resource resource) {

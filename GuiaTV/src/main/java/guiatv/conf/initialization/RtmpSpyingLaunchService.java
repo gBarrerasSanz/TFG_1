@@ -54,13 +54,13 @@ public class RtmpSpyingLaunchService {
 			StreamSource streamSource = new StreamSource(chData.getUrl());
 			ArffObject arffObject = new ArffObject();
 			Channel ch = chServ.findByIdChBusiness(chData.getChIdBusiness(), false);
-			MLChannel mlChannel = new MLChannel(ch, streamSource, 
+			MLChannel mlChannel = new MLChannel(ch, streamSource, new ArffObject(),
 					chData.getCols(), chData.getRows(), chData.getTopLeft(), chData.getBotRight());
 			// Cargar datos clasificados
 			loadClassifiedDataFromChannel(chData, mlChannel);
 			// Meterlo en la BD
-			streamSourceServ.save(streamSource);
-			arffServ.save(arffObject);
+			streamSourceServ.save(mlChannel.getStreamSource());
+			arffServ.save(mlChannel.getArffObject());
 			mlChServ.save(mlChannel);
 			if (ch != null) {
 				// Espiar channel
@@ -92,7 +92,7 @@ public class RtmpSpyingLaunchService {
 				imgFileInputStream = new FileInputStream(imgFile);
 				byte[] imgData = IOUtils.toByteArray(imgFileInputStream);
 				Blob blob = new Blob(imgData, mlChannel);
-	    		mlChannel.addSample(blob, truth);
+	    		mlChannel.getArffObject().addSample(blob, truth);
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
