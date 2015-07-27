@@ -40,6 +40,7 @@ import org.springframework.hateoas.Link;
 import org.springframework.hateoas.ResourceSupport;
 import org.springframework.hateoas.ResourcesLinksVisible;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -81,8 +82,9 @@ public class RtSchedule implements Serializable {
 //	@JoinColumn(name="channel_fk", referencedColumnName="idChPersistence")
 	private Channel channel;
 	
-	@JsonView({SchedulePublisher.PublisherRtScheduleView.class})
 //	@Column(name = "instant", nullable = false)
+	@JsonView({SchedulePublisher.PublisherRtScheduleView.class})
+	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss a z")
 	private Timestamp instant;
 	
 //	@Column(name = "type", nullable = false)
@@ -99,6 +101,7 @@ public class RtSchedule implements Serializable {
 	public RtSchedule(Channel channel, Timestamp instant) {
     	this.channel = channel;
     	this.instant = instant;
+    	this.type = EventType.UNKNOWN;
     }
 
 	public Channel getChannel() {

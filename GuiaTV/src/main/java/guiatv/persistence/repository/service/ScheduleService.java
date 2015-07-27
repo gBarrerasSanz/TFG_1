@@ -99,9 +99,27 @@ public class ScheduleService {
 		return lSched;
 	}
 	
+//	@Transactional(readOnly = true)
+//	public int setTruePublishedWhereIdSched(Long idSched) {
+//		return schedRep.setTruePublishedWhereIdSched(idSched);
+//	}
+	
 	@Transactional(readOnly = true)
-	public int setTruePublishedWhereIdSched(Long idSched) {
-		return schedRep.setTruePublishedWhereIdSched(idSched);
+	public int setTruePublished(List<Schedule> lSched) {
+		int retVal = 0;
+		for (Schedule sched: lSched) {
+			retVal += schedRep.setTruePublishedWhereIdSched(sched.getIdSched());
+		}
+		return retVal;
+	}
+	
+	@Transactional(readOnly = true)
+	public int setFalsePublished(List<Schedule> lSched) {
+		int retVal = 0;
+		for (Schedule sched: lSched) {
+			retVal += schedRep.setFalsePublishedWhereIdSched(sched.getIdSched());
+		}
+		return retVal;
 	}
 	
 	@Transactional(readOnly = true)

@@ -31,6 +31,7 @@ import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.log4j.Logger;
 
 import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
@@ -56,7 +57,7 @@ public class SchedulePublisher {
 	ScheduleService schedServ;
 	
 	public void publishListSchedules(Message<List<Schedule>> listSchedMsg ) {
-		List<Schedule> publishedSched = new ArrayList<Schedule>();
+		List<Schedule> nonPublishedSched = new ArrayList<Schedule>();
 		String routKey = null;
 		for (Schedule sched: listSchedMsg.getPayload()) {
 			try {
@@ -65,18 +66,22 @@ public class SchedulePublisher {
 				String schedJson = sched.toStringPublisher();
 				schedJson = StringEscapeUtils.unescapeJava(schedJson);
 				amqpTmp.convertAndSend(routKey, schedJson);
-				publishedSched.add(sched);
+				
+//				logger.debug("Published Schedule: "+schedJson);
 				logger.debug("Published Schedule ("+sched.getIdSched()+"): "+sched.getProgramme().getNameProg()
 						+" -> "+CommonUtility.timestampToString(sched.getStart())+
 						" --- "+CommonUtility.timestampToString(sched.getEnd())+
 						" ==> Published: "+sched.isPublished());
 			
 			} catch (AmqpException e) {
+				nonPublishedSched.add(sched);
 				logger.error("ERROR: Could NOT connect to RabbitMQ");
 			} catch(Exception e) {
+				nonPublishedSched.add(sched);
 				e.printStackTrace();
 //				logger.error("ERROR: Unknown error");
 			}
+			schedServ.setFalsePublished(nonPublishedSched);
 		}
 		/**
 		 * Actualizar el campo published de los schedules publicados a True.
@@ -95,12 +100,14 @@ public class SchedulePublisher {
 		try {
 			assert(rtSched != null);
 			routKey = prog.getHashNameProg();
-			String rtSchedJsonString = rtSched.toString();
+			ObjectMapper mapper = new ObjectMapper();
+			mapper.disable(MapperFeature.DEFAULT_VIEW_INCLUSION);
+	        mapper.setConfig(mapper.getSerializationConfig()
+	                .withView(PublisherRtScheduleView.class));
+			String rtSchedJsonString = mapper.writeValueAsString(rtSched);
 //			schedJson = StringEscapeUtils.unescapeJava(schedJson);
 			amqpTmp.convertAndSend(routKey, rtSchedJsonString);
-			logger.debug("Published RtSchedule: "+rtSched.getChannel()
-					+" -> "+CommonUtility.timestampToString(rtSched.getInstant())
-					+" -> "+rtSched.getType());
+			logger.debug("Published RtSchedule: "+rtSchedJsonString);
 		
 			} catch (AmqpException e) {
 				logger.error("ERROR: Could NOT connect to RabbitMQ");

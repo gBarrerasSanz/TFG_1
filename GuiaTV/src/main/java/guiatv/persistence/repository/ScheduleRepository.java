@@ -79,5 +79,10 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long>,
 			+ "WHERE s.idSched = ?1")
 	int setTruePublishedWhereIdSched(Long idSched);
 	
+	@Modifying
+	@Query("UPDATE schedule s SET s.published = false "
+			+ "WHERE s.idSched = ?1")
+	int setFalsePublishedWhereIdSched(Long idSched);
+	
 //	void delete(Schedule sched);
 }
