@@ -89,7 +89,7 @@ public class ArffObject implements Serializable {
 	
 	public void setupAtts(Blob blob) {
 		// Se saca el objecto mat del blob
-		Mat img = CvUtils.getColorMatFromByteArray(blob.getBlob(), blob.getBlobCols(), blob.getBlobRows());
+		Mat img = CvUtils.getGrayMatFromByteArray(blob.getBlob(), blob.getBlobCols(), blob.getBlobRows());
 //		// Se binariza la imagen 
 //		Mat binImg = CvUtils.thresholdImg(img);
 //		// Se obtiene el array de bytes de la imagen binarizada
@@ -234,11 +234,11 @@ public class ArffObject implements Serializable {
 	
 	private byte[] getBinBlobFromBlob(Blob blob) {
 		// Se saca el objeto mat del blob
-		Mat img = CvUtils.getColorMatFromByteArray(blob.getBlob(), blob.getBlobCols(), blob.getBlobRows());
+		Mat img = CvUtils.getGrayMatFromByteArray(blob.getBlob(), blob.getBlobCols(), blob.getBlobRows());
 		// Se binariza la imagen 
 		CvUtils.threshold(img);
 		// Se obtiene el array de bytes de la imagen binarizada
-		byte[] binBlob = CvUtils.getByteArrayFromMat2(img);
+		byte[] binBlob = CvUtils.getByteArrayFromMat(img);
 		return binBlob;
 	}
 	

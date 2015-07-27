@@ -20,22 +20,29 @@ public class CvUtils {
 //	private final static int imgRows = 720;
 	
 	
-	public static Mat getColorMatFromByteArray(byte[] byteArr, int imgCols, int imgRows) {
-		Mat dataMat = new Mat(imgRows, imgCols, CvType.CV_8UC3);
+	public static Mat getGrayMatFromByteArray(byte[] byteArr, int imgCols, int imgRows) {
+		Mat dataMat = new Mat(imgRows, imgCols, CvType.CV_8UC1);
 		dataMat.put(0, 0, byteArr);
-		Mat mat = Highgui.imdecode(dataMat, Highgui.CV_LOAD_IMAGE_COLOR);
+		return dataMat;
+//		Mat mat = Highgui.imdecode(dataMat, Highgui.CV_LOAD_IMAGE_GRAYSCALE);
+//		return mat;
+	}
+	
+	public static Mat getGrayMatAndDecodeFromByteArray(byte[] byteArr, int imgCols, int imgRows) {
+		Mat dataMat = new Mat(imgRows, imgCols, CvType.CV_8UC1);
+		dataMat.put(0, 0, byteArr);
+		Mat mat = Highgui.imdecode(dataMat, Highgui.CV_LOAD_IMAGE_GRAYSCALE);
 		return mat;
 	}
 	
-//	public static byte[] getByteArrayFromMat(Mat mat) {
+//	public static byte[] getByteArrayFromMat2(Mat mat) {
 //		MatOfByte bytemat = new MatOfByte();
 //		Highgui.imencode(".jpg", mat, bytemat);
 //		byte[] byteArr = bytemat.toArray();
 //		return byteArr;
 //	}
 	
-	// NO FUNCIONA BIEN
-	public static byte[] getByteArrayFromMat2(Mat mat) {
+	public static byte[] getByteArrayFromMat(Mat mat) {
 		byte byteArr[] = new byte[(int) (mat.total() * mat.channels())];
 		mat.get(0, 0, byteArr);
 		return byteArr;
@@ -68,7 +75,7 @@ public class CvUtils {
 	}
 	
 	public static void showBlob(Blob blob) {
-		Mat blobMat = getColorMatFromByteArray(blob.getBlob(), blob.getBlobCols(), blob.getBlobRows());
+		Mat blobMat = getGrayMatFromByteArray(blob.getBlob(), blob.getBlobCols(), blob.getBlobRows());
 		Imshow im = new Imshow("Image");
 		im.showImage(blobMat);
 	}

@@ -1,7 +1,9 @@
 package guiatv.computervision.rtmpspy;
 
 import guiatv.common.CommonUtility;
+import guiatv.computervision.CvUtils;
 import guiatv.computervision.Imshow;
+import guiatv.persistence.domain.Blob;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
@@ -19,7 +21,8 @@ public class Test1 {
 	
 	private static String platform = "Windows8.1";
 	static String[] rtmpSources = {
-			"rtmp://antena3fms35livefs.fplive.net:1935/antena3fms35live-live/stream-lasexta_1"
+			"rtmp://antena3fms35livefs.fplive.net:1935/antena3fms35live-live/stream-lasexta_1",
+			"http://antena3-aos1-apple-live.adaptive.level3.net/apple/antena3/channel03/index.m3u8"
 			};
 	public static void main(String[] args) {
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
@@ -28,7 +31,7 @@ public class Test1 {
 	
 	public static File doRtmpSpying() {
 //		Resource capDirRes = ctx.getResource("META-INF/xmltv/cap");
-		URL capDirUrl = Test1.class.getClassLoader().getResource("META-INF/ffmpeg/cap");
+		URL capDirUrl = Test1.class.getClassLoader().getResource("META-INF/ffmpeg/cap/");
 		File capDir = null;
 		try {
 			capDir = new File(capDirUrl.toURI());
@@ -42,10 +45,10 @@ public class Test1 {
 				File.separator+"tmp");
 		if (tmpDir.exists() == false) { tmpDir.mkdirs(); }
 //		Resource binDirRes = ctx.getResource("META-INF/xmltv/grabber/windows_bin/xmltv-0.5.66-win32");
-		String binDirStr = "D:/GitHub/TFG_1/GuiaTV/bin/META-INF/ffmpeg/windows_bin/ffmpeg-win64/bin";
+		String binDirStr = "C:/Users/VAIO/GitHub/GuiaTV/bin/META-INF/ffmpeg/windows_bin/ffmpeg-win64/bin";
 		File resFile = null, errFile = null;
 		resFile = new File("res");
-		errFile = new File("D:/GitHub/TFG_1/GuiaTV/bin/META-INF/ffmpeg/cap/tmp/errorLog_"+CommonUtility.getDateString()+".txt");
+		errFile = new File("C:/Users/VAIO/GitHub/GuiaTV/bin/META-INF/ffmpeg/cap/tmp/errorLog_"+CommonUtility.getDateString()+".txt");
 		switch(platform) {
 		case "Windows8.1":
 			BufferedInputStream in = null;
@@ -99,11 +102,10 @@ public class Test1 {
 		        		}
 		        		if (imgReady) {
 		        			if (data.size() != 0) {
-		        				Mat dataMat = new Mat(512, 512, CvType.CV_8UC1);
+		        				Mat dataMat = new Mat(720, 1280, CvType.CV_8UC1);
 		        				dataMat.put(0, 0, data.toByteArray());
-		        				Mat frameMat = Highgui.imdecode(dataMat, 1);
-		        				Imshow im = new Imshow("Image");
-		        		        im.showImage(frameMat);
+		        				Mat mat = Highgui.imdecode(dataMat, Highgui.CV_LOAD_IMAGE_GRAYSCALE);
+	        					Highgui.imwrite("imgSpy.jpeg", mat);
 		        			}
 		        		}
 		        	}

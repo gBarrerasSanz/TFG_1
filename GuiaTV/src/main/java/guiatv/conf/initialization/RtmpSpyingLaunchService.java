@@ -96,13 +96,16 @@ public class RtmpSpyingLaunchService {
 			try {
 //				imgFileInputStream = new FileInputStream(imgFile);
 //				byte[] imgData = IOUtils.toByteArray(imgFileInputStream);
-				Mat imgMat = Highgui.imread(imgFile.getAbsolutePath(), Highgui.CV_LOAD_IMAGE_COLOR);
-				byte[] imgData = CvUtils.getByteArrayFromMat2(imgMat);
+				Mat imgMat = Highgui.imread(imgFile.getAbsolutePath(), Highgui.CV_LOAD_IMAGE_GRAYSCALE);
+				byte[] imgData = CvUtils.getByteArrayFromMat(imgMat);
+//				Highgui.imwrite("imgMat1.jpeg", imgMat);
+//				Highgui.imwrite("imgMat2.jpeg", CvUtils.getGrayScaleMatFromByteArray(
+//						imgData, imgMat.cols(), imgMat.rows()));
 				Blob blob = new Blob(imgData, mlChannel);
 				// DEBUG
-				Highgui.imwrite("imOut1.jpeg", imgMat);
-				Highgui.imwrite("imOut2.jpeg", CvUtils.getColorMatFromByteArray(
-						imgData, blob.getBlobCols(), blob.getBlobRows()));
+//				Highgui.imwrite("imOut1.jpeg", imgMat);
+//				Highgui.imwrite("imOut2.jpeg", CvUtils.getGrayScaleMatFromByteArray(
+//						imgData, blob.getBlobCols(), blob.getBlobRows()));
 	    		mlChannel.getArffObject().addSample(blob, truth);
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();

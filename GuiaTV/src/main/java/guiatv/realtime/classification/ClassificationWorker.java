@@ -45,7 +45,7 @@ public class ClassificationWorker {
 									new Timestamp(new Date().getTime()));
 			
 			// DEBUG
-			Highgui.imwrite("im.jpeg", CvUtils.getColorMatFromByteArray(
+			Highgui.imwrite("img.jpeg", CvUtils.getGrayMatFromByteArray(
 					blob.getBlob(), blob.getBlobCols(), blob.getBlobRows()));
 						
 			Instance instance = blob.getMlChannel().getArffObject().getUnknownInstance(blob);

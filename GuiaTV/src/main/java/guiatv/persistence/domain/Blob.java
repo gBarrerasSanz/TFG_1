@@ -45,25 +45,22 @@ public class Blob {
 	}
 	
 	public Blob(byte[] img, MLChannel mlChannel) throws Exception {
-		// DEBUG
-//		Highgui.imwrite("imIn.jpeg", CvUtils.getMatFromByteArray(
-//				img, mlChannel.getImgCols(), mlChannel.getImgRows()));
-				
 		// Extraer ROI
-		Mat imgMat = CvUtils.getColorMatFromByteArray(img, mlChannel.getImgCols(), mlChannel.getImgRows());
+		Mat imgMat = CvUtils.getGrayMatFromByteArray(img, mlChannel.getImgCols(), mlChannel.getImgRows());
 		Mat roiMat = CvUtils.getRoiFromMat(imgMat, mlChannel.getTopLeft(), mlChannel.getBotRight());
 		this.blobCols = roiMat.cols();
 		this.blobRows = roiMat.rows();
-		this.blob = CvUtils.getByteArrayFromMat2(roiMat);
+		this.blob = CvUtils.getByteArrayFromMat(roiMat);
 		this.mlChannel = mlChannel;
-		
-		// DEBUG
-//		Highgui.imwrite("imMat.jpeg", roiMat);
-//		byte byteArr[] = new byte[(int) (roiMat.total() * roiMat.channels())];
-//		roiMat.get(0, 0, byteArr);
-//		Highgui.imwrite("imbyteArr1.jpeg", CvUtils.getMatFromByteArray(
-//				blob, roiMat.cols(), roiMat.rows()));
-//		logger.debug("Done");
+	}
+	
+	public Blob(Mat grayImgMat, MLChannel mlChannel) {
+		// Extraer ROI
+		Mat roiMat = CvUtils.getRoiFromMat(grayImgMat, mlChannel.getTopLeft(), mlChannel.getBotRight());
+		this.blobCols = roiMat.cols();
+		this.blobRows = roiMat.rows();
+		this.blob = CvUtils.getByteArrayFromMat(roiMat);
+		this.mlChannel = mlChannel;
 	}
 	
     /**********************************************************
