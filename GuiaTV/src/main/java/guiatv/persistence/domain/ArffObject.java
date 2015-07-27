@@ -30,7 +30,8 @@ public class ArffObject implements Serializable {
 	
 	@Column(name = "atts", nullable = true)
 	private FastVector atts; // Atributos
-	@Column(name = "data", nullable = true)
+	
+//	@Column(name = "data", nullable = true)
 	private Instances data; // Muestras
 	
 	private static FastVector pixelAttVals;
@@ -46,36 +47,42 @@ public class ArffObject implements Serializable {
 		classAttVals.addElement("false");
 	}
 	
-	/**
-	 * blob: imagen de 3 canales correspondiente al Roi
-	 * truth: Clasificación humana del blob ( true => Emisión; false => Anuncios)
-	 */
-	public void addSample(Blob blob, boolean truth) {
-		// Se saca el objecto mat del blob
-		Mat img = CvUtils.getMatFromByteArray(blob.getBlob(), blob.getBlobCols(), blob.getBlobRows());
-		// Se binariza la imagen 
-		Mat binImg = CvUtils.thresholdImg(img);
-		// Se obtiene el array de bytes de la imagen binarizada
-		byte[] binBlob = CvUtils.getByteArrayFromMat(binImg);
-		
-		if (data.numInstances() == 0) {
-			setupAtts(img);
-		}
-		
-		double[] vals = new double[data.numAttributes()];
-		for (int i=0; i < blob.getBlob().length; i++) {
-			String val = (binBlob[i] == 0) ? "b" : "w";
-			vals[i] = pixelAttVals.indexOf(val);
-		}
-		vals[atts.size()-1] = classAttVals.indexOf(String.valueOf(truth));
-		data.add(new Instance(1.0, vals));
-	}
+//	/**
+//	 * blob: imagen de 3 canales correspondiente al Roi
+//	 * truth: Clasificación humana del blob ( true => Emisión; false => Anuncios)
+//	 */
+//	public void addSample(Blob blob, boolean truth) {
+//		// Se saca el objecto mat del blob
+//		Mat img = CvUtils.getMatFromByteArray(blob.getBlob(), blob.getBlobCols(), blob.getBlobRows());
+//		// Se binariza la imagen 
+//		Mat binImg = CvUtils.thresholdImg(img);
+//		// Se obtiene el array de bytes de la imagen binarizada
+//		byte[] binBlob = CvUtils.getByteArrayFromMat(binImg);
+//		
+//		if (data.numInstances() == 0) {
+//			setupAtts(img);
+//		}
+//		
+//		double[] vals = new double[data.numAttributes()];
+//		for (int i=0; i < blob.getBlob().length; i++) {
+//			String val = (binBlob[i] == 0) ? "b" : "w";
+//			vals[i] = pixelAttVals.indexOf(val);
+//		}
+//		vals[atts.size()-1] = classAttVals.indexOf(String.valueOf(truth));
+//		data.add(new Instance(1.0, vals));
+//	}
 	
 	public Instances getData() {
 		return data;
 	}
 	
-	private void setupAtts(Mat img) {
+	public void setupAtts(Blob blob) {
+		// Se saca el objecto mat del blob
+		Mat img = CvUtils.getMatFromByteArray(blob.getBlob(), blob.getBlobCols(), blob.getBlobRows());
+//		// Se binariza la imagen 
+//		Mat binImg = CvUtils.thresholdImg(img);
+//		// Se obtiene el array de bytes de la imagen binarizada
+//		byte[] binBlob = CvUtils.getByteArrayFromMat(binImg);
 		for (int r=0; r<img.rows(); r++) {
 			for (int c=0; c<img.cols(); c++) {
 				atts.addElement(new Attribute(r+"_"+c, pixelAttVals));

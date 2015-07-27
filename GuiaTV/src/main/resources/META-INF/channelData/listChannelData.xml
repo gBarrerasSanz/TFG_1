@@ -13,6 +13,7 @@
 			<rows>666</rows>
 		</botRight>
 		<active>false</active>
+		<batchDataUri>captures/01_a1/goodSamples/</batchDataUri>
 	</channelData>
 		<channelData id="antena-3-839.laguiatv.com">
 		<chIdBusiness>antena-3-839.laguiatv.com</chIdBusiness>
@@ -28,6 +29,7 @@
 			<rows>661</rows>
 		</botRight>
 		<active>true</active>
+		<batchDataUri>captures/03_a3/goodSamples/</batchDataUri>
 	</channelData>
 	<channelData id="neox-722.laguiatv.com">
 		<chIdBusiness>neox-722.laguiatv.com</chIdBusiness>
@@ -43,6 +45,7 @@
 			<rows>662</rows>
 		</botRight>
 		<active>true</active>
+		<batchDataUri>captures/07_aNeox/goodSamples/</batchDataUri>
 	</channelData>
 	<channelData id="aragon-tv-919.laguiatv.com">
 		<chIdBusiness>aragon-tv-919.laguiatv.com</chIdBusiness>
@@ -58,5 +61,6 @@
 			<rows>106</rows>
 		</botRight>
 		<active>true</active>
+		<<batchDataUri>captures/10_aAragon/goodSamples/</batchDataUri>
 	</channelData>
 </listChannelsData>

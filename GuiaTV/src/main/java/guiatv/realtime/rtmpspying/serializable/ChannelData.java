@@ -16,6 +16,7 @@ public class ChannelData {
 	private int cols;
 	private int rows;
 	private boolean active;
+	private String batchDataUri;
 	
 	public ChannelData() {
 	}
@@ -86,6 +87,15 @@ public class ChannelData {
 
 	public void setActive(boolean active) {
 		this.active = active;
+	}
+	
+	@XmlElement(name="batchDataUri")
+	public String getBatchDataUri() {
+		return batchDataUri;
+	}
+
+	public void setBatchDataUri(String batchDataUri) {
+		this.batchDataUri = batchDataUri;
 	}
 	
 	
