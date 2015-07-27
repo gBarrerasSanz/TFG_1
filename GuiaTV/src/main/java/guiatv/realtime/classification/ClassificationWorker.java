@@ -12,7 +12,9 @@ import guiatv.cv.classificator.Classif_old;
 import guiatv.persistence.domain.Blob;
 import guiatv.persistence.domain.MLChannel;
 import guiatv.persistence.domain.RtSchedule;
+import guiatv.persistence.domain.RtSchedule.InstantState;
 import guiatv.persistence.domain.Schedule;
+import guiatv.persistence.domain.RtSchedule.EventType;
 
 import org.apache.log4j.Logger;
 import org.opencv.core.Core;
@@ -48,9 +50,19 @@ public class ClassificationWorker {
 			Highgui.imwrite("img.jpeg", CvUtils.getGrayMatFromByteArray(
 					blob.getBlob(), blob.getBlobCols(), blob.getBlobRows()));
 						
-			Instance instance = blob.getMlChannel().getArffObject().getUnknownInstance(blob);
+			Instance instance = blob.getMlChannel().getArffObject().getUnlabeledInstance(blob);
 			double classifyVal = blob.getMlChannel().getArffObject().getTrainedClassifier().classifyInstance(instance);
-			logger.debug("classifyVal = "+classifyVal);
+			if (classifyVal == 0) {
+				rtSched.setState(InstantState.ON_PROGRAMME);
+				logger.debug(blob.getMlChannel().getChannel().getIdChBusiness()+
+						" -> ON_PROGRAMME");
+			}
+			else {
+				rtSched.setState(InstantState.ON_ADVERTS);
+				logger.debug(blob.getMlChannel().getChannel().getIdChBusiness()+
+						" -> ON_ADVERTS");
+			}
+//			logger.debug("classifyVal = "+classifyVal);
 		} catch(Exception e) {
 			e.printStackTrace();
 		}

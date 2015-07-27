@@ -85,9 +85,22 @@ public class TrainIncr
 		Instance firstInstance = arff.getData().firstInstance();
 		trainSet.add(firstInstance);
 		nb.buildClassifier(trainSet);
+		int onlineHits = 0;
 		for (int i=1; i<arff.getData().numInstances(); i++) {
+			double actualValue = arff.getData().instance(i).classValue();
+			double retValue = nb.classifyInstance(arff.getData().instance(i));
+			String res = i+": actualValue="+actualValue+", retValue="+retValue;
+			if (actualValue == retValue) {
+				System.out.println(res + " -> HIT");
+				onlineHits++;
+			}
+			else {
+				System.out.println(res + " -> FAILURE");
+			}
 			nb.updateClassifier(arff.getData().instance(i));
 		}
+		double onlineSuccRate = (double)onlineHits / (arff.getData().numInstances() - 1);
+		System.out.println("onlineSuccRate = "+onlineSuccRate);
 		
 		// Test the model
 		 Evaluation eTest = new Evaluation(arff.getData());

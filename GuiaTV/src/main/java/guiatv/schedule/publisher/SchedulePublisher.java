@@ -107,7 +107,7 @@ public class SchedulePublisher {
 			String rtSchedJsonString = mapper.writeValueAsString(rtSched);
 //			schedJson = StringEscapeUtils.unescapeJava(schedJson);
 			amqpTmp.convertAndSend(routKey, rtSchedJsonString);
-			logger.debug("Published RtSchedule: "+rtSchedJsonString);
+//			logger.debug("Published RtSchedule: "+rtSchedJsonString);
 		
 			} catch (AmqpException e) {
 				logger.error("ERROR: Could NOT connect to RabbitMQ");

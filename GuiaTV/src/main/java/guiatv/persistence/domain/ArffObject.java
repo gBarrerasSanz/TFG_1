@@ -186,7 +186,7 @@ public class ArffObject implements Serializable {
 			setupClassifierNaiveBayesUpdateable(blob);
 		}
 		
-		Instance newInstance = getTrainingInstance(blob, truth);
+		Instance newInstance = getLabeledInstance(blob, truth);
 		if (data.checkInstance(newInstance)) {
 //			data.add(newInstance); // TODO: No sé si hace falta (Ni se si hace falta conservar todas las muestras en data)
 			newInstance.setDataset(data);
@@ -204,7 +204,7 @@ public class ArffObject implements Serializable {
 		updateClassifier(newInstance);
 	}
 	
-	private Instance getTrainingInstance(Blob blob, boolean truth) {
+	private Instance getLabeledInstance(Blob blob, boolean truth) {
 		byte[] binBlob = getBinBlobFromBlob(blob);
 //		byte[] binBlob = blob.getBlob();
 		int numAtts = data.numAttributes();
@@ -217,7 +217,7 @@ public class ArffObject implements Serializable {
 		return new Instance(1.0, vals);
 	}
 	
-	public Instance getUnknownInstance(Blob blob) {
+	public Instance getUnlabeledInstance(Blob blob) {
 		byte[] binBlob = getBinBlobFromBlob(blob);
 //		byte[] binBlob = blob.getBlob();
 		int numAtts = data.numAttributes();

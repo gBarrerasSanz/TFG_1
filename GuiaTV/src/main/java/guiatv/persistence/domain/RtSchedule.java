@@ -71,6 +71,10 @@ public class RtSchedule implements Serializable {
     	BREAK_START, BREAK_END, UNKNOWN 
     }
 	
+	public static enum InstantState {
+		ON_PROGRAMME, ON_ADVERTS
+	}
+	
 //	@JsonView({CustomSchedule.class, SchedulePublisher.PublisherScheduleView.class})
 //	@Id
 //    @Column(name = "idRtSched", nullable = false)
@@ -90,6 +94,9 @@ public class RtSchedule implements Serializable {
 //	@Column(name = "type", nullable = false)
 	@JsonView({SchedulePublisher.PublisherRtScheduleView.class})
 	private EventType type;
+	
+	@JsonView({SchedulePublisher.PublisherRtScheduleView.class})
+	private InstantState state;
 	
     
     /**********************************************************
@@ -126,6 +133,14 @@ public class RtSchedule implements Serializable {
 
 	public void setType(EventType type) {
 		this.type = type;
+	}
+
+	public InstantState getState() {
+		return state;
+	}
+
+	public void setState(InstantState state) {
+		this.state = state;
 	}
 	
 }
