@@ -7,6 +7,7 @@ import java.sql.Timestamp;
 import java.util.Date;
 
 import guiatv.common.datatypes.Frame_OLD;
+import guiatv.computervision.CvUtils;
 import guiatv.cv.classificator.Classif_old;
 import guiatv.persistence.domain.Blob;
 import guiatv.persistence.domain.MLChannel;
@@ -26,6 +27,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.io.Resource;
 
+import weka.core.Instance;
+
 
 public class ClassificationWorker {
 	
@@ -40,6 +43,14 @@ public class ClassificationWorker {
 	//		logger.debug("Classifying blob from "+blob.getMlChannel().getChannel().getIdChBusiness());
 			rtSched = new RtSchedule(blob.getMlChannel().getChannel(), 
 									new Timestamp(new Date().getTime()));
+			
+			// DEBUG
+			Highgui.imwrite("im.jpeg", CvUtils.getColorMatFromByteArray(
+					blob.getBlob(), blob.getBlobCols(), blob.getBlobRows()));
+						
+			Instance instance = blob.getMlChannel().getArffObject().getUnknownInstance(blob);
+			double classifyVal = blob.getMlChannel().getArffObject().getTrainedClassifier().classifyInstance(instance);
+			logger.debug("classifyVal = "+classifyVal);
 		} catch(Exception e) {
 			e.printStackTrace();
 		}

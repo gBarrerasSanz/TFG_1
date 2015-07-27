@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
+import guiatv.computervision.CvUtils;
 import guiatv.persistence.domain.ArffObject;
 import guiatv.persistence.domain.Blob;
 import guiatv.persistence.domain.Channel;
@@ -21,6 +22,8 @@ import guiatv.realtime.rtmpspying.serializable.ChannelData;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
+import org.opencv.core.Mat;
+import org.opencv.highgui.Highgui;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -54,7 +57,7 @@ public class RtmpSpyingLaunchService {
 			StreamSource streamSource = new StreamSource(chData.getUrl());
 			ArffObject arffObject = new ArffObject();
 			Channel ch = chServ.findByIdChBusiness(chData.getChIdBusiness(), false);
-			MLChannel mlChannel = new MLChannel(ch, streamSource, new ArffObject(),
+			MLChannel mlChannel = new MLChannel(ch, streamSource, arffObject,
 					chData.getCols(), chData.getRows(), chData.getTopLeft(), chData.getBotRight());
 			// Cargar datos clasificados
 			loadClassifiedDataFromChannel(chData, mlChannel);
@@ -63,6 +66,8 @@ public class RtmpSpyingLaunchService {
 			arffServ.save(mlChannel.getArffObject());
 			mlChServ.save(mlChannel);
 			if (ch != null) {
+				// Añadir a los MlChannel en curso
+				
 				// Espiar channel
 				rtmpSpyingServ.doSpying(mlChannel);
 			}
@@ -87,11 +92,17 @@ public class RtmpSpyingLaunchService {
 	
 	private void loadFileListGroup(File[] fList, MLChannel mlChannel, boolean truth) {
 		for (File imgFile: fList) {
-    		InputStream imgFileInputStream;
+//    		InputStream imgFileInputStream;
 			try {
-				imgFileInputStream = new FileInputStream(imgFile);
-				byte[] imgData = IOUtils.toByteArray(imgFileInputStream);
+//				imgFileInputStream = new FileInputStream(imgFile);
+//				byte[] imgData = IOUtils.toByteArray(imgFileInputStream);
+				Mat imgMat = Highgui.imread(imgFile.getAbsolutePath(), Highgui.CV_LOAD_IMAGE_COLOR);
+				byte[] imgData = CvUtils.getByteArrayFromMat2(imgMat);
 				Blob blob = new Blob(imgData, mlChannel);
+				// DEBUG
+				Highgui.imwrite("imOut1.jpeg", imgMat);
+				Highgui.imwrite("imOut2.jpeg", CvUtils.getColorMatFromByteArray(
+						imgData, blob.getBlobCols(), blob.getBlobRows()));
 	    		mlChannel.getArffObject().addSample(blob, truth);
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();

@@ -13,11 +13,15 @@ import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 
+import org.apache.log4j.Logger;
 import org.opencv.core.Mat;
+import org.opencv.highgui.Highgui;
 
 @Entity(name = "roiblob")
 public class Blob {
-
+	
+	private static final Logger logger = Logger.getLogger("debugLog");
+	
 	@Id
     @Column(name = "idRoiBlobPersistence", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,13 +45,25 @@ public class Blob {
 	}
 	
 	public Blob(byte[] img, MLChannel mlChannel) throws Exception {
+		// DEBUG
+//		Highgui.imwrite("imIn.jpeg", CvUtils.getMatFromByteArray(
+//				img, mlChannel.getImgCols(), mlChannel.getImgRows()));
+				
 		// Extraer ROI
-		Mat imgMat = CvUtils.getMatFromByteArray(img, mlChannel.getImgCols(), mlChannel.getImgRows());
+		Mat imgMat = CvUtils.getColorMatFromByteArray(img, mlChannel.getImgCols(), mlChannel.getImgRows());
 		Mat roiMat = CvUtils.getRoiFromMat(imgMat, mlChannel.getTopLeft(), mlChannel.getBotRight());
-		this.blob = CvUtils.getByteArrayFromMat(roiMat);
-		this.blobCols = mlChannel.getBotRight()[0] - mlChannel.getTopLeft()[0];
-		this.blobRows = mlChannel.getBotRight()[1] - mlChannel.getTopLeft()[1];
+		this.blobCols = roiMat.cols();
+		this.blobRows = roiMat.rows();
+		this.blob = CvUtils.getByteArrayFromMat2(roiMat);
 		this.mlChannel = mlChannel;
+		
+		// DEBUG
+//		Highgui.imwrite("imMat.jpeg", roiMat);
+//		byte byteArr[] = new byte[(int) (roiMat.total() * roiMat.channels())];
+//		roiMat.get(0, 0, byteArr);
+//		Highgui.imwrite("imbyteArr1.jpeg", CvUtils.getMatFromByteArray(
+//				blob, roiMat.cols(), roiMat.rows()));
+//		logger.debug("Done");
 	}
 	
     /**********************************************************

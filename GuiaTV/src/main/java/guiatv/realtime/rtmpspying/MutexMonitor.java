@@ -1,5 +1,6 @@
 package guiatv.realtime.rtmpspying;
 
+import guiatv.persistence.domain.MLChannel;
 import guiatv.realtime.rtmpspying.serializable.ChannelData;
 import guiatv.realtime.rtmpspying.serializable.ListChannelsData;
 
@@ -7,6 +8,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
@@ -31,6 +33,8 @@ public class MutexMonitor {
 	
 	
 	BlockingQueue<ChannelData> queue;
+	
+//	List<MLChannel> lMlChannelLive = new ArrayList<MLChannel>();
 	
 	public MutexMonitor() {
 		
@@ -66,4 +70,11 @@ public class MutexMonitor {
 		queue.add(chData);
 	}
 	
+//	public synchronized void addMlChannel(MLChannel mlChannel) {
+//		lMlChannelLive.add(mlChannel);
+//	}
+//	
+//	public synchronized MLChannel getMlChannel() {
+//		return lMlChannelLive;
+//	}
 }

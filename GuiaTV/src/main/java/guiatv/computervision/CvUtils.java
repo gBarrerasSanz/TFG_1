@@ -7,6 +7,7 @@ import java.io.IOException;
 
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
+import org.opencv.core.MatOfByte;
 import org.opencv.highgui.Highgui;
 import org.opencv.imgproc.Imgproc;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,14 +20,22 @@ public class CvUtils {
 //	private final static int imgRows = 720;
 	
 	
-	public static Mat getMatFromByteArray(byte[] byteArr, int imgCols, int imgRows) {
-		Mat dataMat = new Mat(imgRows, imgCols, CvType.CV_8UC1);
+	public static Mat getColorMatFromByteArray(byte[] byteArr, int imgCols, int imgRows) {
+		Mat dataMat = new Mat(imgRows, imgCols, CvType.CV_8UC3);
 		dataMat.put(0, 0, byteArr);
-//		Mat mat = Highgui.imdecode(dataMat, 1);
-		return dataMat;
+		Mat mat = Highgui.imdecode(dataMat, Highgui.CV_LOAD_IMAGE_COLOR);
+		return mat;
 	}
 	
-	public static byte[] getByteArrayFromMat(Mat mat) {
+//	public static byte[] getByteArrayFromMat(Mat mat) {
+//		MatOfByte bytemat = new MatOfByte();
+//		Highgui.imencode(".jpg", mat, bytemat);
+//		byte[] byteArr = bytemat.toArray();
+//		return byteArr;
+//	}
+	
+	// NO FUNCIONA BIEN
+	public static byte[] getByteArrayFromMat2(Mat mat) {
 		byte byteArr[] = new byte[(int) (mat.total() * mat.channels())];
 		mat.get(0, 0, byteArr);
 		return byteArr;
@@ -59,7 +68,7 @@ public class CvUtils {
 	}
 	
 	public static void showBlob(Blob blob) {
-		Mat blobMat = getMatFromByteArray(blob.getBlob(), blob.getBlobCols(), blob.getBlobRows());
+		Mat blobMat = getColorMatFromByteArray(blob.getBlob(), blob.getBlobCols(), blob.getBlobRows());
 		Imshow im = new Imshow("Image");
 		im.showImage(blobMat);
 	}

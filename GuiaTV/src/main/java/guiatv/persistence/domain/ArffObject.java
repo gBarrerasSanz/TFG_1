@@ -89,7 +89,7 @@ public class ArffObject implements Serializable {
 	
 	public void setupAtts(Blob blob) {
 		// Se saca el objecto mat del blob
-		Mat img = CvUtils.getMatFromByteArray(blob.getBlob(), blob.getBlobCols(), blob.getBlobRows());
+		Mat img = CvUtils.getColorMatFromByteArray(blob.getBlob(), blob.getBlobCols(), blob.getBlobRows());
 //		// Se binariza la imagen 
 //		Mat binImg = CvUtils.thresholdImg(img);
 //		// Se obtiene el array de bytes de la imagen binarizada
@@ -180,19 +180,13 @@ public class ArffObject implements Serializable {
 	}
 	
 	public void addSample(Blob blob, boolean truth) {
-		// Se saca el objecto mat del blob
-		Mat img = CvUtils.getMatFromByteArray(blob.getBlob(), blob.getBlobCols(), blob.getBlobRows());
-		// Se binariza la imagen 
-		CvUtils.threshold(img);
-		// Se obtiene el array de bytes de la imagen binarizada
-		byte[] binBlob = CvUtils.getByteArrayFromMat(img);
-		
+
 		if (data == null) {
 			setupAtts(blob);
 			setupClassifierNaiveBayesUpdateable(blob);
 		}
 		
-		Instance newInstance = getTrainingInstance(blob, binBlob, truth);
+		Instance newInstance = getTrainingInstance(blob, truth);
 		if (data.checkInstance(newInstance)) {
 //			data.add(newInstance); // TODO: No sé si hace falta (Ni se si hace falta conservar todas las muestras en data)
 			newInstance.setDataset(data);
@@ -210,7 +204,9 @@ public class ArffObject implements Serializable {
 		updateClassifier(newInstance);
 	}
 	
-	private Instance getTrainingInstance(Blob blob, byte[] binBlob, boolean truth) {
+	private Instance getTrainingInstance(Blob blob, boolean truth) {
+		byte[] binBlob = getBinBlobFromBlob(blob);
+//		byte[] binBlob = blob.getBlob();
 		int numAtts = data.numAttributes();
 		double[] vals = new double[numAtts];
 		for (int i=0; i < blob.getBlob().length; i++) {
@@ -219,6 +215,31 @@ public class ArffObject implements Serializable {
 		}
 		vals[numAtts-1] = classAttVals.indexOf(String.valueOf(truth));
 		return new Instance(1.0, vals);
+	}
+	
+	public Instance getUnknownInstance(Blob blob) {
+		byte[] binBlob = getBinBlobFromBlob(blob);
+//		byte[] binBlob = blob.getBlob();
+		int numAtts = data.numAttributes();
+		double[] vals = new double[numAtts];
+		for (int i=0; i < blob.getBlob().length; i++) {
+			String val = (binBlob[i] == 0) ? "b" : "w";
+			vals[i] = pixelAttVals.indexOf(val);
+		}
+//		vals[numAtts-1] = classAttVals.indexOf(String.valueOf(truth));
+		Instance newInstance = new Instance(1.0, vals);
+		newInstance.setDataset(data);
+		return newInstance;
+	}
+	
+	private byte[] getBinBlobFromBlob(Blob blob) {
+		// Se saca el objeto mat del blob
+		Mat img = CvUtils.getColorMatFromByteArray(blob.getBlob(), blob.getBlobCols(), blob.getBlobRows());
+		// Se binariza la imagen 
+		CvUtils.threshold(img);
+		// Se obtiene el array de bytes de la imagen binarizada
+		byte[] binBlob = CvUtils.getByteArrayFromMat2(img);
+		return binBlob;
 	}
 	
 }
