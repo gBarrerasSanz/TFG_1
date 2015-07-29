@@ -10,6 +10,7 @@ import org.springframework.integration.support.MessageBuilder;
 import org.springframework.messaging.Message;
 import org.springframework.scheduling.annotation.Async;
 
+import guiatv.persistence.domain.MLChannel;
 import guiatv.persistence.domain.Programme;
 import guiatv.persistence.domain.RtSchedule;
 import guiatv.persistence.domain.Schedule;
@@ -29,15 +30,16 @@ public class RealtimeBrain {
 	 * - Publicarlo en RabbitMQ
 	 * - Descartarlo
 	 */
-	public void manageRtSchedule(RtSchedule rtsched) {
+	public void manageRtSchedule(RtSchedule rtSched) {
 		// TODO: Tomar la decisión
-		boolean send = true; 
+		MLChannel mlChannel = rtSched.getMlChannel();
+		boolean mustNotify = mlChannel.addRtSched(rtSched);
 		
-		if (send) {
+		if (mustNotify) {
 			// Determinar a qué programa afecta
-			Programme prog = progServ.findOneByChannelAndInstant(rtsched.getChannel(), rtsched.getInstant());
+			Programme prog = progServ.findOneByChannelAndInstant(rtSched.getMlChannel().getChannel(), rtSched.getInstant());
 			if (prog != null) {
-				Message<RtSchedule> rtSchedMsg = MessageBuilder.withPayload(rtsched).build();
+				Message<RtSchedule> rtSchedMsg = MessageBuilder.withPayload(rtSched).build();
 				schedPublisher.publishRtSchedule(rtSchedMsg, prog);
 			}
 			else {

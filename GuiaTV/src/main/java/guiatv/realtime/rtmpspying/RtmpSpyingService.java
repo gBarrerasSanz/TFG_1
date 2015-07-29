@@ -42,6 +42,7 @@ public class RtmpSpyingService {
 	
 	private static final Logger logger = Logger.getLogger("debugLog"); 
 	
+	private static final int numReqPerSecond = 1;
 	@Value("${platform}")
 	private String platform;
 	
@@ -83,12 +84,13 @@ public class RtmpSpyingService {
 				File binDir = new File(binDirUrl.toURI());
 				String[] cmd = { 
 					binDir.getAbsolutePath()+File.separator+"ffmpeg.exe",
-					"-i", mlChannel.getStreamSource().getUrl(), // ********************* TODO: URL
+					"-r", String.valueOf(numReqPerSecond),
+					"-i", "\""+mlChannel.getStreamSource().getUrl()+"\"", // ********************* TODO: URL
 					"-vcodec", "mjpeg",
 					"-f", "image2pipe",
 					"-pix_fmt", "yuvj420p",
 					"-vf", "scale="+mlChannel.getImgCols()+":"+mlChannel.getImgRows(),
-					"-r", "1",
+					"-r", "24",
 					"-"
 				};
 				Process p = null;

@@ -10,6 +10,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.util.List;
+import java.util.Queue;
 
 import guiatv.catalog.serializers.ScheduleChannelSerializer;
 import guiatv.common.CommonUtility;
@@ -33,6 +34,8 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
 
+import org.apache.commons.collections4.queue.CircularFifoQueue;
+import org.apache.log4j.Logger;
 import org.opencv.core.Mat;
 
 import com.fasterxml.jackson.annotation.JsonView;
@@ -48,6 +51,7 @@ import weka.core.converters.ArffLoader;
 import weka.core.converters.ArffSaver;
 
 import org.opencv.highgui.Highgui;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 
@@ -55,11 +59,14 @@ import org.springframework.core.io.Resource;
 @Table(uniqueConstraints={@UniqueConstraint(columnNames = {"channel_fk", "streamSource_fk"})})
 public class MLChannel {
 	
+	private static final Logger logger = Logger.getLogger("debugLog");
+	
 	@Id
     @Column(name = "idMlChPersistence", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idMlChPersistence;
 	
+	@JsonView({SchedulePublisher.PublisherRtScheduleView.class})
 	@OneToOne(targetEntity=Channel.class, fetch=FetchType.LAZY)
 	@JoinColumn(name="channel_fk", referencedColumnName="idChPersistence")
 	private Channel channel;
@@ -69,6 +76,9 @@ public class MLChannel {
 	
 	@Column(name="dataSetUri", nullable=true)
 	private String dataSetUri;
+	
+	@Column(name="fullDataSetUri", nullable=true)
+	private String fullDataSetUri;
 	
 	@Column(name="imgCols", nullable=false)
 	private int imgCols;
@@ -95,8 +105,17 @@ public class MLChannel {
 	@Transient
 	private Instances dataSet;
 	
-//	@Transient
-//	private InstantState currentState;
+	@Transient
+	private Instances fullDataSet;
+	
+	@Transient
+	private InstantState currentState;
+	
+	@Transient
+	private final static int FIFO_QUEUE_SIZE = 10;
+	
+	@Transient
+	private Queue<InstantState> fifoRtSched = new CircularFifoQueue<InstantState>(FIFO_QUEUE_SIZE);
 	
 	public MLChannel() {
 	}
@@ -189,6 +208,19 @@ public class MLChannel {
 		}
 	}
 	
+	public boolean loadFullDataSet() {
+		try { 
+			ArffLoader loader = new ArffLoader();
+			loader.setFile(CommonUtility.getFileFromRelativeUri(fullDataSetUri));
+			fullDataSet = loader.getDataSet();
+			fullDataSet.setClassIndex(fullDataSet.numAttributes()-1);
+			return true;
+		} catch (IOException e) {
+//			e.printStackTrace();
+			return false;
+		}
+	}
+	
 	public boolean loadTrainedClassifier() {
 		try {
 			InputStream is = new FileInputStream(CommonUtility.getFileFromRelativeUri(trainedClassifierUri));
@@ -218,6 +250,18 @@ public class MLChannel {
 		}
 	}
 	
+	public void saveFullDataSet() {
+		ArffSaver saver = new ArffSaver();
+		saver.setInstances(fullDataSet);
+		try {
+			CommonUtility.createFileFromClassPathUriIfDoesNotExists(fullDataSetUri);
+			saver.setFile(CommonUtility.getFileFromRelativeUri(fullDataSetUri));
+			saver.writeBatch();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public void saveTrainedClassifier() {
 		OutputStream os;
 		try {
@@ -231,13 +275,28 @@ public class MLChannel {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
-
+	}
+	
+	public void releaseDataSet() {
+		dataSet = null; // Dejar que el recolector haga su trabajo
+	}
+	
+	public void releaseFullDataSet() {
+		fullDataSet = null; // Dejar que el recolector haga su trabajo
+	}
+	
+	public void releaseTrainedClassifier() {
+		trainedClassifier = null; // Dejar que el recolector haga su trabajo
 	}
 	
 	public void saveAndReleaseDataSet() {
 		saveDataSet();
 		dataSet = null; // Dejar que el recolector haga su trabajo
+	}
+	
+	public void saveAndReleaseFullDataSet() {
+		saveDataSet();
+		fullDataSet = null; // Dejar que el recolector haga su trabajo
 	}
 	
 	public void saveAndReleaseTrainedClassifier() {
@@ -253,13 +312,22 @@ public class MLChannel {
 		return dataSet;
 	}
 	
+	public Instances getFullDataSet() {
+		return fullDataSet;
+	}
+	
 	public void createDataSetUri() {
-		dataSetUri = "META-INF/MLChannels/fileArff/"
+		dataSetUri = "META-INF/MLChannels_DBFiles/fileArff/"
 				+channel.getIdChBusiness()+"/dataSet.arff";
 	}
 	
+	public void createFullDataSetUri() {
+		fullDataSetUri = "META-INF/MLChannels_DBFiles/fileArff/"
+				+channel.getIdChBusiness()+"/fullDataSet.arff";
+	}
+	
 	public void createTrainedClassifierUri() {
-		trainedClassifierUri = "META-INF/MLChannels/trainedClassifier/"
+		trainedClassifierUri = "META-INF/MLChannels_DBFiles/trainedClassifier/"
 				+channel.getIdChBusiness()+"/trainedClassifier.model";
 	}
 	
@@ -268,12 +336,16 @@ public class MLChannel {
 		if (dataSet == null) {
 			// TODO: Asumo que si dataSet == null, entonces trainedClassifier == null. NO SÉ SI SE CUMPLE SIEMPRE O NO
 			dataSet = ArffHelper.createInstancesObject(blob);
+			fullDataSet = ArffHelper.createInstancesObject(blob);
 			trainedClassifier = ArffHelper.createClassifierNaiveBayesUpdateable(dataSet, blob);
 		}
 		Instance newInstance = ArffHelper.getLabeledInstance(dataSet, blob, truth);
 		if (dataSet.checkInstance(newInstance)) {
-//			data.add(newInstance); // TODO: No sé si hace falta (Ni se si hace falta conservar todas las muestras en data)
+			/** IMPORTANTE */
+//			dataSet.add(newInstance); // TODO: No sé si hace falta (Ni se si hace falta conservar todas las muestras en data)
 			newInstance.setDataset(dataSet);
+			fullDataSet.add(newInstance); 
+			newInstance.setDataset(fullDataSet); 
 		}
 		else {
 			throw new IllegalArgumentException("newInstance IS NOT compatible with DataSet data");
@@ -281,4 +353,79 @@ public class MLChannel {
 		ArffHelper.updateClassifier(trainedClassifier, newInstance);
 	}
 	
+	
+	public InstantState getCurrentState() {
+		return currentState;
+	}
+	
+	public void switchCurrentState() {
+		switch(currentState) {
+		case ON_PROGRAMME:
+			currentState = InstantState.ON_ADVERTS;
+			break;
+		case ON_ADVERTS:
+			currentState = InstantState.ON_PROGRAMME;
+			break;
+		default:
+			logger.error("ERROR ON switchCurrentState()");
+			break;
+		}
+	}
+	
+	/**
+	 * Añade el estado del RtSchedule actual a la cola circular
+	 * Devuelve TRUE si el estado currentState ha cambiado y por lo tanto el cambio
+	 * debe ser notificado y FALSE en otro caso.
+	 * 
+	 * En principio NO hace falta la keyword synchronized, ya que cada instancia
+	 * de MLChannel debe se accedida por un solo thread
+	 */
+	public synchronized boolean addRtSched(RtSchedule rtSched) {
+		if (fifoRtSched.size() < FIFO_QUEUE_SIZE) { // Si la cola NO está llena aun
+			fifoRtSched.add(rtSched.getState());
+			return false;
+		}
+		else { // Si la cola está llena
+			if (currentState == null) { // Si todavía NO se ha inicializado currentState
+				int numOnProgramme = 0, numOnAdverts = 0;
+				// Quedarse con el instante mayoritario
+				for (InstantState instant: fifoRtSched) {
+					switch(instant) {
+					case ON_PROGRAMME:
+						numOnProgramme++;
+						break;
+					case ON_ADVERTS:
+						numOnAdverts++;
+						break;
+					default:
+						break;
+					}
+				}
+				currentState = InstantState.ON_PROGRAMME;
+				if (numOnAdverts > numOnProgramme) {
+					currentState = InstantState.ON_ADVERTS;
+				}
+				Channel ch = rtSched.getMlChannel().getChannel();
+				logger.debug("Initialized channel ("+ch.getIdChBusiness()+") -> "+currentState);
+				return false;
+			}
+			else { // Si currentState ya estaba inicializado
+				fifoRtSched.add(rtSched.getState());
+				for (InstantState instant: fifoRtSched) {
+					// Si alguno de los estados de la cola coincide con el estado actual -> Salir
+					if (instant.equals(currentState)) {
+						return false;
+					}
+				}
+				/*
+				 * Post: Todos los estados de la cola son distintos al estado actual currentState
+				 * Por lo tanto rtSched.getState(), al pertenecer a la cola, también 
+				 * es distinto al estado actual 
+				 */
+				// Cambiar el estado actual
+				switchCurrentState();
+				return true;
+			}
+		}
+	}
 }

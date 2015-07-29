@@ -37,7 +37,6 @@ public class RtmpSpyingLaunchService {
 	@Autowired
 	ChannelService chServ;
 	
-	
 	@Autowired
 	StreamSourceService streamSourceServ;
 	
@@ -56,28 +55,33 @@ public class RtmpSpyingLaunchService {
 			// Crear MlChannel 
 			StreamSource streamSource = new StreamSource(chData.getUrl());
 			Channel ch = chServ.findByIdChBusiness(chData.getChIdBusiness(), false);
-			MLChannel mlChannel = new MLChannel(ch, streamSource,
-					chData.getCols(), chData.getRows(), chData.getTopLeft(), chData.getBotRight());
-			mlChannel.createDataSetUri();
-			mlChannel.createTrainedClassifierUri();
-			boolean dataSetAndClassifierLoaded = mlChannel.loadDataSet() && mlChannel.loadTrainedClassifier();
-			if ( ! dataSetAndClassifierLoaded ) { // Si el dataSet y el Classifier NO estaban guardados
-				// Cargar datos clasificados en el directorio goodSamples
-				loadClassifiedDataFromChannel(chData, mlChannel);
-			}
-			// Meterlo en la BD
-			streamSourceServ.save(mlChannel.getStreamSource());
-			if (dataSetAndClassifierLoaded) { // Si el dataSet y el Classifier ya estaban guardados
-				// Entonces guardar mlChannel en la base de datos
-				mlChServ.save(mlChannel);
-			}
-			else { // Si el dataSet y el Classifier NO estaban guardados
-				// Entonces guardar mlChannel en la base de datos y los ficheros de dataSet y Classifier
-				mlChServ.saveAndSaveFiles(mlChannel);
-			}
 			if (ch != null) {
-				// Añadir a los MlChannel en curso
-				
+				MLChannel mlChannel = new MLChannel(ch, streamSource,
+						chData.getCols(), chData.getRows(), chData.getTopLeft(), chData.getBotRight());
+				mlChannel.createDataSetUri();
+				mlChannel.createFullDataSetUri();
+				mlChannel.createTrainedClassifierUri();
+				boolean dataSetAndClassifierLoaded = mlChannel.loadDataSet() && 
+						mlChannel.loadFullDataSet() && mlChannel.loadTrainedClassifier();
+				if ( ! dataSetAndClassifierLoaded ) { // Si el dataSet y el Classifier NO estaban guardados
+					// Cargar datos clasificados en el directorio goodSamples
+					loadClassifiedDataFromChannel(chData, mlChannel);
+				}
+				// Meterlo en la BD
+				streamSourceServ.save(mlChannel.getStreamSource());
+				if (dataSetAndClassifierLoaded) { // Si el dataSet y el Classifier ya estaban guardados
+					// Entonces guardar mlChannel en la base de datos
+					mlChServ.save(mlChannel);
+				}
+				else { // Si el dataSet y el Classifier NO estaban guardados
+					// Entonces guardar mlChannel en la base de datos y los ficheros de dataSet y Classifier
+					mlChServ.saveAndSaveFiles(mlChannel);
+				}
+				// Hacer cross-validation del modelo entrenado
+				String cvResults = ArffHelper.doCrossValidation(mlChannel.getTrainedClassifier(), mlChannel.getFullDataSet());
+				logger.debug("Channel "+ch.getIdChBusiness()+": "+cvResults);
+				// Liberar la memoria que ocupa fullDataSet
+				mlChannel.releaseFullDataSet();
 				// Espiar channel
 				rtmpSpyingServ.doSpying(mlChannel);
 			}

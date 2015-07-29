@@ -18,8 +18,8 @@ public class TaskExecutorConfig {
 	@Bean(name="rtmpSpyingTaskExecutor")
 	public Executor getRtmpSpyingTaskExecutor() {
 		ThreadPoolTaskExecutor taskExecutor = new ThreadPoolTaskExecutor();
-        taskExecutor.setCorePoolSize(5);
-		taskExecutor.setMaxPoolSize(10);
+        taskExecutor.setCorePoolSize(10);
+		taskExecutor.setMaxPoolSize(15);
 		taskExecutor.setQueueCapacity(25);
         taskExecutor.initialize();
         return taskExecutor;
@@ -28,8 +28,8 @@ public class TaskExecutorConfig {
 	@Bean(name="classificationTaskExecutor")
 	public Executor getClassificationTaskExecutor() {
 		ThreadPoolTaskExecutor taskExecutor = new ThreadPoolTaskExecutor();
-        taskExecutor.setCorePoolSize(5);
-		taskExecutor.setMaxPoolSize(10);
+        taskExecutor.setCorePoolSize(10);
+		taskExecutor.setMaxPoolSize(15);
 		taskExecutor.setQueueCapacity(25);
         taskExecutor.initialize();
         return taskExecutor;

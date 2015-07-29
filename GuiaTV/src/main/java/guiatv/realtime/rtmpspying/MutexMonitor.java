@@ -45,7 +45,7 @@ public class MutexMonitor {
 		JAXBContext jaxbContext;
 		try {
 			jaxbContext = JAXBContext.newInstance(ListChannelsData.class);
-			Resource resource = new ClassPathResource("META-INF/MLChannels/channelData/listChannelData.xml");
+			Resource resource = new ClassPathResource("META-INF/channelData/listChannelData.xml");
 	        Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
 	        ListChannelsData listChannelsData = (ListChannelsData) unmarshaller.unmarshal(resource.getInputStream());
 	        

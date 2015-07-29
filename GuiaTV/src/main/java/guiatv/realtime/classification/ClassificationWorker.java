@@ -14,7 +14,6 @@ import guiatv.persistence.domain.MLChannel;
 import guiatv.persistence.domain.RtSchedule;
 import guiatv.persistence.domain.RtSchedule.InstantState;
 import guiatv.persistence.domain.Schedule;
-import guiatv.persistence.domain.RtSchedule.EventType;
 import guiatv.persistence.domain.helper.ArffHelper;
 
 import org.apache.log4j.Logger;
@@ -44,7 +43,7 @@ public class ClassificationWorker {
 		RtSchedule rtSched = null;
 		try {
 	//		logger.debug("Classifying blob from "+blob.getMlChannel().getChannel().getIdChBusiness());
-			rtSched = new RtSchedule(blob.getMlChannel().getChannel(), 
+			rtSched = new RtSchedule(blob.getMlChannel(), 
 									new Timestamp(new Date().getTime()));
 //			// DEBUG
 //			Highgui.imwrite("img.jpeg", CvUtils.getGrayMatFromByteArray(
@@ -56,13 +55,13 @@ public class ClassificationWorker {
 //			double classifyVal = blob.getMlChannel().getArffObject().getTrainedClassifier().classifyInstance(instance);
 			if (classifyVal == 0) {
 				rtSched.setState(InstantState.ON_PROGRAMME);
-				logger.debug(blob.getMlChannel().getChannel().getIdChBusiness()+
-						" -> ON_PROGRAMME");
+//				logger.debug(blob.getMlChannel().getChannel().getIdChBusiness()+
+//						" -> ON_PROGRAMME");
 			}
 			else {
 				rtSched.setState(InstantState.ON_ADVERTS);
-				logger.debug(blob.getMlChannel().getChannel().getIdChBusiness()+
-						" -> ON_ADVERTS");
+//				logger.debug(blob.getMlChannel().getChannel().getIdChBusiness()+
+//						" -> ON_ADVERTS");
 			}
 //			logger.debug("classifyVal = "+classifyVal);
 		} catch(Exception e) {

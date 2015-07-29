@@ -2,6 +2,7 @@ package guiatv.persistence.domain.helper;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Random;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -20,6 +21,7 @@ import org.opencv.core.Mat;
 import org.opencv.highgui.Highgui;
 import org.opencv.imgproc.Imgproc;
 
+import weka.classifiers.Evaluation;
 import weka.classifiers.bayes.NaiveBayesUpdateable;
 import weka.core.Attribute;
 import weka.core.FastVector;
@@ -71,8 +73,9 @@ public class ArffHelper implements Serializable {
 		// Atributo de clase		
 		Attribute classAtt = new Attribute("class", classAttVals);
 		atts.addElement(classAtt);
-		// Crear objecto Instances
-		Instances dataSet = new Instances("MyRel", atts, 0);
+		// Crear objeto Instances
+		String nameInstances = "Rel "+blob.getMlChannel().getChannel().getIdChBusiness();
+		Instances dataSet = new Instances(nameInstances, atts, 0);
 		// Añadir atributos al objeto Instances
 		dataSet.setClass(classAtt); // Establece el atributo classAtt como el atributo que indica la clase
 		return dataSet;
@@ -132,7 +135,6 @@ public class ArffHelper implements Serializable {
 	
 	public static Instance getUnlabeledInstance(Instances dataSet, Blob blob) {
 		FastVector pixelAttVals = getPixelAttVals();
-		FastVector classAttVals = getClassAttVals();
 		byte[] binBlob = getBinBlobFromBlob(blob);
 		int numAtts = dataSet.numAttributes();
 		double[] vals = new double[numAtts];
@@ -155,6 +157,17 @@ public class ArffHelper implements Serializable {
 		// Se obtiene el array de bytes de la imagen binarizada
 		byte[] binBlob = CvUtils.getByteArrayFromMat(img);
 		return binBlob;
+	}
+	
+	public static String doCrossValidation(NaiveBayesUpdateable trainedClassifier, Instances dataSet) {
+		Evaluation eTest;
+		try {
+			eTest = new Evaluation(dataSet);
+			eTest.crossValidateModel(trainedClassifier, dataSet, 10, new Random(1));
+			return eTest.toSummaryString();
+		} catch (Exception e) {
+			return null;
+		}
 	}
 	
 }

@@ -68,7 +68,8 @@ public class SchedulePublisher {
 				amqpTmp.convertAndSend(routKey, schedJson);
 				
 //				logger.debug("Published Schedule: "+schedJson);
-				logger.debug("Published Schedule ("+sched.getIdSched()+"): "+sched.getProgramme().getNameProg()
+				logger.debug("Published Sched ("+sched.getIdSched()+"): "+sched.getProgramme().getNameProg()
+						+ " ["+sched.getChannel().getIdChBusiness()+"]"
 						+" -> "+CommonUtility.timestampToString(sched.getStart())+
 						" --- "+CommonUtility.timestampToString(sched.getEnd())+
 						" ==> Published: "+sched.isPublished());
@@ -108,7 +109,9 @@ public class SchedulePublisher {
 //			schedJson = StringEscapeUtils.unescapeJava(schedJson);
 			amqpTmp.convertAndSend(routKey, rtSchedJsonString);
 //			logger.debug("Published RtSchedule: "+rtSchedJsonString);
-		
+			logger.debug("Published RtSchedule ("+rtSched.getMlChannel().getChannel().getIdChBusiness()+"): "
+					+prog.getNameProg()
+					+" -> "+rtSched.getState());
 			} catch (AmqpException e) {
 				logger.error("ERROR: Could NOT connect to RabbitMQ");
 			} catch(Exception e) {

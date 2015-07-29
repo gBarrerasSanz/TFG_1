@@ -35,6 +35,7 @@ public class MLChannelService {
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
     public void saveAndSaveFiles(MLChannel mlCh) {
 		mlCh.saveDataSet();
+		mlCh.saveFullDataSet();
 		mlCh.saveTrainedClassifier();
 		mlChRep.save(mlCh);
     }

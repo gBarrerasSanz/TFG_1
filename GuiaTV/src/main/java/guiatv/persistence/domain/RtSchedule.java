@@ -67,9 +67,9 @@ public class RtSchedule implements Serializable {
 	 */
 	private static final long serialVersionUID = 6261936189827031704L;
 
-	public static enum EventType {
-    	BREAK_START, BREAK_END, UNKNOWN 
-    }
+//	public static enum EventType {
+//    	BREAK_START, BREAK_END, UNKNOWN 
+//    }
 	
 	public static enum InstantState {
 		ON_PROGRAMME, ON_ADVERTS
@@ -81,19 +81,22 @@ public class RtSchedule implements Serializable {
 //    @GeneratedValue(strategy = GenerationType.IDENTITY)
 //    protected Long idRtSched;
 	
+//	@JsonView({SchedulePublisher.PublisherRtScheduleView.class})
+////	@ManyToOne(targetEntity=Channel.class, fetch=FetchType.LAZY)
+////	@JoinColumn(name="channel_fk", referencedColumnName="idChPersistence")
+//	private Channel channel;
+	
 	@JsonView({SchedulePublisher.PublisherRtScheduleView.class})
-//	@ManyToOne(targetEntity=Channel.class, fetch=FetchType.LAZY)
-//	@JoinColumn(name="channel_fk", referencedColumnName="idChPersistence")
-	private Channel channel;
+	private MLChannel mlChannel;
 	
 //	@Column(name = "instant", nullable = false)
 	@JsonView({SchedulePublisher.PublisherRtScheduleView.class})
 	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss a z")
 	private Timestamp instant;
 	
-//	@Column(name = "type", nullable = false)
-	@JsonView({SchedulePublisher.PublisherRtScheduleView.class})
-	private EventType type;
+////	@Column(name = "type", nullable = false)
+//	@JsonView({SchedulePublisher.PublisherRtScheduleView.class})
+//	private EventType type;
 	
 	@JsonView({SchedulePublisher.PublisherRtScheduleView.class})
 	private InstantState state;
@@ -105,18 +108,18 @@ public class RtSchedule implements Serializable {
 	public RtSchedule() {
 	}
 
-	public RtSchedule(Channel channel, Timestamp instant) {
-    	this.channel = channel;
+	public RtSchedule(MLChannel mlChannel, Timestamp instant) {
+    	this.mlChannel = mlChannel;
     	this.instant = instant;
-    	this.type = EventType.UNKNOWN;
+//    	this.type = EventType.UNKNOWN;
     }
 
-	public Channel getChannel() {
-		return channel;
+	public MLChannel getMlChannel() {
+		return mlChannel;
 	}
 
-	public void setChannel(Channel channel) {
-		this.channel = channel;
+	public void setMlChannel(MLChannel mlChannel) {
+		this.mlChannel = mlChannel;
 	}
 
 	public Timestamp getInstant() {
@@ -127,13 +130,13 @@ public class RtSchedule implements Serializable {
 		this.instant = instant;
 	}
 
-	public EventType getType() {
-		return type;
-	}
-
-	public void setType(EventType type) {
-		this.type = type;
-	}
+//	public EventType getType() {
+//		return type;
+//	}
+//
+//	public void setType(EventType type) {
+//		this.type = type;
+//	}
 
 	public InstantState getState() {
 		return state;
