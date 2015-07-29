@@ -7,6 +7,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -17,6 +19,8 @@ import java.util.Locale;
 import java.util.Random;
 
 import org.apache.log4j.Logger;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 
 
 public class CommonUtility {
@@ -26,6 +30,8 @@ public class CommonUtility {
 	final static int msToSecsConv = 1000;
 	final static int msToMinsConv = 1000*60;
 	final static int msToHoursConv = 1000*60*60;
+	
+	final static String SRC_RESOURCES_URI = "src/main/resources/";
 	
 	private static enum TimeUnit {
 		SEC, MIN, HOUR
@@ -173,6 +179,33 @@ public class CommonUtility {
 	public static boolean isScheduleBeingEmitedNow(Schedule sched) {
 		return isScheduleStarted(sched) 		// ha empezado
 				&& isScheduleOnTime(sched);		// todavía NO ha terminado
+	}
+	
+	public static File getFileFromClassPathUri(String uri) {
+		Resource resource = new ClassPathResource(uri);
+		try {
+			return resource.getFile();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public static File getFileFromRelativeUri(String relUri) {
+		File file = new File(SRC_RESOURCES_URI+File.separator+relUri);
+		return file;
+	}
+	
+	public static void createFileFromClassPathUriIfDoesNotExists(String relUri) {
+		try {
+			File file = new File(SRC_RESOURCES_URI+File.separator+relUri);
+			if ( ! file.exists()) {
+				file.getParentFile().mkdirs();
+				file.createNewFile();
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 }

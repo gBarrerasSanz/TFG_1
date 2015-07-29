@@ -1,12 +1,11 @@
 package guiatv.conf.initialization;
 
 import guiatv.computervision.CvUtils;
-import guiatv.persistence.domain.ArffObject;
 import guiatv.persistence.domain.Channel;
 import guiatv.persistence.domain.MLChannel;
 import guiatv.persistence.domain.StreamSource;
+import guiatv.persistence.domain.helper.ArffHelper;
 import guiatv.persistence.repository.StreamSourceRepository;
-import guiatv.persistence.repository.service.ArffObjectService;
 import guiatv.persistence.repository.service.ChannelService;
 import guiatv.persistence.repository.service.MLChannelService;
 import guiatv.persistence.repository.service.StreamSourceService;

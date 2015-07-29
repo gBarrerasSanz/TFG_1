@@ -7,12 +7,11 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import guiatv.computervision.CvUtils;
-import guiatv.persistence.domain.ArffObject;
 import guiatv.persistence.domain.Blob;
 import guiatv.persistence.domain.Channel;
 import guiatv.persistence.domain.MLChannel;
 import guiatv.persistence.domain.StreamSource;
-import guiatv.persistence.repository.service.ArffObjectService;
+import guiatv.persistence.domain.helper.ArffHelper;
 import guiatv.persistence.repository.service.ChannelService;
 import guiatv.persistence.repository.service.MLChannelService;
 import guiatv.persistence.repository.service.StreamSourceService;
@@ -27,6 +26,9 @@ import org.opencv.highgui.Highgui;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import weka.classifiers.bayes.NaiveBayesUpdateable;
+import weka.core.Instances;
+
 @Service
 public class RtmpSpyingLaunchService {
 	
@@ -35,8 +37,6 @@ public class RtmpSpyingLaunchService {
 	@Autowired
 	ChannelService chServ;
 	
-	@Autowired
-	ArffObjectService arffServ;
 	
 	@Autowired
 	StreamSourceService streamSourceServ;
@@ -55,16 +55,26 @@ public class RtmpSpyingLaunchService {
 		while ((chData = monitor.acquireChannel()) != null) {
 			// Crear MlChannel 
 			StreamSource streamSource = new StreamSource(chData.getUrl());
-			ArffObject arffObject = new ArffObject();
 			Channel ch = chServ.findByIdChBusiness(chData.getChIdBusiness(), false);
-			MLChannel mlChannel = new MLChannel(ch, streamSource, arffObject,
+			MLChannel mlChannel = new MLChannel(ch, streamSource,
 					chData.getCols(), chData.getRows(), chData.getTopLeft(), chData.getBotRight());
-			// Cargar datos clasificados
-			loadClassifiedDataFromChannel(chData, mlChannel);
+			mlChannel.createDataSetUri();
+			mlChannel.createTrainedClassifierUri();
+			boolean dataSetAndClassifierLoaded = mlChannel.loadDataSet() && mlChannel.loadTrainedClassifier();
+			if ( ! dataSetAndClassifierLoaded ) { // Si el dataSet y el Classifier NO estaban guardados
+				// Cargar datos clasificados en el directorio goodSamples
+				loadClassifiedDataFromChannel(chData, mlChannel);
+			}
 			// Meterlo en la BD
 			streamSourceServ.save(mlChannel.getStreamSource());
-			arffServ.save(mlChannel.getArffObject());
-			mlChServ.save(mlChannel);
+			if (dataSetAndClassifierLoaded) { // Si el dataSet y el Classifier ya estaban guardados
+				// Entonces guardar mlChannel en la base de datos
+				mlChServ.save(mlChannel);
+			}
+			else { // Si el dataSet y el Classifier NO estaban guardados
+				// Entonces guardar mlChannel en la base de datos y los ficheros de dataSet y Classifier
+				mlChServ.saveAndSaveFiles(mlChannel);
+			}
 			if (ch != null) {
 				// Añadir a los MlChannel en curso
 				
@@ -92,21 +102,11 @@ public class RtmpSpyingLaunchService {
 	
 	private void loadFileListGroup(File[] fList, MLChannel mlChannel, boolean truth) {
 		for (File imgFile: fList) {
-//    		InputStream imgFileInputStream;
 			try {
-//				imgFileInputStream = new FileInputStream(imgFile);
-//				byte[] imgData = IOUtils.toByteArray(imgFileInputStream);
 				Mat imgMat = Highgui.imread(imgFile.getAbsolutePath(), Highgui.CV_LOAD_IMAGE_GRAYSCALE);
 				byte[] imgData = CvUtils.getByteArrayFromMat(imgMat);
-//				Highgui.imwrite("imgMat1.jpeg", imgMat);
-//				Highgui.imwrite("imgMat2.jpeg", CvUtils.getGrayScaleMatFromByteArray(
-//						imgData, imgMat.cols(), imgMat.rows()));
 				Blob blob = new Blob(imgData, mlChannel);
-				// DEBUG
-//				Highgui.imwrite("imOut1.jpeg", imgMat);
-//				Highgui.imwrite("imOut2.jpeg", CvUtils.getGrayScaleMatFromByteArray(
-//						imgData, blob.getBlobCols(), blob.getBlobRows()));
-	    		mlChannel.getArffObject().addSample(blob, truth);
+				mlChannel.addSample(blob, truth);
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 			} catch (IOException e) {

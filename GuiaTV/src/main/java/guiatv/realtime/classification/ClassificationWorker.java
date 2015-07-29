@@ -15,6 +15,7 @@ import guiatv.persistence.domain.RtSchedule;
 import guiatv.persistence.domain.RtSchedule.InstantState;
 import guiatv.persistence.domain.Schedule;
 import guiatv.persistence.domain.RtSchedule.EventType;
+import guiatv.persistence.domain.helper.ArffHelper;
 
 import org.apache.log4j.Logger;
 import org.opencv.core.Core;
@@ -45,13 +46,14 @@ public class ClassificationWorker {
 	//		logger.debug("Classifying blob from "+blob.getMlChannel().getChannel().getIdChBusiness());
 			rtSched = new RtSchedule(blob.getMlChannel().getChannel(), 
 									new Timestamp(new Date().getTime()));
-			
-			// DEBUG
-			Highgui.imwrite("img.jpeg", CvUtils.getGrayMatFromByteArray(
-					blob.getBlob(), blob.getBlobCols(), blob.getBlobRows()));
+//			// DEBUG
+//			Highgui.imwrite("img.jpeg", CvUtils.getGrayMatFromByteArray(
+//					blob.getBlob(), blob.getBlobCols(), blob.getBlobRows()));
 						
-			Instance instance = blob.getMlChannel().getArffObject().getUnlabeledInstance(blob);
-			double classifyVal = blob.getMlChannel().getArffObject().getTrainedClassifier().classifyInstance(instance);
+			Instance instance = ArffHelper.getUnlabeledInstance(blob.getMlChannel().getDataSet(), blob);
+//			blob.getMlChannel().getArffObject().getUnlabeledInstance(blob);
+			double classifyVal = blob.getMlChannel().getTrainedClassifier().classifyInstance(instance);
+//			double classifyVal = blob.getMlChannel().getArffObject().getTrainedClassifier().classifyInstance(instance);
 			if (classifyVal == 0) {
 				rtSched.setState(InstantState.ON_PROGRAMME);
 				logger.debug(blob.getMlChannel().getChannel().getIdChBusiness()+

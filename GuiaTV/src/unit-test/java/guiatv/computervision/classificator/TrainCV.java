@@ -1,6 +1,6 @@
 package guiatv.computervision.classificator;
 
-import guiatv.persistence.domain.ArffObject;
+import guiatv.persistence.domain.helper.ArffHelper;
 
 import java.io.File;
 import java.io.IOException;

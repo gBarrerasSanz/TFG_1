@@ -1,10 +1,22 @@
 package guiatv.persistence.domain;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.util.List;
 
 import guiatv.catalog.serializers.ScheduleChannelSerializer;
+import guiatv.common.CommonUtility;
 import guiatv.computervision.CvUtils;
+import guiatv.persistence.domain.RtSchedule.InstantState;
 import guiatv.persistence.domain.Schedule.CustomSchedule;
+import guiatv.persistence.domain.helper.ArffHelper;
 import guiatv.schedule.publisher.SchedulePublisher;
 
 import javax.persistence.Column;
@@ -18,6 +30,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
 
 import org.opencv.core.Mat;
@@ -31,7 +44,12 @@ import weka.classifiers.bayes.NaiveBayesUpdateable;
 import weka.core.FastVector;
 import weka.core.Instance;
 import weka.core.Instances;
+import weka.core.converters.ArffLoader;
+import weka.core.converters.ArffSaver;
+
 import org.opencv.highgui.Highgui;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 
 @Entity(name = "mlchannel")
 @Table(uniqueConstraints={@UniqueConstraint(columnNames = {"channel_fk", "streamSource_fk"})})
@@ -46,12 +64,11 @@ public class MLChannel {
 	@JoinColumn(name="channel_fk", referencedColumnName="idChPersistence")
 	private Channel channel;
 	
-	@OneToOne(targetEntity=ArffObject.class, fetch=FetchType.LAZY)
-	@JoinColumn(name="arffObject_fk", referencedColumnName="idArffPersistence")
-	private ArffObject arffObject;
+	@Column(name="trainedClassifierUri", nullable=true)
+	private String trainedClassifierUri;
 	
-//	@Column(name="trainedClassifier", nullable=true)
-//	private NaiveBayesUpdateable trainedClassifier;
+	@Column(name="dataSetUri", nullable=true)
+	private String dataSetUri;
 	
 	@Column(name="imgCols", nullable=false)
 	private int imgCols;
@@ -72,35 +89,27 @@ public class MLChannel {
 	@OneToMany(targetEntity=Blob.class, mappedBy="mlChannel", fetch=FetchType.LAZY, orphanRemoval=true)
 	private List<StreamSource> listRoiBlobs;
 	
-//	@Column(name="numTrainData", nullable=false)
-//	private int numTrainData;
+	@Transient
+	private NaiveBayesUpdateable trainedClassifier;
 	
-//	private static FastVector pixelAttVals;
-//	private static FastVector classAttVals;
+	@Transient
+	private Instances dataSet;
+	
+//	@Transient
+//	private InstantState currentState;
 	
 	public MLChannel() {
 	}
 	
-	public MLChannel(Channel channel, StreamSource streamSource, ArffObject arffObject,
+	public MLChannel(Channel channel, StreamSource streamSource,
 			int imgCols, int imgRows, int[] topLeft, int[] botRight) {
 		
 		this.channel = channel;
 		this.streamSource = streamSource;
-		this.arffObject = arffObject;
 		this.imgCols = imgCols;
 		this.imgRows = imgRows;
 		this.topLeft = topLeft;
 		this.botRight = botRight;
-//		this.numTrainData = 0;
-		
-//		// Miembros estáticos
-//		pixelAttVals = new FastVector(2);
-//		pixelAttVals.addElement("b");
-//		pixelAttVals.addElement("w");
-//		
-//		classAttVals = new FastVector(2);
-//		classAttVals.addElement("true");
-//		classAttVals.addElement("false");
 	}
 	
     /**********************************************************
@@ -114,22 +123,6 @@ public class MLChannel {
 	public void setChannel(Channel channel) {
 		this.channel = channel;
 	}
-
-	public ArffObject getArffObject() {
-		return arffObject;
-	}
-
-	public void setArffObject(ArffObject arffObject) {
-		this.arffObject = arffObject;
-	}
-
-//	public NaiveBayesUpdateable getTrainedClassifier() {
-//		return trainedClassifier;
-//	}
-//
-//	public void setTrainedClassifier(NaiveBayesUpdateable trainedClassifier) {
-//		this.trainedClassifier = trainedClassifier;
-//	}
 
 	public int[] getTopLeft() {
 		return topLeft;
@@ -183,63 +176,109 @@ public class MLChannel {
 		return idMlChPersistence;
 	}
 	
-//	public int getNumTrainData() {
-//		return numTrainData;
-//	}
-//
-//	public void setNumTrainData(int numTrainData) {
-//		this.numTrainData = numTrainData;
-//	}
+	public boolean loadDataSet() {
+		try { 
+			ArffLoader loader = new ArffLoader();
+			loader.setFile(CommonUtility.getFileFromRelativeUri(dataSetUri));
+			dataSet = loader.getDataSet();
+			dataSet.setClassIndex(dataSet.numAttributes()-1);
+			return true;
+		} catch (IOException e) {
+//			e.printStackTrace();
+			return false;
+		}
+	}
+	
+	public boolean loadTrainedClassifier() {
+		try {
+			InputStream is = new FileInputStream(CommonUtility.getFileFromRelativeUri(trainedClassifierUri));
+			ObjectInputStream objectInputStream = new ObjectInputStream(is);
+			trainedClassifier = (NaiveBayesUpdateable) objectInputStream.readObject();
+			objectInputStream.close();
+			return true;
+		} catch (IOException e) {
+//			e.printStackTrace();
+			return false;
+		} catch (ClassNotFoundException e) {
+//			e.printStackTrace();
+			return false;
+		}
 
-//	public void updateClassifier(List<Instance> lInstances) {
-//		for (Instance instance: lInstances) {
-//			try {
-//				trainedClassifier.updateClassifier(instance);
-//			} catch (Exception e) {
-//				e.printStackTrace();
-//			}
-//		}
-//	}
-//	
-//	public void updateClassifier(Instance instance) {
-//		try {
-//			trainedClassifier.updateClassifier(instance);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//	}
-//	
-//	public void setupClassifierNaiveBayesUpdateable(Blob blob) {
-//		trainedClassifier = new NaiveBayesUpdateable();
-//		arffObject = new ArffObject();
-//		arffObject.setupAtts(blob);
-//		Instances instances = arffObject.getData();
-//		try {
-//			trainedClassifier.buildClassifier(instances);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//	}
-//	
-//	public void addSample(Blob blob, boolean truth) {
-//		// Se saca el objecto mat del blob
-//		Mat img = CvUtils.getMatFromByteArray(blob.getBlob(), blob.getBlobCols(), blob.getBlobRows());
-//		// Se binariza la imagen 
-//		CvUtils.threshold(img);
-//		// Se obtiene el array de bytes de la imagen binarizada
-//		byte[] binBlob = CvUtils.getByteArrayFromMat(img);
-//		
-//		if (numTrainData == 0) {
-//			setupClassifierNaiveBayesUpdateable(blob);
-//		}
-//		
-//		int numAtts = arffObject.getData().numAttributes();
-//		double[] vals = new double[numAtts];
-//		for (int i=0; i < blob.getBlob().length; i++) {
-//			String val = (binBlob[i] == 0) ? "b" : "w";
-//			vals[i] = pixelAttVals.indexOf(val);
-//		}
-//		vals[numAtts-1] = classAttVals.indexOf(String.valueOf(truth));
-//		updateClassifier(new Instance(1.0, vals));
-//	}
+	}
+	
+	public void saveDataSet() {
+		ArffSaver saver = new ArffSaver();
+		saver.setInstances(dataSet);
+		try {
+			CommonUtility.createFileFromClassPathUriIfDoesNotExists(dataSetUri);
+			saver.setFile(CommonUtility.getFileFromRelativeUri(dataSetUri));
+			saver.writeBatch();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void saveTrainedClassifier() {
+		OutputStream os;
+		try {
+			CommonUtility.createFileFromClassPathUriIfDoesNotExists(trainedClassifierUri);
+			os = new FileOutputStream(CommonUtility.getFileFromRelativeUri(trainedClassifierUri));
+			ObjectOutputStream objectOutputStream = new ObjectOutputStream(os);
+			objectOutputStream.writeObject(trainedClassifier);
+			objectOutputStream.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+
+	}
+	
+	public void saveAndReleaseDataSet() {
+		saveDataSet();
+		dataSet = null; // Dejar que el recolector haga su trabajo
+	}
+	
+	public void saveAndReleaseTrainedClassifier() {
+		saveTrainedClassifier();
+		trainedClassifier = null; // Dejar que el recolector haga su trabajo
+	}
+
+	public NaiveBayesUpdateable getTrainedClassifier() {
+		return trainedClassifier;
+	}
+
+	public Instances getDataSet() {
+		return dataSet;
+	}
+	
+	public void createDataSetUri() {
+		dataSetUri = "META-INF/MLChannels/fileArff/"
+				+channel.getIdChBusiness()+"/dataSet.arff";
+	}
+	
+	public void createTrainedClassifierUri() {
+		trainedClassifierUri = "META-INF/MLChannels/trainedClassifier/"
+				+channel.getIdChBusiness()+"/trainedClassifier.model";
+	}
+	
+	public void addSample(Blob blob, boolean truth) 
+	{
+		if (dataSet == null) {
+			// TODO: Asumo que si dataSet == null, entonces trainedClassifier == null. NO SÉ SI SE CUMPLE SIEMPRE O NO
+			dataSet = ArffHelper.createInstancesObject(blob);
+			trainedClassifier = ArffHelper.createClassifierNaiveBayesUpdateable(dataSet, blob);
+		}
+		Instance newInstance = ArffHelper.getLabeledInstance(dataSet, blob, truth);
+		if (dataSet.checkInstance(newInstance)) {
+//			data.add(newInstance); // TODO: No sé si hace falta (Ni se si hace falta conservar todas las muestras en data)
+			newInstance.setDataset(dataSet);
+		}
+		else {
+			throw new IllegalArgumentException("newInstance IS NOT compatible with DataSet data");
+		}
+		ArffHelper.updateClassifier(trainedClassifier, newInstance);
+	}
+	
 }
