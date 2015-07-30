@@ -113,7 +113,7 @@ public class XMLTVGrabber {
 				String readLine = null;
 		        while ((readLine = in.readLine()) != null) {
 		        	// ELIMINAR LOS CARACTERES NO-ASCII (http://stackoverflow.com/questions/2869072/remove-non-utf-8-characters-from-xml-with-declared-encoding-utf-8-java)
-		        	readLine = readLine.replaceAll("[^\\x20-\\x7e]", "");
+//		        	readLine = readLine.replaceAll("[^\\x20-\\x7e]", "");
 		        	out.write(readLine+"\n");
 //		        	logger.debug(readData.toString());
 		        }

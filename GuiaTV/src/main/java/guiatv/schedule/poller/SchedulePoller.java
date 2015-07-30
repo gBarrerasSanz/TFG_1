@@ -19,7 +19,8 @@ public class SchedulePoller {
 	ScheduleService schedServ;
 	
 	private final int SECS_PER_MIN = 60;
-	private final int SECONDS_FROM_START = SECS_PER_MIN * 100; // 2 min
+	/** CONFIGURATION PARAMS */
+	private final int SECONDS_FROM_START = SECS_PER_MIN * 10; // 5 min
 	
 	public List<Schedule> askForSchedules() {
 		List<Schedule> lSched = schedServ.findByPublishedFalseAndSecondsFromStart(SECONDS_FROM_START);

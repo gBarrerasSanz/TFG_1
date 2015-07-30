@@ -148,4 +148,14 @@ public class RtSchedule implements Serializable {
 		this.programme = programme;
 	}
 	
+	@Override
+	public String toString() {
+		return "Schedule {"+
+				"channel="+mlChannel.getChannel().getIdChBusiness()+", "+
+				"programme="+programme.getNameProg()+", "+
+				"instant="+instant+", "+
+				"state="+state+
+				"}";
+	}
+	
 }

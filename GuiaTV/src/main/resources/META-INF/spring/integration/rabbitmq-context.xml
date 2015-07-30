@@ -4,7 +4,7 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/rabbit http://www.springframework.org/schema/rabbit/spring-rabbit-1.4.xsd">
 
-    <rabbit:connection-factory id="connectionFactory" virtual-host="/" username="user" password="userp" port="5672"/>
+    <rabbit:connection-factory id="connectionFactory" virtual-host="/" username="guest" password="guest" port="5672"/>
     <rabbit:template id="amqpTemplate" connection-factory="connectionFactory"/>
     <rabbit:admin connection-factory="connectionFactory"/>
 
