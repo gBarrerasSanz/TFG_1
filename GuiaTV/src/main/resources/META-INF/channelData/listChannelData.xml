@@ -12,7 +12,7 @@
 			<cols>1197</cols>
 			<rows>666</rows>
 		</botRight>
-		<active>true</active>
+		<active>false</active>
 		<batchDataUri>captures/01_a1/goodSamples/</batchDataUri>
 	</channelData>
 	<channelData id="antena-3-839.laguiatv.com">
@@ -49,7 +49,6 @@
 		<active>false</active>
 		<batchDataUri>captures/05_a5/goodSamples/</batchDataUri>
 	</channelData>
-	<!-- La Sexta NO FUNCIONA -->
 	<channelData id="la-sexta-782.laguiatv.com">
 		<chIdBusiness>la-sexta-782.laguiatv.com</chIdBusiness>
 		<url>http://a3live-lh.akamaihd.net/i/lasexta/lasexta_1@35272/master.m3u8</url>
@@ -108,12 +107,12 @@
 		<cols>1280</cols>
 		<rows>720</rows>
 		<topLeft>
-			<cols>975</cols>
-			<rows>46</rows>
+			<cols>1110</cols>
+			<rows>50</rows>
 		</topLeft>
 		<botRight>
-			<cols>1033</cols>
-			<rows>106</rows>
+			<cols>1164</cols>
+			<rows>107</rows>
 		</botRight>
 		<active>false</active>
 		<batchDataUri>captures/10_aAragon/goodSamples/</batchDataUri>

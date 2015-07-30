@@ -48,6 +48,7 @@ public class Blob {
 		// Extraer ROI
 		Mat imgMat = CvUtils.getGrayMatFromByteArray(img, mlChannel.getImgCols(), mlChannel.getImgRows());
 		Mat roiMat = CvUtils.getRoiFromMat(imgMat, mlChannel.getTopLeft(), mlChannel.getBotRight());
+		Highgui.imwrite("aragon.jpeg", roiMat);
 		this.blobCols = roiMat.cols();
 		this.blobRows = roiMat.rows();
 		this.blob = CvUtils.getByteArrayFromMat(roiMat);

@@ -101,7 +101,9 @@ public class RtSchedule implements Serializable {
 	@JsonView({SchedulePublisher.PublisherRtScheduleView.class})
 	private InstantState state;
 	
-    
+	@JsonView({SchedulePublisher.PublisherRtScheduleView.class})
+    private Programme programme;
+	
     /**********************************************************
      * 					GETTERS / SETTERS
      *********************************************************/
@@ -130,20 +132,20 @@ public class RtSchedule implements Serializable {
 		this.instant = instant;
 	}
 
-//	public EventType getType() {
-//		return type;
-//	}
-//
-//	public void setType(EventType type) {
-//		this.type = type;
-//	}
-
 	public InstantState getState() {
 		return state;
 	}
 
 	public void setState(InstantState state) {
 		this.state = state;
+	}
+
+	public Programme getProgramme() {
+		return programme;
+	}
+
+	public void setProgramme(Programme programme) {
+		this.programme = programme;
 	}
 	
 }

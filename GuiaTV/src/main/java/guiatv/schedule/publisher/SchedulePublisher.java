@@ -5,6 +5,7 @@ import guiatv.common.CommonUtility;
 import guiatv.persistence.domain.Programme;
 import guiatv.persistence.domain.RtSchedule;
 import guiatv.persistence.domain.Schedule;
+import guiatv.persistence.repository.service.ProgrammeService;
 import guiatv.persistence.repository.service.ScheduleService;
 
 import java.io.IOException;
@@ -56,6 +57,9 @@ public class SchedulePublisher {
 	@Autowired
 	ScheduleService schedServ;
 	
+	@Autowired
+	ProgrammeService progServ;
+	
 	public void publishListSchedules(Message<List<Schedule>> listSchedMsg ) {
 		List<Schedule> nonPublishedSched = new ArrayList<Schedule>();
 		String routKey = null;
@@ -95,28 +99,37 @@ public class SchedulePublisher {
 //		schedServ.delete(publishedSched);
 	}
 	
-	public void publishRtSchedule(Message<RtSchedule> rtScheduleMsg, Programme prog) {
+	public void publishRtSchedule(Message<RtSchedule> rtScheduleMsg) {
 		RtSchedule rtSched = rtScheduleMsg.getPayload();
-		String routKey = null;
-		try {
-			assert(rtSched != null);
-			routKey = prog.getHashNameProg();
-			ObjectMapper mapper = new ObjectMapper();
-			mapper.disable(MapperFeature.DEFAULT_VIEW_INCLUSION);
-	        mapper.setConfig(mapper.getSerializationConfig()
-	                .withView(PublisherRtScheduleView.class));
-			String rtSchedJsonString = mapper.writeValueAsString(rtSched);
-//			schedJson = StringEscapeUtils.unescapeJava(schedJson);
-			amqpTmp.convertAndSend(routKey, rtSchedJsonString);
-//			logger.debug("Published RtSchedule: "+rtSchedJsonString);
-			logger.debug("Published RtSchedule ("+rtSched.getMlChannel().getChannel().getIdChBusiness()+"): "
-					+prog.getNameProg()
-					+" -> "+rtSched.getState());
-			} catch (AmqpException e) {
-				logger.error("ERROR: Could NOT connect to RabbitMQ");
-			} catch(Exception e) {
-				e.printStackTrace();
-//				logger.error("ERROR: Unknown error");
-			}
+		// Determinar a qué programa afecta
+		Programme prog = progServ.findOneByChannelAndInstant(rtSched.getMlChannel().getChannel(), 
+				rtSched.getInstant());
+		if (prog != null) {
+			rtSched.setProgramme(prog);
+			String routKey = null;
+			try {
+				assert(rtSched != null);
+				routKey = rtSched.getProgramme().getHashNameProg();
+				ObjectMapper mapper = new ObjectMapper();
+				mapper.disable(MapperFeature.DEFAULT_VIEW_INCLUSION);
+		        mapper.setConfig(mapper.getSerializationConfig()
+		                .withView(PublisherRtScheduleView.class));
+				String rtSchedJsonString = mapper.writeValueAsString(rtSched);
+	//			schedJson = StringEscapeUtils.unescapeJava(schedJson);
+				amqpTmp.convertAndSend(routKey, rtSchedJsonString);
+	//			logger.debug("Published RtSchedule: "+rtSchedJsonString);
+				logger.debug("Published RtSchedule ("+rtSched.getMlChannel().getChannel().getIdChBusiness()+"): "
+						+rtSched.getProgramme().getNameProg()
+						+" -> "+rtSched.getState());
+				} catch (AmqpException e) {
+					logger.error("ERROR: Could NOT connect to RabbitMQ");
+				} catch(Exception e) {
+					e.printStackTrace();
+	//				logger.error("ERROR: Unknown error");
+				}
+		}
+		else {
+			logger.error("RtSchedule DOES NOT contain any programme");
+		}
 	}
 }

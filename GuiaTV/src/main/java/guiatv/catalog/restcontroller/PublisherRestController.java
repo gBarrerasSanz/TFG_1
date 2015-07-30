@@ -4,9 +4,12 @@ import guiatv.catalog.datatypes.Catalog;
 import guiatv.catalog.datatypes.ListChannels;
 import guiatv.catalog.datatypes.ListProgrammes;
 import guiatv.persistence.domain.Channel;
+import guiatv.persistence.domain.MLChannel;
 import guiatv.persistence.domain.Programme;
 import guiatv.persistence.domain.Programme.MultipleProgrammes;
 import guiatv.persistence.domain.Programme.SingleProgramme;
+import guiatv.persistence.domain.RtSchedule;
+import guiatv.persistence.domain.RtSchedule.InstantState;
 import guiatv.persistence.domain.Schedule.CustomSchedule;
 import guiatv.persistence.domain.Schedule;
 import guiatv.persistence.repository.ChannelRepository;
@@ -135,5 +138,35 @@ public class PublisherRestController {
 		return response;
 	}
 		
+	@RequestMapping(
+			value = "/rtSchedules/", 
+			method = RequestMethod.GET)
+	@JsonView(Schedule.CustomSchedule.class)
+	public ResponseEntity<RtSchedule> publishSchedulesByHashIdChBusinessAndHashNameProgAndStartAndEnd(
+			@RequestParam(value="hashIdChBusiness", defaultValue="", required=false) String hashIdChBusiness)
+	{
+		ResponseEntity<RtSchedule> response;
+		ResponseEntity<RtSchedule> errorResp = new ResponseEntity<RtSchedule>(
+				new RtSchedule(), HttpStatus.BAD_REQUEST);
 		
+		if (hashIdChBusiness.length()>0) {
+			Channel ch = chServ.findByHashIdChBusiness(hashIdChBusiness, true);
+			MLChannel mlChannel = new MLChannel();
+			mlChannel.setChannel(ch);
+			RtSchedule rtSched = new RtSchedule();
+			rtSched.setMlChannel(mlChannel);
+			rtSched.setInstant(new Timestamp(new Date().getTime()));
+			rtSched.setState(InstantState.ON_PROGRAMME);
+			/********************************************
+			 * PUBLICAR RTSCHEDULE
+			 *******************************************/
+			Message<RtSchedule> rtSchedMsg = MessageBuilder.withPayload(rtSched).build();
+			publisher.publishRtSchedule(rtSchedMsg);
+			response = new ResponseEntity<RtSchedule>(rtSched, HttpStatus.OK);
+		}
+		else {
+			response = errorResp;
+		}
+		return response;
+	}
 }

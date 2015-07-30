@@ -23,11 +23,21 @@
         var table = $('#tableProgrammes');       
         var url = 'http://localhost:8080/catalog/schedules/?hashNameProg='+hashNameProg; 
         $.getJSON(url, function (jsonContent) {
-           $.each(jsonContent, function(idx, elem){
+        	var rtAdded = false;
+           	$.each(jsonContent, function(idx, elem){
         	   	var linkChannel = elem._links.channel.href;
         	   	var linkProgramme = elem._links.programme.href;
         	   	var hashIdChBusiness = getHashFromLink(linkChannel);
         	   	var hashNameProg = getHashFromLink(linkProgramme);
+        	   	
+        	 	// Añadir RtSchedule
+                if ( ! rtAdded ) { 
+                	var linkRt = 'http://localhost:8080/publisher/rtSchedules/?'
+                    	+'hashIdChBusiness='+hashIdChBusiness;
+                	table.append('<tr><td><h2><a href="'+linkRt+'">Send RtSchedule now, '+
+                 		   'channel '+hashIdChBusiness+'</a></h2></td></tr>'); 
+                	rtAdded = true;
+        	   	}
         	   	
                 var link = 'http://localhost:8080/publisher/schedules/?'
                 	+'hashIdChBusiness='+hashIdChBusiness
@@ -35,8 +45,11 @@
                 	+'&amp;start='+elem.start
                 	+'&amp;end='+elem.end;
                 table.append('<tr><td><strong><a href="'+link+'">'+
-                		elem.start+' ---- '+elem.end+'</a></strong></td></tr>');    
+                		elem.start+' ---- '+elem.end+'</a></strong></td></tr>'); 
             });
+          
+           
+           
         });
     }
     </script>

@@ -36,15 +36,8 @@ public class RealtimeBrain {
 		boolean mustNotify = mlChannel.addRtSched(rtSched);
 		
 		if (mustNotify) {
-			// Determinar a qué programa afecta
-			Programme prog = progServ.findOneByChannelAndInstant(rtSched.getMlChannel().getChannel(), rtSched.getInstant());
-			if (prog != null) {
-				Message<RtSchedule> rtSchedMsg = MessageBuilder.withPayload(rtSched).build();
-				schedPublisher.publishRtSchedule(rtSchedMsg, prog);
-			}
-			else {
-				// Descartar
-			}
+			Message<RtSchedule> rtSchedMsg = MessageBuilder.withPayload(rtSched).build();
+			schedPublisher.publishRtSchedule(rtSchedMsg);
 		}
 		else { // send == false
 			// Descartar
