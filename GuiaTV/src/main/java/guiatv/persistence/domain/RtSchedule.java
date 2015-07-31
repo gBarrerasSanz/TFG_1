@@ -3,15 +3,15 @@ package guiatv.persistence.domain;
 import guiatv.catalog.serializers.ScheduleChannelSerializer;
 import guiatv.catalog.serializers.ScheduleProgrammeSerializer;
 import guiatv.catalog.serializers.TimestampDateSerializer;
+import guiatv.common.CommonUtility;
 import guiatv.persistence.domain.Schedule.CustomSchedule;
 import guiatv.schedule.publisher.SchedulePublisher;
 import guiatv.schedule.publisher.SchedulePublisher.PublisherScheduleView;
 
 import java.io.Serializable;
-import java.sql.Date;
-import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -91,8 +91,9 @@ public class RtSchedule implements Serializable {
 	
 //	@Column(name = "instant", nullable = false)
 	@JsonView({SchedulePublisher.PublisherRtScheduleView.class})
-	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss a z")
-	private Timestamp instant;
+	@Temporal(TemporalType.TIMESTAMP)
+	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern=CommonUtility.zonedDateFormat)
+	private Date instant;
 	
 ////	@Column(name = "type", nullable = false)
 //	@JsonView({SchedulePublisher.PublisherRtScheduleView.class})
@@ -110,7 +111,7 @@ public class RtSchedule implements Serializable {
 	public RtSchedule() {
 	}
 
-	public RtSchedule(MLChannel mlChannel, Timestamp instant) {
+	public RtSchedule(MLChannel mlChannel, Date instant) {
     	this.mlChannel = mlChannel;
     	this.instant = instant;
 //    	this.type = EventType.UNKNOWN;
@@ -124,11 +125,11 @@ public class RtSchedule implements Serializable {
 		this.mlChannel = mlChannel;
 	}
 
-	public Timestamp getInstant() {
+	public Date getInstant() {
 		return instant;
 	}
 
-	public void setInstant(Timestamp instant) {
+	public void setInstant(Date instant) {
 		this.instant = instant;
 	}
 

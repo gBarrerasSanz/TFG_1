@@ -22,6 +22,12 @@
     function populateProgrammeSchedules(){  
         var table = $('#tableProgrammes');       
         var url = 'http://localhost:8080/catalog/schedules/?hashNameProg='+hashNameProg; 
+        
+        var progUrl = 'http://localhost:8080/catalog/programmes/'+hashNameProg; 
+        $.getJSON(progUrl, function (programme) {
+        	var nameProg = programme.nameProg;
+        	$("#title2").text("Lista de schedules de programa "+nameProg);
+        });
         $.getJSON(url, function (jsonContent) {
         	var rtAdded = false;
            	$.each(jsonContent, function(idx, elem){
@@ -43,7 +49,8 @@
                 	+'hashIdChBusiness='+hashIdChBusiness
                 	+'&amp;hashNameProg='+hashNameProg
                 	+'&amp;start='+elem.start
-                	+'&amp;end='+elem.end;
+                	+'&amp;end='+elem.end
+                	+'&amp;preConvertDates=true';
                 table.append('<tr><td><strong><a href="'+link+'">'+
                 		elem.start+' ---- '+elem.end+'</a></strong></td></tr>'); 
             });
@@ -53,10 +60,10 @@
         });
     }
     </script>
-    <title>Lista de programas</title>
+    <title>Lista de schedules</title>
 </head>
 <body>
-    <h1>Lista de programas</h1>
+    <h1><span id="title2"></span></h1>
     <table id='tableProgrammes'></table>
 	<script>
 	populateProgrammeSchedules();

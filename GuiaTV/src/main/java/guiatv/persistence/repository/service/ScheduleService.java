@@ -1,6 +1,5 @@
 package guiatv.persistence.repository.service;
 
-import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
@@ -134,7 +133,7 @@ public class ScheduleService {
 	}
 	
 	@Transactional(readOnly = true)
-	public List<Schedule> findByChannelAndProgrammeAndStartGreaterOrEqualThan(Channel ch, Programme prog, Timestamp start, boolean refs) {
+	public List<Schedule> findByChannelAndProgrammeAndStartGreaterOrEqualThan(Channel ch, Programme prog, Date start, boolean refs) {
 		List<Schedule> lSched = schedRep.findByChannelAndProgrammeAndStartGreaterOrEqualThan(ch, prog, start);
 		if (refs){
 			for (Schedule sched: lSched) {
@@ -158,7 +157,7 @@ public class ScheduleService {
 	}
 	
 	@Transactional(readOnly = true)
-	public List<Schedule> findByChannelAndProgrammeAndEndLessThan(Channel ch, Programme prog, Timestamp end, boolean refs) {
+	public List<Schedule> findByChannelAndProgrammeAndEndLessThan(Channel ch, Programme prog, Date end, boolean refs) {
 		List<Schedule> lSched = schedRep.findByChannelAndProgrammeAndEndLessThanOrderByStartAsc(ch, prog, end);
 		if (refs){
 			for (Schedule sched: lSched) {
@@ -175,8 +174,8 @@ public class ScheduleService {
 	 */
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public List<Schedule> findByPublishedFalseAndSecondsFromStart(int secsFromStart) {
-		Timestamp now = new Timestamp(new Date().getTime());
-		Timestamp afterStart = new Timestamp(now.getTime() + (long)(1000 * secsFromStart));
+		Date now = new Date();
+		Date afterStart = new Date(now.getTime() + ((long)(1000 * secsFromStart)));
 		List<Schedule> lSched = 
 				schedRep.findByStartBetweenAndPublishedFalseOrStartBeforeAndEndAfterAndPublishedFalseOrderByStartAsc(
 						now, afterStart, now, now);
@@ -196,7 +195,7 @@ public class ScheduleService {
 	
 	@Transactional(readOnly = true)
     public Schedule findByChannelAndProgrammeAndStartAndEnd(Channel ch, 
-    		Programme prog, Timestamp start, Timestamp end) {
+    		Programme prog, Date start, Date end) {
 		return schedRep.findByChannelAndProgrammeAndStartAndEnd(ch, 
 				prog, start, end);
     }

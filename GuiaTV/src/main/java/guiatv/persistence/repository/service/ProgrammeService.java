@@ -1,7 +1,7 @@
 package guiatv.persistence.repository.service;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import guiatv.catalog.datatypes.ListProgrammes;
@@ -52,7 +52,7 @@ public class ProgrammeService {
 	}
 	
 	@Transactional(readOnly = true)
-	public Programme findOneByChannelAndInstant(Channel ch, Timestamp instant) {
+	public Programme findOneByChannelAndInstant(Channel ch, Date instant) {
 //		Programme prog = schedRep.findOneByChannelAndInstant(ch, instant);
 		List<Schedule> lSched2 = schedRep.findByChannelOrderByStartAsc(ch);
 		List<Schedule> lSched3 = new ArrayList<Schedule>();

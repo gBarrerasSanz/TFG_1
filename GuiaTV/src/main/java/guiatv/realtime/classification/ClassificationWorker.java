@@ -3,7 +3,6 @@ package guiatv.realtime.classification;
 import java.io.File;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.sql.Timestamp;
 import java.util.Date;
 
 import guiatv.common.datatypes.Frame_OLD;
@@ -43,8 +42,7 @@ public class ClassificationWorker {
 		RtSchedule rtSched = null;
 		try {
 	//		logger.debug("Classifying blob from "+blob.getMlChannel().getChannel().getIdChBusiness());
-			rtSched = new RtSchedule(blob.getMlChannel(), 
-									new Timestamp(new Date().getTime()));
+			rtSched = new RtSchedule(blob.getMlChannel(), new Date());
 //			// DEBUG
 //			Highgui.imwrite("img.jpeg", CvUtils.getGrayMatFromByteArray(
 //					blob.getBlob(), blob.getBlobCols(), blob.getBlobRows()));

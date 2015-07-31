@@ -6,7 +6,6 @@ import guiatv.persistence.domain.Programme;
 import guiatv.persistence.domain.Schedule;
 
 import java.io.File;
-import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -96,8 +95,8 @@ public class XMLTVTransformer implements Transformer {
 					String idChBusiness = schedNodeMap.getNamedItem("channel").getNodeValue();
 					sched.setChannel(mapCh.get(idChBusiness));
 					sched.setProgramme(mapProg.get(nameProg));
-					sched.setStart(CommonUtility.strToTimestamp(schedNodeMap.getNamedItem("start").getNodeValue()));
-					sched.setEnd(CommonUtility.strToTimestamp(schedNodeMap.getNamedItem("stop").getNodeValue()));
+					sched.setStart(CommonUtility.xmltvFormatToDate(schedNodeMap.getNamedItem("start").getNodeValue()));
+					sched.setEnd(CommonUtility.xmltvFormatToDate(schedNodeMap.getNamedItem("stop").getNodeValue()));
 					
 					/**
 					 * Añadir el schedule siempre que el horario sea NO pasado

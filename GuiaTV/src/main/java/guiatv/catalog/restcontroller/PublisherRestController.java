@@ -3,6 +3,7 @@ package guiatv.catalog.restcontroller;
 import guiatv.catalog.datatypes.Catalog;
 import guiatv.catalog.datatypes.ListChannels;
 import guiatv.catalog.datatypes.ListProgrammes;
+import guiatv.common.CommonUtility;
 import guiatv.persistence.domain.Channel;
 import guiatv.persistence.domain.MLChannel;
 import guiatv.persistence.domain.Programme;
@@ -20,7 +21,6 @@ import guiatv.persistence.repository.service.ProgrammeService;
 import guiatv.persistence.repository.service.ScheduleService;
 import guiatv.schedule.publisher.SchedulePublisher;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -77,15 +77,15 @@ public class PublisherRestController {
 	public ResponseEntity<List<Schedule>> publishSchedulesByHashIdChBusinessAndHashNameProgAndStartAndEnd(
 			@RequestParam(value="hashIdChBusiness", defaultValue="", required=false) String hashIdChBusiness,
 			@RequestParam(value="hashNameProg", defaultValue="", required=false) String hashNameProg,
-			@RequestParam(value="start", defaultValue="", required=false) @DateTimeFormat(pattern="yyyy-MM-dd hh:mm:ss a z") Date startDate,
-			@RequestParam(value="end", defaultValue="", required=false) @DateTimeFormat(pattern="yyyy-MM-dd hh:mm:ss a z") Date endDate)
+			@RequestParam(value="start", defaultValue="", required=false) @DateTimeFormat(pattern=CommonUtility.zonedDateFormat) String startDate,
+			@RequestParam(value="end", defaultValue="", required=false) @DateTimeFormat(pattern=CommonUtility.zonedDateFormat) String endDate)
 	{
 		ResponseEntity<List<Schedule>> response;
 		ResponseEntity<List<Schedule>> errorResp = new ResponseEntity<List<Schedule>>(new ArrayList<Schedule>(), HttpStatus.BAD_REQUEST);
-		Timestamp start, end;
+		Date start, end;
 		try {
-			start = new Timestamp(startDate.getTime());
-			end = new Timestamp(endDate.getTime());
+			start = CommonUtility.strToDate(startDate);
+			end = CommonUtility.strToDate(endDate);
 		} catch(Exception e) {
 			start = null;
 			end = null;
@@ -100,8 +100,7 @@ public class PublisherRestController {
 			Channel ch = chServ.findByHashIdChBusiness(hashIdChBusiness, true);
 			Programme prog = progServ.findByHashNameProg(hashNameProg, true);
 			if (ch != null && prog != null) {
-				Schedule sched = schedServ.findByChannelAndProgrammeAndStartAndEnd(ch, prog, 
-						new Timestamp(start.getTime()), new Timestamp(end.getTime()));
+				Schedule sched = schedServ.findByChannelAndProgrammeAndStartAndEnd(ch, prog, start, end);
 				if(sched != null) { // Si se ha encontrado un schedule
 					List<Schedule> lSched = new ArrayList<Schedule>();
 					lSched.add(sched);
@@ -155,7 +154,7 @@ public class PublisherRestController {
 			mlChannel.setChannel(ch);
 			RtSchedule rtSched = new RtSchedule();
 			rtSched.setMlChannel(mlChannel);
-			rtSched.setInstant(new Timestamp(new Date().getTime()));
+			rtSched.setInstant(new Date());
 			rtSched.setState(InstantState.ON_PROGRAMME);
 			/********************************************
 			 * PUBLICAR RTSCHEDULE

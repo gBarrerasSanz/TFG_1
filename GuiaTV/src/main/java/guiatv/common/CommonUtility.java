@@ -37,15 +37,47 @@ public class CommonUtility {
 		SEC, MIN, HOUR
 	}
 	
+	public static final String plainDateFormat = "yyyy-MM-dd-HH:mm:ss";
+	public static final String zonedDateFormat = "yyyy-MM-dd-HH:mm:ss, zzzz";
+	private static final Locale SPAIN_LOCALE = new Locale("es","ES");
+	private static final SimpleDateFormat sdfXmltv = new SimpleDateFormat("yyyyMMddhhmmss Z", SPAIN_LOCALE);
+	private static final SimpleDateFormat zonedSdf = new SimpleDateFormat(zonedDateFormat, SPAIN_LOCALE);
+	private static final SimpleDateFormat plainSdf = new SimpleDateFormat(plainDateFormat);
 	
-	
-	public static Date strToDate(String str) {
-		final Locale SPAIN_LOCALE = new Locale("es","ES");
-		SimpleDateFormat format = new SimpleDateFormat("yyyyMMddhhmmss Z", SPAIN_LOCALE);
+	public static Date xmltvFormatToDate(String str) {
 		try {
-			return format.parse(str);
+			return sdfXmltv.parse(str);
 		} catch (ParseException e) {
 			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public static String dateToStr(Date date) {
+		return zonedSdf.format(date);
+	}
+	
+	public static String dateToPlainStr(Date date) {
+		return plainSdf.format(date);
+	}
+	
+	public static Date computeDateFromZonedDate(Date zonedDate) {
+		String newDateStr = zonedSdf.format(zonedDate);
+		Date newDate = null;
+		try {
+			newDate = zonedSdf.parse(newDateStr);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return newDate;
+	}
+	
+	public static Date strToDate(String strDate) {
+		try {
+			return zonedSdf.parse(strDate);
+		} catch (ParseException e) {
+//			e.printStackTrace();
 			return null;
 		}
 	}
@@ -57,7 +89,7 @@ public class CommonUtility {
 	}
 	
 	public static Timestamp strToTimestamp(String str) {
-		return new Timestamp(strToDate(str).getTime()); 
+		return new Timestamp(xmltvFormatToDate(str).getTime()); 
 	}
 	
 	public static boolean checkFileNameDate(String grabFileName, Date realDate) {

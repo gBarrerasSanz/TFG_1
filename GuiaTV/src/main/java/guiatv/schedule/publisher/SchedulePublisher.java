@@ -74,8 +74,8 @@ public class SchedulePublisher {
 //				logger.debug("Published Schedule: "+schedJson);
 				logger.debug("Published Sched ("+sched.getIdSched()+"): "+sched.getProgramme().getNameProg()
 						+ " ["+sched.getChannel().getIdChBusiness()+"]"
-						+" -> "+CommonUtility.timestampToString(sched.getStart())+
-						" --- "+CommonUtility.timestampToString(sched.getEnd())+
+						+" -> "+CommonUtility.dateToStr(sched.getStart())+
+						" --- "+CommonUtility.dateToStr(sched.getEnd())+
 						" ==> Published: "+sched.isPublished());
 			
 			} catch (AmqpException e) {

@@ -2,7 +2,6 @@ package guiatv.persistence;
 
 import static org.junit.Assert.*;
 
-import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
@@ -185,10 +184,10 @@ public class PersistenceTests extends AbstractTransactionalJUnit4SpringContextTe
 		Channel ch1 = new Channel("nameIdCh1");
 		Channel ch2 = new Channel("nameIdCh2");
 		ch1.computeHashIdChBusiness(); ch2.computeHashIdChBusiness();
-		Timestamp ts1 = new Timestamp(new Date().getTime());
-		Timestamp ts2 = new Timestamp(new Date().getTime());
-		Schedule sched1 = new Schedule(ch1, prog1, ts1, ts1);
-		Schedule sched2 = new Schedule(ch2, prog2, ts2, ts2);
+		Date date1 = new Date();
+		Date date2 = new Date();
+		Schedule sched1 = new Schedule(ch1, prog1, date1, date1);
+		Schedule sched2 = new Schedule(ch2, prog2, date2, date2);
 		schedRep.save(sched1);
 		schedRep.save(sched2);
 	}
@@ -200,10 +199,10 @@ public class PersistenceTests extends AbstractTransactionalJUnit4SpringContextTe
 		Programme prog2 = new Programme("nameProg1"); // El programme es el mismo
 		Channel ch1 = new Channel("nameIdCh1");
 		Channel ch2 = new Channel("nameIdCh2");
-		Timestamp ts1 = new Timestamp(new Date().getTime());
-		Timestamp ts2 = new Timestamp(new Date().getTime());
-		Schedule sched1 = new Schedule(ch1, prog1, ts1, ts1);
-		Schedule sched2 = new Schedule(ch2, prog2, ts2, ts2);
+		Date date1 = new Date();
+		Date date2 = new Date();
+		Schedule sched1 = new Schedule(ch1, prog1, date1, date1);
+		Schedule sched2 = new Schedule(ch2, prog2, date2, date2);
 		schedRep.save(sched1);
 		schedRep.save(sched2);
 	}

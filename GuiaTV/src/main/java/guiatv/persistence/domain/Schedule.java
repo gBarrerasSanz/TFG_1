@@ -3,14 +3,14 @@ package guiatv.persistence.domain;
 import guiatv.catalog.serializers.ScheduleChannelSerializer;
 import guiatv.catalog.serializers.ScheduleProgrammeSerializer;
 import guiatv.catalog.serializers.TimestampDateSerializer;
+import guiatv.common.CommonUtility;
 import guiatv.schedule.publisher.SchedulePublisher;
 import guiatv.schedule.publisher.SchedulePublisher.PublisherScheduleView;
 
 import java.io.Serializable;
-import java.sql.Date;
-import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -39,6 +39,7 @@ import org.springframework.hateoas.Link;
 import org.springframework.hateoas.ResourceSupport;
 import org.springframework.hateoas.ResourcesLinksVisible;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -87,17 +88,23 @@ public class Schedule extends ResourceSupport implements Serializable {
 	@JoinColumn(name="programme_fk", referencedColumnName="idProgPersistence")
 	protected Programme programme;
 	
-	@JsonView({CustomSchedule.class, SchedulePublisher.PublisherScheduleView.class})
-	@JsonSerialize(using=TimestampDateSerializer.class)
-	@JsonProperty // Creo que no hace falta con @JsonView
-	@Column(name = "start", nullable = false)
-	protected Timestamp start;
 	
+//	@JsonSerialize(using=TimestampDateSerializer.class)
+//	@JsonProperty // Creo que no hace falta con @JsonView
 	@JsonView({CustomSchedule.class, SchedulePublisher.PublisherScheduleView.class})
-	@JsonSerialize(using=TimestampDateSerializer.class)
+	@Column(name = "start", nullable = false)
+	@Temporal(TemporalType.TIMESTAMP)
+	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern=CommonUtility.zonedDateFormat)
+	protected Date start;
+	
+	
+//	@JsonSerialize(using=TimestampDateSerializer.class)
 	@JsonProperty // Creo que no hace falta con @JsonView
+	@JsonView({CustomSchedule.class, SchedulePublisher.PublisherScheduleView.class})
 	@Column(name = "end", nullable = false)
-	protected Timestamp end;
+	@Temporal(TemporalType.TIMESTAMP)
+	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern=CommonUtility.zonedDateFormat)
+	protected Date end;
 	
 	@Column(name = "published", nullable = false)
 	protected boolean published;
@@ -109,7 +116,7 @@ public class Schedule extends ResourceSupport implements Serializable {
 	public Schedule() {
 	}
 
-	public Schedule(Channel channel, Programme programme, Timestamp start, Timestamp end) {
+	public Schedule(Channel channel, Programme programme, Date start, Date end) {
     	this.channel = channel;
     	this.programme = programme;
     	this.start = start;
@@ -142,19 +149,20 @@ public class Schedule extends ResourceSupport implements Serializable {
 		this.programme = programme;
 	}
 
-	public Timestamp getStart() {
+	public Date getStart() {
+		
 		return start;
 	}
 
-	public Timestamp getEnd() {
+	public Date getEnd() {
 		return end;
 	}
 
-	public void setEnd(Timestamp end) {
+	public void setEnd(Date end) {
 		this.end = end;
 	}
 
-	public void setStart(Timestamp start) {
+	public void setStart(Date start) {
 		this.start = start;
 	}
 
@@ -243,10 +251,8 @@ public class Schedule extends ResourceSupport implements Serializable {
 		schedJson.put("programme", progJson);
 		
 		
-//		DateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-		DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss a z");
-		schedJson.put("start", df.format(new Date(start.getTime())));
-		schedJson.put("end", df.format(new Date(end.getTime())));
+		schedJson.put("start", CommonUtility.dateToPlainStr(start));
+		schedJson.put("end", CommonUtility.dateToPlainStr(end));
 		String schedString = schedJson.toJSONString();
 		return schedString;
 	}

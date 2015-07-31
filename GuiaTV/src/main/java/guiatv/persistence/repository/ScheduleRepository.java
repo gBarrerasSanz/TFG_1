@@ -1,6 +1,6 @@
 package guiatv.persistence.repository;
 
-import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.context.annotation.Profile;
@@ -32,7 +32,7 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long>,
 	
 	@Query("SELECT s FROM schedule s WHERE s.channel = ?1 AND s.programme = ?2 AND s.start >= ?3 ORDER BY s.start ASC")
 	List<Schedule> findByChannelAndProgrammeAndStartGreaterOrEqualThan(Channel ch, 
-			Programme prog, Timestamp start);
+			Programme prog, Date start);
 	
 //	@Query("SELECT s.programme FROM schedule s "
 //			+ "WHERE s.channel = ?1 AND s.start <= ?2 AND s.end >= ?2")
@@ -44,14 +44,14 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long>,
 	@Query("SELECT s.programme FROM schedule s "
 	+ "WHERE s.channel = ?1 AND s.start <= ?2 AND s.end >= ?2")
 	List<Schedule> findByChannelAndInstantBetweenStartAndEnd(
-			Channel ch, Timestamp instant);
+			Channel ch, Date instant);
 	
 	// DEBUG
-	Schedule findOneByStartBeforeAndEndAfter(Timestamp instant1, Timestamp instant2);
+	Schedule findOneByStartBeforeAndEndAfter(Date instant1, Date instant2);
 	
 	List<Schedule> findByProgramme(Programme prog);
 	
-	List<Schedule> findByChannelAndProgrammeAndEndLessThanOrderByStartAsc(Channel ch, Programme prog, Timestamp end);
+	List<Schedule> findByChannelAndProgrammeAndEndLessThanOrderByStartAsc(Channel ch, Programme prog, Date end);
 	
 	
 //	@Query("Select s from schedule s where s.start >= ?1 and s.end <= ?2")
@@ -59,7 +59,7 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long>,
 	
 	// Devolver los schedules con start en [start, end] o los schedules con (start < start2 AND end > start2) (schedules en curso)
 	
-	List<Schedule> findByStartBetweenAndPublishedFalseOrStartBeforeAndEndAfterAndPublishedFalseOrderByStartAsc(Timestamp start, Timestamp end, Timestamp start2, Timestamp start3);
+	List<Schedule> findByStartBetweenAndPublishedFalseOrStartBeforeAndEndAfterAndPublishedFalseOrderByStartAsc(Date start, Date end, Date start2, Date start3);
 	
 //	@Query("SELECT s from schedule s "
 //			+ "WHERE s.published >= false AND "
@@ -72,7 +72,7 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long>,
 //	@Query("Select s from Schedule s where s.channel=?1 and s.programme=?2 and s.start >= CURRENT_TIMESTAMP")
 //	List<Schedule> findByChannelAndProgrammeFromNow(Channel ch, Programme prog);
 	
-	Schedule findByChannelAndProgrammeAndStartAndEnd(Channel ch, Programme prog, Timestamp start, Timestamp end);
+	Schedule findByChannelAndProgrammeAndStartAndEnd(Channel ch, Programme prog, Date start, Date end);
 	
 	@Modifying
 	@Query("UPDATE schedule s SET s.published = true "
