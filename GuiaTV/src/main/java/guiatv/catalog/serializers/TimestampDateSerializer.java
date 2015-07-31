@@ -1,9 +1,12 @@
 package guiatv.catalog.serializers;
 
+import guiatv.common.CommonUtility;
+
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
 
 
 import com.fasterxml.jackson.core.JsonGenerator;
@@ -18,7 +21,10 @@ public class TimestampDateSerializer extends JsonSerializer<Timestamp>{
 			SerializerProvider provider) throws IOException,
 			JsonProcessingException {
 		
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss a z");
-		jgen.writeString(sdf.format(new Date(timestamp.getTime())));
+		
+//		SimpleDateFormat sdf = new SimpleDateFormat(CommonUtility.zonelessDateFormat);
+//		jgen.writeString(sdf.format(new Date(timestamp.getTime())));
+		
+		jgen.writeString(CommonUtility.localTimestampToGmtStr(timestamp));
 	}
 }

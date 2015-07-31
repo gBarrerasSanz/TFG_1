@@ -17,6 +17,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
+import java.util.TimeZone;
 
 import org.apache.log4j.Logger;
 import org.springframework.core.io.ClassPathResource;
@@ -37,47 +38,65 @@ public class CommonUtility {
 		SEC, MIN, HOUR
 	}
 	
-	public static final String plainDateFormat = "yyyy-MM-dd-HH:mm:ss";
-	public static final String zonedDateFormat = "yyyy-MM-dd-HH:mm:ss, zzzz";
+	public static final String zonelessDateFormat = "yyyy-MM-dd HH:mm:ss";
+	public static final String zonedDateFormat = "yyyy-MM-dd-HH:mm:ss, z";
 	private static final Locale SPAIN_LOCALE = new Locale("es","ES");
-	private static final SimpleDateFormat sdfXmltv = new SimpleDateFormat("yyyyMMddhhmmss Z", SPAIN_LOCALE);
-	private static final SimpleDateFormat zonedSdf = new SimpleDateFormat(zonedDateFormat, SPAIN_LOCALE);
-	private static final SimpleDateFormat plainSdf = new SimpleDateFormat(plainDateFormat);
+	private static final SimpleDateFormat spainSdf = new SimpleDateFormat(zonedDateFormat, SPAIN_LOCALE);
+	private static final SimpleDateFormat zonedGmtSdf = new SimpleDateFormat(zonedDateFormat);
+	private static final SimpleDateFormat zonelessGmtSdf = new SimpleDateFormat(zonelessDateFormat);
 	
 	public static Date xmltvFormatToDate(String str) {
 		try {
-			return sdfXmltv.parse(str);
+			SimpleDateFormat spainSdf = new SimpleDateFormat("yyyyMMddHHmmss Z");
+			Date dateFromSpain = spainSdf.parse(str);
+//			String dateFromSpainStr = spainSdf.format(dateFromSpain);
+			
+			SimpleDateFormat utcSdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			TimeZone utcZone = TimeZone.getTimeZone("UTC");
+			utcSdf.setTimeZone(utcZone);
+			String utcDateStr = utcSdf.format(dateFromSpain);
+			Date utcDate = utcSdf.parse(utcDateStr);
+			return utcDate;
 		} catch (ParseException e) {
 			e.printStackTrace();
 			return null;
 		}
 	}
 	
+	public static String localTimestampToGmtStr(Timestamp ts) {
+		SimpleDateFormat utcSdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss, z");
+		TimeZone utcZone = TimeZone.getTimeZone("UTC");
+		utcSdf.setTimeZone(utcZone);
+		String utcDateStr = utcSdf.format(ts.getTime());
+		return utcDateStr;
+//			Date utcDate = utcSdf.parse(utcDateStr);
+//			return utcDate;
+	}
+	
 	public static String dateToStr(Date date) {
-		return zonedSdf.format(date);
+		return zonedGmtSdf.format(date);
 	}
 	
 	public static String dateToPlainStr(Date date) {
-		return plainSdf.format(date);
+		return zonedGmtSdf.format(date);
 	}
 	
-	public static Date computeDateFromZonedDate(Date zonedDate) {
-		String newDateStr = zonedSdf.format(zonedDate);
-		Date newDate = null;
-		try {
-			newDate = zonedSdf.parse(newDateStr);
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return newDate;
-	}
-	
-	public static Date strToDate(String strDate) {
-		try {
-			return zonedSdf.parse(strDate);
-		} catch (ParseException e) {
+//	public static Date computeDateFromZonedDate(Date zonedDate) {
+//		String newDateStr = zonedSdf.format(zonedDate);
+//		Date newDate = null;
+//		try {
+//			newDate = zonedSdf.parse(newDateStr);
+//		} catch (ParseException e) {
+//			// TODO Auto-generated catch block
 //			e.printStackTrace();
+//		}
+//		return newDate;
+//	}
+	
+	public static Date utcDateStrToUtcDate(String strDate) {
+		try {
+			return zonedGmtSdf.parse(strDate);
+		} catch (ParseException e) {
 			return null;
 		}
 	}

@@ -84,8 +84,8 @@ public class PublisherRestController {
 		ResponseEntity<List<Schedule>> errorResp = new ResponseEntity<List<Schedule>>(new ArrayList<Schedule>(), HttpStatus.BAD_REQUEST);
 		Date start, end;
 		try {
-			start = CommonUtility.strToDate(startDate);
-			end = CommonUtility.strToDate(endDate);
+			start = CommonUtility.utcDateStrToUtcDate(startDate);
+			end = CommonUtility.utcDateStrToUtcDate(endDate);
 		} catch(Exception e) {
 			start = null;
 			end = null;

@@ -30,8 +30,8 @@ public class ListScheduleCreator {
 		schedMadre.setProgramme(progMadre);
 //		schedMadre.setStart(CommonUtility.strToDate("20150316173500 +0100"));
 //		schedMadre.setEnd(CommonUtility.strToDate("20150316175400 +0100"));
-		schedMadre.setStart(CommonUtility.strToDate("20170316173500 +0100"));
-		schedMadre.setEnd(CommonUtility.strToDate("20170316175400 +0100"));
+		schedMadre.setStart(CommonUtility.xmltvFormatToDate("20170316173500 +0200"));
+		schedMadre.setEnd(CommonUtility.xmltvFormatToDate("20170316175400 +0200"));
 		
 		
 		Schedule schedSimpsons = new Schedule();
@@ -39,8 +39,8 @@ public class ListScheduleCreator {
 		schedSimpsons.setProgramme(progSimpsons);
 //		schedSimpsons.setStart(CommonUtility.strToDate("20150316214500 +0100"));
 //		schedSimpsons.setEnd(CommonUtility.strToDate("20150316220000 +0100"));
-		schedSimpsons.setStart(CommonUtility.strToDate("20170316214500 +0100"));
-		schedSimpsons.setEnd(CommonUtility.strToDate("20170316220000 +0100"));
+		schedSimpsons.setStart(CommonUtility.xmltvFormatToDate("20170316214500 +0200"));
+		schedSimpsons.setEnd(CommonUtility.xmltvFormatToDate("20170316220000 +0200"));
 		
 		listScheduleExpected.add(schedMadre);
 		listScheduleExpected.add(schedSimpsons);
