@@ -112,7 +112,7 @@ public class MLChannel {
 	private InstantState currentState;
 	
 	@Transient
-	private final static int FIFO_QUEUE_SIZE = 10;
+	private final static int FIFO_QUEUE_SIZE = 5;
 	
 	@Transient
 	private Queue<InstantState> fifoRtSched = new CircularFifoQueue<InstantState>(FIFO_QUEUE_SIZE);

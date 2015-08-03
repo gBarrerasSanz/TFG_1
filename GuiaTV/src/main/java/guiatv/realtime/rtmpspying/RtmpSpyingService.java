@@ -43,6 +43,9 @@ public class RtmpSpyingService {
 	private static final Logger logger = Logger.getLogger("debugLog"); 
 	
 	private static final int numReqPerSecond = 1;
+	
+	private static final int oneFrameEveryXSecs = 1;
+	
 	@Value("${platform}")
 	private String platform;
 	
@@ -78,19 +81,22 @@ public class RtmpSpyingService {
 				.getResource("META-INF/ffmpeg/windows_bin/ffmpeg-win64/bin");
 		
 		switch(platform) {
+		case "Windows7":
 		case "Windows8.1":
 			BufferedInputStream in = null;
 			try {
 				File binDir = new File(binDirUrl.toURI());
 				String[] cmd = { 
 					binDir.getAbsolutePath()+File.separator+"ffmpeg.exe",
-					"-r", String.valueOf(numReqPerSecond),
+//					"-r", String.valueOf(numReqPerSecond),
+//					"-r", "1/"+String.valueOf(oneFrameEveryXSecs),
 					"-i", "\""+mlChannel.getStreamSource().getUrl()+"\"", // ********************* TODO: URL
-					"-vcodec", "mjpeg",
+//					"-vcodec", "mjpeg",
 					"-f", "image2pipe",
 					"-pix_fmt", "yuvj420p",
 					"-vf", "scale="+mlChannel.getImgCols()+":"+mlChannel.getImgRows(),
-					"-r", "24",
+					"-r", "1/"+String.valueOf(oneFrameEveryXSecs),
+//					"-r", "24",
 					"-"
 				};
 				Process p = null;

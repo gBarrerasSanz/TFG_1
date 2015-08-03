@@ -31,6 +31,7 @@ public class CommandsOnStartup implements ApplicationListener<ContextRefreshedEv
 	
 	@Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
+		System.err.close(); 
 		setConfig();
 		//		loadAndSpyChannels();
     	// Crear un objeto MLChannel para cada canal y meterlo en el repositorio
