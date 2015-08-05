@@ -14,6 +14,7 @@
 		</botRight>
 		<active>false</active>
 		<batchDataUri>captures/01_a1/goodSamples/</batchDataUri>
+		<numSamplesToSwitchState>5</numSamplesToSwitchState>
 	</channelData>
 	<channelData id="antena-3-839.laguiatv.com">
 		<chIdBusiness>antena-3-839.laguiatv.com</chIdBusiness>
@@ -30,6 +31,7 @@
 		</botRight>
 		<active>true</active>
 		<batchDataUri>captures/03_a3/goodSamples/</batchDataUri>
+		<numSamplesToSwitchState>5</numSamplesToSwitchState>
 	</channelData>
 	<channelData id="tele-5-847.laguiatv.com">
 		<chIdBusiness>tele-5-847.laguiatv.com</chIdBusiness>
@@ -47,6 +49,7 @@
 		</botRight>
 		<active>true</active>
 		<batchDataUri>captures/05_a5/goodSamples/</batchDataUri>
+		<numSamplesToSwitchState>5</numSamplesToSwitchState>
 	</channelData>
 	<channelData id="la-sexta-782.laguiatv.com">
 		<chIdBusiness>la-sexta-782.laguiatv.com</chIdBusiness>
@@ -63,6 +66,7 @@
 		</botRight>
 		<active>true</active>
 		<batchDataUri>captures/06_a6/goodSamples/</batchDataUri>
+		<numSamplesToSwitchState>5</numSamplesToSwitchState>
 	</channelData>
 	<channelData id="neox-722.laguiatv.com">
 		<chIdBusiness>neox-722.laguiatv.com</chIdBusiness>
@@ -80,6 +84,7 @@
 		</botRight>
 		<active>true</active>
 		<batchDataUri>captures/07_aNeox/goodSamples/</batchDataUri>
+		<numSamplesToSwitchState>10</numSamplesToSwitchState>
 	</channelData>
 	<!-- Nova NO FUNCIONA -->
 	<channelData id="nova-723.laguiatv.com">
@@ -98,8 +103,10 @@
 		</botRight>
 		<active>false</active>
 		<batchDataUri>captures/08_aNova/goodSamples/</batchDataUri>
+		<numSamplesToSwitchState>5</numSamplesToSwitchState>
 	</channelData>
 	<channelData id="aragon-tv-919.laguiatv.com">
+		<nameProg>Aragón TV</nameProg>
 		<chIdBusiness>aragon-tv-919.laguiatv.com</chIdBusiness>
 		<url>rtmp://aragontvlivefs.fplive.net/aragontvlive-live/stream_normal_abt
 			live=1</url>
@@ -113,7 +120,8 @@
 			<cols>1164</cols>
 			<rows>107</rows>
 		</botRight>
-		<active>false</active>
+		<active>true</active>
 		<batchDataUri>captures/10_aAragon/goodSamples/</batchDataUri>
+		<numSamplesToSwitchState>5</numSamplesToSwitchState>
 	</channelData>
 </listChannelsData>

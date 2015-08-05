@@ -10,6 +10,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class ChannelData {
 	
 	private String chIdBusiness;
+	private String nameProg;
 	private String url;
 	private int[] topLeft;
 	private int[] botRight;
@@ -17,6 +18,7 @@ public class ChannelData {
 	private int rows;
 	private boolean active;
 	private String batchDataUri;
+	private int numSamplesToSwitchState;
 	
 	public ChannelData() {
 	}
@@ -96,6 +98,24 @@ public class ChannelData {
 
 	public void setBatchDataUri(String batchDataUri) {
 		this.batchDataUri = batchDataUri;
+	}
+	
+	@XmlElement(name="nameProg")
+	public String getNameProg() {
+		return nameProg;
+	}
+
+	public void setNameProg(String nameProg) {
+		this.nameProg = nameProg;
+	}
+	
+	@XmlElement(name="numSamplesToSwitchState")
+	public int getNumSamplesToSwitchState() {
+		return numSamplesToSwitchState;
+	}
+
+	public void setNumSamplesToSwitchState(int numSamplesToSwitchState) {
+		this.numSamplesToSwitchState = numSamplesToSwitchState;
 	}
 	
 	

@@ -10,6 +10,8 @@ import guiatv.persistence.repository.ChannelRepository;
 
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -62,4 +64,10 @@ public class ChannelService {
     public void delete(ListChannels lCh) {
     	chRep.delete(lCh);
     }
+	
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	public void updateNameProgWhereIdChPersistence(String nameCh, Channel ch) {
+		chRep.updateNameProgWhereIdChPersistence(nameCh, ch.getIdChPersistence());
+	}
+	
 }

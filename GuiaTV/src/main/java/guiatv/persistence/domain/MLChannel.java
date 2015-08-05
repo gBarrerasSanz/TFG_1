@@ -112,16 +112,19 @@ public class MLChannel {
 	private InstantState currentState;
 	
 	@Transient
-	private final static int FIFO_QUEUE_SIZE = 5;
+	private final static int MIN_FIFO_QUEUE_SIZE = 2;
+	
+	private int numSamplesToSwitchState = MIN_FIFO_QUEUE_SIZE;
 	
 	@Transient
-	private Queue<InstantState> fifoRtSched = new CircularFifoQueue<InstantState>(FIFO_QUEUE_SIZE);
+	private Queue<InstantState> fifoRtSched = new CircularFifoQueue<InstantState>(numSamplesToSwitchState);
 	
 	public MLChannel() {
 	}
 	
 	public MLChannel(Channel channel, StreamSource streamSource,
-			int imgCols, int imgRows, int[] topLeft, int[] botRight) {
+			int imgCols, int imgRows, int[] topLeft, int[] botRight,
+			int numSamplesToSwitchState) {
 		
 		this.channel = channel;
 		this.streamSource = streamSource;
@@ -129,6 +132,7 @@ public class MLChannel {
 		this.imgRows = imgRows;
 		this.topLeft = topLeft;
 		this.botRight = botRight;
+		this.numSamplesToSwitchState = numSamplesToSwitchState;
 	}
 	
     /**********************************************************
@@ -277,6 +281,14 @@ public class MLChannel {
 		}
 	}
 	
+	public int getNumSamplesToSwitchState() {
+		return numSamplesToSwitchState;
+	}
+
+	public void setNumSamplesToSwitchState(int numSamplesToSwitchState) {
+		this.numSamplesToSwitchState = numSamplesToSwitchState;
+	}
+
 	public void releaseDataSet() {
 		dataSet = null; // Dejar que el recolector haga su trabajo
 	}
@@ -381,7 +393,7 @@ public class MLChannel {
 	 * de MLChannel debe se accedida por un solo thread
 	 */
 	public synchronized boolean addRtSched(RtSchedule rtSched) {
-		if (fifoRtSched.size() < FIFO_QUEUE_SIZE) { // Si la cola NO está llena aun
+		if (fifoRtSched.size() < MIN_FIFO_QUEUE_SIZE) { // Si la cola NO está llena aun
 			fifoRtSched.add(rtSched.getState());
 			return false;
 		}
@@ -428,4 +440,6 @@ public class MLChannel {
 			}
 		}
 	}
+	
+	
 }

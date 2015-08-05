@@ -56,8 +56,15 @@ public class RtmpSpyingLaunchService {
 			StreamSource streamSource = new StreamSource(chData.getUrl());
 			Channel ch = chServ.findByIdChBusiness(chData.getChIdBusiness(), false);
 			if (ch != null) {
+				// Cambiar nombre del channel si se indica en el xml de ChannelData
+				if (chData.getNameProg() != null) { 
+					ch.setNameCh(chData.getNameProg());
+					chServ.updateNameProgWhereIdChPersistence(chData.getNameProg(), ch);
+				}
+				
 				MLChannel mlChannel = new MLChannel(ch, streamSource,
-						chData.getCols(), chData.getRows(), chData.getTopLeft(), chData.getBotRight());
+						chData.getCols(), chData.getRows(), chData.getTopLeft(), chData.getBotRight(),
+						chData.getNumSamplesToSwitchState());
 				mlChannel.createDataSetUri();
 				mlChannel.createFullDataSetUri();
 				mlChannel.createTrainedClassifierUri();
