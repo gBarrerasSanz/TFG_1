@@ -68,13 +68,13 @@ public class CatalogRestController {
 			value = "", 
 			method = RequestMethod.GET)
 	@ResponseBody
-	public ResponseEntity<Catalog> getCatalog(@RequestParam(value = "country", 
-			required = false, defaultValue = "spain") String country)
+	// TODO: @RequestParam(value = "country", required = false, defaultValue = "spain") String country
+	public ResponseEntity<Catalog> getCatalog()
 	{
 		// TODO: (Muy largo plazo) Controlar dependiendo de los paises
-		Catalog catalog = new Catalog(country);
+		Catalog catalog = new Catalog();
 		catalog.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(
-				CatalogRestController.class).getCatalog(country)).withSelfRel());
+				CatalogRestController.class).getCatalog()).withSelfRel());
 		catalog.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(
 				CatalogRestController.class).getChannels()).withRel("channels"));
 		catalog.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(
