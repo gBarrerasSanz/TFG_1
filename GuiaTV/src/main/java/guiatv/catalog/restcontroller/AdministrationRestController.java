@@ -36,7 +36,7 @@ public class AdministrationRestController {
 	@RequestMapping(
 			value = "/activation/", 
 			method = RequestMethod.POST)
-	public ResponseEntity<Boolean> changeChannelActivation(
+	public ResponseEntity<Boolean> switchChannelActivationState(
 			@RequestParam(value="hashIdChBusiness", defaultValue="", required=true) String hashIdChBusiness,
 			@RequestParam(value="activation", defaultValue="", required=true) boolean activation)
 	{
@@ -53,6 +53,41 @@ public class AdministrationRestController {
 				logger.debug("Channel ["+ch.getIdChBusiness()+"] is now OFF");
 			}
 			return okResp;
+		}
+		else {
+			return errResp;
+		}
+	}
+	
+	@RequestMapping(
+			value = "/spying/", 
+			method = RequestMethod.POST)
+	public ResponseEntity<Boolean> switchChannelSpyingState(
+			@RequestParam(value="hashIdChBusiness", defaultValue="", required=true) String hashIdChBusiness,
+			@RequestParam(value="spying", defaultValue="", required=true) boolean spying)
+	{
+		ResponseEntity<Boolean> okResp = new ResponseEntity<Boolean>(true, HttpStatus.ACCEPTED);
+		ResponseEntity<Boolean> errResp = new ResponseEntity<Boolean>(false, HttpStatus.BAD_REQUEST);
+		Channel ch = chRep.findByHashIdChBusiness(hashIdChBusiness);
+		if (ch != null) {
+			if (spying) {
+				boolean queryResult = monitor.queryChannelForSpying(ch);
+				if (queryResult) {
+					logger.debug("Channel ["+ch.getIdChBusiness()+"] is now BEING SPIED");
+					return okResp;
+				}
+				else {
+					logger.debug("Channel ["+ch.getIdChBusiness()+
+							"] CANNOT BE SPIED at this moment or it's already spied");
+					return errResp;
+				}
+			}
+			else {
+				monitor.releaseBusyChannel(ch);
+				logger.debug("Channel ["+ch.getIdChBusiness()+"] has been queried for STOP BEING SPIED");
+				return okResp;
+			}
+			
 		}
 		else {
 			return errResp;

@@ -136,6 +136,16 @@ public class RtmpSpyingService {
 		        		if (imgReady) {
 		        			if (data.size() != 0) {
 		        				try {
+		        					// Antes de nada, comprobar que el channel sigue activo
+		        					Channel ch = mlChannel.getChannel();
+		        					boolean activeCh = monitor.checkActiveChannel(ch);
+		        					boolean spiedCh = monitor.checkSpiedChannel(ch);
+		        					// Si se ha dado señal de desactivar channel o dejar de espiarlo
+		        					if ( ! activeCh  || ! spiedCh) { 
+		        						// Entonces terminar
+		        						logger.debug("Channel ["+ch.getIdChBusiness()+"] is NO LONGER SPIED");
+		        						return;
+		        					}
 		        					Mat imgGrayMat = CvUtils.getGrayMatAndDecodeFromByteArray(
 		        							data.toByteArray(), mlChannel.getImgCols(), mlChannel.getImgRows());
 		        					Blob blob = new Blob(imgGrayMat, mlChannel); 

@@ -7,7 +7,7 @@
     <script src="http://code.jquery.com/jquery-2.1.3.js"></script>
     <title>Admin Channels</title>
 <script>
-function queryForActivationChange(elem, hashIdChBusiness, activation) {
+function queryForActivationSwitch(elem, hashIdChBusiness, activation) {
 	$.ajax({
 		type : "POST",
 		url : "/admin/channels/activation/",
@@ -19,22 +19,15 @@ function queryForActivationChange(elem, hashIdChBusiness, activation) {
 				if (elem.innerHTML == 'true') { // Si está activado -> Desactivar
 					elem.innerHTML = 'false';
 					elem.className = "btn btn-danger";
+					// Cambiar el estado del botón de spied a falso
+					var spiedElem = elem.parentElement.parentElement.getElementsByTagName("*")[5];
+					spiedElem.innerHTML = 'false';
+					spiedElem.className = "btn btn-danger";
 				}
 				else { // Si está desactivado -> Activar
 					elem.innerHTML = 'true';
 					elem.className = "btn btn-success";
 				}
-				//var uri = jqXHR.responseJSON.uri;
-				//$("#result").html("<a target='_blank' href='"+uri+"' class='btn btn-default btn-lg' role='button'>"+uri+"</a>")
-				break;
-			case 422:
-				//showFeedback("The provided URL cannot be processed!");
-				break;
-			case 423:
-				//showFeedback("The provided URL has been blocked!");
-				break;
-			case 404:
-				break;
 			default:
 				console.log("jqXHR.status="+jqXHR.status);
 				break;
@@ -42,17 +35,49 @@ function queryForActivationChange(elem, hashIdChBusiness, activation) {
 		}
 	});
 }
+
+function queryForSpyingSwitch(elem, hashIdChBusiness, spying) {
+	$.ajax({
+		type : "POST",
+		url : "/admin/channels/spying/",
+		data : { hashIdChBusiness: hashIdChBusiness, spying: spying},
+		complete: function(jqXHR, textStatus) {
+			var result = false;
+			switch(jqXHR.status){
+			case 202: // ACCEPTED
+				if (elem.innerHTML == 'true') { // Si está busy -> Desactivar spying
+					elem.innerHTML = 'false';
+					elem.className = "btn btn-danger";
+				}
+				else { // Si está not busy -> Activar spying
+					elem.innerHTML = 'true';
+					elem.className = "btn btn-success";
+				}
+			default:
+				console.log("jqXHR.status="+jqXHR.status);
+				break;
+			}
+		}
+	});
+}
+
 function onActiveClicked(elem, hashIdChBusiness) {
 	//alert("You clicked "+elem);
 	if (elem.innerHTML == 'true') { // Si está activado -> Desactivar
-		//elem.innerHTML = 'false';
-		//elem.className = "btn btn-danger";
-		queryForActivationChange(elem, hashIdChBusiness, false);
+		queryForActivationSwitch(elem, hashIdChBusiness, false);
 	}
 	else { // Si está desactivado -> Activar
-		//elem.innerHTML = 'true';
-		//elem.className = "btn btn-success";
-		queryForActivationChange(elem, hashIdChBusiness, true);
+		queryForActivationSwitch(elem, hashIdChBusiness, true);
+	}
+}
+
+function onSpiedClicked(elem, hashIdChBusiness) {
+	//alert("You clicked "+elem);
+	if (elem.innerHTML == 'true') { // Si está busy -> Desactivar spying
+		queryForSpyingSwitch(elem, hashIdChBusiness, false);
+	}
+	else { // Si está not busy -> Activar spying
+		queryForSpyingSwitch(elem, hashIdChBusiness, true);
 	}
 }
 </script>
@@ -70,14 +95,18 @@ function onActiveClicked(elem, hashIdChBusiness) {
   </thead>
   <tbody>
     <tr th:each="ch : ${lChData}">
-      <td th:text="${ch.nameProg}">None</td>
-      <td th:text="${ch.idChBusiness}">None</td>
-      <td>
+      <td th:name="nameProg" th:text="${ch.nameProg}">None</td>
+      <td th:name="idChBusiness" th:text="${ch.idChBusiness}">None</td>
+      <td th:name="active">
       	<button th:text="${ch.active}" 
       		th:class="${ch.active}? 'btn btn-success' : 'btn btn-danger'"
       		th:onclick="'javascript:onActiveClicked(this, \''+ ${ch.hashIdChBusiness} +'\');'">None</button>
       </td>
-      <td th:text="${ch.busy}">None</td>
+      <td th:name="busy">
+      <button th:text="${ch.busy}" 
+      		th:class="${ch.busy}? 'btn btn-success' : 'btn btn-danger'"
+      		th:onclick="'javascript:onSpiedClicked(this, \''+ ${ch.hashIdChBusiness} +'\');'">None</button>
+      </td>
     </tr>
   </tbody>
 </table>

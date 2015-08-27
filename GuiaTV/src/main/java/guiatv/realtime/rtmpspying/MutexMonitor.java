@@ -23,6 +23,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Scope;
@@ -37,6 +38,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Service
 @Scope("singleton")
 public class MutexMonitor {
+	
+	private static final Logger logger = Logger.getLogger("debugLog");
 	
 	@Autowired
 	RtmpSpyingLaunchService spyLaunchServ;
@@ -63,7 +66,6 @@ public class MutexMonitor {
 	        for (ChannelData chData: listChannelsData.getListChannelData()) {
 	        	// Si está activo
 	        	if (chData.isActive() ) { 
-	        		chPool.put(chData.getIdChBusiness(), chData);
 	        		Channel ch = new Channel();
 	        		ch.setIdChBusiness(chData.getIdChBusiness());
 	        		ch.computeHashIdChBusiness();
@@ -71,11 +73,31 @@ public class MutexMonitor {
 	        		lCh.add(ch);
 	        		// Añadir hashIdChBusiness al objeto ChannelData
 	        		chData.setHashIdChBusiness(ch.getHashIdChBusiness());
+	        		// Añadir objeto ChannelData al hashmap
+	        		chPool.put(chData.getHashIdChBusiness(), chData);
 	        	}
 	        }
         }
         chServ.save(lCh);
-        spyLaunchServ.loadAndSpyChannels();
+
+        // Espiar channels
+//		for (Object value : chPool.values()) {
+//		ChannelData chData = (ChannelData)value;
+//		if (chData.getUrl() != null && chData.isActive() && ! chData.isBusy()) {
+//			chData.setBusy(true);
+//			return chData;
+//		}
+//	}
+        for (Object value : chPool.values()) {
+        	ChannelData chData = (ChannelData)value;
+        	if (spyLaunchServ.launchChannelSpying(chData)) {
+    			chData.setBusy(true);
+    			logger.debug("Channel ["+chData.getIdChBusiness()+"] is now BEING SPIED");
+    		}
+    		else {
+    			logger.debug("Channel ["+chData.getIdChBusiness()+"] CANNOT BE SPIED at this moment");
+    		}
+        }
 	}
 	
 	private ListChannelsData initializeListChannelsData() {
@@ -106,18 +128,41 @@ public class MutexMonitor {
 	/*
 	 * METODOS QUE MODIFICAN EL ESTADO DE BUSY
 	 */
-	public synchronized ChannelData acquireNonBusyChannel() {
-		for (Object value : chPool.values()) {
-			ChannelData chData = (ChannelData)value;
-			if (chData.getUrl() != null && chData.isActive() && ! chData.isBusy()) {
+//	public synchronized ChannelData acquireNonBusyChannel() {
+//		for (Object value : chPool.values()) {
+//			ChannelData chData = (ChannelData)value;
+//			if (chData.getUrl() != null && chData.isActive() && ! chData.isBusy()) {
+//				chData.setBusy(true);
+//				return chData;
+//			}
+//		}
+//		return null;
+//	}
+	
+	public synchronized boolean queryChannelForSpying(ChannelData queryChData) {
+		ChannelData chData = chPool.get(queryChData.getHashIdChBusiness());
+		if ( ! chData.isBusy() ) { // Si NO esta ya siendo espiado
+			// Entonces intentar espiarlo
+			if (spyLaunchServ.launchChannelSpying(chData)) {
 				chData.setBusy(true);
-				return chData;
+				return true;
+			}
+			else {
+				return false;
 			}
 		}
-		return null;
+		else {
+			return false;
+		}
 	}
 	
-	public synchronized void releaseBusyChannel(ChannelData chData) {
+	public synchronized boolean queryChannelForSpying(Channel ch) {
+		ChannelData chData = chPool.get(ch.getHashIdChBusiness());
+		return queryChannelForSpying(chData);
+	}
+	
+	public synchronized void releaseBusyChannel(Channel ch) {
+		ChannelData chData = chPool.get(ch.getHashIdChBusiness());
 		chData.setBusy(false);
 	}
 	
@@ -125,21 +170,22 @@ public class MutexMonitor {
 	 * METODOS QUE MODIFICAN EL ESTADO DE ACTIVE 
 	 */
 	public synchronized void activateChannel(Channel channel) {
-		ChannelData chData = chPool.get(channel.getIdChBusiness());
+		ChannelData chData = chPool.get(channel.getHashIdChBusiness());
 		if (chData != null) {
 			chData.setActive(true);
 		}
 	}
 	
 	public synchronized void deactivateChannel(Channel channel) {
-		ChannelData chData = chPool.get(channel.getIdChBusiness());
+		ChannelData chData = chPool.get(channel.getHashIdChBusiness());
 		if (chData != null) {
 			chData.setActive(false);
+			chData.setBusy(false);
 		}
 	}
 	
 	public synchronized boolean checkActiveChannel(Channel channel) {
-		ChannelData chData = chPool.get(channel.getIdChBusiness());
+		ChannelData chData = chPool.get(channel.getHashIdChBusiness());
 		if (chData != null && chData.isActive()) {
 			return true;
 		}
@@ -148,8 +194,18 @@ public class MutexMonitor {
 		}
 	}
 	
+	public synchronized boolean checkSpiedChannel(Channel channel) {
+		ChannelData chData = chPool.get(channel.getHashIdChBusiness());
+		if (chData != null && chData.isBusy()) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+	
 	public synchronized boolean checkExistentChannel(Channel channel) {
-		ChannelData chData = chPool.get(channel.getIdChBusiness());
+		ChannelData chData = chPool.get(channel.getHashIdChBusiness());
 		if (chData != null) {
 			return true;
 		}
@@ -158,12 +214,12 @@ public class MutexMonitor {
 		}
 	}
 	
-	public void loadAndSpyChannels() {
-        if ( ! spiersLaunched) {
-			// Lanzar espias
-	        spyLaunchServ.loadAndSpyChannels();
-        }
-	}
+//	public void loadAndSpyChannels() {
+//        if ( ! spiersLaunched) {
+//			// Lanzar espias
+//	        spyLaunchServ.loadAndSpyChannels();
+//        }
+//	}
 	
 //	private synchronized void addChDataToPool(ChannelData chData) {
 //		chPool.add(chData);
