@@ -1,5 +1,6 @@
 <listChannelsData>
 	<channelData id="tve-1-807.laguiatv.com">
+		<nameProg>TVE 1</nameProg>
 		<chIdBusiness>tve-1-807.laguiatv.com</chIdBusiness>
 		<url>http://iphonelive.rtve.es/LA1_LV3_IPH/LA1_LV3_IPH.m3u8</url>
 		<cols>1280</cols>
@@ -15,8 +16,10 @@
 		<active>false</active>
 		<batchDataUri>captures/01_a1/goodSamples/</batchDataUri>
 		<numSamplesToSwitchState>5</numSamplesToSwitchState>
+		<autostart>false</autostart>
 	</channelData>
 	<channelData id="antena-3-839.laguiatv.com">
+		<nameProg>Antena 3</nameProg>
 		<chIdBusiness>antena-3-839.laguiatv.com</chIdBusiness>
 		<url>http://a3live-lh.akamaihd.net/i/antena3_1@35248/master.m3u8</url>
 		<cols>1280</cols>
@@ -32,8 +35,10 @@
 		<active>true</active>
 		<batchDataUri>captures/03_a3/goodSamples/</batchDataUri>
 		<numSamplesToSwitchState>5</numSamplesToSwitchState>
+		<autostart>true</autostart>
 	</channelData>
 	<channelData id="tele-5-847.laguiatv.com">
+		<nameProg>Telecinco</nameProg>
 		<chIdBusiness>tele-5-847.laguiatv.com</chIdBusiness>
 		<url>http://mdsios1-lh.akamaihd.net/i/telecinco/esmediaset_11@168471/index_0_av-b.m3u8
 		</url>
@@ -50,8 +55,10 @@
 		<active>true</active>
 		<batchDataUri>captures/05_a5/goodSamples/</batchDataUri>
 		<numSamplesToSwitchState>5</numSamplesToSwitchState>
+		<autostart>false</autostart>
 	</channelData>
 	<channelData id="la-sexta-782.laguiatv.com">
+		<nameProg>La Sexta</nameProg>
 		<chIdBusiness>la-sexta-782.laguiatv.com</chIdBusiness>
 		<url>http://a3live-lh.akamaihd.net/i/lasexta/lasexta_1@35272/master.m3u8</url>
 		<cols>1280</cols>
@@ -67,8 +74,10 @@
 		<active>true</active>
 		<batchDataUri>captures/06_a6/goodSamples/</batchDataUri>
 		<numSamplesToSwitchState>5</numSamplesToSwitchState>
+		<autostart>false</autostart>
 	</channelData>
 	<channelData id="neox-722.laguiatv.com">
+		<nameProg>Neox</nameProg>
 		<chIdBusiness>neox-722.laguiatv.com</chIdBusiness>
 		<url>http://antena3-aos1-apple-live.adaptive.level3.net/apple/antena3/channel03/index.m3u8
 		</url>
@@ -85,9 +94,11 @@
 		<active>true</active>
 		<batchDataUri>captures/07_aNeox/goodSamples/</batchDataUri>
 		<numSamplesToSwitchState>10</numSamplesToSwitchState>
+		<autostart>false</autostart>
 	</channelData>
 	<!-- Nova NO FUNCIONA -->
 	<channelData id="nova-723.laguiatv.com">
+		<nameProg>Nova</nameProg>
 		<chIdBusiness>nova-723.laguiatv.com</chIdBusiness>
 		<url>rtmp://antena3fms35livefs.fplive.net:1935/antena3fms35live-live/stream-eventos6_2
 			live=1</url>
@@ -104,6 +115,7 @@
 		<active>false</active>
 		<batchDataUri>captures/08_aNova/goodSamples/</batchDataUri>
 		<numSamplesToSwitchState>5</numSamplesToSwitchState>
+		<autostart>false</autostart>
 	</channelData>
 	<channelData id="aragon-tv-919.laguiatv.com">
 		<nameProg>Aragón TV</nameProg>
@@ -120,8 +132,9 @@
 			<cols>1164</cols>
 			<rows>107</rows>
 		</botRight>
-		<active>true</active>
+		<active>false</active>
 		<batchDataUri>captures/10_aAragon/goodSamples/</batchDataUri>
 		<numSamplesToSwitchState>5</numSamplesToSwitchState>
+		<autostart>false</autostart>
 	</channelData>
 </listChannelsData>

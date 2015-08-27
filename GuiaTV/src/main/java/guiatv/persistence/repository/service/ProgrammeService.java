@@ -64,8 +64,13 @@ public class ProgrammeService {
 		// TODO: Hacer esto con una consulta al schedRep
 //		Schedule sched2 = schedRep.findOneByStartBeforeAndEndAfter(instant, instant);
 //		List<Schedule> lSched = schedRep.findByChannelAndInstantBetweenStartAndEnd(ch, instant);
-		Hibernate.initialize(lSched3.get(0).getProgramme());
-		return lSched3.get(0).getProgramme();
+		if (lSched3.size() > 0) {
+			Hibernate.initialize(lSched3.get(0).getProgramme());
+			return lSched3.get(0).getProgramme();
+		}
+		else {
+			return null;
+		}
 	}
 	
 	

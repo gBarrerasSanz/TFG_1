@@ -16,6 +16,7 @@ import guiatv.persistence.repository.ScheduleRepository;
 import guiatv.persistence.repository.service.ChannelService;
 import guiatv.persistence.repository.service.ProgrammeService;
 import guiatv.persistence.repository.service.ScheduleService;
+import guiatv.realtime.rtmpspying.MutexMonitor;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -62,6 +63,8 @@ public class CatalogRestController {
 	ProgrammeService progServ;
 	@Autowired
 	ObjectMapper mapper;
+	@Autowired
+	MutexMonitor monitor;
 	
 	
 	@RequestMapping(
@@ -89,12 +92,20 @@ public class CatalogRestController {
 	public ResponseEntity<ListChannels> getChannels()
 	{
 		ListChannels lChannels = chServ.findAll();
+		ListChannels flChannels = new ListChannels();
+		// Filtrar dejando solo los channels activos
 		for (Channel ch: lChannels) {
+			if (monitor.checkActiveChannel(ch)) {
+				flChannels.add(ch);
+			}
+		}
+		// Añadir los links HATEOAS
+		for (Channel ch: flChannels) {
 			ch.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(
 					CatalogRestController.class).getChannelByHashIdChBusiness(
 							ch.getHashIdChBusiness())).withSelfRel());
 		}
-		return new ResponseEntity<ListChannels>(lChannels, HttpStatus.OK);
+		return new ResponseEntity<ListChannels>(flChannels, HttpStatus.OK);
 	}
 	
 	@RequestMapping(

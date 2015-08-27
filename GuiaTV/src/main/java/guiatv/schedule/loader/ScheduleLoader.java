@@ -8,7 +8,9 @@ import guiatv.persistence.repository.ScheduleRepository;
 import guiatv.persistence.repository.service.ChannelService;
 import guiatv.persistence.repository.service.ProgrammeService;
 import guiatv.persistence.repository.service.ScheduleService;
+import guiatv.realtime.rtmpspying.MutexMonitor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.ConstraintViolationException;
@@ -38,14 +40,23 @@ public class ScheduleLoader {
 	@Autowired
 	RtmpSpyingLaunchService spyLaunchServ;
 	
+	@Autowired
+	MutexMonitor monitor;
+	
 	public ScheduleLoader() {
 	}
 	
 	public void loadListSchedules(List<Schedule> lSched) {
-		
-		int numInserted = schedServ.save(lSched);
+		// Filtrar lSched dejando solo los channels activos
+		List<Schedule> flSched = new ArrayList<Schedule>();
+		for (Schedule sched: lSched) {
+			if(monitor.checkExistentChannel(sched.getChannel())) {
+				flSched.add(sched);
+			}
+		}
+		int numInserted = schedServ.save(flSched);
 		System.out.println("Loaded "+numInserted+" schedules");
-		spyLaunchServ.loadAndSpyChannels();
+//		spyLaunchServ.loadAndSpyChannels();
 		
 	}
 }

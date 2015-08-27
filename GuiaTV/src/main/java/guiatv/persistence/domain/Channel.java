@@ -61,6 +61,12 @@ public class Channel extends ResourceSupport implements Serializable {
 	public Channel() {
 		listSchedules = new ArrayList<Schedule>();
 	}
+	
+	public Channel(String nameIdCh) {
+	   	this.idChBusiness = nameIdCh;
+	   	listSchedules = new ArrayList<Schedule>();
+	}
+	
 	@Id
     @Column(name = "idChPersistence", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -108,11 +114,6 @@ public class Channel extends ResourceSupport implements Serializable {
     /**********************************************************
      * 					GETTERS / SETTERS
      *********************************************************/
-    
-    
-    public Channel(String nameIdCh) {
-    	this.idChBusiness = nameIdCh;
-    }
     
 	public Long getIdChPersistence() {
 		return idChPersistence;

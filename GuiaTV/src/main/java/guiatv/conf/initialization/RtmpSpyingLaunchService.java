@@ -6,6 +6,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
+import javax.annotation.PostConstruct;
+
 import guiatv.computervision.CvUtils;
 import guiatv.persistence.domain.Blob;
 import guiatv.persistence.domain.Channel;
@@ -24,11 +26,13 @@ import org.apache.log4j.Logger;
 import org.opencv.core.Mat;
 import org.opencv.highgui.Highgui;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Service;
 
 import weka.classifiers.bayes.NaiveBayesUpdateable;
 import weka.core.Instances;
 
+//@DependsOn("MutexMonitor")
 @Service
 public class RtmpSpyingLaunchService {
 	
@@ -49,51 +53,60 @@ public class RtmpSpyingLaunchService {
 	@Autowired
 	MutexMonitor monitor;
 	
+//	@PostConstruct
+//	public void onPostConstruct() {
+//		this.loadAndSpyChannels();
+//	}
+	
+//	@PostConstruct
 	public void loadAndSpyChannels() {
 		ChannelData chData = null;
-		while ((chData = monitor.acquireChannel()) != null) {
-			// Crear MlChannel 
-			StreamSource streamSource = new StreamSource(chData.getUrl());
-			Channel ch = chServ.findByIdChBusiness(chData.getChIdBusiness(), false);
-			if (ch != null) {
-				// Cambiar nombre del channel si se indica en el xml de ChannelData
-				if (chData.getNameProg() != null) { 
-					ch.setNameCh(chData.getNameProg());
-					chServ.updateNameProgWhereIdChPersistence(chData.getNameProg(), ch);
+		
+		while ((chData = monitor.acquireNonBusyChannel()) != null) {
+			
+			if (chData != null && chData.getUrl() != null) {
+				// Crear MlChannel 
+				StreamSource streamSource = new StreamSource(chData.getUrl());
+				Channel ch = chServ.findByIdChBusiness(chData.getIdChBusiness(), false);
+				if (ch != null) {
+//					// TODO: Decidir donde poner esto
+//					// Cambiar nombre del channel si se indica en el xml de ChannelData
+//					if (chData.getNameProg() != null) { 
+//						ch.setNameCh(chData.getNameProg());
+//						chServ.updateNameProgWhereIdChPersistence(chData.getNameProg(), ch);
+//					}
+					
+					MLChannel mlChannel = new MLChannel(ch, streamSource,
+							chData.getCols(), chData.getRows(), chData.getTopLeft(), chData.getBotRight(),
+							chData.getNumSamplesToSwitchState());
+					mlChannel.createDataSetUri();
+					mlChannel.createFullDataSetUri();
+					mlChannel.createTrainedClassifierUri();
+					boolean dataSetAndClassifierLoaded = mlChannel.loadDataSet() && 
+							mlChannel.loadFullDataSet() && mlChannel.loadTrainedClassifier();
+					if ( ! dataSetAndClassifierLoaded ) { // Si el dataSet y el Classifier NO estaban guardados
+						// Cargar datos clasificados en el directorio goodSamples
+						loadClassifiedDataFromChannel(chData, mlChannel);
+					}
+					// Meterlo en la BD
+					streamSourceServ.save(mlChannel.getStreamSource());
+					if (dataSetAndClassifierLoaded) { // Si el dataSet y el Classifier ya estaban guardados
+						// Entonces guardar mlChannel en la base de datos
+						mlChServ.save(mlChannel);
+					}
+					else { // Si el dataSet y el Classifier NO estaban guardados
+						// Entonces guardar mlChannel en la base de datos y los ficheros de dataSet y Classifier
+						mlChServ.saveAndSaveFiles(mlChannel);
+					}
+					// Hacer cross-validation del modelo entrenado
+	//				String cvResults = ArffHelper.doCrossValidation(mlChannel.getTrainedClassifier(), mlChannel.getFullDataSet());
+	//				logger.debug("Channel "+ch.getIdChBusiness()+": "+cvResults);
+					// Liberar la memoria que ocupa fullDataSet
+					mlChannel.releaseFullDataSet();
+					// Espiar channel
+					logger.debug("Spying channel "+ch.getNameCh());
+					rtmpSpyingServ.doSpying(mlChannel);
 				}
-				
-				MLChannel mlChannel = new MLChannel(ch, streamSource,
-						chData.getCols(), chData.getRows(), chData.getTopLeft(), chData.getBotRight(),
-						chData.getNumSamplesToSwitchState());
-				mlChannel.createDataSetUri();
-				mlChannel.createFullDataSetUri();
-				mlChannel.createTrainedClassifierUri();
-				boolean dataSetAndClassifierLoaded = mlChannel.loadDataSet() && 
-						mlChannel.loadFullDataSet() && mlChannel.loadTrainedClassifier();
-				if ( ! dataSetAndClassifierLoaded ) { // Si el dataSet y el Classifier NO estaban guardados
-					// Cargar datos clasificados en el directorio goodSamples
-					loadClassifiedDataFromChannel(chData, mlChannel);
-				}
-				// Meterlo en la BD
-				streamSourceServ.save(mlChannel.getStreamSource());
-				if (dataSetAndClassifierLoaded) { // Si el dataSet y el Classifier ya estaban guardados
-					// Entonces guardar mlChannel en la base de datos
-					mlChServ.save(mlChannel);
-				}
-				else { // Si el dataSet y el Classifier NO estaban guardados
-					// Entonces guardar mlChannel en la base de datos y los ficheros de dataSet y Classifier
-					mlChServ.saveAndSaveFiles(mlChannel);
-				}
-				// Hacer cross-validation del modelo entrenado
-				String cvResults = ArffHelper.doCrossValidation(mlChannel.getTrainedClassifier(), mlChannel.getFullDataSet());
-				logger.debug("Channel "+ch.getIdChBusiness()+": "+cvResults);
-				// Liberar la memoria que ocupa fullDataSet
-				mlChannel.releaseFullDataSet();
-				// Espiar channel
-				rtmpSpyingServ.doSpying(mlChannel);
-			}
-			else {
-				logger.debug("ERROR: Cannot spy channel "+chData.getChIdBusiness()+ ": It is not included in xmltv conf !!!");
 			}
 		}
 	}

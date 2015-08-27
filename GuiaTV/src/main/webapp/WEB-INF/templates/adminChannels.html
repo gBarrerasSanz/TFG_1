@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"></meta>
+    <!-- Bootstrap core CSSS -->
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"/>
+    <script src="http://code.jquery.com/jquery-2.1.3.js"></script>
+    <title>Admin Channels</title>
+<script>
+function queryForActivationChange(elem, hashIdChBusiness, activation) {
+	$.ajax({
+		type : "POST",
+		url : "/admin/channels/activation/",
+		data : { hashIdChBusiness: hashIdChBusiness, activation: activation},
+		complete: function(jqXHR, textStatus) {
+			var result = false;
+			switch(jqXHR.status){
+			case 202: // ACCEPTED
+				if (elem.innerHTML == 'true') { // Si está activado -> Desactivar
+					elem.innerHTML = 'false';
+					elem.className = "btn btn-danger";
+				}
+				else { // Si está desactivado -> Activar
+					elem.innerHTML = 'true';
+					elem.className = "btn btn-success";
+				}
+				//var uri = jqXHR.responseJSON.uri;
+				//$("#result").html("<a target='_blank' href='"+uri+"' class='btn btn-default btn-lg' role='button'>"+uri+"</a>")
+				break;
+			case 422:
+				//showFeedback("The provided URL cannot be processed!");
+				break;
+			case 423:
+				//showFeedback("The provided URL has been blocked!");
+				break;
+			case 404:
+				break;
+			default:
+				console.log("jqXHR.status="+jqXHR.status);
+				break;
+			}
+		}
+	});
+}
+function onActiveClicked(elem, hashIdChBusiness) {
+	//alert("You clicked "+elem);
+	if (elem.innerHTML == 'true') { // Si está activado -> Desactivar
+		//elem.innerHTML = 'false';
+		//elem.className = "btn btn-danger";
+		queryForActivationChange(elem, hashIdChBusiness, false);
+	}
+	else { // Si está desactivado -> Activar
+		//elem.innerHTML = 'true';
+		//elem.className = "btn btn-success";
+		queryForActivationChange(elem, hashIdChBusiness, true);
+	}
+}
+</script>
+
+</head>
+<h2>Channels</h2>
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th>nameCh</th>
+      <th>idChBusiness</th>
+      <th>active</th>
+      <th>spied</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr th:each="ch : ${lChData}">
+      <td th:text="${ch.nameProg}">None</td>
+      <td th:text="${ch.idChBusiness}">None</td>
+      <td>
+      	<button th:text="${ch.active}" 
+      		th:class="${ch.active}? 'btn btn-success' : 'btn btn-danger'"
+      		th:onclick="'javascript:onActiveClicked(this, \''+ ${ch.hashIdChBusiness} +'\');'">None</button>
+      </td>
+      <td th:text="${ch.busy}">None</td>
+    </tr>
+  </tbody>
+</table>
+</html>

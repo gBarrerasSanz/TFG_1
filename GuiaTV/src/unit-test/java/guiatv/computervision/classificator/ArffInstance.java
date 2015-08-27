@@ -52,6 +52,7 @@ public class ArffInstance {
 	public void addSample(String imgPath, boolean truth) {
 		Mat img = getMatFromImgPath(imgPath);
 		Imshow im = new Imshow("Image");
+//		im.showImage(img); // mostrar imagen
 		if (numData == 0) {
 			setupAtts(img);
 		}
@@ -110,6 +111,8 @@ public class ArffInstance {
     	Mat dst = src.submat(topLeft[1], botRight[1], topLeft[0], botRight[0]);
     	Imgproc.adaptiveThreshold(dst, dst, 255,
     	         Imgproc.ADAPTIVE_THRESH_MEAN_C, Imgproc.THRESH_BINARY_INV, 11, 2);
+//    	Imgproc.threshold(dst, dst, 0,
+//   	         255, Imgproc.THRESH_OTSU);
     	return dst;
 	}
 	

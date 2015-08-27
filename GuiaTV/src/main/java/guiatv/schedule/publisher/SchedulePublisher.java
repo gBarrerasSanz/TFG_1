@@ -129,7 +129,7 @@ public class SchedulePublisher {
 				}
 		}
 		else {
-			logger.error("RtSchedule DOES NOT contain any programme");
+			logger.error("Channel ["+rtSched.getMlChannel().getChannel().getIdChBusiness()+"]:RtSchedule DOES NOT contain any programme");
 		}
 	}
 }

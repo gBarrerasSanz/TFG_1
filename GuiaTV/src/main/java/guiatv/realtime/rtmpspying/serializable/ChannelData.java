@@ -1,15 +1,20 @@
 package guiatv.realtime.rtmpspying.serializable;
 
+import java.nio.charset.StandardCharsets;
+
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlElements;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.google.common.hash.Hashing;
+
 
 @XmlRootElement(name="channelData")
 public class ChannelData {
 	
-	private String chIdBusiness;
+	private String idChBusiness;
+	private String hashIdChBusiness; // ESTE CAMPO NO EXISTE EN EL XML
 	private String nameProg;
 	private String url;
 	private int[] topLeft;
@@ -19,16 +24,19 @@ public class ChannelData {
 	private boolean active;
 	private String batchDataUri;
 	private int numSamplesToSwitchState;
+	private boolean autostart;
+	private boolean busy; // ESTE CAMPO NO EXISTE EN EL XML
 	
 	public ChannelData() {
+		busy = false;
 	}
 
 	@XmlElement(name="chIdBusiness")
-	public String getChIdBusiness() {
-		return chIdBusiness;
+	public String getIdChBusiness() {
+		return idChBusiness;
 	}
-	public void setChIdBusiness(String chIdBusiness) {
-		this.chIdBusiness = chIdBusiness;
+	public void setIdChBusiness(String chIdBusiness) {
+		this.idChBusiness = chIdBusiness;
 	}
 	@XmlElement(name="url")
 	public String getUrl() {
@@ -118,7 +126,33 @@ public class ChannelData {
 		this.numSamplesToSwitchState = numSamplesToSwitchState;
 	}
 	
+	@XmlElement(name="autostart")
+	public boolean isAutostart() {
+		return autostart;
+	}
+
+	public void setAutostart(boolean autostart) {
+		this.autostart = autostart;
+	}
+
+	public boolean isBusy() {
+		return busy;
+	}
+
+	public void setBusy(boolean busy) {
+		this.busy = busy;
+	}
 	
+//	public void computeHashIdChBusiness() {
+//		hashIdChBusiness = Hashing.murmur3_32().hashString(idChBusiness, StandardCharsets.UTF_8).toString();
+//	} 
 	
+	public void setHashIdChBusiness(String hashIdChBusiness) {
+		this.hashIdChBusiness = hashIdChBusiness;
+	}
+	
+	public String getHashIdChBusiness() {
+		return hashIdChBusiness;
+	}
 	
 }
