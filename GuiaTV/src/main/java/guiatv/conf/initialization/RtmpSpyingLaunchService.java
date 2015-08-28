@@ -5,10 +5,14 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
 
+import guiatv.common.CommonUtility;
 import guiatv.computervision.CvUtils;
 import guiatv.persistence.domain.Blob;
 import guiatv.persistence.domain.Channel;
@@ -64,6 +68,9 @@ public class RtmpSpyingLaunchService {
 //	@PostConstruct
 	public boolean loadMLChannel(ChannelData chData) {
 		try {
+			if ( ! CommonUtility.validateURL(chData.getUrl())) {
+				logger.debug("ERROR: channel: idChBusiness = "+chData.getIdChBusiness()+" CANNOT be trained without a stream url");
+			}
 			// Crear MlChannel 
 			StreamSource streamSource = new StreamSource(chData.getUrl());
 			Channel ch = chServ.findByIdChBusiness(chData.getIdChBusiness(), false);
@@ -79,31 +86,47 @@ public class RtmpSpyingLaunchService {
 				mlChannel.createTrainedClassifierUri();
 				boolean dataSetAndClassifierLoaded = mlChannel.loadDataSet() && 
 						mlChannel.loadFullDataSet() && mlChannel.loadTrainedClassifier();
-				if ( ! dataSetAndClassifierLoaded ) { // Si el dataSet y el Classifier NO estaban guardados
-					// Cargar datos clasificados en el directorio goodSamples
-					loadClassifiedDataFromChannel(chData, mlChannel);
-				}
-				// Meterlo en la BD
-				streamSourceServ.save(mlChannel.getStreamSource());
-				if (dataSetAndClassifierLoaded) { // Si el dataSet y el Classifier ya estaban guardados
-					// Entonces guardar mlChannel en la base de datos
-					mlChServ.save(mlChannel);
+				
+				// Si el dataSet y el Classifier SÍ estaban guardados
+				boolean trained = false;
+				if (dataSetAndClassifierLoaded) {
+					// Entonces marcar el MLChannel como que ya está entrenado
+					trained = true;
 				}
 				else { // Si el dataSet y el Classifier NO estaban guardados
-					// Entonces guardar mlChannel en la base de datos y los ficheros de dataSet y Classifier
-					mlChServ.saveAndSaveFiles(mlChannel);
+					// Cargar datos clasificados del directorio goodSamples
+					// SI todo va bien, habrá entrenado y por lo tanto trained == true
+					trained = loadClassifiedDataFromChannel(chData, mlChannel);
+				}
+				// Meter el StreamSource en la BD (Esté entrenado o no, si quiere espiar necesita una url de stream)
+				streamSourceServ.save(mlChannel.getStreamSource());
+				if (trained) { // Si el clasificador está entrenado
+					mlChannel.setTrained(true);
+					if (dataSetAndClassifierLoaded) { // Si el dataSet y el Classifier ya estaban guardados
+						// Entonces guardar mlChannel en la base de datos
+						mlChServ.save(mlChannel);
+					}
+					else { // Si el dataSet y el Classifier NO estaban guardados
+						// Entonces guardar mlChannel en la base de datos y los ficheros de dataSet y Classifier
+						mlChServ.saveAndSaveFiles(mlChannel);
+					}
+				}
+				else { // Si el clasificador NO está entrenado
+					mlChannel.setTrained(false);
+					mlChServ.save(mlChannel);
 				}
 				chData.setMlChannel(mlChannel);
 				return true;
 			}
 		} catch(Exception e) {
+			e.printStackTrace();
 			logger.debug("ERROR: channel: idChBusiness = "+chData.getIdChBusiness()+" DOES NOT HAVE a trained classifier yet.");
 			return false;
 		}
 	}
 	
 	public boolean launchChannelSpying(ChannelData chData) {
-		if (chData == null || chData.getUrl() == null || ! chData.isActive() || chData.isBusy()) {
+		if (chData == null || ! CommonUtility.validateURL(chData.getUrl()) || ! chData.isActive() || chData.isSpied()) {
 			return false;
 		}
 		
@@ -115,20 +138,26 @@ public class RtmpSpyingLaunchService {
 		return true;
 	}
 	
-	private void loadClassifiedDataFromChannel(ChannelData chData, MLChannel mlChannel) {
-		// Good Samples de mlChannel
-		File chDirFile = new File(chData.getBatchDataUri());
-		File[] chListFiles = chDirFile.listFiles();
-		loadFileListGroup(chListFiles, mlChannel, true);
-    	
-		// Avertisements de mlChannel
-    	final String ADS_BATCH_DATA_URI = "captures/publicidad";
-    	File adsDirFile = new File(ADS_BATCH_DATA_URI);
-    	File[] adsListFiles = adsDirFile.listFiles();
-    	loadFileListGroup(adsListFiles, mlChannel, false);
+	
+	private boolean loadClassifiedDataFromChannel(ChannelData chData, MLChannel mlChannel) {
+		try {
+			// Good Samples de mlChannel
+			File chDirFile = new File(chData.getBatchDataUri());
+			File[] chListFiles = chDirFile.listFiles();
+			loadFileListGroup(chListFiles, mlChannel, true);
+	    	
+			// Avertisements de mlChannel
+	    	final String ADS_BATCH_DATA_URI = "captures/publicidad";
+	    	File adsDirFile = new File(ADS_BATCH_DATA_URI);
+	    	File[] adsListFiles = adsDirFile.listFiles();
+	    	loadFileListGroup(adsListFiles, mlChannel, false);
+	    	return true;
+		} catch(Exception e) {
+			return false;
+		}
 	}
 	
-	private void loadFileListGroup(File[] fList, MLChannel mlChannel, boolean truth) {
+	private boolean loadFileListGroup(File[] fList, MLChannel mlChannel, boolean truth) {
 		for (File imgFile: fList) {
 			try {
 				Mat imgMat = Highgui.imread(imgFile.getAbsolutePath(), Highgui.CV_LOAD_IMAGE_GRAYSCALE);
@@ -137,11 +166,15 @@ public class RtmpSpyingLaunchService {
 				mlChannel.addSample(blob, truth);
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
+				return false;
 			} catch (IOException e) {
 				e.printStackTrace();
+				return false;
 			} catch (Exception e) {
 				e.printStackTrace();
+				return false;
 			}
     	}
+		return true;
 	}
 }

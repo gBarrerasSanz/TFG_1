@@ -3,6 +3,7 @@ package guiatv.realtime.router;
 import guiatv.computervision.CvUtils;
 import guiatv.persistence.domain.Blob;
 import guiatv.persistence.domain.Channel;
+import guiatv.persistence.repository.service.MLChannelService;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,9 @@ public class BlobCustomRouter {
 	
 	private static final Logger logger = Logger.getLogger("debugLog");
 	
+	@Autowired
+	MLChannelService mlChServ;
+	
     @Router
     public String routeBlob(Blob blob) {
     	// TODO: Implementar
@@ -21,7 +25,7 @@ public class BlobCustomRouter {
 //    	CvUtils.showBlob(blob);
     	
     	assert(blob != null);
-    	boolean trained = true; // TODO: REMOVE THIS
+    	boolean trained = blob.getMlChannel().isTrained();
         if (trained) {
         	return "classificationChIn";
         }

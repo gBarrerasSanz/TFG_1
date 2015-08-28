@@ -18,21 +18,21 @@ public class ChannelData {
 	private String idChBusiness;
 	private String hashIdChBusiness; // ESTE CAMPO NO EXISTE EN EL XML
 	private String nameProg;
-	private boolean trained;
 	private String url;
 	private int[] topLeft;
 	private int[] botRight;
 	private int cols;
 	private int rows;
 	private boolean active;
+	private boolean doSpying;
 	private String batchDataUri;
 	private int numSamplesToSwitchState;
 	private boolean adminVisible;
-	private boolean busy; // ESTE CAMPO NO EXISTE EN EL XML
-	private MLChannel mlCh; // ESTE CAMPO NO EXISTE EN EL XML
+	private boolean spied; // ESTE CAMPO NO EXISTE EN EL XML
+	private MLChannel mlChannel; // ESTE CAMPO NO EXISTE EN EL XML
 	
 	public ChannelData() {
-		busy = false;
+		spied = false;
 	}
 
 	@XmlElement(name="chIdBusiness")
@@ -139,12 +139,12 @@ public class ChannelData {
 		this.adminVisible = adminVisible;
 	}
 
-	public boolean isBusy() {
-		return busy;
+	public boolean isSpied() {
+		return spied;
 	}
 
-	public void setBusy(boolean busy) {
-		this.busy = busy;
+	public void setSpied(boolean busy) {
+		this.spied = busy;
 	}
 	
 //	public void computeHashIdChBusiness() {
@@ -159,21 +159,21 @@ public class ChannelData {
 		return hashIdChBusiness;
 	}
 	
-	@XmlElement(name="trained")
-	public boolean isTrained() {
-		return trained;
+	@XmlElement(name="doSpying")
+	public boolean isDoSpying() {
+		return doSpying;
 	}
 
-	public void setTrained(boolean trained) {
-		this.trained = trained;
+	public void setDoSpying(boolean doSpying) {
+		this.doSpying = doSpying;
 	}
 
 	public MLChannel getMlChannel() {
-		return mlCh;
+		return mlChannel;
 	}
 
 	public void setMlChannel(MLChannel mlCh) {
-		this.mlCh = mlCh;
+		this.mlChannel = mlCh;
 	}
 	
 	

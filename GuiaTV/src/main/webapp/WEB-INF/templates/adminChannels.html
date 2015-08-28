@@ -45,11 +45,11 @@ function queryForSpyingSwitch(elem, hashIdChBusiness, spying) {
 			var result = false;
 			switch(jqXHR.status){
 			case 202: // ACCEPTED
-				if (elem.innerHTML == 'true') { // Si está busy -> Desactivar spying
+				if (elem.innerHTML == 'true') { // Si está spied -> Desactivar spying
 					elem.innerHTML = 'false';
 					elem.className = "btn btn-danger";
 				}
-				else { // Si está not busy -> Activar spying
+				else { // Si está not spied -> Activar spying
 					elem.innerHTML = 'true';
 					elem.className = "btn btn-success";
 				}
@@ -109,10 +109,10 @@ function onActiveClicked(elem, hashIdChBusiness) {
 
 function onSpiedClicked(elem, hashIdChBusiness) {
 	//alert("You clicked "+elem);
-	if (elem.innerHTML == 'true') { // Si está busy -> Desactivar spying
+	if (elem.innerHTML == 'true') { // Si está spying -> Desactivar spying
 		queryForSpyingSwitch(elem, hashIdChBusiness, false);
 	}
-	else { // Si está not busy -> Activar spying
+	else { // Si está not spying -> Activar spying
 		queryForSpyingSwitch(elem, hashIdChBusiness, true);
 	}
 }
@@ -152,9 +152,9 @@ function onPublishScheduleClicked(elem, hashIdChBusiness, realtime) {
       		th:class="${ch.active}? 'btn btn-success' : 'btn btn-danger'"
       		th:onclick="'javascript:onActiveClicked(this, \''+ ${ch.hashIdChBusiness} +'\');'">None</button>
       </td>
-      <td th:name="busy">
-      <button th:text="${ch.busy}" 
-      		th:class="${ch.busy}? 'btn btn-success' : 'btn btn-danger'"
+      <td th:name="spied">
+      <button th:text="${ch.spied}" 
+      		th:class="${ch.spied}? 'btn btn-success' : 'btn btn-danger'"
       		th:onclick="'javascript:onSpiedClicked(this, \''+ ${ch.hashIdChBusiness} +'\');'">None</button>
       </td>
       <td>
@@ -166,9 +166,9 @@ function onPublishScheduleClicked(elem, hashIdChBusiness, realtime) {
       		th:onclick="'javascript:onPublishScheduleClicked(this, \''+ ${ch.hashIdChBusiness} +'\', true);'">None</button>
       </td>
       <td>
-      <button th:text="${ch.trained}? 'EXECUTE' : 'DISABLED'"
-      		th:class="${ch.trained}? 'btn btn-success' : 'btn btn-default'"
-      		th:onclick="'javascript:onCrossValidationClicked(this, \''+ ${ch.hashIdChBusiness} +'\', \''+ ${ch.trained} +'\');'">None</button>
+      <button th:text="${ch.mlChannel.trained}? 'EXECUTE' : 'DISABLED'"
+      		th:class="${ch.mlChannel.trained}? 'btn btn-success' : 'btn btn-default'"
+      		th:onclick="'javascript:onCrossValidationClicked(this, \''+ ${ch.hashIdChBusiness} +'\', \''+ ${ch.mlChannel.trained} +'\');'">None</button>
       </td>
     </tr>
   </tbody>

@@ -35,12 +35,22 @@ public class TaskExecutorConfig {
         return taskExecutor;
 	}
 	
+	@Bean(name="unclassifiedBlobTaskExecutor")
+	public Executor getUnclassifiedBlobTaskExecutor() {
+		ThreadPoolTaskExecutor taskExecutor = new ThreadPoolTaskExecutor();
+        taskExecutor.setCorePoolSize(10);
+		taskExecutor.setMaxPoolSize(15);
+		taskExecutor.setQueueCapacity(25);
+        taskExecutor.initialize();
+        return taskExecutor;
+	}
+	
 	@Bean(name="realtimeBrainTaskExecutor")
 	public Executor getRealTimeBrainTaskExecutor() {
 		ThreadPoolTaskExecutor taskExecutor = new ThreadPoolTaskExecutor();
-        taskExecutor.setCorePoolSize(1);
-		taskExecutor.setMaxPoolSize(1);
-		taskExecutor.setQueueCapacity(1);
+        taskExecutor.setCorePoolSize(10);
+		taskExecutor.setMaxPoolSize(15);
+		taskExecutor.setQueueCapacity(25);
         taskExecutor.initialize();
         return taskExecutor;
 	}

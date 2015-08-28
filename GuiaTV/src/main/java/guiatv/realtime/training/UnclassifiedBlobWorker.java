@@ -6,7 +6,10 @@ import java.net.URL;
 
 import guiatv.common.datatypes.Frame_OLD;
 import guiatv.cv.classificator.Classif_old;
+import guiatv.persistence.domain.Blob;
+import guiatv.persistence.repository.service.BlobService;
 
+import org.apache.log4j.Logger;
 import org.opencv.core.Core;
 import org.opencv.core.Core.MinMaxLocResult;
 import org.opencv.core.CvType;
@@ -20,15 +23,24 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.core.io.Resource;
 
 
-public class TrainingWorker {
-
+public class UnclassifiedBlobWorker {
 	
-	public TrainingWorker() {
+	private static final Logger logger = Logger.getLogger("debugLog");
+	
+	@Autowired
+	BlobService blobServ;
+	
+	public UnclassifiedBlobWorker() {
 	}
-
 	
-	public void train() {
-	
+	public void storeBlob(Blob blob) {
+		logger.debug("Received blob from channel "+blob.getMlChannel().getChannel().getIdChBusiness());
+		if (blobServ.count() <= 2000) {
+			blobServ.save(blob);
+		}
+		else {
+			logger.debug("Stored 2000 blobs already");
+		}
 	}
 
 }

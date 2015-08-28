@@ -323,6 +323,18 @@
 			input-channel="classificationChIn" ref="classificationWorker" method="classify"
 			output-channel="realtimeBrainChIn"/>
 	</beans>	
+	<!-- ******************************** UNCLASSIFIED BLOB MANAGER ***************************************** -->
+	<beans profile="dev, default">
+		<int:channel id="trainingChIn">
+			<int:dispatcher task-executor="unclassifiedBlobTaskExecutor"
+				load-balancer="round-robin" />
+		</int:channel>
+
+		<bean id="unclassifiedBlobWorker" class="guiatv.realtime.training.UnclassifiedBlobWorker" />
+		<int:outbound-channel-adapter
+			channel="trainingChIn" ref="unclassifiedBlobWorker" method="storeBlob" />
+
+	</beans>	
 	<!-- ******************************** REAL TIME BRAIN ***************************************** -->
 	<beans profile="dev, default">
 		<int:channel id="realtimeBrainChIn">

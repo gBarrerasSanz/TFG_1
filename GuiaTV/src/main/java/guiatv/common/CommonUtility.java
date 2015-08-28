@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.sql.Timestamp;
@@ -75,6 +76,16 @@ public class CommonUtility {
 	
 	public static String dateToStr(Date date) {
 		return zonedGmtSdf.format(date);
+	}
+	
+	public static boolean validateURL(String stringUrl) {
+		try {
+		    URL url = new URL(stringUrl);
+		    return true;
+		} catch (MalformedURLException e) {
+		    // the URL is not in a valid form
+			return false;
+		}
 	}
 	
 	public static String dateToPlainStr(Date date) {

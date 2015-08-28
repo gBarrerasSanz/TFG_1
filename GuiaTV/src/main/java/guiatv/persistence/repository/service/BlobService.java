@@ -31,6 +31,11 @@ public class BlobService {
 		return blobRep.findAll();
 	}
 	
+	@Transactional(readOnly = true)
+	public Long count() {
+		return blobRep.count();
+	}
+	
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
     public void save(Blob blob) {
 		blobRep.save(blob);

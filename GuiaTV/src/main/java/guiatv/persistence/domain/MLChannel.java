@@ -71,6 +71,9 @@ public class MLChannel {
 	@JoinColumn(name="channel_fk", referencedColumnName="idChPersistence")
 	private Channel channel;
 	
+	@Column(name="trained", nullable=false)
+	private boolean trained;
+	
 	@Column(name="trainedClassifierUri", nullable=true)
 	private String trainedClassifierUri;
 	
@@ -133,6 +136,7 @@ public class MLChannel {
 		this.topLeft = topLeft;
 		this.botRight = botRight;
 		this.numSamplesToSwitchState = numSamplesToSwitchState;
+		this.trained = false;
 	}
 	
     /**********************************************************
@@ -343,8 +347,22 @@ public class MLChannel {
 				+channel.getIdChBusiness()+"/trainedClassifier.model";
 	}
 	
+	public boolean isTrained() {
+		return trained;
+	}
+
+	public void setTrained(boolean trained) {
+		this.trained = trained;
+	}
+
 	public void addSample(Blob blob, boolean truth) 
 	{
+		/*
+		 * IMPORTANTE: En el momento en el que se añade una muestra, se considera
+		 * que MLChannel está entrenado <=> MLChannel.trained = true
+		 */
+		this.trained = true;
+		
 		if (dataSet == null) {
 			// TODO: Asumo que si dataSet == null, entonces trainedClassifier == null. NO SÉ SI SE CUMPLE SIEMPRE O NO
 			dataSet = ArffHelper.createInstancesObject(blob);

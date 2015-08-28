@@ -86,10 +86,10 @@ public class MutexMonitor {
 	        }
         }
         chServ.save(lCh);
-        // Por cada chData entrenado, crear el MLChannel correspondiente y guardarlo en chData
+        // Por cada chData cuyo canal se quiera espiar (entranado o no), crear el MLChannel correspondiente y guardarlo en chData
         for (Object value : chPool.values()) {
         	ChannelData chData = (ChannelData)value;
-        	if (chData.isTrained()) {
+        	if (chData.isDoSpying()) {
         		spyLaunchServ.loadMLChannel(chData);
         	}
         }
@@ -97,7 +97,7 @@ public class MutexMonitor {
         for (Object value : chPool.values()) {
         	ChannelData chData = (ChannelData)value;
         	if (spyLaunchServ.launchChannelSpying(chData)) {
-    			chData.setBusy(true);
+    			chData.setSpied(true);
     			logger.debug("Channel ["+chData.getIdChBusiness()+"] is now BEING SPIED");
     		}
     		else {
@@ -147,10 +147,10 @@ public class MutexMonitor {
 	
 	public synchronized boolean queryChannelForSpying(ChannelData queryChData) {
 		ChannelData chData = chPool.get(queryChData.getHashIdChBusiness());
-		if ( ! chData.isBusy() ) { // Si NO esta ya siendo espiado
+		if ( ! chData.isSpied() ) { // Si NO esta ya siendo espiado
 			// Entonces intentar espiarlo
 			if (spyLaunchServ.launchChannelSpying(chData)) {
-				chData.setBusy(true);
+				chData.setSpied(true);
 				return true;
 			}
 			else {
@@ -169,7 +169,7 @@ public class MutexMonitor {
 	
 	public synchronized void releaseBusyChannel(Channel ch) {
 		ChannelData chData = chPool.get(ch.getHashIdChBusiness());
-		chData.setBusy(false);
+		chData.setSpied(false);
 	}
 	
 	/*
@@ -186,7 +186,7 @@ public class MutexMonitor {
 		ChannelData chData = chPool.get(channel.getHashIdChBusiness());
 		if (chData != null) {
 			chData.setActive(false);
-			chData.setBusy(false);
+			chData.setSpied(false);
 		}
 	}
 	
@@ -202,7 +202,7 @@ public class MutexMonitor {
 	
 	public synchronized boolean checkSpiedChannel(Channel channel) {
 		ChannelData chData = chPool.get(channel.getHashIdChBusiness());
-		if (chData != null && chData.isBusy()) {
+		if (chData != null && chData.isSpied()) {
 			return true;
 		}
 		else {
