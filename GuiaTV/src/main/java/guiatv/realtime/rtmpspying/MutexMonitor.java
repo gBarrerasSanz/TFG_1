@@ -5,6 +5,7 @@ import guiatv.conf.initialization.RtmpSpyingLaunchService;
 import guiatv.persistence.domain.Channel;
 import guiatv.persistence.domain.MLChannel;
 import guiatv.persistence.repository.service.ChannelService;
+import guiatv.persistence.repository.service.MLChannelService;
 import guiatv.realtime.rtmpspying.serializable.ChannelData;
 import guiatv.realtime.rtmpspying.serializable.ListChannelsData;
 
@@ -45,6 +46,8 @@ public class MutexMonitor {
 	RtmpSpyingLaunchService spyLaunchServ;
 	
 	@Autowired
+	MLChannelService mlChServ;
+	@Autowired
 	ChannelService chServ;
 	
 	private boolean spiersLaunched;
@@ -65,7 +68,7 @@ public class MutexMonitor {
 			chPool = new HashMap<String, ChannelData>(listChannelsData.getListChannelData().size());
 	        for (ChannelData chData: listChannelsData.getListChannelData()) {
 	        	// Si está activo
-	        	if (chData.isActive() ) { 
+	        	if (chData.isActive() || chData.isAdminVisible()) { 
 	        		Channel ch = new Channel();
 	        		ch.setIdChBusiness(chData.getIdChBusiness());
 	        		ch.computeHashIdChBusiness();
@@ -73,21 +76,24 @@ public class MutexMonitor {
 	        		lCh.add(ch);
 	        		// Añadir hashIdChBusiness al objeto ChannelData
 	        		chData.setHashIdChBusiness(ch.getHashIdChBusiness());
+	        		// Si es autostart pero no está activo -> Poner activo a falso
+	        		if ( ! chData.isActive() ) {
+	        			chData.setActive(false);
+	        		}
 	        		// Añadir objeto ChannelData al hashmap
 	        		chPool.put(chData.getHashIdChBusiness(), chData);
 	        	}
 	        }
         }
         chServ.save(lCh);
-
-        // Espiar channels
-//		for (Object value : chPool.values()) {
-//		ChannelData chData = (ChannelData)value;
-//		if (chData.getUrl() != null && chData.isActive() && ! chData.isBusy()) {
-//			chData.setBusy(true);
-//			return chData;
-//		}
-//	}
+        // Por cada chData entrenado, crear el MLChannel correspondiente y guardarlo en chData
+        for (Object value : chPool.values()) {
+        	ChannelData chData = (ChannelData)value;
+        	if (chData.isTrained()) {
+        		spyLaunchServ.loadMLChannel(chData);
+        	}
+        }
+        // Lanzar los spiers
         for (Object value : chPool.values()) {
         	ChannelData chData = (ChannelData)value;
         	if (spyLaunchServ.launchChannelSpying(chData)) {
@@ -212,6 +218,11 @@ public class MutexMonitor {
 		else {
 			return false;
 		}
+	}
+	
+	public synchronized MLChannel getMlChannelFromHashIdChBusiness(String hashIdChBusiness) {
+		ChannelData chData = chPool.get(hashIdChBusiness);
+		return chData.getMlChannel();
 	}
 	
 //	public void loadAndSpyChannels() {

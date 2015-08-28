@@ -27,6 +27,11 @@ public class MLChannelService {
 		return mlChRep.findAll();
 	}
 	
+	@Transactional(readOnly = true)
+	public MLChannel findByChannel(Channel ch) {
+		return mlChRep.findByChannel(ch);
+	}
+	
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
     public void save(MLChannel mlCh) {
 		mlChRep.save(mlCh);

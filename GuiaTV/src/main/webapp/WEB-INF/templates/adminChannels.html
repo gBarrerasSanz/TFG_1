@@ -61,6 +61,42 @@ function queryForSpyingSwitch(elem, hashIdChBusiness, spying) {
 	});
 }
 
+function queryForCrossValidation(elem, hashIdChBusiness, alreadyTrained) {
+	$.ajax({
+		type : "GET",
+		url : "/admin/channels/crossvalidation/",
+		data : { hashIdChBusiness: hashIdChBusiness, alreadyTrained: alreadyTrained},
+		complete: function(jqXHR, textStatus) {
+			var result = false;
+			switch(jqXHR.status){
+			case 200: // OK
+				alert(jqXHR.responseText);
+			default:
+				console.log("jqXHR.status="+jqXHR.status);
+				break;
+			}
+		}
+	});
+}
+
+function queryForPublishSchedule(elem, hashIdChBusiness, realtime) {
+	$.ajax({
+		type : "GET",
+		url : "/admin/channels/publishSchedule/",
+		data : { hashIdChBusiness: hashIdChBusiness, realtime: realtime},
+		complete: function(jqXHR, textStatus) {
+			var result = false;
+			switch(jqXHR.status){
+			case 200: // OK
+				//
+			default:
+				console.log("jqXHR.status="+jqXHR.status);
+				break;
+			}
+		}
+	});
+}
+
 function onActiveClicked(elem, hashIdChBusiness) {
 	//alert("You clicked "+elem);
 	if (elem.innerHTML == 'true') { // Si está activado -> Desactivar
@@ -80,6 +116,18 @@ function onSpiedClicked(elem, hashIdChBusiness) {
 		queryForSpyingSwitch(elem, hashIdChBusiness, true);
 	}
 }
+
+function onCrossValidationClicked(elem, hashIdChBusiness, trained) {
+	if (trained) {
+		// alreadyTrained==false -> El clasificador será reinicializado y no se espiarán los datos de test
+		var alreadyTrained = false;
+		queryForCrossValidation(elem, hashIdChBusiness, alreadyTrained);
+	}
+}
+
+function onPublishScheduleClicked(elem, hashIdChBusiness, realtime) {
+	queryForPublishSchedule(elem, hashIdChBusiness, realtime);
+}
 </script>
 
 </head>
@@ -91,6 +139,8 @@ function onSpiedClicked(elem, hashIdChBusiness) {
       <th>idChBusiness</th>
       <th>active</th>
       <th>spied</th>
+      <th>Publish Schedules</th>
+      <th>K-Fold C-V</th>
     </tr>
   </thead>
   <tbody>
@@ -106,6 +156,19 @@ function onSpiedClicked(elem, hashIdChBusiness) {
       <button th:text="${ch.busy}" 
       		th:class="${ch.busy}? 'btn btn-success' : 'btn btn-danger'"
       		th:onclick="'javascript:onSpiedClicked(this, \''+ ${ch.hashIdChBusiness} +'\');'">None</button>
+      </td>
+      <td>
+      <button th:text="Schedule"
+      		th:class="'btn btn-info'"
+      		th:onclick="'javascript:onPublishScheduleClicked(this, \''+ ${ch.hashIdChBusiness} +'\', false);'">None</button>
+      <button th:text="RtSchedule"
+      		th:class="'btn btn-primary'"
+      		th:onclick="'javascript:onPublishScheduleClicked(this, \''+ ${ch.hashIdChBusiness} +'\', true);'">None</button>
+      </td>
+      <td>
+      <button th:text="${ch.trained}? 'EXECUTE' : 'DISABLED'"
+      		th:class="${ch.trained}? 'btn btn-success' : 'btn btn-default'"
+      		th:onclick="'javascript:onCrossValidationClicked(this, \''+ ${ch.hashIdChBusiness} +'\', \''+ ${ch.trained} +'\');'">None</button>
       </td>
     </tr>
   </tbody>

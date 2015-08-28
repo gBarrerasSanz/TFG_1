@@ -78,6 +78,28 @@ public class ScheduleService {
 		return lSched;
 	}
 	
+	/*
+	 CUIDADO: ESTE MÉTODO NO TIENE UNO EN EL REPOSITORY ASOCIADO, 
+	 SINO QUE LLAMA A schedRep.findByChannelOrderByStartAsc() y se queda solo
+	 con el primer elemento
+	 */
+	@Transactional(readOnly = true)
+	public Schedule findOneByChannelOrderByStartAsc(Channel ch, boolean refs) {
+		List<Schedule> lSched = schedRep.findByChannelOrderByStartAsc(ch);
+		if (lSched == null || lSched.size() == 0) {
+			return null;
+		}
+		else {
+			Schedule sched = lSched.get(0);
+			if (refs) {
+				Hibernate.initialize(sched);
+				Hibernate.initialize(sched.getChannel());
+				Hibernate.initialize(sched.getProgramme());
+			}
+			return sched;
+		}
+	}
+	
 	@Transactional(readOnly = true)
 	public List<Schedule> findByChannelOrderByStartAsc(Channel ch, boolean refs) {
 		List<Schedule> lSched = schedRep.findByChannelOrderByStartAsc(ch);

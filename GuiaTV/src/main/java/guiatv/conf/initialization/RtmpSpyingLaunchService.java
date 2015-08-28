@@ -62,11 +62,8 @@ public class RtmpSpyingLaunchService {
 //	}
 	
 //	@PostConstruct
-	public boolean launchChannelSpying(ChannelData chData) {
-		if (chData == null || chData.getUrl() == null || ! chData.isActive() || chData.isBusy()) {
-			return false;
-		}
-		else {
+	public boolean loadMLChannel(ChannelData chData) {
+		try {
 			// Crear MlChannel 
 			StreamSource streamSource = new StreamSource(chData.getUrl());
 			Channel ch = chServ.findByIdChBusiness(chData.getIdChBusiness(), false);
@@ -96,17 +93,26 @@ public class RtmpSpyingLaunchService {
 					// Entonces guardar mlChannel en la base de datos y los ficheros de dataSet y Classifier
 					mlChServ.saveAndSaveFiles(mlChannel);
 				}
-				// Hacer cross-validation del modelo entrenado
-//				String cvResults = ArffHelper.doCrossValidation(mlChannel.getTrainedClassifier(), mlChannel.getFullDataSet());
-//				logger.debug("Channel "+ch.getIdChBusiness()+": "+cvResults);
-				// Liberar la memoria que ocupa fullDataSet
-				mlChannel.releaseFullDataSet();
-				// Espiar channel
-//				logger.debug("Spying channel "+ch.getNameCh());
-				rtmpSpyingServ.doSpying(mlChannel);
+				chData.setMlChannel(mlChannel);
 				return true;
 			}
+		} catch(Exception e) {
+			logger.debug("ERROR: channel: idChBusiness = "+chData.getIdChBusiness()+" DOES NOT HAVE a trained classifier yet.");
+			return false;
 		}
+	}
+	
+	public boolean launchChannelSpying(ChannelData chData) {
+		if (chData == null || chData.getUrl() == null || ! chData.isActive() || chData.isBusy()) {
+			return false;
+		}
+		
+		MLChannel mlCh = chData.getMlChannel();
+		if (mlCh == null) {
+			return false;
+		}
+		rtmpSpyingServ.doSpying(mlCh);
+		return true;
 	}
 	
 	private void loadClassifiedDataFromChannel(ChannelData chData, MLChannel mlChannel) {

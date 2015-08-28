@@ -1,5 +1,7 @@
 package guiatv.realtime.rtmpspying.serializable;
 
+import guiatv.persistence.domain.MLChannel;
+
 import java.nio.charset.StandardCharsets;
 
 import javax.xml.bind.annotation.XmlElement;
@@ -16,6 +18,7 @@ public class ChannelData {
 	private String idChBusiness;
 	private String hashIdChBusiness; // ESTE CAMPO NO EXISTE EN EL XML
 	private String nameProg;
+	private boolean trained;
 	private String url;
 	private int[] topLeft;
 	private int[] botRight;
@@ -24,8 +27,9 @@ public class ChannelData {
 	private boolean active;
 	private String batchDataUri;
 	private int numSamplesToSwitchState;
-	private boolean autostart;
+	private boolean adminVisible;
 	private boolean busy; // ESTE CAMPO NO EXISTE EN EL XML
+	private MLChannel mlCh; // ESTE CAMPO NO EXISTE EN EL XML
 	
 	public ChannelData() {
 		busy = false;
@@ -126,13 +130,13 @@ public class ChannelData {
 		this.numSamplesToSwitchState = numSamplesToSwitchState;
 	}
 	
-	@XmlElement(name="autostart")
-	public boolean isAutostart() {
-		return autostart;
+	@XmlElement(name="adminVisible")
+	public boolean isAdminVisible() {
+		return adminVisible;
 	}
 
-	public void setAutostart(boolean autostart) {
-		this.autostart = autostart;
+	public void setAdminVisible(boolean adminVisible) {
+		this.adminVisible = adminVisible;
 	}
 
 	public boolean isBusy() {
@@ -154,5 +158,24 @@ public class ChannelData {
 	public String getHashIdChBusiness() {
 		return hashIdChBusiness;
 	}
+	
+	@XmlElement(name="trained")
+	public boolean isTrained() {
+		return trained;
+	}
+
+	public void setTrained(boolean trained) {
+		this.trained = trained;
+	}
+
+	public MLChannel getMlChannel() {
+		return mlCh;
+	}
+
+	public void setMlChannel(MLChannel mlCh) {
+		this.mlCh = mlCh;
+	}
+	
+	
 	
 }

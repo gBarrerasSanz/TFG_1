@@ -118,7 +118,7 @@ public class XMLTVTransformer implements Transformer {
 				/**
 				 * Imprimir lista de channels procesados
 				 */
-				String processedChannels = "Channels procesados = ";
+				String processedChannels = "Channels procedentes de XMLTV = ";
 				for (Channel channel : mapCh.values()) {
 					processedChannels += channel.getIdChBusiness()+", ";
 				}
