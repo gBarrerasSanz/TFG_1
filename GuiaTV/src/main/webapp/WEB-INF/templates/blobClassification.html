@@ -6,8 +6,37 @@
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"/>
     <script src="http://code.jquery.com/jquery-2.1.3.js"></script>
     <title>Admin Channels</title>
-	<script>
-	</script>
+<script>
+function queryClassification(elem, idBlobPersistence, classificationResult) {
+	$.ajax({
+		type : "POST",
+		url : "/admin/channels/learnNewClassifiedSample/",
+		data : { idBlobPersistence: idBlobPersistence, classificationResult: classificationResult},
+		complete: function(jqXHR, textStatus) {
+			var result = false;
+			switch(jqXHR.status){
+			case 200: // OK
+				// Hacer desaparecer el botón que NO ha sido seleccionado:
+				if (classificationResult) { // Si classificationResult==true -> Hacer desaparecer botón Bad
+					var badElem = elem.parentElement.getElementsByTagName("*")[1];
+					$(badElem).hide();
+				}
+				else { // Si classificationResult==false -> Hacer desaparecen botón Good
+					var goodElem = elem.parentElement.getElementsByTagName("*")[0];
+					$(goodElem).hide();
+				}
+			default:
+				console.log("jqXHR.status="+jqXHR.status);
+				break;
+			}
+		}
+	});
+}
+
+function onClassifyClicked(elem, idBlobPersistence, classificationResult) {
+	queryClassification(elem, idBlobPersistence, classificationResult);
+}	
+</script>
 </head>
 <body>
 <h2>Blobs</h2>
@@ -25,10 +54,21 @@
     	<td th:name="id" th:text="${blob.idBlobPersistence}">None</td>
       	<td th:name="idChBusiness" th:text="${blob.mlChannel.channel.idChBusiness}">None</td>
       	<td th:name="blob">
-      		<!-- <img th:src="@{/blobImg/${blob.idBlobPersistence}}"/> -->
-      		<img src="http://localhost:8080/ml/blobImg/1"/>
+      		<!-- ESTO NO ESTA DEL TODO BIEN PORQUE HAY QUE HARDCODEAR /ml
+      			y debería detectarlo solo con @, pero si no da problemas
+      			con la expresion de dentro ${blob.idBlobPersistence} -->
+      		<img th:src="@{|/ml/blobImg/${blob.idBlobPersistence}|}"/>
       	</td>
-      	<td th:name="classification">None</td>
+      	<td>
+      		<button th:text="Good"
+      			th:class="'btn btn-success'"
+      			th:onclick="'javascript:onClassifyClicked(this, \''+ ${blob.idBlobPersistence} +'\', true);'">
+      		</button>
+      		<button th:text="Bad"
+      			th:class="'btn btn-danger'"
+      			th:onclick="'javascript:onClassifyClicked(this, \''+ ${blob.idBlobPersistence} +'\', false);'">
+      		</button>
+      	</td>
     </tr>
   </tbody>
 </table>

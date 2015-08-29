@@ -1,6 +1,7 @@
 package guiatv.catalog.restcontroller;
 
 import guiatv.common.CommonUtility;
+import guiatv.persistence.domain.Blob;
 import guiatv.persistence.domain.Channel;
 import guiatv.persistence.domain.MLChannel;
 import guiatv.persistence.domain.RtSchedule;
@@ -9,6 +10,7 @@ import guiatv.persistence.domain.RtSchedule.InstantState;
 import guiatv.persistence.domain.helper.ArffHelper;
 import guiatv.persistence.repository.ChannelRepository;
 import guiatv.persistence.repository.MLChannelRepository;
+import guiatv.persistence.repository.service.BlobService;
 import guiatv.persistence.repository.service.ChannelService;
 import guiatv.persistence.repository.service.MLChannelService;
 import guiatv.persistence.repository.service.ScheduleService;
@@ -52,6 +54,8 @@ public class AdministrationRestController {
 	SchedulePublisher schedPublisher;
 	@Autowired
 	ScheduleService schedServ;
+	@Autowired
+	BlobService blobServ;
 	
 	@RequestMapping(
 			value = "/activation/", 
@@ -198,5 +202,21 @@ public class AdministrationRestController {
 		else {
 			return errResp;
 		}
+	}
+	
+	@RequestMapping(
+			value = "/learnNewClassifiedSample/", 
+			method = RequestMethod.POST)
+	public ResponseEntity<Boolean> learnNewClassifiedSample(
+			@RequestParam(value="idBlobPersistence", defaultValue="", required=true) long idBlobPersistence,
+			@RequestParam(value="classificationResult", defaultValue="", required=true) boolean classificationResult)
+	{
+		Blob blob = blobServ.findOneByIdBlobPersistence(idBlobPersistence);
+		MLChannel mlCh = blob.getMlChannel();
+		// Añadir muestra
+		monitor.addSample(blob, classificationResult);
+		// Eliminar blob de la Base de Datos
+		blobServ.delete(blob);
+		return new ResponseEntity<Boolean>(true, HttpStatus.OK);
 	}
 }

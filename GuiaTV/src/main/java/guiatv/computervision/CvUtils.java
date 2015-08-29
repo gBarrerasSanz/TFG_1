@@ -42,6 +42,14 @@ public class CvUtils {
 //		return byteArr;
 //	}
 	
+	public static byte[] convertByteArrayToPngDecodeable(byte[] byteArr, int imgCols, int imgRows) {
+		Mat mat = getGrayMatFromByteArray(byteArr, imgCols, imgRows);
+		MatOfByte bytemat = new MatOfByte();
+		Highgui.imencode(".png", mat, bytemat);
+		byte[] pngByteArr = bytemat.toArray();
+		return pngByteArr;
+	}
+	
 	/*
 	 * ESTA ES LA QUE FUNCIONA HASTA EL MOMENTO
 	 */

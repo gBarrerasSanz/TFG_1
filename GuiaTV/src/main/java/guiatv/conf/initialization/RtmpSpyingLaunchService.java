@@ -164,7 +164,7 @@ public class RtmpSpyingLaunchService {
 				Mat imgMat = Highgui.imread(imgFile.getAbsolutePath(), Highgui.CV_LOAD_IMAGE_GRAYSCALE);
 				byte[] imgData = CvUtils.getByteArrayFromMat(imgMat);
 				Blob blob = new Blob(imgData, mlChannel);
-				mlChannel.addSample(blob, truth);
+				monitor.addSample(blob, truth);
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 				return false;

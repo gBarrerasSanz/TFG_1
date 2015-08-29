@@ -18,6 +18,7 @@ import guiatv.computervision.CvUtils;
 import guiatv.persistence.domain.RtSchedule.InstantState;
 import guiatv.persistence.domain.Schedule.CustomSchedule;
 import guiatv.persistence.domain.helper.ArffHelper;
+import guiatv.persistence.repository.service.MLChannelService;
 import guiatv.schedule.publisher.SchedulePublisher;
 
 import javax.persistence.Column;
@@ -74,6 +75,12 @@ public class MLChannel {
 	@Column(name="trained", nullable=false)
 	private boolean trained;
 	
+	@Column(name="numFalseSamplesLearned", nullable=false)
+	private long numFalseSamplesLearned;
+	
+	@Column(name="numTrueSamplesLearned", nullable=false)
+	private long numTrueSamplesLearned;
+	
 	@Column(name="trainedClassifierUri", nullable=true)
 	private String trainedClassifierUri;
 	
@@ -122,6 +129,9 @@ public class MLChannel {
 	@Transient
 	private Queue<InstantState> fifoRtSched = new CircularFifoQueue<InstantState>(numSamplesToSwitchState);
 	
+	@Transient
+	private int numLastLearnedSamples = 0;
+	
 	public MLChannel() {
 	}
 	
@@ -137,6 +147,8 @@ public class MLChannel {
 		this.botRight = botRight;
 		this.numSamplesToSwitchState = numSamplesToSwitchState;
 		this.trained = false;
+		this.numFalseSamplesLearned = 0;
+		this.numTrueSamplesLearned = 0;
 	}
 	
     /**********************************************************
@@ -355,39 +367,78 @@ public class MLChannel {
 		this.trained = trained;
 	}
 
-	public void addSample(Blob blob, boolean truth) 
-	{
-		/*
-		 * IMPORTANTE: En el momento en el que se añade una muestra, se considera
-		 * que MLChannel está entrenado <=> MLChannel.trained = true
-		 */
-		this.trained = true;
-		
-		if (dataSet == null) {
-			// TODO: Asumo que si dataSet == null, entonces trainedClassifier == null. NO SÉ SI SE CUMPLE SIEMPRE O NO
-			dataSet = ArffHelper.createInstancesObject(blob);
-			fullDataSet = ArffHelper.createInstancesObject(blob);
-			trainedClassifier = ArffHelper.createClassifierNaiveBayesUpdateable(dataSet, blob);
-		}
-		Instance newInstance = ArffHelper.getLabeledInstance(dataSet, blob, truth);
-		if (dataSet.checkInstance(newInstance)) {
-			/** IMPORTANTE */
-//			dataSet.add(newInstance); // TODO: No sé si hace falta (Ni se si hace falta conservar todas las muestras en data)
-			newInstance.setDataset(dataSet);
-			fullDataSet.add(newInstance); 
-			newInstance.setDataset(fullDataSet); 
-		}
-		else {
-			throw new IllegalArgumentException("newInstance IS NOT compatible with DataSet data");
-		}
-		ArffHelper.updateClassifier(trainedClassifier, newInstance);
-	}
+//	public void addSample(Blob blob, boolean truth) 
+//	{
+//		
+//		if (dataSet == null) {
+//			// TODO: Asumo que si dataSet == null, entonces trainedClassifier == null. NO SÉ SI SE CUMPLE SIEMPRE O NO
+//			dataSet = ArffHelper.createInstancesObject(blob);
+//			fullDataSet = ArffHelper.createInstancesObject(blob);
+//			trainedClassifier = ArffHelper.createClassifierNaiveBayesUpdateable(dataSet, blob);
+//			/*
+//			 * IMPORTANTE: En el momento en el que se añade una muestra, se considera
+//			 * que MLChannel está entrenado <=> MLChannel.trained = true
+//			 */
+//			if ( ! trained) { trained = true; }
+//		}
+//		
+//		Instance newInstance = ArffHelper.getLabeledInstance(dataSet, blob, truth);
+//		if (dataSet.checkInstance(newInstance)) { // Si la instancia concuerda con el modelo creado
+//			/** IMPORTANTE */
+////			dataSet.add(newInstance); // TODO: No sé si hace falta (Ni se si hace falta conservar todas las muestras en data)
+//			newInstance.setDataset(dataSet);
+//			fullDataSet.add(newInstance); 
+//			newInstance.setDataset(fullDataSet); 
+//		}
+//		else {
+//			throw new IllegalArgumentException("newInstance IS NOT compatible with DataSet data");
+//		}
+//		ArffHelper.updateClassifier(trainedClassifier, newInstance);
+//		
+//		// Contar número de muestras aprendidas sin backup
+//		numLastLearnedSamples++;
+//		/*
+//		 * Si se han aprendido 10 muestras no backupeadas, 
+//		 * entonces hacer backup de los ficheros de datos y del clasificador
+//		 * y resetear la cuenta a 0
+//		 */
+//		if(numLastLearnedSamples >= 10) {
+////			mlChServ.saveAndSaveFiles(this);
+//			numLastLearnedSamples = 0;
+//		}
+//		
+//		// Contar numero de muestras verdaderas y falsas aprendidas
+//		if(truth) {
+//			numTrueSamplesLearned++;
+//		}
+//		else {
+//			numFalseSamplesLearned++;
+//		}
+//	}
 	
 	
 	public InstantState getCurrentState() {
 		return currentState;
 	}
 	
+	
+	
+	public long getNumFalseSamplesLearned() {
+		return numFalseSamplesLearned;
+	}
+
+	public void setNumFalseSamplesLearned(long numFalseSamplesLearned) {
+		this.numFalseSamplesLearned = numFalseSamplesLearned;
+	}
+
+	public long getNumTrueSamplesLearned() {
+		return numTrueSamplesLearned;
+	}
+
+	public void setNumTrueSamplesLearned(long numTrueSamplesLearned) {
+		this.numTrueSamplesLearned = numTrueSamplesLearned;
+	}
+
 	public void switchCurrentState() {
 		switch(currentState) {
 		case ON_PROGRAMME:
@@ -462,6 +513,26 @@ public class MLChannel {
 				return true;
 			}
 		}
+	}
+
+	public int getNumLastLearnedSamples() {
+		return numLastLearnedSamples;
+	}
+
+	public void setNumLastLearnedSamples(int numLastLearnedSamples) {
+		this.numLastLearnedSamples = numLastLearnedSamples;
+	}
+
+	public void setDataSet(Instances dataSet) {
+		this.dataSet = dataSet;
+	}
+
+	public void setFullDataSet(Instances fullDataSet) {
+		this.fullDataSet = fullDataSet;
+	}
+
+	public void setTrainedClassifier(NaiveBayesUpdateable trainedClassifier) {
+		this.trainedClassifier = trainedClassifier;
 	}
 	
 	

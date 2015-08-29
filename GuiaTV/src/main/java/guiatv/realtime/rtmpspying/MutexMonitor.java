@@ -2,8 +2,10 @@ package guiatv.realtime.rtmpspying;
 
 import guiatv.catalog.datatypes.ListChannels;
 import guiatv.conf.initialization.RtmpSpyingLaunchService;
+import guiatv.persistence.domain.Blob;
 import guiatv.persistence.domain.Channel;
 import guiatv.persistence.domain.MLChannel;
+import guiatv.persistence.domain.helper.ArffHelper;
 import guiatv.persistence.repository.service.ChannelService;
 import guiatv.persistence.repository.service.MLChannelService;
 import guiatv.realtime.rtmpspying.serializable.ChannelData;
@@ -31,6 +33,8 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
+
+import weka.core.Instance;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -222,6 +226,57 @@ public class MutexMonitor {
 		ChannelData chData = chPool.get(hashIdChBusiness);
 		return chData.getMlChannel();
 	}
+	
+	
+	public synchronized void addSample(Blob blob, boolean truth) 
+	{
+		MLChannel mlCh = blob.getMlChannel();
+		if (mlCh.getDataSet() == null) {
+			// TODO: Asumo que si dataSet == null, entonces trainedClassifier == null. NO SÉ SI SE CUMPLE SIEMPRE O NO
+			mlCh.setDataSet(ArffHelper.createInstancesObject(blob));
+			mlCh.setFullDataSet(ArffHelper.createInstancesObject(blob));
+			mlCh.setTrainedClassifier(ArffHelper.createClassifierNaiveBayesUpdateable(mlCh.getDataSet(), blob));
+			/*
+			 * IMPORTANTE: En el momento en el que se añade una muestra, se considera
+			 * que MLChannel está entrenado <=> MLChannel.trained = true
+			 */
+			if ( ! mlCh.isTrained()) { mlCh.setTrained(true); }
+		}
+		
+		Instance newInstance = ArffHelper.getLabeledInstance(mlCh.getDataSet(), blob, truth);
+		if (mlCh.getDataSet().checkInstance(newInstance)) { // Si la instancia concuerda con el modelo creado
+			/** IMPORTANTE */
+//			dataSet.add(newInstance); // TODO: No sé si hace falta (Ni se si hace falta conservar todas las muestras en data)
+			newInstance.setDataset(mlCh.getDataSet());
+			mlCh.getFullDataSet().add(newInstance); 
+			newInstance.setDataset(mlCh.getFullDataSet()); 
+		}
+		else {
+			throw new IllegalArgumentException("newInstance IS NOT compatible with DataSet data");
+		}
+		ArffHelper.updateClassifier(mlCh.getTrainedClassifier(), newInstance);
+		
+		// Contar número de muestras aprendidas sin backup
+		mlCh.setNumLastLearnedSamples(mlCh.getNumLastLearnedSamples()+1);
+		/*
+		 * Si se han aprendido 10 muestras no backupeadas, 
+		 * entonces hacer backup de los ficheros de datos y del clasificador
+		 * y resetear la cuenta a 0
+		 */
+		if(mlCh.getNumLastLearnedSamples() >= 10) {
+//			mlChServ.saveAndSaveFiles(mlCh); // Da error de transient unsaved
+			mlCh.setNumLastLearnedSamples(0);
+		}
+		
+		// Contar numero de muestras verdaderas y falsas aprendidas
+		if(truth) {
+			mlCh.setNumTrueSamplesLearned(mlCh.getNumTrueSamplesLearned()+1);
+		}
+		else {
+			mlCh.setNumFalseSamplesLearned(mlCh.getNumFalseSamplesLearned()+1);
+		}
+	}
+	
 	
 //	public void loadAndSpyChannels() {
 //        if ( ! spiersLaunched) {

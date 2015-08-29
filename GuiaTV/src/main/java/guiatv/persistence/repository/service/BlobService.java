@@ -55,4 +55,9 @@ public class BlobService {
 		blobRep.save(blob);
     }
 	
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void delete(Blob blob) {
+		blobRep.delete(blob);
+    }
+	
 }

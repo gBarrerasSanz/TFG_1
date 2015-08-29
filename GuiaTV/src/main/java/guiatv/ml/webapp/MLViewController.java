@@ -1,6 +1,7 @@
 package guiatv.ml.webapp;
 
 import guiatv.catalog.datatypes.ListChannels;
+import guiatv.computervision.CvUtils;
 import guiatv.persistence.domain.Blob;
 import guiatv.persistence.domain.Channel;
 import guiatv.persistence.repository.ChannelRepository;
@@ -74,10 +75,11 @@ public class MLViewController {
 			produces = MediaType.IMAGE_PNG_VALUE)
 	@ResponseBody
     public ResponseEntity<byte[]> getBlobImg(@PathVariable("idBlobPersistence") Long idBlobPersistence) throws IOException {
-        byte[] imageContent = blobServ.findOneByIdBlobPersistence(idBlobPersistence).getBlob();
+        Blob blob = blobServ.findOneByIdBlobPersistence(idBlobPersistence);
+        byte[] blobImgContent = CvUtils.convertByteArrayToPngDecodeable(blob.getBlob(), blob.getBlobCols(), blob.getBlobRows());
         final HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.IMAGE_PNG);
-        return new ResponseEntity<byte[]>(imageContent, headers, HttpStatus.OK);
+        return new ResponseEntity<byte[]>(blobImgContent, headers, HttpStatus.OK);
         
 //        return new ResponseEntity<byte[]>(imageContent, HttpStatus.OK);
     }

@@ -17,8 +17,8 @@
 			<cols>1197</cols>
 			<rows>666</rows>
 		</botRight>
-		<active>true</active>
-		<doSpying>true</doSpying>
+		<active>false</active>
+		<doSpying>false</doSpying>
 		<batchDataUri>captures/01_a1/goodSamples/</batchDataUri>
 		<numSamplesToSwitchState>5</numSamplesToSwitchState>
 		<adminVisible>true</adminVisible>
@@ -37,8 +37,8 @@
 			<cols>1254</cols>
 			<rows>94</rows>
 		</botRight>
-		<active>true</active>
-		<doSpying>true</doSpying>
+		<active>false</active>
+		<doSpying>false</doSpying>
 		<batchDataUri>captures/09_aTDP/goodSamples/</batchDataUri>
 		<numSamplesToSwitchState>5</numSamplesToSwitchState>
 		<adminVisible>true</adminVisible>
@@ -98,8 +98,8 @@
 			<cols>1177</cols>
 			<rows>662</rows>
 		</botRight>
-		<active>true</active>
-		<doSpying>true</doSpying>
+		<active>false</active>
+		<doSpying>false</doSpying>
 		<batchDataUri>captures/07_aNeox/goodSamples/</batchDataUri>
 		<numSamplesToSwitchState>10</numSamplesToSwitchState>
 		<adminVisible>true</adminVisible>
@@ -125,8 +125,8 @@
 			<cols>1176</cols>
 			<rows>663</rows>
 		</botRight>
-		<active>true</active>
-		<doSpying>true</doSpying>
+		<active>false</active>
+		<doSpying>false</doSpying>
 		<batchDataUri>captures/05_a5/goodSamples/</batchDataUri>
 		<numSamplesToSwitchState>5</numSamplesToSwitchState>
 		<adminVisible>true</adminVisible>
@@ -146,8 +146,8 @@
 			<cols>1164</cols>
 			<rows>107</rows>
 		</botRight>
-		<active>true</active>
-		<doSpying>true</doSpying>
+		<active>false</active>
+		<doSpying>false</doSpying>
 		<batchDataUri>captures/10_aAragon/goodSamples/</batchDataUri>
 		<numSamplesToSwitchState>5</numSamplesToSwitchState>
 		<adminVisible>true</adminVisible>
@@ -169,7 +169,7 @@
 			<rows>649</rows>
 		</botRight>
 		<active>false</active>
-		<doSpying>true</doSpying>
+		<doSpying>false</doSpying>
 		<batchDataUri>captures/08_aNova/goodSamples/</batchDataUri>
 		<numSamplesToSwitchState>5</numSamplesToSwitchState>
 		<adminVisible>true</adminVisible>
@@ -193,8 +193,8 @@
 			<cols></cols>
 			<rows></rows>
 		</botRight>
-		<active>true</active>
-		<doSpying>true</doSpying>
+		<active>false</active>
+		<doSpying>false</doSpying>
 		<batchDataUri></batchDataUri>
 		<numSamplesToSwitchState></numSamplesToSwitchState>
 		<adminVisible>true</adminVisible>

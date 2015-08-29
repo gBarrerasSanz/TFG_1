@@ -135,17 +135,17 @@ function onPublishScheduleClicked(elem, hashIdChBusiness, realtime) {
 <table class="table table-bordered">
   <thead>
     <tr>
-      <th>nameCh</th>
       <th>idChBusiness</th>
       <th>active</th>
       <th>spied</th>
       <th>Publish Schedules</th>
+      <th>Good Samp</th>
+      <th>Bad Samp</th>
       <th>K-Fold C-V</th>
     </tr>
   </thead>
   <tbody>
     <tr th:each="ch : ${lChData}">
-      <td th:name="nameProg" th:text="${ch.nameProg}">None</td>
       <td th:name="idChBusiness" th:text="${ch.idChBusiness}">None</td>
       <td th:name="active">
       	<button th:text="${ch.active}" 
@@ -165,6 +165,8 @@ function onPublishScheduleClicked(elem, hashIdChBusiness, realtime) {
       		th:class="'btn btn-primary'"
       		th:onclick="'javascript:onPublishScheduleClicked(this, \''+ ${ch.hashIdChBusiness} +'\', true);'">None</button>
       </td>
+      <td th:name="goodSamples" th:text="${ch.mlChannel.numTrueSamplesLearned}">None</td>
+      <td th:name="badSamples" th:text="${ch.mlChannel.numFalseSamplesLearned}">None</td>
       <td>
       <button th:text="${ch.mlChannel.trained}? 'EXECUTE' : 'DISABLED'"
       		th:class="${ch.mlChannel.trained}? 'btn btn-success' : 'btn btn-default'"
