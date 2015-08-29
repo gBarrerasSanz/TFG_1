@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"></meta>
+    <!-- Bootstrap core CSSS -->
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"/>
+    <script src="http://code.jquery.com/jquery-2.1.3.js"></script>
+    <title>Admin Channels</title>
+	<script>
+	</script>
+</head>
+<body>
+<h2>Blobs</h2>
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th>id</th>
+      <th>Channel</th>
+      <th>Blob</th>
+      <th>Classification</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr th:each="blob : ${page.content}">
+    	<td th:name="id" th:text="${blob.idBlobPersistence}">None</td>
+      	<td th:name="idChBusiness" th:text="${blob.mlChannel.channel.idChBusiness}">None</td>
+      	<td th:name="blob">
+      		<!-- <img th:src="@{/blobImg/${blob.idBlobPersistence}}"/> -->
+      		<img src="http://localhost:8080/ml/blobImg/1"/>
+      	</td>
+      	<td th:name="classification">None</td>
+    </tr>
+  </tbody>
+</table>
+<h2>Pages</h2>
+<table class="table table-striped">
+<tr>
+	<td th:class="${page.firstPage}? 'disabled' : ''">
+		<span th:if="${page.firstPage}">First</span>
+        <a th:if="${not page.firstPage}" th:href="@{${page.url}(page.page=1,page.size=${page.size})}">First</a>
+	</td>
+	<td th:class="${page.hasPreviousPage}? '' : 'disabled'">
+        <span th:if="${not page.hasPreviousPage}">&lt;&lt;</span>
+        <a th:if="${page.hasPreviousPage}" th:href="@{${page.url}(page.page=${page.number-1},page.size=${page.size})}" title="Go to previous page">&lt;&lt;</a>
+     </td>
+     <td th:each="item : ${page.items}" th:class="${item.current}? 'active' : ''">
+        <span th:if="${item.current}" th:text="${item.number}">1</span>
+        <a th:if="${not item.current}" th:href="@{${page.url}(page.page=${item.number},page.size=${page.size})}"><span th:text="${item.number}">1</span></a>
+      </td>
+      <td th:class="${page.hasNextPage}? '' : 'disabled'">
+        <span th:if="${not page.hasNextPage}">&gt;&gt;</span>
+        <a th:if="${page.hasNextPage}" th:href="@{${page.url}(page.page=${page.number+1},page.size=${page.size})}" title="Go to next page">&gt;&gt;</a>
+      </td>
+      <td th:class="${page.lastPage}? 'disabled' : ''">
+        <span th:if="${page.lastPage}">Last</span>
+        <a th:if="${not page.lastPage}" th:href="@{${page.url}(page.page=${page.totalPages},page.size=${page.size})}">Last</a>
+      </td>
+</tr>
+</table>
+</body>
+</html>

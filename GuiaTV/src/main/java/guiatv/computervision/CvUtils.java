@@ -35,13 +35,16 @@ public class CvUtils {
 		return mat;
 	}
 	
-//	public static byte[] getByteArrayFromMat2(Mat mat) {
+//	public static byte[] getByteArrayFromMat(Mat mat) {
 //		MatOfByte bytemat = new MatOfByte();
-//		Highgui.imencode(".jpg", mat, bytemat);
+//		Highgui.imencode(".png", mat, bytemat);
 //		byte[] byteArr = bytemat.toArray();
 //		return byteArr;
 //	}
 	
+	/*
+	 * ESTA ES LA QUE FUNCIONA HASTA EL MOMENTO
+	 */
 	public static byte[] getByteArrayFromMat(Mat mat) {
 		byte byteArr[] = new byte[(int) (mat.total() * mat.channels())];
 		mat.get(0, 0, byteArr);

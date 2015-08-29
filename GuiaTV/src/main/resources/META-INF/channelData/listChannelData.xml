@@ -1,4 +1,8 @@
 <listChannelsData>
+	
+	<!-- ************************************************************
+	**************** FUENTE STREAMING CORRECTA *************
+	************************************************************	-->
 	<channelData id="tve-1-807.laguiatv.com">
 		<nameProg>TVE 1</nameProg>
 		<chIdBusiness>tve-1-807.laguiatv.com</chIdBusiness>
@@ -13,11 +17,31 @@
 			<cols>1197</cols>
 			<rows>666</rows>
 		</botRight>
-		<active>false</active>
+		<active>true</active>
 		<doSpying>true</doSpying>
 		<batchDataUri>captures/01_a1/goodSamples/</batchDataUri>
 		<numSamplesToSwitchState>5</numSamplesToSwitchState>
-		<adminVisible>false</adminVisible>
+		<adminVisible>true</adminVisible>
+	</channelData>
+	<channelData id="teledeporte-762">
+		<nameProg>Teledeporte</nameProg>
+		<chIdBusiness>teledeporte-762</chIdBusiness>
+		<url>http://iphonelive.rtve.es/TDP_LV3_IPH/TDP_LV3_IPH.m3u8</url>
+		<cols>1280</cols>
+		<rows>720</rows>
+		<topLeft>
+			<cols>1145</cols>
+			<rows>36</rows>
+		</topLeft>
+		<botRight>
+			<cols>1254</cols>
+			<rows>94</rows>
+		</botRight>
+		<active>true</active>
+		<doSpying>true</doSpying>
+		<batchDataUri>captures/09_aTDP/goodSamples/</batchDataUri>
+		<numSamplesToSwitchState>5</numSamplesToSwitchState>
+		<adminVisible>true</adminVisible>
 	</channelData>
 	<channelData id="antena-3-839.laguiatv.com">
 		<nameProg>Antena 3</nameProg>
@@ -39,47 +63,6 @@
 		<numSamplesToSwitchState>5</numSamplesToSwitchState>
 		<adminVisible>true</adminVisible>
 	</channelData>
-	<channelData id="tele-5-847.laguiatv.com">
-		<nameProg>Telecinco</nameProg>
-		<chIdBusiness>tele-5-847.laguiatv.com</chIdBusiness>
-		<url>http://mdsios1-lh.akamaihd.net/i/telecinco/esmediaset_11@168471/index_0_av-b.m3u8
-		</url>
-		<cols>1280</cols>
-		<rows>720</rows>
-		<topLeft>
-			<cols>1123</cols>
-			<rows>606</rows>
-		</topLeft>
-		<botRight>
-			<cols>1176</cols>
-			<rows>663</rows>
-		</botRight>
-		<active>true</active>
-		<doSpying>true</doSpying>
-		<batchDataUri>captures/05_a5/goodSamples/</batchDataUri>
-		<numSamplesToSwitchState>5</numSamplesToSwitchState>
-		<adminVisible>false</adminVisible>
-	</channelData>
-	<channelData id="fdf-734">
-		<nameProg>Factoría de Ficción</nameProg>
-		<chIdBusiness>fdf-734.laguiatv.com</chIdBusiness>
-		<url></url>
-		<cols></cols>
-		<rows></rows>
-		<topLeft>
-			<cols></cols>
-			<rows></rows>
-		</topLeft>
-		<botRight>
-			<cols></cols>
-			<rows></rows>
-		</botRight>
-		<active>true</active>
-		<doSpying>true</doSpying>
-		<batchDataUri></batchDataUri>
-		<numSamplesToSwitchState></numSamplesToSwitchState>
-		<adminVisible>true</adminVisible>
-	</channelData>
 	<channelData id="la-sexta-782.laguiatv.com">
 		<nameProg>La Sexta</nameProg>
 		<chIdBusiness>la-sexta-782.laguiatv.com</chIdBusiness>
@@ -98,7 +81,7 @@
 		<doSpying>true</doSpying>
 		<batchDataUri>captures/06_a6/goodSamples/</batchDataUri>
 		<numSamplesToSwitchState>5</numSamplesToSwitchState>
-		<adminVisible>false</adminVisible>
+		<adminVisible>true</adminVisible>
 	</channelData>
 	<channelData id="neox-722.laguiatv.com">
 		<nameProg>Neox</nameProg>
@@ -119,14 +102,62 @@
 		<doSpying>true</doSpying>
 		<batchDataUri>captures/07_aNeox/goodSamples/</batchDataUri>
 		<numSamplesToSwitchState>10</numSamplesToSwitchState>
-		<adminVisible>false</adminVisible>
+		<adminVisible>true</adminVisible>
 	</channelData>
-	<!-- Nova NO FUNCIONA -->
+	
+	
+	<!-- ************************************************************
+	**************** FUENTE STREAMING CON PROBLEMAS *************
+	************************************************************	-->
+	
+	<channelData id="tele-5-847.laguiatv.com">
+		<nameProg>Telecinco</nameProg>
+		<chIdBusiness>tele-5-847.laguiatv.com</chIdBusiness>
+		<url>http://mdsios1-lh.akamaihd.net/i/telecinco/esmediaset_11@168471/index_0_av-b.m3u8
+		</url>
+		<cols>1280</cols>
+		<rows>720</rows>
+		<topLeft>
+			<cols>1123</cols>
+			<rows>606</rows>
+		</topLeft>
+		<botRight>
+			<cols>1176</cols>
+			<rows>663</rows>
+		</botRight>
+		<active>true</active>
+		<doSpying>true</doSpying>
+		<batchDataUri>captures/05_a5/goodSamples/</batchDataUri>
+		<numSamplesToSwitchState>5</numSamplesToSwitchState>
+		<adminVisible>true</adminVisible>
+	</channelData>
+	
+	<channelData id="aragon-tv-919.laguiatv.com">
+		<nameProg>Aragón TV</nameProg>
+		<chIdBusiness>aragon-tv-919.laguiatv.com</chIdBusiness>
+		<url>rtmp://aragontvlivefs.fplive.net/aragontvlive-live/stream_normal_abt live=1</url>
+		<cols>1280</cols>
+		<rows>720</rows>
+		<topLeft>
+			<cols>1110</cols>
+			<rows>50</rows>
+		</topLeft>
+		<botRight>
+			<cols>1164</cols>
+			<rows>107</rows>
+		</botRight>
+		<active>true</active>
+		<doSpying>true</doSpying>
+		<batchDataUri>captures/10_aAragon/goodSamples/</batchDataUri>
+		<numSamplesToSwitchState>5</numSamplesToSwitchState>
+		<adminVisible>true</adminVisible>
+	</channelData>
+	
+	<!-- La fuente de NOVA está caída -->
 	<channelData id="nova-723.laguiatv.com">
 		<nameProg>Nova</nameProg>
 		<chIdBusiness>nova-723.laguiatv.com</chIdBusiness>
-		<url>rtmp://antena3fms35livefs.fplive.net:1935/antena3fms35live-live/stream-eventos6_2
-			live=1</url>
+		<url>rtmp://antena3fms35livefs.fplive.net:1935/antena3fms35live-live/stream-eventos6_2 live=1</url>
 		<cols>1280</cols>
 		<rows>720</rows>
 		<topLeft>
@@ -143,24 +174,55 @@
 		<numSamplesToSwitchState>5</numSamplesToSwitchState>
 		<adminVisible>true</adminVisible>
 	</channelData>
-	<channelData id="aragon-tv-919.laguiatv.com">
-		<nameProg>Aragón TV</nameProg>
-		<chIdBusiness>aragon-tv-919.laguiatv.com</chIdBusiness>
-		<url>rtmp://aragontvlivefs.fplive.net/aragontvlive-live/stream_normal_abt
-			live=1</url>
+	
+	<!-- ************************************************************
+	**************** NINGUNA FUENTE DE STREAMING CONOCIDA *******
+	************************************************************	-->
+	
+	<channelData id="fdf-734">
+		<nameProg>Factoría de Ficción</nameProg>
+		<chIdBusiness>fdf-734.laguiatv.com</chIdBusiness>
+		<url></url>
+		<cols></cols>
+		<rows></rows>
+		<topLeft>
+			<cols></cols>
+			<rows></rows>
+		</topLeft>
+		<botRight>
+			<cols></cols>
+			<rows></rows>
+		</botRight>
+		<active>true</active>
+		<doSpying>true</doSpying>
+		<batchDataUri></batchDataUri>
+		<numSamplesToSwitchState></numSamplesToSwitchState>
+		<adminVisible>true</adminVisible>
+	</channelData>
+	
+	<!-- ************************************************************
+	**************** SIN PROGRAMACIÓN EN XMLTV **********************
+	************************************************************	-->
+	
+	
+	<!-- EL CANAL 24H NO ESTÁ EN XMLTV -->
+	<channelData id="24HORAS_BLA_BLA">
+		<nameProg>Canal 24 Horas</nameProg>
+		<chIdBusiness>24HORAS_BLA_BLA</chIdBusiness>
+		<url>http://iphonelive.rtve.es/24H_LV3_IPH/bitrate_2.m3u8</url>
 		<cols>1280</cols>
 		<rows>720</rows>
 		<topLeft>
-			<cols>1110</cols>
-			<rows>50</rows>
+			<cols>1113</cols>
+			<rows>562</rows>
 		</topLeft>
 		<botRight>
-			<cols>1164</cols>
-			<rows>107</rows>
+			<cols>1203</cols>
+			<rows>659</rows>
 		</botRight>
 		<active>false</active>
-		<doSpying>true</doSpying>
-		<batchDataUri>captures/10_aAragon/goodSamples/</batchDataUri>
+		<doSpying>false</doSpying>
+		<batchDataUri>captures/00_a24/goodSamples/</batchDataUri>
 		<numSamplesToSwitchState>5</numSamplesToSwitchState>
 		<adminVisible>false</adminVisible>
 	</channelData>

@@ -3,6 +3,7 @@ package guiatv.persistence.domain;
 import guiatv.computervision.CvUtils;
 import guiatv.realtime.rtmpspying.serializable.ChannelData;
 
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -23,15 +24,16 @@ public class Blob {
 	private static final Logger logger = Logger.getLogger("debugLog");
 	
 	@Id
-    @Column(name = "idRoiBlobPersistence", nullable = false)
+    @Column(name = "idBlobPersistence", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idRoiBlobPersistence;
+    private Long idBlobPersistence;
 	
 	@ManyToOne(targetEntity=MLChannel.class, fetch=FetchType.LAZY)
 	@JoinColumn(name="mlchannel_fk", referencedColumnName="idMlChPersistence")
 	private MLChannel mlChannel;
 	
 	@Lob
+	@Basic(fetch = FetchType.LAZY)
 	@Column(name = "blob", nullable = false)
 	private byte[] blob;
 	
@@ -84,8 +86,8 @@ public class Blob {
 		this.blob = blob;
 	}
 
-	public Long getIdRoiBlobPersistence() {
-		return idRoiBlobPersistence;
+	public Long getIdBlobPersistence() {
+		return idBlobPersistence;
 	}
 
 	public int getBlobCols() {

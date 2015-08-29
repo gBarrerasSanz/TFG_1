@@ -2,6 +2,7 @@ package guiatv.conf.mvc;
 
 import guiatv.catalog.restcontroller.CatalogRestController;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.codehaus.jackson.map.ser.impl.JsonSerializerMap;
@@ -16,16 +17,22 @@ import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.format.FormatterRegistry;
+import org.springframework.http.MediaType;
+import org.springframework.http.converter.ByteArrayHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.integration.support.json.Jackson2JsonObjectMapper;
+import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.mvc.method.annotation.ServletWebArgumentResolverAdapter;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.thymeleaf.spring4.SpringTemplateEngine;
 import org.thymeleaf.spring4.view.ThymeleafViewResolver;
@@ -45,12 +52,25 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
         converters.add(converter());
+        converters.add(byteArrayConverter());
     }
     
     @Bean
     public MappingJackson2HttpMessageConverter converter() {
         MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
         converter.setObjectMapper(springHateoasMapper());
+        return converter;
+    }
+    
+    @Bean
+    public ByteArrayHttpMessageConverter byteArrayConverter() {
+    	ByteArrayHttpMessageConverter converter = new ByteArrayHttpMessageConverter();
+        List<MediaType> lMediaType = new ArrayList<MediaType>();
+        lMediaType.add(MediaType.IMAGE_JPEG);
+        lMediaType.add(MediaType.IMAGE_PNG);
+        lMediaType.add(MediaType.IMAGE_GIF);
+        lMediaType.add(MediaType.TEXT_PLAIN); // DEBUG
+    	converter.setSupportedMediaTypes(lMediaType);
         return converter;
     }
     
@@ -140,4 +160,15 @@ public class WebConfig extends WebMvcConfigurerAdapter {
  		source.setBasename("messages");
  		return source;
  	}
+ 	
+ 	@Override
+    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
+ 		PageableHandlerMethodArgumentResolver resolver = new PageableHandlerMethodArgumentResolver();
+ 		resolver.setPageParameterName("page.page");
+ 		resolver.setSizeParameterName("page.size");
+ 		resolver.setFallbackPageable(new PageRequest(0, 50));
+ 		resolver.setOneIndexedParameters(true);
+ 		argumentResolvers.add(resolver);
+ 		super.addArgumentResolvers(argumentResolvers);
+    }
 }

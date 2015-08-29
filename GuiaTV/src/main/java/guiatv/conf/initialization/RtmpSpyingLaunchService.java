@@ -134,6 +134,7 @@ public class RtmpSpyingLaunchService {
 		if (mlCh == null) {
 			return false;
 		}
+		mlCh.resetFifoAndCurrentStateRtSched(); // Limpiar fifo
 		rtmpSpyingServ.doSpying(mlCh);
 		return true;
 	}

@@ -80,10 +80,19 @@ public class CommonUtility {
 	
 	public static boolean validateURL(String stringUrl) {
 		try {
-		    URL url = new URL(stringUrl);
+			/*
+			 * Si empieza por rtmp:// -> Validarlo directamente. 
+			 * Si no, la creación de URL lanzará excepción de protocolo desconocido rtmp
+			 */
+			if (stringUrl.startsWith("rtmp://")) {
+				return true;
+			}
+			new URL(stringUrl);
+//		    new URL(stringUrl.split("[\\t\\n\\r ]+")[0]);
 		    return true;
 		} catch (MalformedURLException e) {
 		    // the URL is not in a valid form
+			
 			return false;
 		}
 	}

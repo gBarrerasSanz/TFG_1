@@ -34,7 +34,7 @@ public class UnclassifiedBlobWorker {
 	}
 	
 	public void storeBlob(Blob blob) {
-		logger.debug("Received blob from channel "+blob.getMlChannel().getChannel().getIdChBusiness());
+//		logger.debug("Received blob from channel "+blob.getMlChannel().getChannel().getIdChBusiness());
 		if (blobServ.count() <= 2000) {
 			blobServ.save(blob);
 		}

@@ -402,6 +402,11 @@ public class MLChannel {
 		}
 	}
 	
+	public synchronized void resetFifoAndCurrentStateRtSched() {
+		fifoRtSched.clear();
+		currentState = null;
+	}
+	
 	/**
 	 * Añade el estado del RtSchedule actual a la cola circular
 	 * Devuelve TRUE si el estado currentState ha cambiado y por lo tanto el cambio

@@ -42,9 +42,11 @@ public class RtmpSpyingService {
 	
 	private static final Logger logger = Logger.getLogger("debugLog"); 
 	
-	private static final int numReqPerSecond = 1;
+//	private static final int numReqPerSecond = 1;
 	
 	private static final int oneFrameEveryXSecs = 1;
+	
+	private static final int initialToleranceMs = 10000;
 	
 	@Value("${platform}")
 	private String platform;
@@ -117,7 +119,12 @@ public class RtmpSpyingService {
 				p = pb.start();
 //				Imshow im = new Imshow("Image");
 				in = new BufferedInputStream(p.getInputStream());
-		        while ((readBytes = in.read(readData, 0, BUFFSIZE)) != -1) {
+				long start = System.currentTimeMillis();
+				/*
+				 * Seguirá ejecutando mientras no se lea un -1 o mientras el tiempo
+				 * que lleva intentandolo es menor que initialToleranceMs milisegundos
+				 */
+		        while ((readBytes = in.read(readData, 0, BUFFSIZE)) != -1 || System.currentTimeMillis()-start < initialToleranceMs) {
 		        	for (byte b: readData) {
 		        		char c = (char) (b & 0xff);
 		        		if (ff && c == 0xd8){
@@ -185,6 +192,11 @@ public class RtmpSpyingService {
 			} catch (Exception e) {
 				e.printStackTrace();	
 			} finally {
+				/*
+				 * Si por alguna razón, el espía termina -> comunicarlo debidamente
+				 */
+				monitor.releaseBusyChannel(mlChannel.getChannel());
+				logger.debug("Channel ["+mlChannel.getChannel().getIdChBusiness()+"] is NO LONGER SPIED");
 		        if (in != null) {
 		            try { in.close(); } catch(Exception e){}
 		        }

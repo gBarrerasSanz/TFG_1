@@ -86,12 +86,10 @@ public class MutexMonitor {
 	        }
         }
         chServ.save(lCh);
-        // Por cada chData cuyo canal se quiera espiar (entranado o no), crear el MLChannel correspondiente y guardarlo en chData
+        // Por cada chData (entranado o no), crear el MLChannel correspondiente y guardarlo en chData
         for (Object value : chPool.values()) {
         	ChannelData chData = (ChannelData)value;
-        	if (chData.isDoSpying()) {
-        		spyLaunchServ.loadMLChannel(chData);
-        	}
+        	spyLaunchServ.loadMLChannel(chData);
         }
         // Lanzar los spiers
         for (Object value : chPool.values()) {
