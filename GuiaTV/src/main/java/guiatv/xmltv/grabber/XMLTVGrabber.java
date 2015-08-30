@@ -1,9 +1,7 @@
 package guiatv.xmltv.grabber;
 
 import guiatv.common.CommonUtility;
-import guiatv.common.datatypes.Frame_OLD;
 import guiatv.computervision.Imshow;
-import guiatv.persistence.domain.MLChannel;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;

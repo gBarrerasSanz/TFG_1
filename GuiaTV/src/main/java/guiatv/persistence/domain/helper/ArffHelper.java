@@ -1,5 +1,9 @@
 package guiatv.persistence.domain.helper;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Random;
@@ -13,6 +17,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 
+import guiatv.common.CommonUtility;
 import guiatv.computervision.CvUtils;
 import guiatv.computervision.Imshow;
 import guiatv.persistence.domain.Blob;
@@ -27,6 +32,7 @@ import weka.core.Attribute;
 import weka.core.FastVector;
 import weka.core.Instance;
 import weka.core.Instances;
+import weka.core.converters.ArffLoader;
 
 public class ArffHelper implements Serializable {
 	
@@ -74,7 +80,7 @@ public class ArffHelper implements Serializable {
 		Attribute classAtt = new Attribute("class", classAttVals);
 		atts.addElement(classAtt);
 		// Crear objeto Instances
-		String nameInstances = "Rel "+blob.getMlChannel().getChannel().getIdChBusiness();
+		String nameInstances = "Rel "+blob.getMyCh().getChannel().getIdChBusiness();
 		Instances dataSet = new Instances(nameInstances, atts, 0);
 		// Añadir atributos al objeto Instances
 		dataSet.setClass(classAtt); // Establece el atributo classAtt como el atributo que indica la clase
@@ -168,6 +174,62 @@ public class ArffHelper implements Serializable {
 		} catch (Exception e) {
 			return null;
 		}
+	}
+	
+	public static boolean addInstanceToModel(Instance instance, Instances dataSet, Instances fullDataSet, NaiveBayesUpdateable trainedClassifier) {
+		if (dataSet.checkInstance(instance)) { // Si la instancia concuerda con el modelo creado
+			/** IMPORTANTE */
+//			dataSet.add(newInstance); // TODO: No sé si hace falta (Ni se si hace falta conservar todas las muestras en data)
+			instance.setDataset(dataSet);
+			instance.setDataset(fullDataSet); 
+			ArffHelper.updateClassifier(trainedClassifier, instance);
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+	
+	public static Instances loadDataSet(String uri) {
+		try { 
+			ArffLoader loader = new ArffLoader();
+			loader.setFile(CommonUtility.getFileFromRelativeUri(uri));
+			Instances dataSet = loader.getDataSet();
+			dataSet.setClassIndex(dataSet.numAttributes()-1);
+			return dataSet;
+		} catch (IOException e) {
+			return null;
+		}
+	}
+	
+	public static Instances loadFullDataSet(String uri) {
+		try { 
+			ArffLoader loader = new ArffLoader();
+			loader.setFile(CommonUtility.getFileFromRelativeUri(uri));
+			Instances fullDataSet = loader.getDataSet();
+			fullDataSet.setClassIndex(fullDataSet.numAttributes()-1);
+			return fullDataSet;
+		} catch (IOException e) {
+//			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public static NaiveBayesUpdateable loadTrainedClassifier(String uri) {
+		try {
+			InputStream is = new FileInputStream(CommonUtility.getFileFromRelativeUri(uri));
+			ObjectInputStream objectInputStream = new ObjectInputStream(is);
+			NaiveBayesUpdateable trainedClassifier = (NaiveBayesUpdateable) objectInputStream.readObject();
+			objectInputStream.close();
+			return trainedClassifier;
+		} catch (IOException e) {
+//			e.printStackTrace();
+			return null;
+		} catch (ClassNotFoundException e) {
+//			e.printStackTrace();
+			return null;
+		}
+
 	}
 	
 }

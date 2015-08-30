@@ -1,6 +1,5 @@
 package guiatv.schedule.loader;
 
-import guiatv.conf.initialization.RtmpSpyingLaunchService;
 import guiatv.persistence.domain.Channel;
 import guiatv.persistence.domain.Programme;
 import guiatv.persistence.domain.Schedule;
@@ -8,7 +7,7 @@ import guiatv.persistence.repository.ScheduleRepository;
 import guiatv.persistence.repository.service.ChannelService;
 import guiatv.persistence.repository.service.ProgrammeService;
 import guiatv.persistence.repository.service.ScheduleService;
-import guiatv.realtime.rtmpspying.MutexMonitor;
+import guiatv.realtime.rtmpspying.MonitorMyCh;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,12 +35,8 @@ public class ScheduleLoader {
 	
 	@Autowired 
 	ApplicationContext appCtx;
-	
 	@Autowired
-	RtmpSpyingLaunchService spyLaunchServ;
-	
-	@Autowired
-	MutexMonitor monitor;
+	MonitorMyCh monitorMyCh;
 	
 	public ScheduleLoader() {
 	}
@@ -50,7 +45,7 @@ public class ScheduleLoader {
 		// Filtrar lSched dejando solo los channels activos
 		List<Schedule> flSched = new ArrayList<Schedule>();
 		for (Schedule sched: lSched) {
-			if(monitor.checkExistentChannel(sched.getChannel())) {
+			if(monitorMyCh.getByChannel(sched.getChannel()) != null) { // Si existe MyCh con este channel
 				flSched.add(sched);
 			}
 		}

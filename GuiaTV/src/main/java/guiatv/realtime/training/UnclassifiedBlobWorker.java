@@ -4,7 +4,6 @@ import java.io.File;
 import java.net.URISyntaxException;
 import java.net.URL;
 
-import guiatv.common.datatypes.Frame_OLD;
 import guiatv.cv.classificator.Classif_old;
 import guiatv.persistence.domain.Blob;
 import guiatv.persistence.repository.service.BlobService;

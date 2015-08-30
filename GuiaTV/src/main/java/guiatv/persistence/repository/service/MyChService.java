@@ -4,10 +4,10 @@ import java.util.List;
 
 import guiatv.catalog.datatypes.ListChannels;
 import guiatv.persistence.domain.Channel;
-import guiatv.persistence.domain.MLChannel;
+import guiatv.persistence.domain.MyCh;
 import guiatv.persistence.domain.Programme;
 import guiatv.persistence.domain.Schedule;
-import guiatv.persistence.repository.MLChannelRepository;
+import guiatv.persistence.repository.MyChRepository;
 
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,32 +17,24 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
-public class MLChannelService {
+public class MyChService {
 	
 	@Autowired
-	MLChannelRepository mlChRep;
+	MyChRepository myChRep;
 	
 	@Transactional(readOnly = true)
-	public List<MLChannel> findAll() {
-		return mlChRep.findAll();
+	public List<MyCh> findAll() {
+		return myChRep.findAll();
 	}
 	
 	@Transactional(readOnly = true)
-	public MLChannel findByChannel(Channel ch) {
-		return mlChRep.findByChannel(ch);
+	public MyCh findByChannel(Channel ch) {
+		return myChRep.findByChannel(ch);
 	}
 	
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void save(MLChannel mlCh) {
-		mlChRep.save(mlCh);
-    }
-	
-	@Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void saveAndSaveFiles(MLChannel mlCh) {
-		mlCh.saveDataSet();
-		mlCh.saveFullDataSet();
-		mlCh.saveTrainedClassifier();
-		mlChRep.save(mlCh);
+    public void save(MyCh myCh) {
+		myChRep.save(myCh);
     }
 	
 }

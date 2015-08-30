@@ -3,6 +3,7 @@ package guiatv.persistence.domain;
 
 import guiatv.catalog.restcontroller.CatalogRestController;
 import guiatv.catalog.serializers.ListProgFromSchedSerializer;
+import guiatv.common.CommonUtility;
 import guiatv.schedule.publisher.SchedulePublisher;
 
 import java.io.Serializable;
@@ -21,8 +22,10 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
@@ -67,11 +70,29 @@ public class Channel extends ResourceSupport implements Serializable {
 	   	listSchedules = new ArrayList<Schedule>();
 	}
 	
+	/*
+	 * CONSTRUCTOR PREFERIDO
+	 */
+	public Channel(String idChBusiness, String nameChGiven) {
+		this.idChBusiness = idChBusiness;
+		this.nameCh = nameChGiven;
+		this.hashIdChBusiness = CommonUtility.hash(idChBusiness);
+		this.listSchedules = new ArrayList<Schedule>();
+	}
+	
+	public void setParent(MyCh myCh) {
+		this.myCh = myCh;
+	}
+	
 	@Id
     @Column(name = "idChPersistence", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idChPersistence;
     
+	@OneToOne(targetEntity=MyCh.class, fetch=FetchType.LAZY)
+	@JoinColumn(name="mych_fk", referencedColumnName="idMyChPersistence")
+	private MyCh myCh;
+	
 	@JsonView({SingleChannel.class, MultipleChannels.class, SchedulePublisher.PublisherScheduleView.class,
 		SchedulePublisher.PublisherRtScheduleView.class})
     @Column(name = "idChBusiness", nullable = false, length = 50)
@@ -165,7 +186,7 @@ public class Channel extends ResourceSupport implements Serializable {
 	
 	
 	public void computeHashIdChBusiness() {
-		hashIdChBusiness = Hashing.murmur3_32().hashString(idChBusiness, StandardCharsets.UTF_8).toString();
+		hashIdChBusiness = CommonUtility.hash(idChBusiness);
 	}
 	
 	public String getHashIdChBusiness() {

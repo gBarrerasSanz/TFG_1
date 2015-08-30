@@ -1,9 +1,13 @@
 package guiatv.computervision;
 
-import guiatv.common.datatypes.Frame_OLD;
 import guiatv.persistence.domain.Blob;
+import guiatv.persistence.domain.MyCh;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
@@ -91,5 +95,26 @@ public class CvUtils {
 		im.showImage(blobMat);
 	}
 	
+	public static List<Blob> loadFileListGroup(File[] fList, MyCh myCh) {
+		List<Blob> lBlob = new ArrayList<Blob>();
+		for (File imgFile: fList) {
+			try {
+				Mat imgMat = Highgui.imread(imgFile.getAbsolutePath(), Highgui.CV_LOAD_IMAGE_GRAYSCALE);
+				byte[] imgData = CvUtils.getByteArrayFromMat(imgMat);
+				Blob blob = new Blob(imgData, myCh);
+				lBlob.add(blob);
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+				return null;
+			} catch (IOException e) {
+				e.printStackTrace();
+				return null;
+			} catch (Exception e) {
+				e.printStackTrace();
+				return null;
+			}
+    	}
+		return lBlob;
+	}
 
 }

@@ -4,11 +4,10 @@ import guiatv.catalog.datatypes.ListChannels;
 import guiatv.computervision.CvUtils;
 import guiatv.persistence.domain.Blob;
 import guiatv.persistence.domain.Channel;
+import guiatv.persistence.domain.MyCh;
 import guiatv.persistence.repository.ChannelRepository;
 import guiatv.persistence.repository.service.BlobService;
-import guiatv.realtime.rtmpspying.MutexMonitor;
-import guiatv.realtime.rtmpspying.serializable.ChannelData;
-import guiatv.realtime.rtmpspying.serializable.ListChannelsData;
+import guiatv.realtime.rtmpspying.MonitorMyCh;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -38,10 +37,8 @@ public class MLViewController {
 	
 	@Autowired
 	ChannelRepository chRep;
-	
 	@Autowired
-	MutexMonitor monitor;
-	
+	MonitorMyCh monitorMyCh;
 	@Autowired
 	BlobService blobServ;
 	
@@ -55,7 +52,7 @@ public class MLViewController {
 	@RequestMapping(value = "/adminChannels", method = RequestMethod.GET)
 	public String adminChannels(Model model)
 	{
-		List<ChannelData> lChData = monitor.readListChannelData();
+		List<MyCh> lChData = monitorMyCh.getListMyCh();
 		model.addAttribute("lChData", lChData);
 		return "adminChannels";
 	}

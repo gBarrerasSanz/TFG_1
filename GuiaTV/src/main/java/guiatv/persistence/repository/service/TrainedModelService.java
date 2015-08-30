@@ -8,8 +8,10 @@ import guiatv.persistence.domain.Channel;
 import guiatv.persistence.domain.Programme;
 import guiatv.persistence.domain.Schedule;
 import guiatv.persistence.domain.StreamSource;
+import guiatv.persistence.domain.TrainedModel;
 import guiatv.persistence.repository.BlobRepository;
 import guiatv.persistence.repository.StreamSourceRepository;
+import guiatv.persistence.repository.TrainedModelRepository;
 
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,41 +23,31 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
-public class BlobService {
+public class TrainedModelService {
 	
 	@Autowired
-	BlobRepository blobRep;
+	TrainedModelRepository trainedModelRep;
 	
 	@Transactional(readOnly = true)
-	public List<Blob> findAll() {
-		return blobRep.findAll();
+	public List<TrainedModel> findAll() {
+		return trainedModelRep.findAll();
 	}
 	
 	@Transactional(readOnly = true)
-	public Page<Blob> findAll(Pageable pageable) {
-		return blobRep.findAll(pageable);
+	public TrainedModel findOneByIdTrainedModelPersistence(long idTrainedModelPersistence) {
+		TrainedModel trainedModel = trainedModelRep.findOneByIdTrainedModelPersistence(idTrainedModelPersistence);
+		return trainedModel;
 	}
 	
-	@Transactional(readOnly = true)
-	public Blob findOneByIdBlobPersistence(long idBlobPersistence) {
-		Blob blob = blobRep.findOneByIdBlobPersistence(idBlobPersistence);
-		Hibernate.initialize(blob.getBlob());
-		return blob;
-	}
-	
-	@Transactional(readOnly = true)
-	public Long count() {
-		return blobRep.count();
-	}
 	
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void save(Blob blob) {
-		blobRep.save(blob);
+    public void save(TrainedModel trainedModel) {
+		trainedModelRep.save(trainedModel);
     }
 	
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void delete(Blob blob) {
-		blobRep.delete(blob);
+    public void delete(TrainedModel trainedModel) {
+		trainedModelRep.delete(trainedModel);
     }
 	
 }

@@ -3,17 +3,11 @@
 //import java.util.List;
 //
 //import guiatv.catalog.datatypes.ListChannels;
-//import guiatv.persistence.domain.Blob;
 //import guiatv.persistence.domain.Channel;
 //import guiatv.persistence.domain.MLChannel;
 //import guiatv.persistence.domain.Programme;
 //import guiatv.persistence.domain.Schedule;
-//import guiatv.persistence.domain.StreamSource;
-//import guiatv.persistence.domain.helper.ArffHelper;
-//import guiatv.persistence.repository.ArffObjectRepository;
-//import guiatv.persistence.repository.BlobRepository;
 //import guiatv.persistence.repository.MLChannelRepository;
-//import guiatv.persistence.repository.StreamSourceRepository;
 //
 //import org.hibernate.Hibernate;
 //import org.springframework.beans.factory.annotation.Autowired;
@@ -23,19 +17,32 @@
 //
 //@Service
 //@Transactional
-//public class ArffObjectService {
+//public class MLChannelService_NOT_USED {
 //	
 //	@Autowired
-//	ArffObjectRepository arffRep;
+//	MLChannelRepository mlChRep;
 //	
 //	@Transactional(readOnly = true)
-//	public List<ArffHelper> findAll() {
-//		return arffRep.findAll();
+//	public List<MLChannel> findAll() {
+//		return mlChRep.findAll();
+//	}
+//	
+//	@Transactional(readOnly = true)
+//	public MLChannel findByChannel(Channel ch) {
+//		return mlChRep.findByChannel(ch);
 //	}
 //	
 //	@Transactional(propagation = Propagation.REQUIRES_NEW)
-//    public void save(ArffHelper arffObject) {
-//		arffRep.save(arffObject);
+//    public void save(MLChannel mlCh) {
+//		mlChRep.save(mlCh);
+//    }
+//	
+//	@Transactional(propagation = Propagation.REQUIRES_NEW)
+//    public void saveAndSaveFiles(MLChannel mlCh) {
+//		mlCh.saveDataSet();
+//		mlCh.saveFullDataSet();
+//		mlCh.saveTrainedClassifier();
+//		mlChRep.save(mlCh);
 //    }
 //	
 //}

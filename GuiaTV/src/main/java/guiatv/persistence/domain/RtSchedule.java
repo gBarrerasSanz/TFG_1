@@ -87,7 +87,7 @@ public class RtSchedule implements Serializable {
 //	private Channel channel;
 	
 	@JsonView({SchedulePublisher.PublisherRtScheduleView.class})
-	private MLChannel mlChannel;
+	private MyCh myCh;
 	
 //	@Column(name = "instant", nullable = false)
 	@JsonView({SchedulePublisher.PublisherRtScheduleView.class})
@@ -111,18 +111,18 @@ public class RtSchedule implements Serializable {
 	public RtSchedule() {
 	}
 
-	public RtSchedule(MLChannel mlChannel, Date instant) {
-    	this.mlChannel = mlChannel;
+	public RtSchedule(MyCh myCh, Date instant) {
+    	this.myCh = myCh;
     	this.instant = instant;
 //    	this.type = EventType.UNKNOWN;
     }
 
-	public MLChannel getMlChannel() {
-		return mlChannel;
+	public MyCh getMyCh() {
+		return myCh;
 	}
 
-	public void setMlChannel(MLChannel mlChannel) {
-		this.mlChannel = mlChannel;
+	public void setMyCh(MyCh myCh) {
+		this.myCh = myCh;
 	}
 
 	public Date getInstant() {
@@ -152,7 +152,7 @@ public class RtSchedule implements Serializable {
 	@Override
 	public String toString() {
 		return "Schedule {"+
-				"channel="+mlChannel.getChannel().getIdChBusiness()+", "+
+				"channel="+myCh.getChannel().getIdChBusiness()+", "+
 				"programme="+programme.getNameProg()+", "+
 				"instant="+instant+", "+
 				"state="+state+

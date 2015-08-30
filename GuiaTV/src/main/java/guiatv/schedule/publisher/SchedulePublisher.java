@@ -102,7 +102,7 @@ public class SchedulePublisher {
 	public void publishRtSchedule(Message<RtSchedule> rtScheduleMsg) {
 		RtSchedule rtSched = rtScheduleMsg.getPayload();
 		// Determinar a qué programa afecta
-		Programme prog = progServ.findOneByChannelAndInstant(rtSched.getMlChannel().getChannel(), 
+		Programme prog = progServ.findOneByChannelAndInstant(rtSched.getMyCh().getChannel(), 
 				rtSched.getInstant());
 		if (prog != null) {
 			rtSched.setProgramme(prog);
@@ -118,7 +118,7 @@ public class SchedulePublisher {
 	//			schedJson = StringEscapeUtils.unescapeJava(schedJson);
 				amqpTmp.convertAndSend(routKey, rtSchedJsonString);
 	//			logger.debug("Published RtSchedule: "+rtSchedJsonString);
-				logger.debug("Published RtSchedule ("+rtSched.getMlChannel().getChannel().getIdChBusiness()+"): "
+				logger.debug("Published RtSchedule ("+rtSched.getMyCh().getChannel().getIdChBusiness()+"): "
 						+rtSched.getProgramme().getNameProg()
 						+" -> "+rtSched.getState());
 				} catch (AmqpException e) {
@@ -129,7 +129,7 @@ public class SchedulePublisher {
 				}
 		}
 		else {
-			logger.error("Channel ["+rtSched.getMlChannel().getChannel().getIdChBusiness()+"]:RtSchedule DOES NOT contain any programme");
+			logger.error("Channel ["+rtSched.getMyCh().getChannel().getIdChBusiness()+"]:RtSchedule DOES NOT contain any programme");
 		}
 	}
 }

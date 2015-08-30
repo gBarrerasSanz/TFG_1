@@ -16,7 +16,7 @@ import guiatv.persistence.repository.ScheduleRepository;
 import guiatv.persistence.repository.service.ChannelService;
 import guiatv.persistence.repository.service.ProgrammeService;
 import guiatv.persistence.repository.service.ScheduleService;
-import guiatv.realtime.rtmpspying.MutexMonitor;
+import guiatv.realtime.rtmpspying.MonitorMyCh;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -64,8 +64,7 @@ public class CatalogRestController {
 	@Autowired
 	ObjectMapper mapper;
 	@Autowired
-	MutexMonitor monitor;
-	
+	MonitorMyCh monitorMyCh;
 	
 	@RequestMapping(
 			value = "", 
@@ -95,7 +94,7 @@ public class CatalogRestController {
 		ListChannels flChannels = new ListChannels();
 		// Filtrar dejando solo los channels activos
 		for (Channel ch: lChannels) {
-			if (monitor.checkActiveChannel(ch)) {
+			if (monitorMyCh.getByChannel(ch) != null) { // Si existe
 				flChannels.add(ch);
 			}
 		}

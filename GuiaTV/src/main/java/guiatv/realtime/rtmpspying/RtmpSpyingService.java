@@ -1,15 +1,13 @@
 package guiatv.realtime.rtmpspying;
 
 import guiatv.common.CommonUtility;
-import guiatv.common.datatypes.Frame_OLD;
 import guiatv.computervision.CvUtils;
 import guiatv.computervision.Imshow;
 import guiatv.persistence.domain.Blob;
 import guiatv.persistence.domain.Channel;
-import guiatv.persistence.domain.MLChannel;
+import guiatv.persistence.domain.MyCh;
 import guiatv.persistence.repository.ChannelRepository;
 import guiatv.persistence.repository.service.AsyncTransactionService;
-import guiatv.realtime.rtmpspying.serializable.ChannelData;
 import guiatv.realtime.servicegateway.CapturedBlobsGateway;
 
 import java.io.BufferedInputStream;
@@ -60,9 +58,6 @@ public class RtmpSpyingService {
     @Autowired
     AsyncTransactionService asyncTransactionService;
 	
-	@Autowired
-	MutexMonitor monitor;
-	
 //	ChannelData chData;
     
 	public RtmpSpyingService() {
@@ -75,8 +70,8 @@ public class RtmpSpyingService {
 	
 	
 	@Async("rtmpSpyingTaskExecutor")
-	public void doSpying(MLChannel mlChannel) {
-		assert(mlChannel.getChannel() != null);
+	public void doSpying(MyCh myCh) {
+		assert(myCh.getChannel() != null);
 //		ChannelData chData = null;
 //		chData = monitor.getAnAvailableChannel();
 		URL binDirUrl = this.getClass().getClassLoader()
@@ -92,11 +87,11 @@ public class RtmpSpyingService {
 					binDir.getAbsolutePath()+File.separator+"ffmpeg.exe",
 //					"-r", String.valueOf(numReqPerSecond),
 //					"-r", "1/"+String.valueOf(oneFrameEveryXSecs),
-					"-i", "\""+mlChannel.getStreamSource().getUrl()+"\"", // ********************* TODO: URL
+					"-i", "\""+myCh.getStreamSrc().getUrl()+"\"", // ********************* TODO: URL
 //					"-vcodec", "mjpeg",
 					"-f", "image2pipe",
 					"-pix_fmt", "yuvj420p",
-					"-vf", "scale="+mlChannel.getImgCols()+":"+mlChannel.getImgRows(),
+					"-vf", "scale="+myCh.getStreamSrc().getCols()+":"+myCh.getStreamSrc().getRows(),
 					"-r", "1/"+String.valueOf(oneFrameEveryXSecs),
 //					"-r", "24",
 					"-"
@@ -144,9 +139,9 @@ public class RtmpSpyingService {
 		        			if (data.size() != 0) {
 		        				try {
 		        					// Antes de nada, comprobar que el channel sigue activo
-		        					Channel ch = mlChannel.getChannel();
-		        					boolean activeCh = monitor.checkActiveChannel(ch);
-		        					boolean spiedCh = monitor.checkSpiedChannel(ch);
+		        					Channel ch = myCh.getChannel();
+		        					boolean activeCh = myCh.getMyChState().isActive();
+		        					boolean spiedCh = myCh.getMyChState().isSpied();
 		        					// Si se ha dado señal de desactivar channel o dejar de espiarlo
 		        					if ( ! activeCh  || ! spiedCh) { 
 		        						// Entonces terminar
@@ -154,8 +149,9 @@ public class RtmpSpyingService {
 		        						return;
 		        					}
 		        					Mat imgGrayMat = CvUtils.getGrayMatAndDecodeFromByteArray(
-		        							data.toByteArray(), mlChannel.getImgCols(), mlChannel.getImgRows());
-		        					Blob blob = new Blob(imgGrayMat, mlChannel); 
+		        							data.toByteArray(), myCh.getStreamSrc().getCols(), 
+		        							myCh.getStreamSrc().getRows());
+		        					Blob blob = new Blob(imgGrayMat, myCh); 
 		        					Highgui.imwrite("imgSpy.jpeg", CvUtils.getGrayMatFromByteArray(
 		        							blob.getBlob(), blob.getBlobCols(), blob.getBlobRows()));
 		        					capturedBlobsGateway.sendBlob(blob);
@@ -195,8 +191,8 @@ public class RtmpSpyingService {
 				/*
 				 * Si por alguna razón, el espía termina -> comunicarlo debidamente
 				 */
-				monitor.releaseBusyChannel(mlChannel.getChannel());
-				logger.debug("Channel ["+mlChannel.getChannel().getIdChBusiness()+"] is NO LONGER SPIED");
+				myCh.getMyChState().releaseSpying();
+				logger.debug("Channel ["+myCh.getChannel().getIdChBusiness()+"] is NO LONGER SPIED");
 		        if (in != null) {
 		            try { in.close(); } catch(Exception e){}
 		        }

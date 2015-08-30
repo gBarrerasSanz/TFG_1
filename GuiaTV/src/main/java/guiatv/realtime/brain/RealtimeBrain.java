@@ -9,7 +9,7 @@ import org.springframework.integration.support.MessageBuilder;
 import org.springframework.messaging.Message;
 import org.springframework.scheduling.annotation.Async;
 
-import guiatv.persistence.domain.MLChannel;
+import guiatv.persistence.domain.MyCh;
 import guiatv.persistence.domain.Programme;
 import guiatv.persistence.domain.RtSchedule;
 import guiatv.persistence.domain.Schedule;
@@ -31,8 +31,8 @@ public class RealtimeBrain {
 	 */
 	public void manageRtSchedule(RtSchedule rtSched) {
 		// TODO: Tomar la decisión
-		MLChannel mlChannel = rtSched.getMlChannel();
-		boolean mustNotify = mlChannel.addRtSched(rtSched);
+		MyCh myCh = rtSched.getMyCh();
+		boolean mustNotify = myCh.getMyChState().addRtSched(rtSched);
 		
 		if (mustNotify) {
 			Message<RtSchedule> rtSchedMsg = MessageBuilder.withPayload(rtSched).build();

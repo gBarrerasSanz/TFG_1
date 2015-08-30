@@ -3,18 +3,16 @@ package guiatv.catalog.restcontroller;
 import guiatv.common.CommonUtility;
 import guiatv.persistence.domain.Blob;
 import guiatv.persistence.domain.Channel;
-import guiatv.persistence.domain.MLChannel;
+import guiatv.persistence.domain.MyCh;
 import guiatv.persistence.domain.RtSchedule;
 import guiatv.persistence.domain.Schedule;
 import guiatv.persistence.domain.RtSchedule.InstantState;
 import guiatv.persistence.domain.helper.ArffHelper;
 import guiatv.persistence.repository.ChannelRepository;
-import guiatv.persistence.repository.MLChannelRepository;
 import guiatv.persistence.repository.service.BlobService;
 import guiatv.persistence.repository.service.ChannelService;
-import guiatv.persistence.repository.service.MLChannelService;
 import guiatv.persistence.repository.service.ScheduleService;
-import guiatv.realtime.rtmpspying.MutexMonitor;
+import guiatv.realtime.rtmpspying.MonitorMyCh;
 import guiatv.schedule.publisher.SchedulePublisher;
 
 import java.util.ArrayList;
@@ -47,15 +45,13 @@ public class AdministrationRestController {
 	@Autowired
 	ChannelService chServ;
 	@Autowired
-	MLChannelService mlChServ;
-	@Autowired
-	MutexMonitor monitor;
-	@Autowired
 	SchedulePublisher schedPublisher;
 	@Autowired
 	ScheduleService schedServ;
 	@Autowired
 	BlobService blobServ;
+	@Autowired
+	MonitorMyCh monitorMyCh;
 	
 	@RequestMapping(
 			value = "/activation/", 
@@ -69,11 +65,11 @@ public class AdministrationRestController {
 		Channel ch = chServ.findByHashIdChBusiness(hashIdChBusiness, false);
 		if (ch != null) {
 			if (activation) {
-				monitor.activateChannel(ch);
+				monitorMyCh.getByChannel(ch).getMyChState().activate();
 				logger.debug("Channel ["+ch.getIdChBusiness()+"] is now ACTIVE");
 			}
 			else {
-				monitor.deactivateChannel(ch);
+				monitorMyCh.getByChannel(ch).getMyChState().deactivate();
 				logger.debug("Channel ["+ch.getIdChBusiness()+"] is now OFF");
 			}
 			return okResp;
@@ -95,7 +91,7 @@ public class AdministrationRestController {
 		Channel ch = chServ.findByHashIdChBusiness(hashIdChBusiness, false);
 		if (ch != null) {
 			if (spying) {
-				boolean queryResult = monitor.queryChannelForSpying(ch);
+				boolean queryResult = monitorMyCh.getByChannel(ch).getMyChState().requestSpying();
 				if (queryResult) {
 					logger.debug("Channel ["+ch.getIdChBusiness()+"] is now BEING SPIED");
 					return okResp;
@@ -107,7 +103,7 @@ public class AdministrationRestController {
 				}
 			}
 			else {
-				monitor.releaseBusyChannel(ch);
+				monitorMyCh.getByChannel(ch).getMyChState().releaseSpying();
 				logger.debug("Channel ["+ch.getIdChBusiness()+"] has been queried for STOP BEING SPIED");
 				return okResp;
 			}
@@ -124,17 +120,18 @@ public class AdministrationRestController {
 			@RequestParam(value = "alreadyTrained", defaultValue = "", required = true) boolean alreadyTrained) {
 //		Channel ch = chServ.findByHashIdChBusiness(hashIdChBusiness, false);
 		
-		MLChannel mlCh = monitor.getMlChannelFromHashIdChBusiness(hashIdChBusiness);
-		if (mlCh == null) {
-			return new ResponseEntity<String>("MLCHANNEL NOT FOUND",
+		MyCh myCh = monitorMyCh.getByHashIdChBusiness(hashIdChBusiness);
+		if (myCh == null) {
+			return new ResponseEntity<String>("MyCh NOT FOUND",
 					HttpStatus.NOT_FOUND);
 		}
-		boolean loadClassifier = mlCh.loadTrainedClassifier();
-		if (!loadClassifier) {
+		boolean loadedClassifier = ( myCh.getTrainedModel().getTrainedClassifier() != null);
+		if (!loadedClassifier) {
 			return new ResponseEntity<String>("CLASSIFIER NOT FOUND",
 					HttpStatus.NOT_FOUND);
 		}
-		mlCh.loadFullDataSet(); // Cargar TODOS los datos (atributos + muestras)
+		// ATENCIÓN: SE ASUME QUE fullDataSet está ya cargado
+//		myCh.getTrainedModel().loadOrCreateFullDataSet(blob) // Cargar TODOS los datos (atributos + muestras)
 		String cvResults;
 		/*
 		 * Si se quiere evaluar C-V con el clasificador ya entrenado (Habiendo
@@ -143,7 +140,8 @@ public class AdministrationRestController {
 		if (alreadyTrained) {
 			// Utilizar el clasificador ya entrenado con todas las muestras
 			cvResults = ArffHelper.doCrossValidation(
-					mlCh.getTrainedClassifier(), mlCh.getFullDataSet());
+					myCh.getTrainedModel().getTrainedClassifier(), 
+					myCh.getTrainedModel().getFullDataSet());
 		}
 		/*
 		 * Si se quiere evaluar C-V estricto (Sin Haber espiado los datos de
@@ -153,7 +151,7 @@ public class AdministrationRestController {
 			// Crear nuevo clasificador
 			NaiveBayesUpdateable newClassifier = new NaiveBayesUpdateable();
 			cvResults = ArffHelper.doCrossValidation(newClassifier,
-					mlCh.getFullDataSet());
+					myCh.getTrainedModel().getFullDataSet());
 		}
 		return new ResponseEntity<String>(cvResults, HttpStatus.OK);
 	}
@@ -172,10 +170,10 @@ public class AdministrationRestController {
 		if (hashIdChBusiness.length()>0) {
 			Channel ch = chServ.findByHashIdChBusiness(hashIdChBusiness, true);
 			if (realtime) { // RtSchedule
-				MLChannel mlChannel = new MLChannel();
-				mlChannel.setChannel(ch);
+				MyCh myCh = new MyCh();
+				myCh.setChannel(ch);
 				RtSchedule rtSched = new RtSchedule();
-				rtSched.setMlChannel(mlChannel);
+				rtSched.setMyCh(myCh);
 				rtSched.setInstant(new Date());
 				rtSched.setState(InstantState.ON_PROGRAMME);
 				/********************************************
@@ -212,9 +210,9 @@ public class AdministrationRestController {
 			@RequestParam(value="classificationResult", defaultValue="", required=true) boolean classificationResult)
 	{
 		Blob blob = blobServ.findOneByIdBlobPersistence(idBlobPersistence);
-		MLChannel mlCh = blob.getMlChannel();
+		MyCh mlCh = blob.getMyCh();
 		// Añadir muestra
-		monitor.addSample(blob, classificationResult);
+		mlCh.getTrainedModel().learnSample(blob, classificationResult);
 		// Eliminar blob de la Base de Datos
 		blobServ.delete(blob);
 		return new ResponseEntity<Boolean>(true, HttpStatus.OK);

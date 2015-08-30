@@ -34,7 +34,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import guiatv.Application;
 import guiatv.ApplicationTest;
 import guiatv.common.CommonUtility;
-import guiatv.common.datatypes.Frame_OLD;
 import guiatv.persistence.domain.Channel;
 import guiatv.persistence.domain.Schedule;
 import guiatv.persistence.repository.ScheduleRepository;

@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.nio.charset.StandardCharsets;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -23,6 +24,8 @@ import java.util.TimeZone;
 import org.apache.log4j.Logger;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
+
+import com.google.common.hash.Hashing;
 
 
 public class CommonUtility {
@@ -277,6 +280,10 @@ public class CommonUtility {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public static String hash(String strIn) {
+		return Hashing.murmur3_32().hashString(strIn, StandardCharsets.UTF_8).toString();
 	}
 	
 }

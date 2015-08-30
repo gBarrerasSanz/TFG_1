@@ -5,16 +5,12 @@ import java.util.TimeZone;
 
 import guiatv.computervision.CvUtils;
 import guiatv.persistence.domain.Channel;
-import guiatv.persistence.domain.MLChannel;
 import guiatv.persistence.domain.StreamSource;
 import guiatv.persistence.domain.helper.ArffHelper;
 import guiatv.persistence.repository.StreamSourceRepository;
 import guiatv.persistence.repository.service.ChannelService;
-import guiatv.persistence.repository.service.MLChannelService;
 import guiatv.persistence.repository.service.StreamSourceService;
-import guiatv.realtime.rtmpspying.MutexMonitor;
 import guiatv.realtime.rtmpspying.RtmpSpyingService;
-import guiatv.realtime.rtmpspying.serializable.ChannelData;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

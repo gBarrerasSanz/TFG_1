@@ -5,7 +5,7 @@ import guiatv.catalog.datatypes.ListChannels;
 import guiatv.catalog.datatypes.ListProgrammes;
 import guiatv.common.CommonUtility;
 import guiatv.persistence.domain.Channel;
-import guiatv.persistence.domain.MLChannel;
+import guiatv.persistence.domain.MyCh;
 import guiatv.persistence.domain.Programme;
 import guiatv.persistence.domain.Programme.MultipleProgrammes;
 import guiatv.persistence.domain.Programme.SingleProgramme;
@@ -150,10 +150,10 @@ public class PublisherRestController {
 		
 		if (hashIdChBusiness.length()>0) {
 			Channel ch = chServ.findByHashIdChBusiness(hashIdChBusiness, true);
-			MLChannel mlChannel = new MLChannel();
-			mlChannel.setChannel(ch);
+			MyCh myCh = new MyCh();
+			myCh.setChannel(ch);
 			RtSchedule rtSched = new RtSchedule();
-			rtSched.setMlChannel(mlChannel);
+			rtSched.setMyCh(myCh);
 			rtSched.setInstant(new Date());
 			rtSched.setState(InstantState.ON_PROGRAMME);
 			/********************************************

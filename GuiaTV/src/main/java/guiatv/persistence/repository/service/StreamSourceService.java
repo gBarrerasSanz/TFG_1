@@ -4,11 +4,9 @@ import java.util.List;
 
 import guiatv.catalog.datatypes.ListChannels;
 import guiatv.persistence.domain.Channel;
-import guiatv.persistence.domain.MLChannel;
 import guiatv.persistence.domain.Programme;
 import guiatv.persistence.domain.Schedule;
 import guiatv.persistence.domain.StreamSource;
-import guiatv.persistence.repository.MLChannelRepository;
 import guiatv.persistence.repository.StreamSourceRepository;
 
 import org.hibernate.Hibernate;

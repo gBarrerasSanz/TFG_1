@@ -1,7 +1,6 @@
 package guiatv.persistence.domain;
 
 import guiatv.computervision.CvUtils;
-import guiatv.realtime.rtmpspying.serializable.ChannelData;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -18,7 +17,7 @@ import org.apache.log4j.Logger;
 import org.opencv.core.Mat;
 import org.opencv.highgui.Highgui;
 
-@Entity(name = "roiblob")
+@Entity(name = "blob")
 public class Blob {
 	
 	private static final Logger logger = Logger.getLogger("debugLog");
@@ -28,9 +27,9 @@ public class Blob {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idBlobPersistence;
 	
-	@ManyToOne(targetEntity=MLChannel.class, fetch=FetchType.LAZY)
-	@JoinColumn(name="mlchannel_fk", referencedColumnName="idMlChPersistence")
-	private MLChannel mlChannel;
+	@ManyToOne(targetEntity=MyCh.class, fetch=FetchType.LAZY)
+	@JoinColumn(name="mych_fk", referencedColumnName="idMyChPersistence")
+	private MyCh myCh;
 	
 	@Lob
 	@Basic(fetch = FetchType.LAZY)
@@ -46,36 +45,39 @@ public class Blob {
 	public Blob() {
 	}
 	
-	public Blob(byte[] img, MLChannel mlChannel) throws Exception {
+	public Blob(byte[] img, MyCh myCh) throws Exception {
 		// Extraer ROI
-		Mat imgMat = CvUtils.getGrayMatFromByteArray(img, mlChannel.getImgCols(), mlChannel.getImgRows());
-		Mat roiMat = CvUtils.getRoiFromMat(imgMat, mlChannel.getTopLeft(), mlChannel.getBotRight());
+		Mat imgMat = CvUtils.getGrayMatFromByteArray(img, 
+				myCh.getStreamSrc().getCols(), myCh.getStreamSrc().getRows());
+		Mat roiMat = CvUtils.getRoiFromMat(imgMat, myCh.getStreamSrc().getTopLeft(), 
+				myCh.getStreamSrc().getBotRight());
 		Highgui.imwrite("aragon.jpeg", roiMat);
 		this.blobCols = roiMat.cols();
 		this.blobRows = roiMat.rows();
 		this.blob = CvUtils.getByteArrayFromMat(roiMat);
-		this.mlChannel = mlChannel;
+		this.myCh = myCh;
 	}
 	
-	public Blob(Mat grayImgMat, MLChannel mlChannel) {
+	public Blob(Mat grayImgMat, MyCh myCh) {
 		// Extraer ROI
-		Mat roiMat = CvUtils.getRoiFromMat(grayImgMat, mlChannel.getTopLeft(), mlChannel.getBotRight());
+		Mat roiMat = CvUtils.getRoiFromMat(grayImgMat, 
+				myCh.getStreamSrc().getTopLeft(), myCh.getStreamSrc().getBotRight());
 		this.blobCols = roiMat.cols();
 		this.blobRows = roiMat.rows();
 		this.blob = CvUtils.getByteArrayFromMat(roiMat);
-		this.mlChannel = mlChannel;
+		this.myCh = myCh;
 	}
 	
     /**********************************************************
      * 					GETTERS / SETTERS
      *********************************************************/
 	
-	public MLChannel getMlChannel() {
-		return mlChannel;
+	public MyCh getMyCh() {
+		return myCh;
 	}
 
-	public void setMlChannel(MLChannel mlChannel) {
-		this.mlChannel = mlChannel;
+	public void setMyCh(MyCh myCh) {
+		this.myCh = myCh;
 	}
 
 	public byte[] getBlob() {

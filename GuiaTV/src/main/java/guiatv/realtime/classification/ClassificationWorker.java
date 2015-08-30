@@ -5,11 +5,9 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Date;
 
-import guiatv.common.datatypes.Frame_OLD;
 import guiatv.computervision.CvUtils;
 import guiatv.cv.classificator.Classif_old;
 import guiatv.persistence.domain.Blob;
-import guiatv.persistence.domain.MLChannel;
 import guiatv.persistence.domain.RtSchedule;
 import guiatv.persistence.domain.RtSchedule.InstantState;
 import guiatv.persistence.domain.Schedule;
@@ -42,14 +40,14 @@ public class ClassificationWorker {
 		RtSchedule rtSched = null;
 		try {
 	//		logger.debug("Classifying blob from "+blob.getMlChannel().getChannel().getIdChBusiness());
-			rtSched = new RtSchedule(blob.getMlChannel(), new Date());
+			rtSched = new RtSchedule(blob.getMyCh(), new Date());
 //			// DEBUG
 //			Highgui.imwrite("img.jpeg", CvUtils.getGrayMatFromByteArray(
 //					blob.getBlob(), blob.getBlobCols(), blob.getBlobRows()));
 						
-			Instance instance = ArffHelper.getUnlabeledInstance(blob.getMlChannel().getDataSet(), blob);
+			Instance instance = ArffHelper.getUnlabeledInstance(blob.getMyCh().getTrainedModel().getDataSet(), blob);
 //			blob.getMlChannel().getArffObject().getUnlabeledInstance(blob);
-			double classifyVal = blob.getMlChannel().getTrainedClassifier().classifyInstance(instance);
+			double classifyVal = blob.getMyCh().getTrainedModel().getTrainedClassifier().classifyInstance(instance);
 //			double classifyVal = blob.getMlChannel().getArffObject().getTrainedClassifier().classifyInstance(instance);
 			if (classifyVal == 0) {
 				rtSched.setState(InstantState.ON_PROGRAMME);
