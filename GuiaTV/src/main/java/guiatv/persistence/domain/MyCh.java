@@ -72,7 +72,7 @@ public class MyCh {
 	private Channel channel;
 	
 	@OneToOne(targetEntity=StreamSource.class, fetch=FetchType.LAZY)
-	@JoinColumn(name="streamSource_fk", referencedColumnName="idStreamSourcePersistence")
+	@JoinColumn(name="streamsource_fk", referencedColumnName="idStreamSourcePersistence")
 	private StreamSource streamSrc;
 	
 	@OneToOne(targetEntity=TrainedModel.class, fetch=FetchType.LAZY)
@@ -89,6 +89,10 @@ public class MyCh {
 	 * CONSTRUCTOR PREFERIDO
 	 */
 	public MyCh(Channel ch, StreamSource streamSrc, TrainedModel trainedModel, MyChState myChState) {
+		this.channel = ch;
+		this.streamSrc = streamSrc;
+		this.trainedModel = trainedModel;
+		this.myChState = myChState;
 	}
 	
 	public Channel getChannel() {

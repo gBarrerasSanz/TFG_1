@@ -172,7 +172,7 @@ public class ArffHelper implements Serializable {
 			eTest.crossValidateModel(trainedClassifier, dataSet, 10, new Random(1));
 			return eTest.toSummaryString();
 		} catch (Exception e) {
-			return null;
+			return "ERROR: "+e.getMessage();
 		}
 	}
 	
@@ -182,6 +182,7 @@ public class ArffHelper implements Serializable {
 //			dataSet.add(newInstance); // TODO: No sé si hace falta (Ni se si hace falta conservar todas las muestras en data)
 			instance.setDataset(dataSet);
 			instance.setDataset(fullDataSet); 
+			fullDataSet.add(instance);
 			ArffHelper.updateClassifier(trainedClassifier, instance);
 			return true;
 		}

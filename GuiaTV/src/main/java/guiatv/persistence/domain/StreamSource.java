@@ -8,7 +8,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Transient;
 
 
 @Entity(name = "streamsource")
@@ -19,9 +21,14 @@ public class StreamSource {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idStreamSourcePersistence;
 	
-	@OneToOne(targetEntity=MyCh.class, fetch=FetchType.LAZY)
-	@JoinColumn(name="mych_fk", referencedColumnName="idMyChPersistence")
+//	@OneToOne(targetEntity=MyCh.class, mappedBy="streamSrc", fetch=FetchType.LAZY)
+	
+//	@OneToOne(targetEntity=MyCh.class, fetch=FetchType.LAZY)
+//	@JoinColumn(name="mych_fk", referencedColumnName="idMyChPersistence")
+	@Transient
 	private MyCh myCh;
+	
+	
 	
 	@Column(name="url", nullable=false)
 	private String url;

@@ -37,10 +37,26 @@ public class BlobService {
 	}
 	
 	@Transactional(readOnly = true)
-	public Blob findOneByIdBlobPersistence(long idBlobPersistence) {
+	public Blob findOneByIdBlobPersistenceInitTrainedModel(long idBlobPersistence) {
 		Blob blob = blobRep.findOneByIdBlobPersistence(idBlobPersistence);
 		Hibernate.initialize(blob.getBlob());
+		// Inicializar TrainedModel
+		Hibernate.initialize(blob.getMyCh().getTrainedModel());
 		return blob;
+	}
+	
+	@Transactional(readOnly = true)
+	public Blob findOneByIdBlobPersistenceInitChannel(long idBlobPersistence) {
+		Blob blob = blobRep.findOneByIdBlobPersistence(idBlobPersistence);
+		if (blob != null) {
+			Hibernate.initialize(blob.getBlob());
+			// Inicializar Channel
+			Hibernate.initialize(blob.getMyCh().getChannel());
+			return blob;
+		}
+		else {
+			return null;
+		}
 	}
 	
 	@Transactional(readOnly = true)

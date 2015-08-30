@@ -88,6 +88,42 @@ function queryForPublishSchedule(elem, hashIdChBusiness, realtime) {
 			var result = false;
 			switch(jqXHR.status){
 			case 200: // OK
+				// Habría que actualizar la página entera, o mejor -> solo los campos afectados
+			default:
+				console.log("jqXHR.status="+jqXHR.status);
+				break;
+			}
+		}
+	});
+}
+
+function queryForBatchTraining(elem, hashIdChBusiness) {
+	$.ajax({
+		type : "GET",
+		url : "/admin/channels/batchTraining/",
+		data : { hashIdChBusiness: hashIdChBusiness},
+		complete: function(jqXHR, textStatus) {
+			var result = false;
+			switch(jqXHR.status){
+			case 200: // OK
+				//
+			default:
+				console.log("jqXHR.status="+jqXHR.status);
+				break;
+			}
+		}
+	});
+}
+
+function queryForClearTrainedModel(elem, hashIdChBusiness) {
+	$.ajax({
+		type : "GET",
+		url : "/admin/channels/clearTrainedModel/",
+		data : { hashIdChBusiness: hashIdChBusiness},
+		complete: function(jqXHR, textStatus) {
+			var result = false;
+			switch(jqXHR.status){
+			case 200: // OK
 				//
 			default:
 				console.log("jqXHR.status="+jqXHR.status);
@@ -128,6 +164,16 @@ function onCrossValidationClicked(elem, hashIdChBusiness, trained) {
 function onPublishScheduleClicked(elem, hashIdChBusiness, realtime) {
 	queryForPublishSchedule(elem, hashIdChBusiness, realtime);
 }
+
+function onBatchTrainingClicked(elem, hashIdChBusiness) {
+	queryForBatchTraining(elem, hashIdChBusiness);
+}
+
+function onClearTrainedModelClicked(elem, hashIdChBusiness, trained) {
+	if (trained) {
+		queryForClearTrainedModel(elem, hashIdChBusiness);
+	}
+}
 </script>
 
 </head>
@@ -141,36 +187,45 @@ function onPublishScheduleClicked(elem, hashIdChBusiness, realtime) {
       <th>Publish Schedules</th>
       <th>Good Samp</th>
       <th>Bad Samp</th>
+      <th>Train</th>
       <th>K-Fold C-V</th>
     </tr>
   </thead>
   <tbody>
-    <tr th:each="ch : ${lChData}">
-      <td th:name="idChBusiness" th:text="${ch.idChBusiness}">None</td>
+    <tr th:each="myCh : ${lMyCh}">
+      <td th:name="idChBusiness" th:text="${myCh.channel.idChBusiness}">None</td>
       <td th:name="active">
-      	<button th:text="${ch.active}" 
-      		th:class="${ch.active}? 'btn btn-success' : 'btn btn-danger'"
-      		th:onclick="'javascript:onActiveClicked(this, \''+ ${ch.hashIdChBusiness} +'\');'">None</button>
+      	<button th:text="${myCh.myChState.active}" 
+      		th:class="${myCh.myChState.active}? 'btn btn-success' : 'btn btn-danger'"
+      		th:onclick="'javascript:onActiveClicked(this, \''+ ${myCh.channel.hashIdChBusiness} +'\');'">None</button>
       </td>
       <td th:name="spied">
-      <button th:text="${ch.spied}" 
-      		th:class="${ch.spied}? 'btn btn-success' : 'btn btn-danger'"
-      		th:onclick="'javascript:onSpiedClicked(this, \''+ ${ch.hashIdChBusiness} +'\');'">None</button>
+      <button th:text="${myCh.myChState.spied}" 
+      		th:class="${myCh.myChState.spied}? 'btn btn-success' : 'btn btn-danger'"
+      		th:onclick="'javascript:onSpiedClicked(this, \''+ ${myCh.channel.hashIdChBusiness} +'\');'">None</button>
       </td>
       <td>
       <button th:text="Schedule"
       		th:class="'btn btn-info'"
-      		th:onclick="'javascript:onPublishScheduleClicked(this, \''+ ${ch.hashIdChBusiness} +'\', false);'">None</button>
+      		th:onclick="'javascript:onPublishScheduleClicked(this, \''+ ${myCh.channel.hashIdChBusiness} +'\', false);'">None</button>
       <button th:text="RtSchedule"
       		th:class="'btn btn-primary'"
-      		th:onclick="'javascript:onPublishScheduleClicked(this, \''+ ${ch.hashIdChBusiness} +'\', true);'">None</button>
+      		th:onclick="'javascript:onPublishScheduleClicked(this, \''+ ${myCh.channel.hashIdChBusiness} +'\', true);'">None</button>
       </td>
-      <td th:name="goodSamples" th:text="${ch.mlChannel.numTrueSamplesLearned}">None</td>
-      <td th:name="badSamples" th:text="${ch.mlChannel.numFalseSamplesLearned}">None</td>
+      <td th:name="goodSamples" th:text="${myCh.trainedModel.goodSamplesLearned}">None</td>
+      <td th:name="badSamples" th:text="${myCh.trainedModel.badSamplesLearned}">None</td>
       <td>
-      <button th:text="${ch.mlChannel.trained}? 'EXECUTE' : 'DISABLED'"
-      		th:class="${ch.mlChannel.trained}? 'btn btn-success' : 'btn btn-default'"
-      		th:onclick="'javascript:onCrossValidationClicked(this, \''+ ${ch.hashIdChBusiness} +'\', \''+ ${ch.mlChannel.trained} +'\');'">None</button>
+      <button th:text="${myCh.trainedModel.isBatchTrainable()}? 'BATCH TRAIN' : 'DISABLED'"
+      		th:class="${myCh.trainedModel.isBatchTrainable()}? 'btn btn-success' : 'btn btn-default'"
+      		th:onclick="'javascript:onBatchTrainingClicked(this, \''+ ${myCh.channel.hashIdChBusiness}+'\');'">None</button>
+      <button th:text="${myCh.trainedModel.isTrained()}? 'CLEAR' : 'DISABLED'"
+      		th:class="${myCh.trainedModel.isTrained()}? 'btn btn-info' : 'btn btn-default'"
+      		th:onclick="'javascript:onClearTrainedModelClicked(this, \''+ ${myCh.channel.hashIdChBusiness}+'\', \''+ ${myCh.trainedModel.trained} +'\');'">None</button>
+      </td>
+      <td>
+      <button th:text="${myCh.trainedModel.isTrained()}? 'EXECUTE' : 'DISABLED'"
+      		th:class="${myCh.trainedModel.isTrained()}? 'btn btn-success' : 'btn btn-default'"
+      		th:onclick="'javascript:onCrossValidationClicked(this, \''+ ${myCh.channel.hashIdChBusiness} +'\', \''+ ${myCh.trainedModel.trained} +'\');'">None</button>
       </td>
     </tr>
   </tbody>

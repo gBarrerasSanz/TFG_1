@@ -97,6 +97,7 @@ public class DeserializedChannel {
 		 @XmlElement(name="cols"),
 		 @XmlElement(name="rows")
 	})
+	@XmlElementWrapper
 	public int[] getTopLeft() {
 		return topLeft;
 	}
@@ -110,6 +111,7 @@ public class DeserializedChannel {
 		 @XmlElement(name="cols"),
 		 @XmlElement(name="rows")
 	})
+	@XmlElementWrapper
 	public int[] getBotRight() {
 		return botRight;
 	}

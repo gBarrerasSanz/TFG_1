@@ -13,6 +13,7 @@ import guiatv.persistence.repository.service.BlobService;
 import guiatv.persistence.repository.service.ChannelService;
 import guiatv.persistence.repository.service.ScheduleService;
 import guiatv.realtime.rtmpspying.MonitorMyCh;
+import guiatv.realtime.rtmpspying.RtmpSpyingService;
 import guiatv.schedule.publisher.SchedulePublisher;
 
 import java.util.ArrayList;
@@ -52,6 +53,8 @@ public class AdministrationRestController {
 	BlobService blobServ;
 	@Autowired
 	MonitorMyCh monitorMyCh;
+	@Autowired
+	RtmpSpyingService rtmpSpyingServ;
 	
 	@RequestMapping(
 			value = "/activation/", 
@@ -91,8 +94,10 @@ public class AdministrationRestController {
 		Channel ch = chServ.findByHashIdChBusiness(hashIdChBusiness, false);
 		if (ch != null) {
 			if (spying) {
-				boolean queryResult = monitorMyCh.getByChannel(ch).getMyChState().requestSpying();
+				MyCh myCh = monitorMyCh.getByChannel(ch);
+				boolean queryResult = myCh.getMyChState().requestSpying();
 				if (queryResult) {
+					rtmpSpyingServ.doSpying(myCh);
 					logger.debug("Channel ["+ch.getIdChBusiness()+"] is now BEING SPIED");
 					return okResp;
 				}
@@ -203,18 +208,68 @@ public class AdministrationRestController {
 	}
 	
 	@RequestMapping(
+			value = "/batchTraining/", 
+			method = RequestMethod.GET)
+	public ResponseEntity<Boolean> batchTraining(
+			@RequestParam(value="hashIdChBusiness", defaultValue="", required=true) String hashIdChBusiness)
+	{
+		Channel ch = chServ.findByHashIdChBusiness(hashIdChBusiness, true);
+		MyCh myCh = monitorMyCh.getByChannel(ch);
+		if (myCh.getTrainedModel().getBatchGoodSamplesUri().length() > 0) {
+			boolean result = myCh.getTrainedModel().trainWithBatchSamples();
+			if (result && myCh.getTrainedModel().isTrained()) {
+				return new ResponseEntity<Boolean>(true, HttpStatus.OK);
+			}
+			else {
+				return new ResponseEntity<Boolean>(false, HttpStatus.BAD_REQUEST);
+			}
+		}
+		else {
+			return new ResponseEntity<Boolean>(false, HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@RequestMapping(
+			value = "/clearTrainedModel/", 
+			method = RequestMethod.GET)
+	public ResponseEntity<Boolean> clearTrainedModel(
+			@RequestParam(value="hashIdChBusiness", defaultValue="", required=true) String hashIdChBusiness)
+	{
+		Channel ch = chServ.findByHashIdChBusiness(hashIdChBusiness, true);
+		MyCh myCh = monitorMyCh.getByChannel(ch);
+		if (myCh.getTrainedModel().getBatchGoodSamplesUri().length() > 0) {
+			myCh.getTrainedModel().clearTrainedModel();
+			if ( ! myCh.getTrainedModel().isTrained()) {
+				return new ResponseEntity<Boolean>(true, HttpStatus.OK);
+			}
+			else {
+				return new ResponseEntity<Boolean>(false, HttpStatus.BAD_REQUEST);
+			}
+		}
+		else {
+			return new ResponseEntity<Boolean>(false, HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@RequestMapping(
 			value = "/learnNewClassifiedSample/", 
 			method = RequestMethod.POST)
 	public ResponseEntity<Boolean> learnNewClassifiedSample(
 			@RequestParam(value="idBlobPersistence", defaultValue="", required=true) long idBlobPersistence,
 			@RequestParam(value="classificationResult", defaultValue="", required=true) boolean classificationResult)
 	{
-		Blob blob = blobServ.findOneByIdBlobPersistence(idBlobPersistence);
-		MyCh mlCh = blob.getMyCh();
-		// Añadir muestra
-		mlCh.getTrainedModel().learnSample(blob, classificationResult);
-		// Eliminar blob de la Base de Datos
-		blobServ.delete(blob);
-		return new ResponseEntity<Boolean>(true, HttpStatus.OK);
+		Blob blob = blobServ.findOneByIdBlobPersistenceInitChannel(idBlobPersistence);
+		// IMPORTANTE: Obtener el MyCh que está en memoria. No una nueva instancia de la BD
+		if (blob != null) {
+			MyCh myCh = monitorMyCh.getByChannel(blob.getMyCh().getChannel());
+			// Añadir muestra
+			myCh.getTrainedModel().learnSample(blob, classificationResult);
+			// Eliminar blob de la Base de Datos
+			blobServ.delete(blob);
+			return new ResponseEntity<Boolean>(true, HttpStatus.OK);
+		}
+		else {
+			return new ResponseEntity<Boolean>(false, HttpStatus.BAD_REQUEST);
+		}
 	}
 }

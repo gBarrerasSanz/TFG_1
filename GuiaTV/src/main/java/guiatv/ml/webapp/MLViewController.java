@@ -52,8 +52,8 @@ public class MLViewController {
 	@RequestMapping(value = "/adminChannels", method = RequestMethod.GET)
 	public String adminChannels(Model model)
 	{
-		List<MyCh> lChData = monitorMyCh.getListMyCh();
-		model.addAttribute("lChData", lChData);
+		List<MyCh> lMyCh = monitorMyCh.getListMyCh();
+		model.addAttribute("lMyCh", lMyCh);
 		return "adminChannels";
 	}
 	
@@ -72,7 +72,7 @@ public class MLViewController {
 			produces = MediaType.IMAGE_PNG_VALUE)
 	@ResponseBody
     public ResponseEntity<byte[]> getBlobImg(@PathVariable("idBlobPersistence") Long idBlobPersistence) throws IOException {
-        Blob blob = blobServ.findOneByIdBlobPersistence(idBlobPersistence);
+        Blob blob = blobServ.findOneByIdBlobPersistenceInitTrainedModel(idBlobPersistence);
         byte[] blobImgContent = CvUtils.convertByteArrayToPngDecodeable(blob.getBlob(), blob.getBlobCols(), blob.getBlobRows());
         final HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.IMAGE_PNG);

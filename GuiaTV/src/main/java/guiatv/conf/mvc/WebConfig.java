@@ -166,7 +166,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
  		PageableHandlerMethodArgumentResolver resolver = new PageableHandlerMethodArgumentResolver();
  		resolver.setPageParameterName("page.page");
  		resolver.setSizeParameterName("page.size");
- 		resolver.setFallbackPageable(new PageRequest(0, 50));
+ 		resolver.setFallbackPageable(new PageRequest(0, 20));
  		resolver.setOneIndexedParameters(true);
  		argumentResolvers.add(resolver);
  		super.addArgumentResolvers(argumentResolvers);

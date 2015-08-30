@@ -44,8 +44,9 @@ public class TrainedModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idTrainedModelPersistence;
 	
-	@OneToOne(targetEntity=MyCh.class, fetch=FetchType.LAZY)
-	@JoinColumn(name="mych_fk", referencedColumnName="idMyChPersistence")
+//	@OneToOne(targetEntity=MyCh.class, fetch=FetchType.LAZY)
+//	@JoinColumn(name="mych_fk", referencedColumnName="idMyChPersistence")
+	@Transient
 	private MyCh myCh;
 	
 	@Column(name = "dataSetUri", nullable = false)
@@ -93,7 +94,7 @@ public class TrainedModel {
 		
 		this.dataSetUri = FILES_BASE_DIR+"fileArff/"+idChBusiness+"/dataSet.arff";
 		this.fullDataSetUri = FILES_BASE_DIR+"fileArff/"+idChBusiness+"/fullDataSet.arff";
-		this.dataSetUri = FILES_BASE_DIR+"trainedClassifier/"+idChBusiness+"/trainedClassifier.model";
+		this.trainedClassifierUri = FILES_BASE_DIR+"trainedClassifier/"+idChBusiness+"/trainedClassifier.model";
 		
 		this.goodSamplesLearned = 0;
 		this.badSamplesLearned = 0;
@@ -120,9 +121,13 @@ public class TrainedModel {
 	}
 	
 	public boolean trainWithBatchSamples() {
-		loadClassifiedDataFromChannel();
-		trained = true;
-		return true;
+		if(loadClassifiedDataFromChannel()) {
+			trained = true;
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
 	
 	public boolean loadOrCreateDataSet(Blob blob) {
@@ -148,34 +153,56 @@ public class TrainedModel {
 	/*
 	 * El acceso a fullDataSet se hace en exclusión mutua
 	 */
-	public boolean loadOrCreateFullDataSet(Blob blob) {
-		synchronized (fullDataSet) {
-			if (fullDataSet == null) { // Si fullDataSet no está cargado
-				// Cargarlo del fichero en el disco duro
-				fullDataSet = ArffHelper.loadDataSet(fullDataSetUri);
-				if (fullDataSet == null) { // Si no se ha podido cargar el fullDataSet
-					// Entonces crearlo
-					fullDataSet = ArffHelper.createInstancesObject(blob);
-				}
-				if (fullDataSet != null){
-					return true;
-				}
-				else {
-					return false;
-				}
+	public synchronized boolean loadOrCreateFullDataSet(Blob blob) {
+		if (fullDataSet == null) { // Si fullDataSet no está cargado
+			// Cargarlo del fichero en el disco duro
+			fullDataSet = ArffHelper.loadDataSet(fullDataSetUri);
+			if (fullDataSet == null) { // Si no se ha podido cargar el fullDataSet
+				// Entonces crearlo
+				fullDataSet = ArffHelper.createInstancesObject(blob);
 			}
-			else {
+			if (fullDataSet != null){
 				return true;
 			}
+			else {
+				return false;
+			}
+		}
+		else {
+			return true;
 		}
 	}
 	
 	/*
 	 * El acceso a fullDataSet se hace en exclusión mutua
 	 */
-	public void freeFullDataSetMemory() {
-		synchronized (fullDataSet) {
+	public synchronized void freeFullDataSetMemory() {
+		fullDataSet = null;
+	}
+	
+	public synchronized void clearTrainedModel() {
+		String PATH = "src/main/resources/";
+		File dataSetFile = new File(PATH+dataSetUri);
+		dataSetFile.setWritable(true);
+		
+		File fullDataSetFile = new File(PATH+fullDataSetUri);
+		fullDataSetFile.setWritable(true);
+		
+		File trainedClassifierFile = new File(PATH+trainedClassifierUri);
+		trainedClassifierFile.setWritable(true);
+		
+		boolean dataSetDeleted = dataSetFile.delete() || ! dataSetFile.exists();
+		boolean fullDataSetDeleted = fullDataSetFile.delete() || ! fullDataSetFile.exists();
+		boolean trainedClassifierDeleted = trainedClassifierFile.delete() || ! trainedClassifierFile.exists();
+		
+		if( dataSetDeleted && fullDataSetDeleted && trainedClassifierDeleted) {
+			dataSet = null;
 			fullDataSet = null;
+			trainedClassifier = null;
+			
+			goodSamplesLearned = 0;
+			badSamplesLearned = 0;
+			trained = false;
 		}
 	}
 	
@@ -302,6 +329,10 @@ public class TrainedModel {
 		return idTrainedModelPersistence;
 	}
 	
+	public boolean isBatchTrainable() {
+		return 	(batchGoodSamplesUri.length() > 0) &&
+				(batchBadSamplesUri.length() > 0);
+	}
 	
 	private boolean loadClassifiedDataFromChannel() {
 		try {
@@ -334,7 +365,7 @@ public class TrainedModel {
 				badSamplesLearned++;
 			}
 	    	lBadBlob = null; // Liberar memoria de lGoodBlob
-	    	freeFullDataSetMemory();
+//	    	freeFullDataSetMemory();
 	    	return true;
 		} catch(Exception e) {
 			return false;

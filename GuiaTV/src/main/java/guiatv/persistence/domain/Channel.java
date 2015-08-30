@@ -89,6 +89,11 @@ public class Channel extends ResourceSupport implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idChPersistence;
     
+	/*
+	 * NO ENTIENDO POR QUE EN StreamSource y en TrainedModel no me deja
+	 * hacer esto y me da error de TransientPropertyValueException, pero
+	 * sin embargo aquí en Channel no lo da.
+	 */
 	@OneToOne(targetEntity=MyCh.class, fetch=FetchType.LAZY)
 	@JoinColumn(name="mych_fk", referencedColumnName="idMyChPersistence")
 	private MyCh myCh;

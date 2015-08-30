@@ -52,6 +52,7 @@ public class MyChState {
 		// Si estado activo y no está siendo espiado
 		if (active && ! spied) {
 			// Entonces dar semáforo verde
+			spied = true;
 			return true;
 		}
 		else { // En otro caso
@@ -87,14 +88,7 @@ public class MyChState {
 	 * de MLChannel debe se accedida por un solo thread
 	 */
 	public synchronized boolean addRtSched(RtSchedule rtSched) {
-		int lastEventsToWatch;
-		if (rtCurrState.equals(InstantState.ON_PROGRAMME)) { // Si está en programa (true)
-			lastEventsToWatch = samplesToFalse;
-		}
-		else { // Si está en publicidad (false)
-			lastEventsToWatch = samplesToTrue;
-		}
-		if (rtSchedFifo.size() < lastEventsToWatch) { // Si la cola NO está llena aun
+		if (rtSchedFifo.size() < Math.max(samplesToFalse, samplesToTrue)) { // Si la cola NO está llena aun
 			rtSchedFifo.add(rtSched.getState());
 			return false;
 		}
@@ -126,6 +120,13 @@ public class MyChState {
 				return false;
 			}
 			else { // Si currentState ya estaba inicializado
+				int lastEventsToWatch;
+				if (rtCurrState.equals(InstantState.ON_PROGRAMME)) { // Si está en programa (true)
+					lastEventsToWatch = samplesToFalse;
+				}
+				else { // Si está en publicidad (false)
+					lastEventsToWatch = samplesToTrue;
+				}
 				rtSchedFifo.add(rtSched.getState());
 				InstantState[] instantArr = (InstantState[]) rtSchedFifo.toArray();
 				for (int i=instantArr.length-1; i >= instantArr.length-lastEventsToWatch; i--) {

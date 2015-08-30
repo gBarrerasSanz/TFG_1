@@ -31,7 +31,8 @@ import weka.core.Instance;
 
 public class ClassificationWorker {
 	
-	private static final Logger logger = Logger.getLogger("debugLog");
+	
+//	private static final Logger logger = Logger.getLogger("debugLog");
 	
 	public ClassificationWorker() {
 	}	
