@@ -5,6 +5,7 @@ import java.util.List;
 import guiatv.catalog.datatypes.ListChannels;
 import guiatv.persistence.domain.Blob;
 import guiatv.persistence.domain.Channel;
+import guiatv.persistence.domain.MyCh;
 import guiatv.persistence.domain.Programme;
 import guiatv.persistence.domain.Schedule;
 import guiatv.persistence.domain.StreamSource;
@@ -37,6 +38,12 @@ public class BlobService {
 	}
 	
 	@Transactional(readOnly = true)
+	public Page<Blob> findByMyCh(MyCh myCh, Pageable pageable) {
+		return blobRep.findByMyCh(myCh, pageable);
+	}
+	
+	
+	@Transactional(readOnly = true)
 	public Blob findOneByIdBlobPersistenceInitTrainedModel(long idBlobPersistence) {
 		Blob blob = blobRep.findOneByIdBlobPersistence(idBlobPersistence);
 		Hibernate.initialize(blob.getBlob());
@@ -58,6 +65,7 @@ public class BlobService {
 			return null;
 		}
 	}
+	
 	
 	@Transactional(readOnly = true)
 	public Long count() {

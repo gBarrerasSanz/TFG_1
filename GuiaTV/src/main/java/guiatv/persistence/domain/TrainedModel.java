@@ -122,7 +122,7 @@ public class TrainedModel {
 	
 	public boolean trainWithBatchSamples() {
 		if(loadClassifiedDataFromChannel()) {
-			trained = true;
+//			trained = true;
 			return true;
 		}
 		else {
@@ -332,6 +332,20 @@ public class TrainedModel {
 	public boolean isBatchTrainable() {
 		return 	(batchGoodSamplesUri.length() > 0) &&
 				(batchBadSamplesUri.length() > 0);
+	}
+	
+	public boolean isAbleToCV() {
+		/**
+		 * Devuelve True si el número de muestras de entrenamiento es mayor
+		 * que el número k de folds que hará el k-fold-cross-validation
+		 */
+		return (goodSamplesLearned + badSamplesLearned >= 10 
+				&& goodSamplesLearned >= 1
+				&& badSamplesLearned >= 1);
+	}
+	
+	public boolean hasLearnedAnySample() {
+		return (goodSamplesLearned + badSamplesLearned > 0);
 	}
 	
 	private boolean loadClassifiedDataFromChannel() {

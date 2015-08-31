@@ -7,6 +7,7 @@ import guiatv.persistence.domain.Channel;
 import guiatv.persistence.domain.MyCh;
 import guiatv.persistence.repository.ChannelRepository;
 import guiatv.persistence.repository.service.BlobService;
+import guiatv.persistence.repository.service.ChannelService;
 import guiatv.realtime.rtmpspying.MonitorMyCh;
 
 import java.io.IOException;
@@ -36,7 +37,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class MLViewController {
 	
 	@Autowired
-	ChannelRepository chRep;
+	ChannelService chServ;
 	@Autowired
 	MonitorMyCh monitorMyCh;
 	@Autowired
@@ -57,12 +58,32 @@ public class MLViewController {
 		return "adminChannels";
 	}
 	
-	@RequestMapping(value = "/blobClassification", method = RequestMethod.GET)
-	public String blobClassification(Model model, Pageable pageable)
+	@RequestMapping(value = "/blobClassification/{hashIdChBusiness}", method = RequestMethod.GET)
+	public String blobClassification(Model model, Pageable pageable,
+			@PathVariable(value="hashIdChBusiness") String hashIdChBusiness)
 	{
-		PageWrapper<Blob> page = new PageWrapper<Blob>(blobServ.findAll(pageable), "/ml/blobClassification");
+		PageWrapper<Blob> page = null;
+		Channel ch = chServ.findByHashIdChBusiness(hashIdChBusiness, true);
+		if (ch == null) {
+			return null;
+		}
+		MyCh myCh = monitorMyCh.getByChannel(ch);
+		if (myCh == null) {
+			return null;
+		}
+		page = new PageWrapper<Blob>(blobServ.findByMyCh(myCh, pageable), "/ml/blobClassification");
 		model.addAttribute("page", page);
 		return "blobClassification";
+	}
+	
+	@RequestMapping(value = "/blobClassification", method = RequestMethod.GET)
+	public String blobClassificationAllChannels(Model model, Pageable pageable)
+	{
+		PageWrapper<Blob> page = null;
+		page = new PageWrapper<Blob>(blobServ.findAll(pageable), "/ml/blobClassification");
+		model.addAttribute("page", page);
+		return "blobClassification";
+		
 	}
 	
 	

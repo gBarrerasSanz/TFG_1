@@ -20,6 +20,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -158,6 +160,9 @@ public class AdministrationRestController {
 			cvResults = ArffHelper.doCrossValidation(newClassifier,
 					myCh.getTrainedModel().getFullDataSet());
 		}
+//		 Convertir los saltos de línea Java a los de HTML
+		//cvResults = cvResults.replaceAll("(\r\n|\n)", "<br />");
+//		cvResults = StringEscapeUtils.
 		return new ResponseEntity<String>(cvResults, HttpStatus.OK);
 	}
 	
@@ -217,7 +222,7 @@ public class AdministrationRestController {
 		MyCh myCh = monitorMyCh.getByChannel(ch);
 		if (myCh.getTrainedModel().getBatchGoodSamplesUri().length() > 0) {
 			boolean result = myCh.getTrainedModel().trainWithBatchSamples();
-			if (result && myCh.getTrainedModel().isTrained()) {
+			if (result) {
 				return new ResponseEntity<Boolean>(true, HttpStatus.OK);
 			}
 			else {
@@ -247,6 +252,25 @@ public class AdministrationRestController {
 			}
 		}
 		else {
+			return new ResponseEntity<Boolean>(false, HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@RequestMapping(
+			value = "/switchTrained/", 
+			method = RequestMethod.GET)
+	public ResponseEntity<Boolean> switchTrained(
+			@RequestParam(value="hashIdChBusiness", defaultValue="", required=true) String hashIdChBusiness,
+			@RequestParam(value="trained", defaultValue="", required=true) boolean trained)
+	{
+		Channel ch = chServ.findByHashIdChBusiness(hashIdChBusiness, true);
+		MyCh myCh = monitorMyCh.getByChannel(ch);
+		if (trained && myCh.getTrainedModel().isAbleToCV()) {
+			myCh.getTrainedModel().setTrained(false);
+			return new ResponseEntity<Boolean>(true, HttpStatus.OK);
+		}
+		else {
+			myCh.getTrainedModel().setTrained(true);
 			return new ResponseEntity<Boolean>(false, HttpStatus.BAD_REQUEST);
 		}
 	}

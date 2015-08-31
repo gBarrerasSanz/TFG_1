@@ -7,6 +7,9 @@
     <script src="http://code.jquery.com/jquery-2.1.3.js"></script>
     <title>Admin Channels</title>
 <script>
+function writeOnFeedbackTA(inputText) {
+	$("#feedbackTA").text(inputText);
+}
 function queryForActivationSwitch(elem, hashIdChBusiness, activation) {
 	$.ajax({
 		type : "POST",
@@ -20,7 +23,7 @@ function queryForActivationSwitch(elem, hashIdChBusiness, activation) {
 					elem.innerHTML = 'false';
 					elem.className = "btn btn-danger";
 					// Cambiar el estado del botón de spied a falso
-					var spiedElem = elem.parentElement.parentElement.getElementsByTagName("*")[5];
+					var spiedElem = elem.parentElement.parentElement.getElementsByTagName("*")[4];
 					spiedElem.innerHTML = 'false';
 					spiedElem.className = "btn btn-danger";
 				}
@@ -70,7 +73,12 @@ function queryForCrossValidation(elem, hashIdChBusiness, alreadyTrained) {
 			var result = false;
 			switch(jqXHR.status){
 			case 200: // OK
-				alert(jqXHR.responseText);
+				var cvResults = jqXHR.responseText;
+				// Eliminar comillas al principio final del string
+				cvResults = cvResults.substring(1, cvResults.length-1);
+				// Reemplazar saltos de línea Java (ESTO FUNCIONA PERO ES RARÍSIMO)
+				cvResults = cvResults.replace(/\\n/g, '\n');
+				writeOnFeedbackTA(cvResults);
 			default:
 				console.log("jqXHR.status="+jqXHR.status);
 				break;
@@ -88,7 +96,7 @@ function queryForPublishSchedule(elem, hashIdChBusiness, realtime) {
 			var result = false;
 			switch(jqXHR.status){
 			case 200: // OK
-				// Habría que actualizar la página entera, o mejor -> solo los campos afectados
+				// TODO: Habría que actualizar la página entera, o mejor -> solo los campos afectados
 			default:
 				console.log("jqXHR.status="+jqXHR.status);
 				break;
@@ -125,6 +133,24 @@ function queryForClearTrainedModel(elem, hashIdChBusiness) {
 			switch(jqXHR.status){
 			case 200: // OK
 				//
+			default:
+				console.log("jqXHR.status="+jqXHR.status);
+				break;
+			}
+		}
+	});
+}
+
+function queryForSwitchTrained(elem, hashIdChBusiness, trained) {
+	$.ajax({
+		type : "GET",
+		url : "/admin/channels/switchTrained/",
+		data : { hashIdChBusiness: hashIdChBusiness, trained: trained},
+		complete: function(jqXHR, textStatus) {
+			var result = false;
+			switch(jqXHR.status){
+			case 200: // OK
+				// TODO: Cambiar los botones afectados
 			default:
 				console.log("jqXHR.status="+jqXHR.status);
 				break;
@@ -174,10 +200,20 @@ function onClearTrainedModelClicked(elem, hashIdChBusiness, trained) {
 		queryForClearTrainedModel(elem, hashIdChBusiness);
 	}
 }
+
+function onSetTrainedClicked(elem, hashIdChBusiness, trained) {
+	if (trained) {
+		queryForSwitchTrained(elem, hashIdChBusiness, trained);
+	}
+}
 </script>
 
 </head>
 <h2>Channels</h2>
+<div class="form-group">
+      <label for="comment">Actions Feedback:</label>
+      <textarea class="form-control" rows="5" id="feedbackTA" contenteditable="false" disabled="disabled"></textarea>
+</div>
 <table class="table table-bordered">
   <thead>
     <tr>
@@ -193,7 +229,11 @@ function onClearTrainedModelClicked(elem, hashIdChBusiness, trained) {
   </thead>
   <tbody>
     <tr th:each="myCh : ${lMyCh}">
-      <td th:name="idChBusiness" th:text="${myCh.channel.idChBusiness}">None</td>
+      <td>
+      <label th:name="idChBusiness" th:text="${myCh.channel.idChBusiness}">None</label>
+      <br/>
+      <a th:href="@{/ml/blobClassification/} + ${myCh.channel.hashIdChBusiness}">Human classification</a>
+      </td>
       <td th:name="active">
       	<button th:text="${myCh.myChState.active}" 
       		th:class="${myCh.myChState.active}? 'btn btn-success' : 'btn btn-danger'"
@@ -218,14 +258,19 @@ function onClearTrainedModelClicked(elem, hashIdChBusiness, trained) {
       <button th:text="${myCh.trainedModel.isBatchTrainable()}? 'BATCH TRAIN' : 'DISABLED'"
       		th:class="${myCh.trainedModel.isBatchTrainable()}? 'btn btn-success' : 'btn btn-default'"
       		th:onclick="'javascript:onBatchTrainingClicked(this, \''+ ${myCh.channel.hashIdChBusiness}+'\');'">None</button>
-      <button th:text="${myCh.trainedModel.isTrained()}? 'CLEAR' : 'DISABLED'"
-      		th:class="${myCh.trainedModel.isTrained()}? 'btn btn-info' : 'btn btn-default'"
-      		th:onclick="'javascript:onClearTrainedModelClicked(this, \''+ ${myCh.channel.hashIdChBusiness}+'\', \''+ ${myCh.trainedModel.trained} +'\');'">None</button>
+      
+      <button th:text="${myCh.trainedModel.hasLearnedAnySample()}? 'CLEAR' : 'CLEAR'"
+      		th:class="${myCh.trainedModel.hasLearnedAnySample()}? 'btn btn-info' : 'btn btn-default'"
+      		th:onclick="'javascript:onClearTrainedModelClicked(this, \''+ ${myCh.channel.hashIdChBusiness}+'\', \''+ ${myCh.trainedModel.hasLearnedAnySample()} +'\');'">None</button>
+      
+      <button th:text="${myCh.trainedModel.isTrained()}? 'SET UNTRAINED' : 'SET TRAINED'"
+      		th:class="${myCh.trainedModel.isTrained()}? 'btn btn-info' : 'btn btn-primary'"
+      		th:onclick="'javascript:onSetTrainedClicked(this, \''+ ${myCh.channel.hashIdChBusiness}+'\', \''+ ${myCh.trainedModel.trained} +'\');'">None</button>
       </td>
       <td>
-      <button th:text="${myCh.trainedModel.isTrained()}? 'EXECUTE' : 'DISABLED'"
-      		th:class="${myCh.trainedModel.isTrained()}? 'btn btn-success' : 'btn btn-default'"
-      		th:onclick="'javascript:onCrossValidationClicked(this, \''+ ${myCh.channel.hashIdChBusiness} +'\', \''+ ${myCh.trainedModel.trained} +'\');'">None</button>
+      <button th:text="${myCh.trainedModel.isAbleToCV()}? 'EXECUTE' : 'EXECUTE'"
+      		th:class="${myCh.trainedModel.isAbleToCV()}? 'btn btn-success' : 'btn btn-default'"
+      		th:onclick="'javascript:onCrossValidationClicked(this, \''+ ${myCh.channel.hashIdChBusiness} +'\', \''+ ${myCh.trainedModel.isAbleToCV()} +'\');'">None</button>
       </td>
     </tr>
   </tbody>

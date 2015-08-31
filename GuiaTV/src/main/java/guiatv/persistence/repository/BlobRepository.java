@@ -1,6 +1,7 @@
 package guiatv.persistence.repository;
 
 import guiatv.persistence.domain.Blob;
+import guiatv.persistence.domain.MyCh;
 import guiatv.persistence.repository.NOTUSED.ChannelRepositoryCustom;
 
 import org.springframework.data.domain.Page;
@@ -12,6 +13,8 @@ public interface BlobRepository extends JpaRepository<Blob, Long>,
 JpaSpecificationExecutor<Blob>, ChannelRepositoryCustom {
 	
 	Page<Blob> findAll(Pageable pageable);
+	
+	Page<Blob> findByMyCh(MyCh myCh, Pageable pageable);
 	
 	Blob findOneByIdBlobPersistence(long idBlobPersistence);
 

@@ -35,7 +35,7 @@ public class SchedulePoller {
 				flSched.add(sched);
 			}
 		}
-		return lSched;
+		return flSched;
 	}
 	
 	
