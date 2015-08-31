@@ -72,6 +72,7 @@ public class MLViewController {
 			return null;
 		}
 		page = new PageWrapper<Blob>(blobServ.findByMyCh(myCh, pageable), "/ml/blobClassification");
+		page.setUrl(page.getUrl()+"/"+hashIdChBusiness+"/");
 		model.addAttribute("page", page);
 		return "blobClassification";
 	}

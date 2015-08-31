@@ -5,6 +5,7 @@ import guiatv.catalog.datatypes.ListChannels;
 import guiatv.catalog.datatypes.ListProgrammes;
 import guiatv.common.CommonUtility;
 import guiatv.persistence.domain.Channel;
+import guiatv.persistence.domain.MyCh;
 import guiatv.persistence.domain.Programme;
 import guiatv.persistence.domain.Programme.MultipleProgrammes;
 import guiatv.persistence.domain.Programme.SingleProgramme;
@@ -94,7 +95,8 @@ public class CatalogRestController {
 		ListChannels flChannels = new ListChannels();
 		// Filtrar dejando solo los channels activos
 		for (Channel ch: lChannels) {
-			if (monitorMyCh.getByChannel(ch) != null) { // Si existe
+			MyCh myCh = monitorMyCh.getByChannel(ch);
+			if (myCh != null && myCh.getMyChState().isActive()) { // Si existe y está activo
 				flChannels.add(ch);
 			}
 		}

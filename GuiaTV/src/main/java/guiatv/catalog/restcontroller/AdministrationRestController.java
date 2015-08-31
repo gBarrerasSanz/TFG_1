@@ -137,6 +137,11 @@ public class AdministrationRestController {
 			return new ResponseEntity<String>("CLASSIFIER NOT FOUND",
 					HttpStatus.NOT_FOUND);
 		}
+		
+		if ( ! myCh.getTrainedModel().isAbleToCV()) {
+			return new ResponseEntity<String>("ERROR: NOT ENOUGH SAMPLES",
+					HttpStatus.BAD_REQUEST);
+		}
 		// ATENCIÓN: SE ASUME QUE fullDataSet está ya cargado
 //		myCh.getTrainedModel().loadOrCreateFullDataSet(blob) // Cargar TODOS los datos (atributos + muestras)
 		String cvResults;
@@ -169,19 +174,21 @@ public class AdministrationRestController {
 	@RequestMapping(
 			value = "/publishSchedule/", 
 			method = RequestMethod.GET)
-	public ResponseEntity<Boolean> publishSchedulesByHashIdChBusiness(
+	public ResponseEntity<String> publishSchedulesByHashIdChBusiness(
 			@RequestParam(value="hashIdChBusiness", defaultValue="", required=true) String hashIdChBusiness,
 			@RequestParam(value="realtime", defaultValue="", required=true) boolean realtime)
 	{
-		ResponseEntity<Boolean> okResp = new ResponseEntity<Boolean>(
-				true, HttpStatus.OK);
-		ResponseEntity<Boolean> errResp = new ResponseEntity<Boolean>(
-				false, HttpStatus.BAD_REQUEST);
+		String returnMsg = null;
+		String returnErrMsg = "Some error ocurred while publishing Schedule";
 		if (hashIdChBusiness.length()>0) {
 			Channel ch = chServ.findByHashIdChBusiness(hashIdChBusiness, true);
+			MyCh myCh = new MyCh();
+			myCh.setChannel(ch);
+			if ( ! myCh.getMyChState().isActive()) {
+				returnMsg = "ERROR: Cannot publish Schedule or RtSchedule in a NOT ACTIVE Channel";
+				return new ResponseEntity<String>(returnMsg, HttpStatus.BAD_REQUEST);
+			}
 			if (realtime) { // RtSchedule
-				MyCh myCh = new MyCh();
-				myCh.setChannel(ch);
 				RtSchedule rtSched = new RtSchedule();
 				rtSched.setMyCh(myCh);
 				rtSched.setInstant(new Date());
@@ -191,7 +198,10 @@ public class AdministrationRestController {
 				 *******************************************/
 				Message<RtSchedule> rtSchedMsg = MessageBuilder.withPayload(rtSched).build();
 				schedPublisher.publishRtSchedule(rtSchedMsg);
-				return okResp;
+				returnMsg = "Published RtSchedule ("+rtSched.getMyCh().getChannel().getIdChBusiness()+"): "
+						+rtSched.getProgramme().getNameProg()
+						+" -> "+rtSched.getState();
+				return new ResponseEntity<String>(returnMsg, HttpStatus.OK);
 			}
 			else { // Schedule
 				Schedule sched = schedServ.findOneByChannelOrderByStartAsc(ch, true);
@@ -200,15 +210,20 @@ public class AdministrationRestController {
 					lSched.add(sched);
 					Message<List<Schedule>> lSchedMsg = MessageBuilder.withPayload(lSched).build();
 					schedPublisher.publishListSchedules(lSchedMsg);
-					return okResp;
+					returnMsg = "Published Sched ("+sched.getIdSched()+"): "+sched.getProgramme().getNameProg()
+						+ " ["+sched.getChannel().getIdChBusiness()+"]"
+						+" -> "+CommonUtility.dateToStr(sched.getStart())+
+						" --- "+CommonUtility.dateToStr(sched.getEnd())+
+						" ==> Published: "+sched.isPublished();
+					return new ResponseEntity<String>(returnMsg, HttpStatus.OK);
 				}
 				else {
-					return errResp;
+					return new ResponseEntity<String>(returnErrMsg, HttpStatus.BAD_REQUEST);
 				}
 			}
 		}
 		else {
-			return errResp;
+			return new ResponseEntity<String>(returnErrMsg, HttpStatus.BAD_REQUEST);
 		}
 	}
 	
@@ -242,9 +257,32 @@ public class AdministrationRestController {
 	{
 		Channel ch = chServ.findByHashIdChBusiness(hashIdChBusiness, true);
 		MyCh myCh = monitorMyCh.getByChannel(ch);
-		if (myCh.getTrainedModel().getBatchGoodSamplesUri().length() > 0) {
-			myCh.getTrainedModel().clearTrainedModel();
-			if ( ! myCh.getTrainedModel().isTrained()) {
+//		if (myCh.getTrainedModel().getBatchGoodSamplesUri().length() > 0) {
+		myCh.getTrainedModel().clearTrainedModel();
+		if ( ! myCh.getTrainedModel().isTrained()) {
+			return new ResponseEntity<Boolean>(true, HttpStatus.OK);
+		}
+		else {
+			return new ResponseEntity<Boolean>(false, HttpStatus.BAD_REQUEST);
+		}
+//		}
+//		else {
+//			return new ResponseEntity<Boolean>(false, HttpStatus.BAD_REQUEST);
+//		}
+	}
+	
+	@RequestMapping(
+			value = "/setTrained/", 
+			method = RequestMethod.GET)
+	public ResponseEntity<Boolean> setTrained(
+			@RequestParam(value="hashIdChBusiness", defaultValue="", required=true) String hashIdChBusiness,
+			@RequestParam(value="trained", defaultValue="", required=true) boolean trained)
+	{
+		Channel ch = chServ.findByHashIdChBusiness(hashIdChBusiness, true);
+		MyCh myCh = monitorMyCh.getByChannel(ch);
+		if (trained) {
+			if ( myCh.getTrainedModel().isAbleToCV()) {
+				myCh.getTrainedModel().setTrained(true);
 				return new ResponseEntity<Boolean>(true, HttpStatus.OK);
 			}
 			else {
@@ -252,26 +290,8 @@ public class AdministrationRestController {
 			}
 		}
 		else {
-			return new ResponseEntity<Boolean>(false, HttpStatus.BAD_REQUEST);
-		}
-	}
-	
-	@RequestMapping(
-			value = "/switchTrained/", 
-			method = RequestMethod.GET)
-	public ResponseEntity<Boolean> switchTrained(
-			@RequestParam(value="hashIdChBusiness", defaultValue="", required=true) String hashIdChBusiness,
-			@RequestParam(value="trained", defaultValue="", required=true) boolean trained)
-	{
-		Channel ch = chServ.findByHashIdChBusiness(hashIdChBusiness, true);
-		MyCh myCh = monitorMyCh.getByChannel(ch);
-		if (trained && myCh.getTrainedModel().isAbleToCV()) {
 			myCh.getTrainedModel().setTrained(false);
 			return new ResponseEntity<Boolean>(true, HttpStatus.OK);
-		}
-		else {
-			myCh.getTrainedModel().setTrained(true);
-			return new ResponseEntity<Boolean>(false, HttpStatus.BAD_REQUEST);
 		}
 	}
 	

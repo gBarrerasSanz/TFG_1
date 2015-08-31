@@ -23,7 +23,8 @@ function queryForActivationSwitch(elem, hashIdChBusiness, activation) {
 					elem.innerHTML = 'false';
 					elem.className = "btn btn-danger";
 					// Cambiar el estado del botón de spied a falso
-					var spiedElem = elem.parentElement.parentElement.getElementsByTagName("*")[4];
+					// TODO: Buscar una forma más consistente de hacer esto
+					var spiedElem = elem.parentElement.parentElement.getElementsByTagName("*")[7];
 					spiedElem.innerHTML = 'false';
 					spiedElem.className = "btn btn-danger";
 				}
@@ -31,6 +32,7 @@ function queryForActivationSwitch(elem, hashIdChBusiness, activation) {
 					elem.innerHTML = 'true';
 					elem.className = "btn btn-success";
 				}
+				break;
 			default:
 				console.log("jqXHR.status="+jqXHR.status);
 				break;
@@ -56,6 +58,7 @@ function queryForSpyingSwitch(elem, hashIdChBusiness, spying) {
 					elem.innerHTML = 'true';
 					elem.className = "btn btn-success";
 				}
+				break;
 			default:
 				console.log("jqXHR.status="+jqXHR.status);
 				break;
@@ -79,6 +82,7 @@ function queryForCrossValidation(elem, hashIdChBusiness, alreadyTrained) {
 				// Reemplazar saltos de línea Java (ESTO FUNCIONA PERO ES RARÍSIMO)
 				cvResults = cvResults.replace(/\\n/g, '\n');
 				writeOnFeedbackTA(cvResults);
+				break;
 			default:
 				console.log("jqXHR.status="+jqXHR.status);
 				break;
@@ -96,9 +100,10 @@ function queryForPublishSchedule(elem, hashIdChBusiness, realtime) {
 			var result = false;
 			switch(jqXHR.status){
 			case 200: // OK
-				// TODO: Habría que actualizar la página entera, o mejor -> solo los campos afectados
+				writeOnFeedbackTA(jqXHR.responseText);
+				break;
 			default:
-				console.log("jqXHR.status="+jqXHR.status);
+				writeOnFeedbackTA(jqXHR.responseText);
 				break;
 			}
 		}
@@ -115,6 +120,9 @@ function queryForBatchTraining(elem, hashIdChBusiness) {
 			switch(jqXHR.status){
 			case 200: // OK
 				//
+				writeOnFeedbackTA("Batch Training completed succesfully\n"+
+						"Please refresh the webpage");
+				break;
 			default:
 				console.log("jqXHR.status="+jqXHR.status);
 				break;
@@ -132,7 +140,9 @@ function queryForClearTrainedModel(elem, hashIdChBusiness) {
 			var result = false;
 			switch(jqXHR.status){
 			case 200: // OK
-				//
+				writeOnFeedbackTA("Trained Model was sucessfully removed\n"+
+						"Please refresh the webpage");
+				break;
 			default:
 				console.log("jqXHR.status="+jqXHR.status);
 				break;
@@ -141,16 +151,29 @@ function queryForClearTrainedModel(elem, hashIdChBusiness) {
 	});
 }
 
-function queryForSwitchTrained(elem, hashIdChBusiness, trained) {
+function queryForSetTrained(elem, hashIdChBusiness, trained) {
 	$.ajax({
 		type : "GET",
-		url : "/admin/channels/switchTrained/",
+		url : "/admin/channels/setTrained/",
 		data : { hashIdChBusiness: hashIdChBusiness, trained: trained},
 		complete: function(jqXHR, textStatus) {
 			var result = false;
 			switch(jqXHR.status){
 			case 200: // OK
 				// TODO: Cambiar los botones afectados
+				if (jqXHR.responseText == true) { // Si se ha pedido entrenar
+					writeOnFeedbackTA("Trained Model is now set as TRAINED\n"+
+							"Please refresh the webpage");
+				}
+				else {  // Si se ha pedido desentrenar
+					writeOnFeedbackTA("Trained Model is now set as NOT TRAINED\n"+
+						"Please refresh the webpage");
+				}
+				break;
+			case 400: // ERROR
+				writeOnFeedbackTA("ERROR: Trained Model requires at least 10 samples"+
+						" and there must be at least one of each class (Programme and Adverts)\n");
+				break;
 			default:
 				console.log("jqXHR.status="+jqXHR.status);
 				break;
@@ -180,11 +203,9 @@ function onSpiedClicked(elem, hashIdChBusiness) {
 }
 
 function onCrossValidationClicked(elem, hashIdChBusiness, trained) {
-	if (trained) {
-		// alreadyTrained==false -> El clasificador será reinicializado y no se espiarán los datos de test
-		var alreadyTrained = false;
-		queryForCrossValidation(elem, hashIdChBusiness, alreadyTrained);
-	}
+	// alreadyTrained==false -> El clasificador será reinicializado y no se espiarán los datos de test
+	var alreadyTrained = false;
+	queryForCrossValidation(elem, hashIdChBusiness, alreadyTrained);
 }
 
 function onPublishScheduleClicked(elem, hashIdChBusiness, realtime) {
@@ -196,15 +217,19 @@ function onBatchTrainingClicked(elem, hashIdChBusiness) {
 }
 
 function onClearTrainedModelClicked(elem, hashIdChBusiness, trained) {
-	if (trained) {
-		queryForClearTrainedModel(elem, hashIdChBusiness);
-	}
+	queryForClearTrainedModel(elem, hashIdChBusiness);
 }
 
-function onSetTrainedClicked(elem, hashIdChBusiness, trained) {
-	if (trained) {
-		queryForSwitchTrained(elem, hashIdChBusiness, trained);
+function onSetTrainedClicked(elem, hashIdChBusiness, isTrained) {
+	if (isTrained == true) { // Si está entrenado
+		// Entonces desentrenar
+		queryForSetTrained(elem, hashIdChBusiness, false);
 	}
+	else { // Si NO esta entrenado
+		// Entonces entrenar
+		queryForSetTrained(elem, hashIdChBusiness, true);
+	}
+		
 }
 </script>
 
@@ -220,7 +245,7 @@ function onSetTrainedClicked(elem, hashIdChBusiness, trained) {
       <th>idChBusiness</th>
       <th>active</th>
       <th>spied</th>
-      <th>Publish Schedules</th>
+      <th>Publish Dummy Schedules</th>
       <th>Good Samp</th>
       <th>Bad Samp</th>
       <th>Train</th>
@@ -265,7 +290,7 @@ function onSetTrainedClicked(elem, hashIdChBusiness, trained) {
       
       <button th:text="${myCh.trainedModel.isTrained()}? 'SET UNTRAINED' : 'SET TRAINED'"
       		th:class="${myCh.trainedModel.isTrained()}? 'btn btn-info' : 'btn btn-primary'"
-      		th:onclick="'javascript:onSetTrainedClicked(this, \''+ ${myCh.channel.hashIdChBusiness}+'\', \''+ ${myCh.trainedModel.trained} +'\');'">None</button>
+      		th:onclick="'javascript:onSetTrainedClicked(this, \''+ ${myCh.channel.hashIdChBusiness}+'\', \''+ ${myCh.trainedModel.isTrained()} +'\');'">None</button>
       </td>
       <td>
       <button th:text="${myCh.trainedModel.isAbleToCV()}? 'EXECUTE' : 'EXECUTE'"

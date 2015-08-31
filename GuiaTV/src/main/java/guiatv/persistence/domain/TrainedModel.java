@@ -116,7 +116,7 @@ public class TrainedModel {
 		// Contabilizar si la muestra es buena o mala		
 		if (truth) { goodSamplesLearned++; }
 		else { badSamplesLearned++; }
-		if ( ! trained) { trained = true; }
+//		if ( ! trained) { trained = true; }
 		return true;
 	}
 	
