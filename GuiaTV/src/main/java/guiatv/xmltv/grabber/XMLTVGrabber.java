@@ -65,7 +65,7 @@ public class XMLTVGrabber {
 		if (tmpDir.exists() == false) { tmpDir.mkdirs(); }
 //		Resource binDirRes = ctx.getResource("META-INF/xmltv/grabber/windows_bin/xmltv-0.5.66-win32");
 		URL binDirUrl = this.getClass().getClassLoader()
-				.getResource("META-INF/xmltv/grabber/windows_bin/xmltv-0.5.66-win32");
+				.getResource("META-INF/xmltv/grabber/windows_bin/xmltv-0.5.67-win32");
 		
 		File resFile = null, errFile = null;
 		/**

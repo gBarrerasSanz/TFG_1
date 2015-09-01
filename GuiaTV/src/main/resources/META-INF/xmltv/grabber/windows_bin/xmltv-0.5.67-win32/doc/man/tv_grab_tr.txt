@@ -1,0 +1,81 @@
+NAME
+    tv_grab_tr - Grab TV listings for Turkey.
+
+SYNOPSIS
+    tv_grab_tr --help
+
+    tv_grab_tr --configure [--config-file FILE]
+
+    tv_grab_tr [--config-file FILE] [--days N] [--offset N] [--output FILE]
+    [--quiet] [--debug]
+
+    tv_grab_tr --list-channels [--config-file FILE] [--output FILE]
+    [--quiet] [--debug]
+
+    tv_grab_tr --version
+
+    tv_grab_tr --capabilities
+
+    tv_grab_tr --description
+
+DESCRIPTION
+    Output TV listings in XMLTV format for many stations available in
+    Turkey. Data is downloaded from Digiturk.
+
+    First you must run tv_grab_tr --configure to choose which stations you
+    want to receive.
+
+    Then running tv_grab_tr with no arguments will get listings for your
+    chosen stations including today.
+
+OPTIONS
+    --help Print a help message and exit.
+
+    --configure Prompt for which stations to download and write the
+    configuration file.
+
+    --list-channels Output a list of all channels that data is available
+    for. The list is in xmltv-format.
+
+    --config-file FILE Set the name of the configuration file, the default
+    is ~/.xmltv/tv_grab_tr.conf. This is the file written by --configure and
+    read when grabbing.
+
+    --output FILE When grabbing, write output to FILE rather than standard
+    output.
+
+    --days N When grabbing, grab N days.
+
+    --offset N Start grabbing at today + N days.
+
+    --quiet Only print error-messages on STDERR.
+
+    --debug Provide more information on progress to STDERR to help in
+    debugging.
+
+    --capabilities Show which capabilities the grabber supports. For more
+    information, see <http://wiki.xmltv.org/index.php/XmltvCapabilities>
+
+    --version Show the version of the grabber.
+
+    --description Show a brief description of the grabber.
+
+ERROR HANDLING
+    If the grabber fails to download listings data for a channel, it will
+    print an error message to STDERR and continue with the next configured
+    channel.
+
+ENVIRONMENT VARIABLES
+    The environment variable HOME can be set to change where configuration
+    files are stored. All configuration is stored in $HOME/.xmltv/. On
+    Windows, it might be necessary to set HOME to a path without spaces in
+    it.
+
+CREDITS
+    Grabber written by Dig Lam, dig -dot- lam -at- gmail -dot- com This
+    documentation copied from tv_grab_uk by Ed Avis, ed -at- membled -dot-
+    com.
+
+BUGS
+    None known.
+

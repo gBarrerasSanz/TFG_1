@@ -1,0 +1,54 @@
+NAME
+    tv_augment - Augment XMLTV listings files with automatic and
+    user-defined rules.
+
+SYNOPSIS
+    tv_augment [--rule <file>] [--config <file>] [--input <file>] [--output
+    <file>] [--log <file>] [--nostats] [--debug <level>]
+
+    tv_augment [-r <file>] [-c <file>] [-i <file>] [-o <file>] [-l <file>]
+    [-n] [-d <level>]
+
+DESCRIPTION
+    Augment an XMLTV xml file by applying corrections ("fixups") to
+    programmes matching defined criteria ("rules").
+
+    Two types of rules are actioned: (i) automatic, (ii) user-defined.
+
+    Automatic rules use pre-programmed input and output to modify the input
+    programmes. E.g. removing a "title" where it is repeated in a
+    "sub-title" (e.g. "Horizon" / "Horizon: Star Wars"), or trying to
+    identify and extract series/episode numbers from the programme title,
+    sub-title or description.
+
+    User-defined rules use the content of a "rules" file which allows
+    programmes matching certain user-defined criteria to be
+    corrected/enhanced with the user data supplied (e.g. adding/changing
+    categories for all episodes of "Horizon", or fixing misspellings in
+    titles, etc.)
+
+    (see "perldoc -F Augment.pm" for more detail)
+
+    --input FILE read from FILE rather than standard input.
+
+    --output FILE write to FILE rather than standard output.
+
+    --rule FILE file containing the user-defined rules.
+
+    --config FILE configuration file containing a list of which rules you
+    want to run.
+
+    --nostats do not print the summary log of actions performed, or list of
+    suggested fixups.
+
+    --log FILE output the stats to this FILE (default = augment.log).
+
+    --debug LEVEL print debug info to STDERR (debug level > 3 is not likely
+    to be of much use (it generates a lot of output))
+
+SEE ALSO
+    xmltv(5)
+
+AUTHOR
+    Geoff Westcott, honir.at.gmail.dot.com, Dec. 2014.
+

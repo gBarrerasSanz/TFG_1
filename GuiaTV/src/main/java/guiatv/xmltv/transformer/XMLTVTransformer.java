@@ -88,28 +88,22 @@ public class XMLTVTransformer implements Transformer {
 				NamedNodeMap schedNodeMap = null; Schedule sched = null; Node schedNode = null;
 				int schedItIdx = 0;
 				while (itSched.hasNext()) {
-					schedNode = listSchedNodes.get(schedItIdx);
-					schedNodeMap= schedNode.getAttributes();
-					sched = new Schedule();
-					String nameProg = itSched.next();
-					String idChBusiness = schedNodeMap.getNamedItem("channel").getNodeValue();
-					sched.setChannel(mapCh.get(idChBusiness));
-					sched.setProgramme(mapProg.get(nameProg));
-					sched.setStart(CommonUtility.xmltvFormatToDate(schedNodeMap.getNamedItem("start").getNodeValue()));
-					sched.setEnd(CommonUtility.xmltvFormatToDate(schedNodeMap.getNamedItem("stop").getNodeValue()));
-					
-					/**
-					 * Añadir el schedule siempre que el horario sea NO pasado
-					 */
-//					if (CommonUtility.isScheduleOnTime(sched)) {
-//						lSched.add(sched);
-//					}
-					/**
-					 * Añadir todos
-					 */
-					lSched.add(sched);
-					
-					schedItIdx++;
+					try {
+						schedNode = listSchedNodes.get(schedItIdx);
+						schedNodeMap= schedNode.getAttributes();
+						sched = new Schedule();
+						String nameProg = itSched.next();
+						String idChBusiness = schedNodeMap.getNamedItem("channel").getNodeValue();
+						sched.setChannel(mapCh.get(idChBusiness));
+						sched.setProgramme(mapProg.get(nameProg));
+						sched.setStart(CommonUtility.xmltvFormatToDate(schedNodeMap.getNamedItem("start").getNodeValue()));
+						sched.setEnd(CommonUtility.xmltvFormatToDate(schedNodeMap.getNamedItem("stop").getNodeValue()));
+	
+						lSched.add(sched);
+						schedItIdx++;
+					} catch(Exception e) {
+						e.printStackTrace();
+					}
 				}
 //				log.debug("listProgNodes.size() = "+String.valueOf(listProgNodes.size()));
 //				log.debug("itIdx = "+String.valueOf(itIdx));

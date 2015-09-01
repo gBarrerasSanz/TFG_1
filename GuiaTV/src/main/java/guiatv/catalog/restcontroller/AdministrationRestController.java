@@ -4,6 +4,7 @@ import guiatv.common.CommonUtility;
 import guiatv.persistence.domain.Blob;
 import guiatv.persistence.domain.Channel;
 import guiatv.persistence.domain.MyCh;
+import guiatv.persistence.domain.Programme;
 import guiatv.persistence.domain.RtSchedule;
 import guiatv.persistence.domain.Schedule;
 import guiatv.persistence.domain.RtSchedule.InstantState;
@@ -11,6 +12,7 @@ import guiatv.persistence.domain.helper.ArffHelper;
 import guiatv.persistence.repository.ChannelRepository;
 import guiatv.persistence.repository.service.BlobService;
 import guiatv.persistence.repository.service.ChannelService;
+import guiatv.persistence.repository.service.ProgrammeService;
 import guiatv.persistence.repository.service.ScheduleService;
 import guiatv.realtime.rtmpspying.MonitorMyCh;
 import guiatv.realtime.rtmpspying.RtmpSpyingService;
@@ -45,6 +47,8 @@ public class AdministrationRestController {
 	
 	private static final Logger logger = Logger.getLogger("debugLog");
 	
+	@Autowired
+	ProgrammeService progServ;
 	@Autowired
 	ChannelService chServ;
 	@Autowired
@@ -182,10 +186,10 @@ public class AdministrationRestController {
 		String returnErrMsg = "Some error ocurred while publishing Schedule";
 		if (hashIdChBusiness.length()>0) {
 			Channel ch = chServ.findByHashIdChBusiness(hashIdChBusiness, true);
-			MyCh myCh = new MyCh();
+			MyCh myCh = monitorMyCh.getByChannel(ch);
 			myCh.setChannel(ch);
 			if ( ! myCh.getMyChState().isActive()) {
-				returnMsg = "ERROR: Cannot publish Schedule or RtSchedule in a NOT ACTIVE Channel";
+				returnMsg = "ERROR: Cannot publish Schedule nor RtSchedule in a NOT ACTIVE Channel";
 				return new ResponseEntity<String>(returnMsg, HttpStatus.BAD_REQUEST);
 			}
 			if (realtime) { // RtSchedule
@@ -193,14 +197,23 @@ public class AdministrationRestController {
 				rtSched.setMyCh(myCh);
 				rtSched.setInstant(new Date());
 				rtSched.setState(InstantState.ON_PROGRAMME);
+				// Determinar a qué programa afecta
+				Programme prog = progServ.findOneByChannelAndInstant(rtSched.getMyCh().getChannel(), 
+						rtSched.getInstant());
+				rtSched.setProgramme(prog);
 				/********************************************
 				 * PUBLICAR RTSCHEDULE
 				 *******************************************/
 				Message<RtSchedule> rtSchedMsg = MessageBuilder.withPayload(rtSched).build();
 				schedPublisher.publishRtSchedule(rtSchedMsg);
-				returnMsg = "Published RtSchedule ("+rtSched.getMyCh().getChannel().getIdChBusiness()+"): "
+				if (prog != null) {
+					returnMsg = "Published RtSchedule ("+rtSched.getMyCh().getChannel().getIdChBusiness()+"): "
 						+rtSched.getProgramme().getNameProg()
 						+" -> "+rtSched.getState();
+				}
+				else {
+					returnMsg = "Channel ["+rtSched.getMyCh().getChannel().getIdChBusiness()+"]:RtSchedule DOES NOT contain any programme";
+				}
 				return new ResponseEntity<String>(returnMsg, HttpStatus.OK);
 			}
 			else { // Schedule

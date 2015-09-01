@@ -1,0 +1,70 @@
+NAME
+    tv_grab_fr - Grab TV listings for France.
+
+SYNOPSIS
+     To configure:
+       tv_grab_fr --configure [--config-file FILE] [--gui OPTION]
+     To grab listings:
+       tv_grab_fr [--config-file FILE] [--output FILE] [--days N]
+        [--offset N] [--quiet] [--debug]
+     To list available channels:
+       tv_grab_fr --list-channels
+     To show capabilities:
+       tv_grab_fr --capabilities
+     To show version:
+       tv_grab_fr --version
+     Help:
+       tv_grab_fr --help
+
+DESCRIPTION
+    Output TV listings for many channels available in France (Orange, Free,
+    cable/ADSL/satellite, Canal+ Sat). The data comes from telestar.fr. The
+    default is to grab 7 days, but there are usually 14 days of listings
+    available from the current day onwards.
+
+    Grabbing speed varies, but is typically 1-2 minutes/day/channel.
+
+    --configure Choose which bouquets/channels to grab listings data for.
+
+    --list-channels List all available channels.
+
+    --config-file FILE Use FILE as config file instead of the default config
+    file. This allows for different config files for different applications.
+
+    --gui OPTION Use this option to enable a graphical interface to be used.
+    OPTION may be 'Tk', or left blank for the best available choice.
+    Additional allowed values of OPTION are 'Term' for normal terminal
+    output (default) and 'TermNoProgressBar' to disable the use of
+    Term::ProgressBar.
+
+    --output FILE Write to FILE rather than standard output.
+
+    --days N Grab N days (default 7, maximum 14) starting from today.
+
+    --offset N Start grabbing N days from today, rather than starting today.
+
+    --quiet Suppress the progress messages normally written to standard
+    error.
+
+    --debug Provide additional debugging messages during processing.
+
+    --capabilities Show which capabilities the grabber supports. For more
+    information, see <http://wiki.xmltv.org/index.php/XmltvCapabilities>.
+
+    --version Show the version of the grabber.
+
+    --help Print a help message and exit.
+
+SEE ALSO
+    xmltv(5)
+
+AUTHOR
+    The current version of the script was rewritten by Nick Morrott,
+    knowledgejunkie at gmail dot com, to support the new telestar.fr site.
+
+    The original author was Sylvain Fabre, centraladmin at lahiette dot com,
+    with patches from: - Francois Gouget, fgouget at free dot fr, - Geoff
+    Westcott, honir999 at gmail dot com, - Karl Dietz, dekarl at
+    spaetfruehstuecken dot org, - Niel Markwick, nielm at bigfoot dot com, -
+    Zubrick, zubrick at number6 dot ch, - and many more!
+

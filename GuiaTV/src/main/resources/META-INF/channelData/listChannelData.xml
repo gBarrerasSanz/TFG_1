@@ -28,8 +28,8 @@
 	
 	<deserializedChannel>
 		<enabled>true</enabled>
-		<nameProg>Teledeporte</nameProg>
-		<idChBusiness>teledeporte-762</idChBusiness>
+		<nameChGiven>Teledeporte</nameChGiven>
+		<idChBusiness>teledeporte-762.laguiatv.com</idChBusiness>
 		<url>http://iphonelive.rtve.es/TDP_LV3_IPH/TDP_LV3_IPH.m3u8</url>
 		<cols>1280</cols>
 		<rows>720</rows>
