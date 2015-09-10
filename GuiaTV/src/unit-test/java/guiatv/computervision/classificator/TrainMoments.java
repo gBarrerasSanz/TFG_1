@@ -29,7 +29,7 @@ import weka.classifiers.bayes.NaiveBayes;
 import weka.classifiers.bayes.NaiveBayesUpdateable;
 import weka.classifiers.functions.SMO;
 
-public class TrainHu
+public class TrainMoments
 {
 
     public static void main(String[] args) throws Exception
@@ -45,15 +45,18 @@ public class TrainHu
     	System.loadLibrary(Core.NATIVE_LIBRARY_NAME); // Cargar libreria de OpenCV
     	
     	String adsDirPath = "captures/publicidad/";
-    	String chDirPath = "captures/07_aNeox/goodSamples/";
     	
-//    	String adsDirPath = "captures/publicidad/";
+    	
+    	String chDirPath = "captures/03_a3/goodSamples/";
+    	
+//    	String chDirPath = "captures/07_aNeox/goodSamples/";
+    	
 //    	String chDirPath = "captures/05_a5/goodSamples/";
     	
     	File chDirFile = new File(chDirPath);
     	File adsDirFile = new File(adsDirPath);
     	int idxImgCh = 0;
-    	ArffInstanceHu arff = new ArffInstanceHu("a3", aNeox_topLeft, aNeox_botRight);
+    	ArffInstanceMoments arff = new ArffInstanceMoments("a3", a3_topLeft, a3_botRight);
     	File[] chListFiles = chDirFile.listFiles();
     	for (File imgFile: chListFiles) {
     		arff.addSample(imgFile.getAbsolutePath(), true);
@@ -70,7 +73,7 @@ public class TrainHu
     	// Guardar el fichero en disco
     	ArffSaver saver = new ArffSaver();
 		saver.setInstances(arff.getData());
-		File fileOut = new File("dataHu.arff");
+		File fileOut = new File("dataMoments.arff");
 		saver.setFile(fileOut);
 		saver.writeBatch();
 		

@@ -16,7 +16,7 @@ import weka.core.FastVector;
 import weka.core.Instance;
 import weka.core.Instances;
 
-public class ArffInstanceHu {
+public class ArffInstanceMoments {
 
 	private String dataSetName;
 	private int numData;
@@ -32,8 +32,10 @@ public class ArffInstanceHu {
 	private FastVector atts; // Atributos
 	private Instances data;
 	private Instances dataRel;
+	
+	private final static int NUM_MOMENTS = 18;
 
-	public ArffInstanceHu(String dataSetName, int[] topLeft, int[] botRight) {
+	public ArffInstanceMoments(String dataSetName, int[] topLeft, int[] botRight) {
 		this.dataSetName = dataSetName;
 		this.numData = 0;
 		this.atts = new FastVector();
@@ -66,19 +68,40 @@ public class ArffInstanceHu {
 		// Extraer momentos hu
 		Moments mom = new Moments();
 		double[] vals = new double[data.numAttributes()];
-		if (contours.size() > 0) {
-			mom = Imgproc.moments(contours.get(0), false);
-			Mat hu = new Mat();
-			Imgproc.HuMoments(mom, hu);
-			for (int i=0; i<hu.rows(); i++) {
-				vals[i] = hu.get(i, 0)[0];
-			}
-		}
-		else { // SI no tiene contornos
-			for (int i=0; i<7; i++) {
-				vals[i] = -1;
-			}
-		}
+//		if (contours.size() > 0) {
+//			mom = Imgproc.moments(contours.get(0), false);
+//			Mat hu = new Mat();
+//			
+////			Imgproc.HuMoments(mom, hu);
+//			for (int i=0; i<hu.rows(); i++) {
+////				vals[i] = hu.get(i, 0)[0];
+//			}
+//			
+//		}
+//		else { // SI no tiene contornos
+//			for (int i=0; i< NUM_MOMENTS; i++) {
+//				vals[i] = -1;
+//			}
+//		}
+		mom = Imgproc.moments(img);
+		vals[0] = mom.get_m00();
+		vals[1] = mom.get_m01();
+		vals[2] = mom.get_m02();
+		vals[3] = mom.get_m03();
+		vals[4] = mom.get_m10();
+		vals[5] = mom.get_m11();
+		vals[6] = mom.get_m12();
+		vals[7] = mom.get_m20();
+		vals[8] = mom.get_m21();
+		vals[9] = mom.get_m30();
+		vals[10] = mom.get_m30();
+		vals[11] = mom.get_nu02();
+		vals[12] = mom.get_nu03();
+		vals[13] = mom.get_nu11();
+		vals[14] = mom.get_nu12();
+		vals[15] = mom.get_nu20();
+		vals[16] = mom.get_nu21();
+		vals[17] = mom.get_nu30();
 		vals[atts.size() - 1] = classAttVals.indexOf(String.valueOf(truth));
 		data.add(new Instance(1.0, vals));
 		numData++;
@@ -89,7 +112,7 @@ public class ArffInstanceHu {
 	}
 
 	private void setupAtts(Mat img) {
-		for (int h = 0; h < 7; h++) {
+		for (int h = 0; h < NUM_MOMENTS; h++) {
 			atts.addElement(new Attribute("h"+h));
 		}
 		// Atributo de clase
@@ -103,15 +126,24 @@ public class ArffInstanceHu {
 	private Mat getMatFromImgPath(String imgPath) {
 		Mat src = Highgui.imread(imgPath, Highgui.CV_LOAD_IMAGE_GRAYSCALE);
 		Mat dst = src.submat(topLeft[1], botRight[1], topLeft[0], botRight[0]);
-		Imgproc.adaptiveThreshold(dst, dst, 255,
-				Imgproc.ADAPTIVE_THRESH_MEAN_C, Imgproc.THRESH_BINARY_INV, 11,
-				2);
+//		Imgproc.adaptiveThreshold(dst, dst, 255,
+//				Imgproc.ADAPTIVE_THRESH_MEAN_C, Imgproc.THRESH_BINARY_INV, 11,
+//				2);
 		
-//		Imgproc.threshold(dst, dst, -1, 255, 
-//				Imgproc.THRESH_OTSU);
+		Imgproc.adaptiveThreshold(dst, dst, 255,
+			Imgproc.ADAPTIVE_THRESH_GAUSSIAN_C, Imgproc.THRESH_BINARY_INV, 11,
+			2);
+		
 //		Imgproc.Canny(dst, dst, 100, 300, 5, true); 
 //		Imgproc.threshold(dst, dst, 255, Imgproc.ADAPTIVE_THRESH_MEAN_C, 
 //				Imgproc.THRESH_BINARY_INV);
+
+//		Imgproc.threshold(dst, dst, 255, 255, 
+//				Imgproc.THRESH_BINARY_INV);
+		
+//		Imgproc.threshold(dst, dst, 255, 255, 
+//		Imgproc.THRESH_OTSU);
+		
 		return dst;
 	}
 
