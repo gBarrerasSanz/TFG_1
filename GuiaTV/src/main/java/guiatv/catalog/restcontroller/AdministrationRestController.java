@@ -36,6 +36,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import weka.classifiers.Evaluation;
 import weka.classifiers.bayes.NaiveBayesUpdateable;
 
 import com.fasterxml.jackson.annotation.JsonView;
@@ -148,14 +149,14 @@ public class AdministrationRestController {
 		}
 		// ATENCIÓN: SE ASUME QUE fullDataSet está ya cargado
 //		myCh.getTrainedModel().loadOrCreateFullDataSet(blob) // Cargar TODOS los datos (atributos + muestras)
-		String cvResults;
+		Evaluation cvEvaluation;
 		/*
 		 * Si se quiere evaluar C-V con el clasificador ya entrenado (Habiendo
 		 * espiado ya los datos de test)
 		 */
 		if (alreadyTrained) {
 			// Utilizar el clasificador ya entrenado con todas las muestras
-			cvResults = ArffHelper.doCrossValidation(
+			cvEvaluation = ArffHelper.doCrossValidation(
 					myCh.getTrainedModel().getTrainedClassifier(), 
 					myCh.getTrainedModel().getFullDataSet());
 		}
@@ -166,13 +167,13 @@ public class AdministrationRestController {
 		else {
 			// Crear nuevo clasificador
 			NaiveBayesUpdateable newClassifier = new NaiveBayesUpdateable();
-			cvResults = ArffHelper.doCrossValidation(newClassifier,
+			cvEvaluation = ArffHelper.doCrossValidation(newClassifier,
 					myCh.getTrainedModel().getFullDataSet());
 		}
 //		 Convertir los saltos de línea Java a los de HTML
 		//cvResults = cvResults.replaceAll("(\r\n|\n)", "<br />");
 //		cvResults = StringEscapeUtils.
-		return new ResponseEntity<String>(cvResults, HttpStatus.OK);
+		return new ResponseEntity<String>(cvEvaluation.toSummaryString(), HttpStatus.OK);
 	}
 	
 	@RequestMapping(

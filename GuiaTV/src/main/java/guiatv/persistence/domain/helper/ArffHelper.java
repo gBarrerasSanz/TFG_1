@@ -26,6 +26,7 @@ import org.opencv.core.Mat;
 import org.opencv.highgui.Highgui;
 import org.opencv.imgproc.Imgproc;
 
+import weka.classifiers.Classifier;
 import weka.classifiers.Evaluation;
 import weka.classifiers.bayes.NaiveBayesUpdateable;
 import weka.core.Attribute;
@@ -165,14 +166,25 @@ public class ArffHelper implements Serializable {
 		return binBlob;
 	}
 	
-	public static String doCrossValidation(NaiveBayesUpdateable trainedClassifier, Instances dataSet) {
+	public static Evaluation doCrossValidation(NaiveBayesUpdateable trainedClassifier, Instances dataSet) {
 		Evaluation eTest;
 		try {
 			eTest = new Evaluation(dataSet);
-			eTest.crossValidateModel(trainedClassifier, dataSet, 10, new Random(1));
-			return eTest.toSummaryString();
+			eTest.crossValidateModel(trainedClassifier, dataSet, 10, new Random(100));
+			return eTest;
 		} catch (Exception e) {
-			return "ERROR: "+e.getMessage();
+			return null;
+		}
+	}
+	
+	public static Evaluation doCrossValidation(Classifier trainedClassifier, Instances dataSet) {
+		Evaluation eTest;
+		try {
+			eTest = new Evaluation(dataSet);
+			eTest.crossValidateModel(trainedClassifier, dataSet, 10, new Random(100));
+			return eTest;
+		} catch (Exception e) {
+			return null;
 		}
 	}
 	

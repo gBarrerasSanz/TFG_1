@@ -97,7 +97,6 @@ public class Train
 		// Test the model
 		 Evaluation eTest = new Evaluation(arff.getData());
 		 eTest.evaluateModel(cModel, arff.getData());
-		 
 		 // Print the result à la Weka explorer:
 		 String strSummary = eTest.toSummaryString();
 		 System.out.println(strSummary);

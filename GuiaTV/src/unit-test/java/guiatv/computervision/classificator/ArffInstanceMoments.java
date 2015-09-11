@@ -16,7 +16,7 @@ import weka.core.FastVector;
 import weka.core.Instance;
 import weka.core.Instances;
 
-public class ArffInstanceMoments {
+public class ArffInstanceMoments implements Arff {
 
 	private String dataSetName;
 	private int numData;
@@ -130,9 +130,9 @@ public class ArffInstanceMoments {
 //				Imgproc.ADAPTIVE_THRESH_MEAN_C, Imgproc.THRESH_BINARY_INV, 11,
 //				2);
 		
-		Imgproc.adaptiveThreshold(dst, dst, 255,
-			Imgproc.ADAPTIVE_THRESH_GAUSSIAN_C, Imgproc.THRESH_BINARY_INV, 11,
-			2);
+//		Imgproc.adaptiveThreshold(dst, dst, 255,
+//			Imgproc.ADAPTIVE_THRESH_GAUSSIAN_C, Imgproc.THRESH_BINARY_INV, 11,
+//			2);
 		
 //		Imgproc.Canny(dst, dst, 100, 300, 5, true); 
 //		Imgproc.threshold(dst, dst, 255, Imgproc.ADAPTIVE_THRESH_MEAN_C, 
@@ -141,8 +141,8 @@ public class ArffInstanceMoments {
 //		Imgproc.threshold(dst, dst, 255, 255, 
 //				Imgproc.THRESH_BINARY_INV);
 		
-//		Imgproc.threshold(dst, dst, 255, 255, 
-//		Imgproc.THRESH_OTSU);
+		Imgproc.threshold(dst, dst, 255, 255, 
+				Imgproc.THRESH_OTSU);
 		
 		return dst;
 	}
