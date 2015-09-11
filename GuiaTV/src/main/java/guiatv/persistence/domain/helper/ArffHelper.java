@@ -80,7 +80,7 @@ public class ArffHelper implements Serializable {
 		Attribute classAtt = new Attribute("class", classAttVals);
 		atts.addElement(classAtt);
 		// Crear objeto Instances
-		String nameInstances = "Rel "+blob.getMyCh().getChannel().getIdChBusiness();
+		String nameInstances = "Rel "+blob.getChannel().getIdChBusiness();
 		Instances dataSet = new Instances(nameInstances, atts, 0);
 		// Añadir atributos al objeto Instances
 		dataSet.setClass(classAtt); // Establece el atributo classAtt como el atributo que indica la clase

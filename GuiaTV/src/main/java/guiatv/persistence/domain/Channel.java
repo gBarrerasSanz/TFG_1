@@ -94,8 +94,9 @@ public class Channel extends ResourceSupport implements Serializable {
 	 * hacer esto y me da error de TransientPropertyValueException, pero
 	 * sin embargo aquí en Channel no lo da.
 	 */
-	@OneToOne(targetEntity=MyCh.class, fetch=FetchType.LAZY)
-	@JoinColumn(name="mych_fk", referencedColumnName="idMyChPersistence")
+//	@OneToOne(targetEntity=MyCh.class, fetch=FetchType.LAZY)
+//	@JoinColumn(name="mych_fk", referencedColumnName="idMyChPersistence")
+	@Transient
 	private MyCh myCh;
 	
 	@JsonView({SingleChannel.class, MultipleChannels.class, SchedulePublisher.PublisherScheduleView.class,

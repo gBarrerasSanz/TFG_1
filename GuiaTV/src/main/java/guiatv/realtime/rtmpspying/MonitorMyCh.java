@@ -10,9 +10,6 @@ import guiatv.persistence.domain.StreamSource;
 import guiatv.persistence.domain.TrainedModel;
 import guiatv.persistence.domain.helper.ArffHelper;
 import guiatv.persistence.repository.service.ChannelService;
-import guiatv.persistence.repository.service.MyChService;
-import guiatv.persistence.repository.service.StreamSourceService;
-import guiatv.persistence.repository.service.TrainedModelService;
 import guiatv.realtime.rtmpspying.serializable.DeserializedChannel;
 import guiatv.realtime.rtmpspying.serializable.ListDeserializedChannel;
 
@@ -53,17 +50,17 @@ public class MonitorMyCh {
 	
 //	@Autowired
 //	RtmpSpyingLaunchService spyLaunchServ;
-	@Autowired
-	StreamSourceService streamSrcServ;
+//	@Autowired
+//	StreamSourceService streamSrcServ;
 	@Autowired
 	ChannelService chServ;
-	@Autowired
-	TrainedModelService trainedModelServ;
+//	@Autowired
+//	TrainedModelService trainedModelServ;
 	@Autowired
 	RtmpSpyingService rtmpSpyingServ;
-	@Autowired
-	MyChService myChServ;
-	
+//	@Autowired
+//	MyChService myChServ;
+//	
 	private HashMap<String, MyCh> myChMap;
 	
 //	List<MLChannel> lMlChannelLive = new ArrayList<MLChannel>();
@@ -103,11 +100,14 @@ public class MonitorMyCh {
 	        		// Añadirlo al mapa de MyCh
 	        		myChMap.put(ch.getHashIdChBusiness(), myCh);
 	        		// Guardar las instancias hijas en la BD
-	        		chServ.save(ch);
-	        		streamSrcServ.save(streamSrc);
-	        		trainedModelServ.save(trainedModel);
+	        		Channel existentCh = chServ.saveOrGetExistent(ch);
+	        		if (existentCh != null) {
+	        			myCh.setChannel(existentCh);
+	        		}
+//	        		streamSrcServ.save(streamSrc);
+//	        		trainedModelServ.save(trainedModel);
 	        		// Y a continuación guardar la instancia padre
-	        		myChServ.save(myCh);
+//	        		myChServ.save(myCh);
 	        	}
 	        }
         }

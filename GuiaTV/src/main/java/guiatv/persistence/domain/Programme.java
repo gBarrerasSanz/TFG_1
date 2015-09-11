@@ -73,7 +73,7 @@ public class Programme extends ResourceSupport implements Serializable {
 
 	@JsonView({MultipleProgrammes.class, SingleProgramme.class, Channel.SingleChannel.class, 
 		SchedulePublisher.PublisherScheduleView.class, SchedulePublisher.PublisherRtScheduleView.class})
-	@Column(name = "nameProg", nullable = false, length = 70)
+	@Column(name = "nameProg", nullable = false, length = 400)
     private String nameProg;
 	
 	@JsonView({MultipleProgrammes.class, SingleProgramme.class, Channel.SingleChannel.class, 

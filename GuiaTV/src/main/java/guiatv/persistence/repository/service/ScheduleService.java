@@ -248,16 +248,16 @@ public class ScheduleService {
 					sched.setProgramme(prog);
 				}
 				else { // No existe programa
-					progRep.saveAndFlush(sched.getProgramme());
+					progRep.save(sched.getProgramme());
 				}
 				Schedule schedIn = schedRep.findByChannelAndProgrammeAndStartAndEnd(
 						sched.getChannel(), sched.getProgramme(), sched.getStart(), sched.getEnd());
 				if (schedIn == null) {
-					schedRep.saveAndFlush(sched);
+					schedRep.save(sched);
 					numSched++;
 				}
 				else {
-					logger.debug("Schedule REPETIDO: "+schedIn);
+//					logger.debug("Schedule REPETIDO: "+schedIn);
 				}
 				
 			} catch(Exception e) {

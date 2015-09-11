@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+import javax.persistence.Transient;
 
 import org.apache.log4j.Logger;
 import org.opencv.core.Mat;
@@ -27,8 +28,11 @@ public class Blob {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idBlobPersistence;
 	
-	@ManyToOne(targetEntity=MyCh.class, fetch=FetchType.LAZY)
-	@JoinColumn(name="mych_fk", referencedColumnName="idMyChPersistence")
+	@ManyToOne(targetEntity=Channel.class, fetch=FetchType.LAZY)
+	@JoinColumn(name="channel_fk", referencedColumnName="idChPersistence")
+	private Channel channel;
+	
+	@Transient
 	private MyCh myCh;
 	
 	@Lob
@@ -55,6 +59,7 @@ public class Blob {
 		this.blobCols = roiMat.cols();
 		this.blobRows = roiMat.rows();
 		this.blob = CvUtils.getByteArrayFromMat(roiMat);
+		this.channel = myCh.getChannel();
 		this.myCh = myCh;
 	}
 	
@@ -65,20 +70,13 @@ public class Blob {
 		this.blobCols = roiMat.cols();
 		this.blobRows = roiMat.rows();
 		this.blob = CvUtils.getByteArrayFromMat(roiMat);
+		this.channel = myCh.getChannel();
 		this.myCh = myCh;
 	}
 	
     /**********************************************************
      * 					GETTERS / SETTERS
      *********************************************************/
-	
-	public MyCh getMyCh() {
-		return myCh;
-	}
-
-	public void setMyCh(MyCh myCh) {
-		this.myCh = myCh;
-	}
 
 	public byte[] getBlob() {
 		return blob;
@@ -107,9 +105,27 @@ public class Blob {
 	public void setBlobRows(int blobRows) {
 		this.blobRows = blobRows;
 	}
-	
-	
 
+	public Channel getChannel() {
+		return channel;
+	}
+
+	public void setChannel(Channel channel) {
+		this.channel = channel;
+	}
+
+	public MyCh getMyCh() throws IllegalAccessException {
+		if (myCh != null) {
+			return myCh;
+		}
+		else {
+			throw new IllegalAccessException("Trying to access to a persisted-not-in-memory blob");
+		}
+	}
+
+	public void setMyCh(MyCh myCh) {
+		this.myCh = myCh;
+	}
 	
 	
 }

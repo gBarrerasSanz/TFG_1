@@ -52,7 +52,7 @@ function onClassifyClicked(elem, idBlobPersistence, classificationResult) {
   <tbody>
     <tr th:each="blob : ${page.content}">
     	<td th:name="id" th:text="${blob.idBlobPersistence}">None</td>
-      	<td th:name="idChBusiness" th:text="${blob.myCh.channel.idChBusiness}">None</td>
+      	<td th:name="idChBusiness" th:text="${blob.channel.idChBusiness}">None</td>
       	<td th:name="blob">
       		<!-- ESTO NO ESTA DEL TODO BIEN PORQUE HAY QUE HARDCODEAR /ml
       			y debería detectarlo solo con @, pero si no da problemas

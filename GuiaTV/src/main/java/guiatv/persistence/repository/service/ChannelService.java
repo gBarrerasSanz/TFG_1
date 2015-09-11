@@ -61,8 +61,27 @@ public class ChannelService {
     }
 	
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
+    public Channel saveOrGetExistent(Channel ch) {
+		Channel existentCh = chRep.findByHashIdChBusiness(ch.getHashIdChBusiness());
+		if (existentCh == null) {
+			chRep.save(ch);
+			return null;
+		}
+		else { // Si se ha encontrado
+			if (existentCh.equals(ch)) {
+				// TODO: Actualizar channel
+				chRep.updateNameProgWhereIdChPersistence(ch.getNameCh(), ch.getIdChPersistence());
+				return existentCh;
+			}
+			else {
+				return existentCh; 
+			}
+		}
+    }
+	
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
     public void save(Channel ch) {
-    	chRep.save(ch);
+		chRep.save(ch);
     }
 	
 	@Transactional(propagation = Propagation.REQUIRES_NEW)

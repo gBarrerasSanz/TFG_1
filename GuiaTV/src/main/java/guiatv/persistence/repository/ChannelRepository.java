@@ -27,7 +27,6 @@ public interface ChannelRepository extends JpaRepository<Channel, Long>,
 	
 	<S extends Channel> Channel save(Channel ch);
 	
-	
 	@Modifying
 	@Query("UPDATE channel c SET c.nameCh = ?1 "
 			+ "WHERE c.idChPersistence = ?2")

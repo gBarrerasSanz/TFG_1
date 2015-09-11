@@ -71,7 +71,7 @@ public class MLViewController {
 		if (myCh == null) {
 			return null;
 		}
-		page = new PageWrapper<Blob>(blobServ.findByMyCh(myCh, pageable), "/ml/blobClassification");
+		page = new PageWrapper<Blob>(blobServ.findByChannel(myCh.getChannel(), pageable), "/ml/blobClassification");
 		page.setUrl(page.getUrl()+"/"+hashIdChBusiness+"/");
 		model.addAttribute("page", page);
 		return "blobClassification";
@@ -94,7 +94,7 @@ public class MLViewController {
 			produces = MediaType.IMAGE_PNG_VALUE)
 	@ResponseBody
     public ResponseEntity<byte[]> getBlobImg(@PathVariable("idBlobPersistence") Long idBlobPersistence) throws IOException {
-        Blob blob = blobServ.findOneByIdBlobPersistenceInitTrainedModel(idBlobPersistence);
+        Blob blob = blobServ.findOneByIdBlobPersistence(idBlobPersistence);
         byte[] blobImgContent = CvUtils.convertByteArrayToPngDecodeable(blob.getBlob(), blob.getBlobCols(), blob.getBlobRows());
         final HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.IMAGE_PNG);

@@ -55,7 +55,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 
-@Entity(name = "mych")
+//@Entity(name = "mych")
 @Table(uniqueConstraints={@UniqueConstraint(columnNames = {"channel_fk", "streamSource_fk"})})
 public class MyCh {
 	

@@ -7,9 +7,7 @@ import guiatv.computervision.CvUtils;
 import guiatv.persistence.domain.Channel;
 import guiatv.persistence.domain.StreamSource;
 import guiatv.persistence.domain.helper.ArffHelper;
-import guiatv.persistence.repository.StreamSourceRepository;
 import guiatv.persistence.repository.service.ChannelService;
-import guiatv.persistence.repository.service.StreamSourceService;
 import guiatv.realtime.rtmpspying.RtmpSpyingService;
 
 import org.apache.log4j.Logger;

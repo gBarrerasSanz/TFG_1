@@ -318,7 +318,7 @@ public class AdministrationRestController {
 		Blob blob = blobServ.findOneByIdBlobPersistenceInitChannel(idBlobPersistence);
 		// IMPORTANTE: Obtener el MyCh que está en memoria. No una nueva instancia de la BD
 		if (blob != null) {
-			MyCh myCh = monitorMyCh.getByChannel(blob.getMyCh().getChannel());
+			MyCh myCh = monitorMyCh.getByChannel(blob.getChannel());
 			// Añadir muestra
 			myCh.getTrainedModel().learnSample(blob, classificationResult);
 			// Eliminar blob de la Base de Datos

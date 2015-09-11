@@ -32,7 +32,7 @@ import weka.core.Instance;
 import weka.core.Instances;
 import weka.core.converters.ArffLoader;
 
-@Entity(name = "trainedmodel")
+//@Entity(name = "trainedmodel")
 public class TrainedModel {
 	
 	private static final Logger logger = Logger.getLogger("debugLog");
@@ -386,5 +386,36 @@ public class TrainedModel {
 		}
 	}
 	
+	@Override
+	public boolean equals(Object obj) {
+	    if (obj == null) {
+	        return false;
+	    }
+	    if (getClass() != obj.getClass()) {
+	        return false;
+	    }
+	    final TrainedModel other = (TrainedModel) obj;
+	    if ((this.dataSetUri == null) ? (other.dataSetUri != null) : !this.dataSetUri.equals(other.dataSetUri)) {
+	        return false;
+	    }
+	    if ((this.fullDataSetUri == null) ? (other.fullDataSetUri != null) : !this.fullDataSetUri.equals(other.fullDataSetUri)) {
+	        return false;
+	    }
+	    if ((this.trainedClassifierUri == null) ? (other.trainedClassifierUri != null) : !this.trainedClassifierUri.equals(other.trainedClassifierUri)) {
+	        return false;
+	    }
+	    if ((this.batchGoodSamplesUri == null) ? (other.batchGoodSamplesUri != null) : !this.batchGoodSamplesUri.equals(other.batchGoodSamplesUri)) {
+	        return false;
+	    }
+	    if ((this.batchBadSamplesUri == null) ? (other.batchBadSamplesUri != null) : !this.batchBadSamplesUri.equals(other.batchBadSamplesUri)) {
+	        return false;
+	    }
+	    if (this.badSamplesLearned != other.badSamplesLearned || 
+	    		this.goodSamplesLearned != other.goodSamplesLearned ||
+	    		this.trained != other.trained) {
+	        return false;
+	    }
+	    return true;
+	}
 	
 }

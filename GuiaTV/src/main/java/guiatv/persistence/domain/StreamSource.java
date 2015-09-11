@@ -13,36 +13,36 @@ import javax.persistence.OneToOne;
 import javax.persistence.Transient;
 
 
-@Entity(name = "streamsource")
+//@Entity(name = "streamsource")
 public class StreamSource {
 	
-	@Id
-    @Column(name = "idStreamSourcePersistence", nullable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idStreamSourcePersistence;
+//	@Id
+//    @Column(name = "idStreamSourcePersistence", nullable = false)
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    private Long idStreamSourcePersistence;
 	
 //	@OneToOne(targetEntity=MyCh.class, mappedBy="streamSrc", fetch=FetchType.LAZY)
 	
 //	@OneToOne(targetEntity=MyCh.class, fetch=FetchType.LAZY)
 //	@JoinColumn(name="mych_fk", referencedColumnName="idMyChPersistence")
-	@Transient
+//	@Transient
 	private MyCh myCh;
 	
 	
 	
-	@Column(name="url", nullable=false)
+//	@Column(name="url", nullable=false)
 	private String url;
 	
-	@Column(name="cols", nullable=false)
+//	@Column(name="cols", nullable=false)
 	private int cols;
 	
-	@Column(name="rows", nullable=false)
+//	@Column(name="rows", nullable=false)
 	private int rows;
 	
-	@Column(name="topLeft", nullable=false)
+//	@Column(name="topLeft", nullable=false)
 	private int[] topLeft;
 	
-	@Column(name="botRight", nullable=false)
+//	@Column(name="botRight", nullable=false)
 	private int[] botRight;
 	
 	public StreamSource(){
@@ -87,9 +87,9 @@ public class StreamSource {
 		this.url = url;
 	}
 
-	public Long getIdStreamSourcePersistence() {
-		return idStreamSourcePersistence;
-	}
+//	public Long getIdStreamSourcePersistence() {
+//		return idStreamSourcePersistence;
+//	}
 
 	public int getCols() {
 		return cols;
@@ -121,6 +121,30 @@ public class StreamSource {
 
 	public void setBotRight(int[] botRight) {
 		this.botRight = botRight;
+	}
+	
+	@Override 
+	public boolean equals(Object obj) {
+		if (obj == null) {
+	        return false;
+	    }
+	    if (getClass() != obj.getClass()) {
+	        return false;
+	    }
+	    final StreamSource other = (StreamSource) obj;
+	    if ((this.url == null) ? (other.url != null) : !this.url.equals(other.url)) {
+	        return false;
+	    }
+	    if (this.cols != other.cols || this.rows != this.rows) {
+	    	return false;
+	    }
+	    if ((this.topLeft == null) ? (other.topLeft != null) : !this.topLeft.equals(other.topLeft)) {
+	        return false;
+	    }
+	    if ((this.botRight == null) ? (other.botRight != null) : !this.botRight.equals(other.botRight)) {
+	        return false;
+	    }
+	    return true;
 	}
 	
 	

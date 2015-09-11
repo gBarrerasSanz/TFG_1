@@ -10,7 +10,6 @@ import guiatv.persistence.domain.Programme;
 import guiatv.persistence.domain.Schedule;
 import guiatv.persistence.domain.StreamSource;
 import guiatv.persistence.repository.BlobRepository;
-import guiatv.persistence.repository.StreamSourceRepository;
 
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,21 +33,32 @@ public class BlobService {
 	
 	@Transactional(readOnly = true)
 	public Page<Blob> findAll(Pageable pageable) {
-		return blobRep.findAll(pageable);
+		Page<Blob> page = blobRep.findAll(pageable);
+		for (Blob blob: page) {
+			Hibernate.initialize(blob.getChannel());
+		}
+		return page;
 	}
 	
 	@Transactional(readOnly = true)
-	public Page<Blob> findByMyCh(MyCh myCh, Pageable pageable) {
-		return blobRep.findByMyCh(myCh, pageable);
+	public Page<Blob> findByChannel(Channel channel, Pageable pageable) {
+		return blobRep.findByChannel(channel, pageable);
 	}
 	
 	
+//	@Transactional(readOnly = true)
+//	public Blob findOneByIdBlobPersistenceInitTrainedModel(long idBlobPersistence) {
+//		Blob blob = blobRep.findOneByIdBlobPersistence(idBlobPersistence);
+//		Hibernate.initialize(blob.getBlob());
+//		// Inicializar TrainedModel
+//		Hibernate.initialize(blob.getMyCh().getTrainedModel());
+//		return blob;
+//	}
+	
 	@Transactional(readOnly = true)
-	public Blob findOneByIdBlobPersistenceInitTrainedModel(long idBlobPersistence) {
+	public Blob findOneByIdBlobPersistence(long idBlobPersistence) {
 		Blob blob = blobRep.findOneByIdBlobPersistence(idBlobPersistence);
 		Hibernate.initialize(blob.getBlob());
-		// Inicializar TrainedModel
-		Hibernate.initialize(blob.getMyCh().getTrainedModel());
 		return blob;
 	}
 	
@@ -58,7 +68,7 @@ public class BlobService {
 		if (blob != null) {
 			Hibernate.initialize(blob.getBlob());
 			// Inicializar Channel
-			Hibernate.initialize(blob.getMyCh().getChannel());
+			Hibernate.initialize(blob.getChannel());
 			return blob;
 		}
 		else {
