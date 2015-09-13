@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+import javax.persistence.TableGenerator;
 import javax.persistence.Transient;
 
 import org.apache.log4j.Logger;
@@ -25,7 +26,12 @@ public class Blob {
 	
 	@Id
     @Column(name = "idBlobPersistence", nullable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @TableGenerator(
+    	    name="blobGen",
+    	    table="blob_sequence_table",
+    	    pkColumnValue="idBlobPersistence",
+    	    allocationSize=1)
+    @GeneratedValue(strategy = GenerationType.TABLE, generator="blobGen")
     private Long idBlobPersistence;
 	
 	@ManyToOne(targetEntity=Channel.class, fetch=FetchType.LAZY)

@@ -24,6 +24,7 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.TableGenerator;
 import javax.persistence.UniqueConstraint;
 import javax.persistence.Version;
 
@@ -69,7 +70,12 @@ public class Programme extends ResourceSupport implements Serializable {
 	
 	@Id
     @Column(name = "idProgPersistence", nullable = false)
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @TableGenerator(
+    	    name="progGen",
+    	    table="prog_sequence_table",
+    	    pkColumnValue="idProgPersistence",
+    	    allocationSize=1)
+    @GeneratedValue(strategy = GenerationType.TABLE, generator="progGen")
     private Long idProgPersistence;
 
 	@JsonView({MultipleProgrammes.class, SingleProgramme.class, Channel.SingleChannel.class, 

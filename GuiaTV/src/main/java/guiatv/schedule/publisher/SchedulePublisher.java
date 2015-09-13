@@ -66,7 +66,7 @@ public class SchedulePublisher {
 		for (Schedule sched: listSchedMsg.getPayload()) {
 			try {
 				assert(sched != null);
-				routKey = sched.getProgramme().getHashNameProg();
+				routKey = sched.getChannel().getHashIdChBusiness()+"."+sched.getProgramme().getHashNameProg();
 				String schedJson = sched.toStringPublisher();
 				schedJson = StringEscapeUtils.unescapeJava(schedJson);
 				amqpTmp.convertAndSend(routKey, schedJson);
@@ -109,7 +109,7 @@ public class SchedulePublisher {
 			String routKey = null;
 			try {
 				assert(rtSched != null);
-				routKey = rtSched.getProgramme().getHashNameProg();
+				routKey = rtSched.getMyCh().getChannel().getHashIdChBusiness()+"."+rtSched.getProgramme().getHashNameProg();
 				ObjectMapper mapper = new ObjectMapper();
 				mapper.disable(MapperFeature.DEFAULT_VIEW_INCLUSION);
 		        mapper.setConfig(mapper.getSerializationConfig()

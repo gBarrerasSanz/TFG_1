@@ -28,6 +28,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.TableGenerator;
 import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
 import javax.persistence.Version;
@@ -87,7 +88,12 @@ public class Channel extends ResourceSupport implements Serializable {
 	
 	@Id
     @Column(name = "idChPersistence", nullable = false)
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @TableGenerator(
+    	    name="channelGen",
+    	    table="channel_sequence_table",
+    	    pkColumnValue="idChPersistence",
+    	    allocationSize=1)
+    @GeneratedValue(strategy = GenerationType.TABLE, generator="channelGen")
     private Long idChPersistence;
     
 	/*

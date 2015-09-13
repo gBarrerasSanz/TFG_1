@@ -26,6 +26,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
+import javax.persistence.TableGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
@@ -70,8 +71,14 @@ public class Schedule extends ResourceSupport implements Serializable {
 	
 	@JsonView({CustomSchedule.class, SchedulePublisher.PublisherScheduleView.class})
 	@Id
+    @TableGenerator(
+	    name="scheduleGen",
+	    table="schedule_sequence_table",
+	    pkColumnValue="idSched",
+	    allocationSize=1)
+	@GeneratedValue(strategy = GenerationType.TABLE, generator="scheduleGen")
     @Column(name = "idSched", nullable = false)
-    @GeneratedValue(strategy = GenerationType.AUTO)
+//	@GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Long idSched;
     
 	

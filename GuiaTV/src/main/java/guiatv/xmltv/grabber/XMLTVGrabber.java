@@ -76,8 +76,10 @@ public class XMLTVGrabber {
 		/**
 		 * Asignar nombre (el mismo para todos, con lo que se reemplazará)
 		 */
+//		resFile = new File(tmpDir.getAbsolutePath()+
+//				File.separator+"xmltvDump_"+CommonUtility.getDateString()+".xml");
 		resFile = new File(tmpDir.getAbsolutePath()+
-				File.separator+"xmltvDump_"+CommonUtility.getDateString()+".xml");
+				File.separator+"xmltvDump.xml");
 		errFile = new File(tmpDir.getAbsolutePath()+
 				File.separator+"errorLog_"+CommonUtility.getDateString()+".txt");
 		switch(platform) {

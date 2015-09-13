@@ -140,12 +140,13 @@
 				<list>
 					<bean
 						class="org.springframework.integration.file.filters.RegexPatternFileListFilter">
+						<constructor-arg value="xmltvDump.xml" />
 						<!-- xmltvDump_yyyy_MM_dd_hh_mm_ss -->
-						<constructor-arg value="xmltvDump_[0-9][0-9][0-9][0-9]_[0-9][0-9]_[0-9][0-9]_[0-9][0-9]_[0-9][0-9]_[0-9][0-9]\.xml" />
-						<!-- <constructor-arg value="xmltvDump.xml" /> -->
+						<!-- <constructor-arg value="xmltvDump_[0-9][0-9][0-9][0-9]_[0-9][0-9]_[0-9][0-9]_[0-9][0-9]_[0-9][0-9]_[0-9][0-9]\.xml" /> -->
+						
 					</bean>
-					<bean
-						class="org.springframework.integration.file.filters.AcceptOnceFileListFilter" />
+					<!-- <bean
+						class="org.springframework.integration.file.filters.AcceptOnceFileListFilter" /> -->
 					<bean class="guiatv.xmltv.transformer.EntireFileFilter" />
 				</list>
 			</constructor-arg>

@@ -268,8 +268,6 @@ public class ScheduleService {
 				if (schedIn == null && ! schedMap.containsKey(sched)) { // Si no está en la base de datos y No se ha introducido antes
 //					logger.debug("sched = "+sched.toString());
 					schedRep.save(sched);
-					sched.setIdSched(1);
-					schedMap.put(sched, 1);
 					numSaved++;
 				}
 				else {
