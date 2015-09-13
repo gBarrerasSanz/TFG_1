@@ -61,25 +61,25 @@ public class MyCh {
 	
 	private static final Logger logger = Logger.getLogger("debugLog");
 	
-	@Id
-    @Column(name = "idMyChPersistence", nullable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//	@Id
+//    @Column(name = "idMyChPersistence", nullable = false)
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idMyChPersistence;
 	
 	@JsonView({SchedulePublisher.PublisherRtScheduleView.class})
-	@OneToOne(targetEntity=Channel.class, fetch=FetchType.LAZY)
-	@JoinColumn(name="channel_fk", referencedColumnName="idChPersistence")
+//	@OneToOne(targetEntity=Channel.class, fetch=FetchType.LAZY)
+//	@JoinColumn(name="channel_fk", referencedColumnName="idChPersistence")
 	private Channel channel;
 	
-	@OneToOne(targetEntity=StreamSource.class, fetch=FetchType.LAZY)
-	@JoinColumn(name="streamsource_fk", referencedColumnName="idStreamSourcePersistence")
+//	@OneToOne(targetEntity=StreamSource.class, fetch=FetchType.LAZY)
+//	@JoinColumn(name="streamsource_fk", referencedColumnName="idStreamSourcePersistence")
 	private StreamSource streamSrc;
 	
-	@OneToOne(targetEntity=TrainedModel.class, fetch=FetchType.LAZY)
-	@JoinColumn(name="trainedmodel_fk", referencedColumnName="idTrainedModelPersistence")
+//	@OneToOne(targetEntity=TrainedModel.class, fetch=FetchType.LAZY)
+//	@JoinColumn(name="trainedmodel_fk", referencedColumnName="idTrainedModelPersistence")
 	private TrainedModel trainedModel;
 	
-	@Transient
+//	@Transient
 	private MyChState myChState;
 	
 	public MyCh() {

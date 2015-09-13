@@ -126,9 +126,9 @@ public class ArffInstanceMoments implements Arff {
 	private Mat getMatFromImgPath(String imgPath) {
 		Mat src = Highgui.imread(imgPath, Highgui.CV_LOAD_IMAGE_GRAYSCALE);
 		Mat dst = src.submat(topLeft[1], botRight[1], topLeft[0], botRight[0]);
-//		Imgproc.adaptiveThreshold(dst, dst, 255,
-//				Imgproc.ADAPTIVE_THRESH_MEAN_C, Imgproc.THRESH_BINARY_INV, 11,
-//				2);
+		Imgproc.adaptiveThreshold(dst, dst, 255,
+				Imgproc.ADAPTIVE_THRESH_MEAN_C, Imgproc.THRESH_BINARY_INV, 11,
+				2);
 		
 //		Imgproc.adaptiveThreshold(dst, dst, 255,
 //			Imgproc.ADAPTIVE_THRESH_GAUSSIAN_C, Imgproc.THRESH_BINARY_INV, 11,
@@ -141,8 +141,8 @@ public class ArffInstanceMoments implements Arff {
 //		Imgproc.threshold(dst, dst, 255, 255, 
 //				Imgproc.THRESH_BINARY_INV);
 		
-		Imgproc.threshold(dst, dst, 255, 255, 
-				Imgproc.THRESH_OTSU);
+//		Imgproc.threshold(dst, dst, 255, 255, 
+//				Imgproc.THRESH_OTSU);
 		
 		return dst;
 	}

@@ -21,6 +21,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
@@ -68,7 +69,7 @@ public class Programme extends ResourceSupport implements Serializable {
 	
 	@Id
     @Column(name = "idProgPersistence", nullable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long idProgPersistence;
 
 	@JsonView({MultipleProgrammes.class, SingleProgramme.class, Channel.SingleChannel.class, 
@@ -84,7 +85,6 @@ public class Programme extends ResourceSupport implements Serializable {
 //	@JsonProperty
 	@JsonSerialize(using=ListSchedulesSerializer.class)
 	@JsonView({SingleProgramme.class})
-//	@OneToMany(targetEntity=Schedule.class, cascade=CascadeType.ALL, mappedBy="programme", fetch=FetchType.LAZY)
 	@OneToMany(targetEntity=Schedule.class, mappedBy="programme", fetch=FetchType.LAZY)
 	private List<Schedule> listSchedules;
     

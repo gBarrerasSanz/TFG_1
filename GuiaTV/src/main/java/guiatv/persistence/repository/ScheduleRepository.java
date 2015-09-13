@@ -72,7 +72,7 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long>,
 //	@Query("Select s from Schedule s where s.channel=?1 and s.programme=?2 and s.start >= CURRENT_TIMESTAMP")
 //	List<Schedule> findByChannelAndProgrammeFromNow(Channel ch, Programme prog);
 	
-	Schedule findByChannelAndProgrammeAndStartAndEnd(Channel ch, Programme prog, Date start, Date end);
+	Schedule findOneByChannelAndProgrammeAndStartAndEnd(Channel ch, Programme prog, Date start, Date end);
 	
 	@Modifying
 	@Query("UPDATE schedule s SET s.published = true "

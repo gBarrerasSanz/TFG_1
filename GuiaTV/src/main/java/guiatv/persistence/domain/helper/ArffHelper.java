@@ -166,7 +166,18 @@ public class ArffHelper implements Serializable {
 		return binBlob;
 	}
 	
-	public static Evaluation doCrossValidation(NaiveBayesUpdateable trainedClassifier, Instances dataSet) {
+//	public static Evaluation doCrossValidation(NaiveBayesUpdateable trainedClassifier, Instances dataSet) {
+//		Evaluation eTest;
+//		try {
+//			eTest = new Evaluation(dataSet);
+//			eTest.crossValidateModel(trainedClassifier, dataSet, 10, new Random(100));
+//			return eTest;
+//		} catch (Exception e) {
+//			return null;
+//		}
+//	}
+	
+	public static Evaluation doCrossValidation(Classifier trainedClassifier, Instances dataSet) {
 		Evaluation eTest;
 		try {
 			eTest = new Evaluation(dataSet);
@@ -177,11 +188,11 @@ public class ArffHelper implements Serializable {
 		}
 	}
 	
-	public static Evaluation doCrossValidation(Classifier trainedClassifier, Instances dataSet) {
+	public static Evaluation evaluateTrainedClassifier(Classifier trainedClassifier, Instances dataSet) {
 		Evaluation eTest;
 		try {
 			eTest = new Evaluation(dataSet);
-			eTest.crossValidateModel(trainedClassifier, dataSet, 10, new Random(100));
+			eTest.evaluateModel(trainedClassifier, dataSet);
 			return eTest;
 		} catch (Exception e) {
 			return null;

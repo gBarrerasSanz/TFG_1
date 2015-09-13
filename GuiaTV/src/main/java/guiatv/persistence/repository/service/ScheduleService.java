@@ -1,7 +1,11 @@
 package guiatv.persistence.repository.service;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 import guiatv.common.CommonUtility;
 import guiatv.persistence.domain.Channel;
@@ -24,6 +28,9 @@ import org.springframework.transaction.annotation.Transactional;
 public class ScheduleService {
 	
 	private static Logger logger = Logger.getLogger("debugLog");
+	
+//	@PersistenceContext
+//	EntityManager em;
 	
 	@Autowired
 	ScheduleRepository schedRep;
@@ -98,6 +105,11 @@ public class ScheduleService {
 			}
 			return sched;
 		}
+	}
+	@Transactional(readOnly = true)
+	public Schedule findOneByChannelAndProgrammeAndStartAndEnd(
+				Channel ch, Programme prog, Date start, Date end) {
+		return schedRep.findOneByChannelAndProgrammeAndStartAndEnd(ch, prog, start, end);
 	}
 	
 	@Transactional(readOnly = true)
@@ -205,10 +217,7 @@ public class ScheduleService {
 			Hibernate.initialize(sched.getChannel());
 			Hibernate.initialize(sched.getProgramme());
 			// Poner published a True
-			if (sched.isPublished()) {
-//				lSched.remove(sched);
-			}
-			else {
+			if ( ! sched.isPublished()) {
 				schedRep.setTruePublishedWhereIdSched(sched.getIdSched());
 			}
 		}
@@ -218,7 +227,7 @@ public class ScheduleService {
 	@Transactional(readOnly = true)
     public Schedule findByChannelAndProgrammeAndStartAndEnd(Channel ch, 
     		Programme prog, Date start, Date end) {
-		return schedRep.findByChannelAndProgrammeAndStartAndEnd(ch, 
+		return schedRep.findOneByChannelAndProgrammeAndStartAndEnd(ch, 
 				prog, start, end);
     }
 	
@@ -229,10 +238,14 @@ public class ScheduleService {
 	
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
     public int save(List<Schedule> lSched) {
-		int numSched = 0;
+		HashMap<Schedule, Integer> schedMap = new HashMap<Schedule, Integer>();
+		int numSaved = 0;
+		int numDup = 0;
+		int numDeprecated = 0;
 		for (Schedule sched: lSched) {
-			// Si el final del schedule NO es posterior al momento actual -> Saltarse el schedule
+			// Si el final del schedule NO es posterior al momento actual -> Saltar a la siguiente iteración
 			if ( ! CommonUtility.isScheduleOnTime(sched)) {
+				numDeprecated++;
 				continue;
 			}
 			try {
@@ -242,7 +255,7 @@ public class ScheduleService {
 					sched.setChannel(ch);
 				}
 				else { // No existe canal
-					chRep.saveAndFlush(sched.getChannel());
+					chRep.save(sched.getChannel());
 				}
 				if (prog != null) { // Ya existe programa
 					sched.setProgramme(prog);
@@ -250,25 +263,45 @@ public class ScheduleService {
 				else { // No existe programa
 					progRep.save(sched.getProgramme());
 				}
-				Schedule schedIn = schedRep.findByChannelAndProgrammeAndStartAndEnd(
+				Schedule schedIn = schedRep.findOneByChannelAndProgrammeAndStartAndEnd(
 						sched.getChannel(), sched.getProgramme(), sched.getStart(), sched.getEnd());
-				if (schedIn == null) {
+				if (schedIn == null && ! schedMap.containsKey(sched)) { // Si no está en la base de datos y No se ha introducido antes
+//					logger.debug("sched = "+sched.toString());
 					schedRep.save(sched);
-					numSched++;
+					sched.setIdSched(1);
+					schedMap.put(sched, 1);
+					numSaved++;
 				}
 				else {
 //					logger.debug("Schedule REPETIDO: "+schedIn);
+					numDup++;
 				}
 				
 			} catch(Exception e) {
-				e.printStackTrace();
+				logger.debug("Schedule REPETIDO: "+sched);
 			}
 		}
-		return numSched;
+		
+		logger.debug("SCHEDULE LOADER: numSaved = "+numSaved+"/"+lSched.size()+"; "+
+				"numDeprecated = "+numDeprecated+"/"+lSched.size()+"; "+
+				"numDuplicated = "+numDup+"/"+lSched.size());
+		return numSaved;
     }
 	
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
     public void save(Schedule sched){
     	schedRep.save(sched);
     }
+	
+//	@Transactional(propagation = Propagation.REQUIRES_NEW)
+//	public void saveIfNotExists(Schedule sched){
+//		em.sa
+//		String query = "insert into schedule values(?,?,?,?, 1)";
+//		em.createNativeQuery(query)
+//		   .setParameter(1, sched.getChannel())
+//		   .setParameter(2, sched.getProgramme())
+//		   .setParameter(3, sched.getStart())
+//		   .setParameter(4, sched.getEnd())
+//		   .executeUpdate();
+//	}
 }

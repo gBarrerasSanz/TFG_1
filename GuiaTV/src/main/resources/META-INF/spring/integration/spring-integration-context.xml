@@ -115,7 +115,7 @@
 
 		<int:inbound-channel-adapter ref="xmltvGrabber"
 			method="doGrabbing" channel="grabberChOut" id="grabberInbound">
-			<int:poller fixed-rate="30000" /> <!-- Cada 30 seg. -->
+			<int:poller fixed-rate="12000" /> <!-- Cada 120 seg. -->
 			<!-- <int:poller max-messages-per-poll="1" cron="0 * * * * ? " /> -->
 			<!-- <int:poller cron="0 * * * * ? "> <int:transactional transaction-manager="transactionManager" 
 				synchronization-factory="syncFactory" /> </int:poller> -->
@@ -140,9 +140,9 @@
 				<list>
 					<bean
 						class="org.springframework.integration.file.filters.RegexPatternFileListFilter">
-						<!-- <constructor-arg value="xmltvDump_[0-9][0-9][0-9][0-9]_[0-9][0-9]_[0-9][0-9]_[0-9][0-9]_[0-9][0-9]\.xml" 
-							/> -->
-						<constructor-arg value="xmltvDump.xml" />
+						<!-- xmltvDump_yyyy_MM_dd_hh_mm_ss -->
+						<constructor-arg value="xmltvDump_[0-9][0-9][0-9][0-9]_[0-9][0-9]_[0-9][0-9]_[0-9][0-9]_[0-9][0-9]_[0-9][0-9]\.xml" />
+						<!-- <constructor-arg value="xmltvDump.xml" /> -->
 					</bean>
 					<bean
 						class="org.springframework.integration.file.filters.AcceptOnceFileListFilter" />
@@ -152,8 +152,7 @@
 		</bean>
 
 		<int-file:inbound-channel-adapter id="filePollerInbound"
-			directory="file:xmltv_cap" channel="transformerChIn" auto-startup="true"
-			filter="compositeFilter">
+			directory="xmltv_cap" channel="transformerChIn" auto-startup="true" filter="compositeFilter" >
 			<int:poller fixed-rate="25000" /> <!-- Cada 25 seg. -->
 		</int-file:inbound-channel-adapter>
 	</beans>
@@ -299,7 +298,7 @@
 		<bean id="customBlobRouter" class="guiatv.realtime.router.BlobCustomRouter" />
 		<int:router id="blobRouter" input-channel="sendBlobChOut"
 			ref="customBlobRouter" method="routeBlob">
-			<int:poller fixed-rate="500"></int:poller>
+			<int:poller fixed-rate="100"></int:poller>
 		</int:router>
 	</beans>
 

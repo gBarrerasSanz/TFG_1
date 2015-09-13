@@ -33,13 +33,15 @@ public class UnclassifiedBlobWorker {
 	}
 	
 	public void storeBlob(Blob blob) {
+		blobServ.save(blob);
+		
 //		logger.debug("Received blob from channel "+blob.getMlChannel().getChannel().getIdChBusiness());
-		if (blobServ.count() <= 2000) {
-			blobServ.save(blob);
-		}
-		else {
-			logger.debug("Stored 2000 blobs already");
-		}
+//		if (blobServ.count() <= 2000) {
+//			blobServ.save(blob);
+//		}
+//		else {
+//			logger.debug("Stored 2000 blobs already");
+//		}
 	}
 
 }

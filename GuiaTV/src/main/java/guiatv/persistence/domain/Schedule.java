@@ -19,6 +19,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
@@ -58,7 +59,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(Include.NON_NULL)
-@Table(uniqueConstraints={@UniqueConstraint(columnNames = {"channel_fk", "programme_fk", "start", "end"})})
+//@Table(uniqueConstraints={@UniqueConstraint(columnNames = {"channel", "programme", "start", "end"})})
 @Entity(name = "schedule")
 public class Schedule extends ResourceSupport implements Serializable {
 	
@@ -70,7 +71,7 @@ public class Schedule extends ResourceSupport implements Serializable {
 	@JsonView({CustomSchedule.class, SchedulePublisher.PublisherScheduleView.class})
 	@Id
     @Column(name = "idSched", nullable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     protected Long idSched;
     
 	
@@ -78,14 +79,14 @@ public class Schedule extends ResourceSupport implements Serializable {
 	@JsonSerialize(using=ScheduleChannelSerializer.class)
 //	@ManyToOne(targetEntity=Channel.class, cascade=CascadeType.ALL, fetch=FetchType.LAZY)
 	@ManyToOne(targetEntity=Channel.class, fetch=FetchType.LAZY)
-	@JoinColumn(name="channel_fk", referencedColumnName="idChPersistence")
+	@JoinColumn(name="channel", referencedColumnName="idChPersistence")
 	protected Channel channel;
     
 	@JsonView({CustomSchedule.class, SchedulePublisher.PublisherScheduleView.class})
 	@JsonSerialize(using=ScheduleProgrammeSerializer.class)
 //	@ManyToOne(targetEntity=Programme.class, cascade=CascadeType.ALL, fetch=FetchType.LAZY)
 	@ManyToOne(targetEntity=Programme.class, fetch=FetchType.LAZY)
-	@JoinColumn(name="programme_fk", referencedColumnName="idProgPersistence")
+	@JoinColumn(name="programme", referencedColumnName="idProgPersistence")
 	protected Programme programme;
 	
 	
@@ -257,5 +258,15 @@ public class Schedule extends ResourceSupport implements Serializable {
 		return schedString;
 	}
 	
+	public boolean isValid(){
+		return channel != null &&
+				programme != null &&
+				start != null &&
+				end != null;
+	}
+	
+	public void setIdSched(long idSched) {
+		this.idSched = idSched;
+	}
 	
 }

@@ -155,7 +155,7 @@ public class CommonUtility {
 	public static String getDateString() {
 		Date date = new Date();
 		final Locale SPAIN_LOCALE = new Locale("es", "ES");
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy_MM_dd_HH_mm", SPAIN_LOCALE);
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss", SPAIN_LOCALE);
 		return formatter.format(date);
 	}
 	

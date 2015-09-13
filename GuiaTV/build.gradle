@@ -155,7 +155,7 @@ dependencies {
     
     //compile 'sc.fiji:Trainable_Segmentation:2.2.2-SNAPSHOT'
     
-    compile 'nz.ac.waikato.cms.weka:weka-stable:3.6.12'
+    compile 'nz.ac.waikato.cms.weka:weka-stable:3.6.13'
     compile 'com.edwardraff:JSAT:0.0.2'
     
     compile 'org.springframework.boot:spring-boot-starter-web:1.2.3.RELEASE'

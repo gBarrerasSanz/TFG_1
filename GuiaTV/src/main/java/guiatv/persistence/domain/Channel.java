@@ -24,6 +24,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -86,7 +87,7 @@ public class Channel extends ResourceSupport implements Serializable {
 	
 	@Id
     @Column(name = "idChPersistence", nullable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long idChPersistence;
     
 	/*
@@ -114,10 +115,7 @@ public class Channel extends ResourceSupport implements Serializable {
     @Column(name = "nameCh", nullable = true, length = 50)
     private String nameCh;
     
-//	@JsonProperty(value="listProgrammes")
-//	@JsonSerialize(using=ListProgFromSchedSerializer.class)
-//	@JsonView(SingleChannel.class)
-//	@OneToMany(targetEntity=Schedule.class, cascade=CascadeType.ALL, mappedBy="channel", fetch=FetchType.LAZY, orphanRemoval=true)
+
 	@OneToMany(targetEntity=Schedule.class, mappedBy="channel", fetch=FetchType.LAZY, orphanRemoval=true)
 	private List<Schedule> listSchedules;
     

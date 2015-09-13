@@ -38,8 +38,10 @@ import weka.classifiers.lazy.IBk;
 import weka.classifiers.lazy.LWL;
 import weka.classifiers.meta.GridSearch;
 import weka.classifiers.mi.CitationKNN;
+import weka.classifiers.functions.GaussianProcesses;
 import weka.classifiers.functions.LibLINEAR;
 import weka.classifiers.functions.LibSVM;
+import weka.classifiers.functions.Logistic;
 import weka.classifiers.functions.MultilayerPerceptron;
 import weka.classifiers.functions.SMO;
 
@@ -67,14 +69,11 @@ public class BenchmarkTrainAll {
 		 */
 		List<Classifier> lC = new ArrayList<Classifier>();
 		List<String> lNameC = new ArrayList<String>(); 
-		lC.add(new BayesNet()); lNameC.add("BayesNet");
 		lC.add(new NaiveBayesUpdateable()); lNameC.add("NaiveBayesUpdateable");
 		lC.add(new SMO()); lNameC.add("SMO"); 
 		lC.add(new IBk()); lNameC.add("IBk"); 
-		lC.add(new LWL()); lNameC.add("LWL"); 
 		lC.add(new J48()); lNameC.add("J48"); 
 		lC.add(new RandomForest()); lNameC.add("RandomForest"); 
-		lC.add(new RandomTree()); lNameC.add("RandomTree"); 
 		/************************************
 		 * Para cada conjunto de features
 		 ************************************/
@@ -107,6 +106,7 @@ public class BenchmarkTrainAll {
 							+ " ********************\n"
 							+ "***********************************************************\n");
 					Classifier classifier = lC.get(m);
+					Classifier trClassifier = Classifier.makeCopies(classifier, 1)[0];
 					Arff arff;
 					if (i==0) {
 						arff = new ArffInstance(ch.nameCh, ch.topLeft,
@@ -137,9 +137,10 @@ public class BenchmarkTrainAll {
 		
 	//					Classifier cModel = (Classifier) new NaiveBayesUpdateable();
 	//				Classifier cModel = (Classifier) new IBk();
-	//					cModel.buildClassifier(arff.getData());
+					trClassifier.buildClassifier(arff.getData());
 					// Test the model
 					Evaluation eTest = ArffHelper.doCrossValidation(classifier, arff.getData());
+					Evaluation eTestTr = ArffHelper.evaluateTrainedClassifier(trClassifier, arff.getData());
 	//				Evaluation eTest = ArffHelper.doCrossValidation(new IBk(), arff.getData());
 					// Evaluar con el modelo entrenado
 	//				Evaluation eTest = ArffHelper.doCrossValidation(cModel, arff.getData());
@@ -165,6 +166,7 @@ public class BenchmarkTrainAll {
 					os.close();
 					if (eTest != null) {
 						long end = System.currentTimeMillis();
+						double pctCorrectTr = eTestTr.pctCorrect();
 						double pctCorrect = eTest.pctCorrect();
 						double kappaCoeff = eTest.kappa();
 						int numInstances = arff.getData().numInstances();
@@ -172,7 +174,9 @@ public class BenchmarkTrainAll {
 						double dataFileLengthMB = dataFile.length() / (1024.0 * 1024);
 						double modelFileLengthMB = modelFile.length() / (1024.0 * 1024);
 						double elapsedSec = (end - start) / 1000.0;
-						System.out.println("pctCorrect = " + pctCorrect);
+
+						System.out.println("pctCorrectTr = " + pctCorrectTr+" %");
+						System.out.println("pctCorrect   = " + pctCorrect+" %");
 						System.out.println("kappaCoeff = " + kappaCoeff);
 						System.out.println("numInstances = " + numInstances);
 						System.out.println("numAtts = " + numAtts);

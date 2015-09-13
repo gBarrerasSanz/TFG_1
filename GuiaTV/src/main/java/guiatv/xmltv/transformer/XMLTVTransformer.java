@@ -112,12 +112,18 @@ public class XMLTVTransformer implements Transformer {
 				/**
 				 * Imprimir lista de channels procesados
 				 */
-				String processedChannels = "Channels procedentes de XMLTV = ";
-				for (Channel channel : mapCh.values()) {
-					processedChannels += channel.getIdChBusiness()+", ";
-				}
-			    log.debug(processedChannels);
+//				String processedChannels = "Channels procedentes de XMLTV = ";
+//				for (Channel channel : mapCh.values()) {
+//					processedChannels += channel.getIdChBusiness()+", ";
+//				}
+//			    log.debug(processedChannels);
 				listSchedulesResult = MessageBuilder.withPayload(lSched).copyHeaders(message.getHeaders()).build();
+				/**
+				 * Eliminar fichero (Hacerlo desde aquí no es lo más adecuado)
+				 */
+//				file.setWritable(true);
+//				boolean deleted = file.delete();
+//				deleted =  ! ( ! deleted);
 			}
 			catch(Exception e) {
 				e.printStackTrace();

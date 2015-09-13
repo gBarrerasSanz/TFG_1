@@ -39,47 +39,47 @@ public class TrainedModel {
 	
 	private static final String FILES_BASE_DIR = "META-INF/MLChannels_DBFiles/";
 	
-	@Id
-    @Column(name = "idTrainedModelPersistence", nullable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//	@Id
+//    @Column(name = "idTrainedModelPersistence", nullable = false)
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idTrainedModelPersistence;
 	
 //	@OneToOne(targetEntity=MyCh.class, fetch=FetchType.LAZY)
 //	@JoinColumn(name="mych_fk", referencedColumnName="idMyChPersistence")
-	@Transient
+//	@Transient
 	private MyCh myCh;
 	
-	@Column(name = "dataSetUri", nullable = false)
+//	@Column(name = "dataSetUri", nullable = false)
 	private String dataSetUri;
 	
-	@Column(name = "fullDataSetUri", nullable = false)
+//	@Column(name = "fullDataSetUri", nullable = false)
 	private String fullDataSetUri;
 	
-	@Column(name = "trainedClassifierUri", nullable = false)
+//	@Column(name = "trainedClassifierUri", nullable = false)
 	private String trainedClassifierUri;
 	
-	@Column(name = "goodSamplesLearned", nullable = false)
+//	@Column(name = "goodSamplesLearned", nullable = false)
 	private int goodSamplesLearned;
 	
-	@Column(name = "badSamplesLearned", nullable = false)
+//	@Column(name = "badSamplesLearned", nullable = false)
 	private int badSamplesLearned;
 	
-	@Column(name = "batchGoodSamplesUri", nullable = false)
+//	@Column(name = "batchGoodSamplesUri", nullable = false)
 	private String batchGoodSamplesUri;
 	
-	@Column(name = "batchBadSamplesUri", nullable = false)
+//	@Column(name = "batchBadSamplesUri", nullable = false)
 	private String batchBadSamplesUri;
 	
-	@Column(name = "trained", nullable = false)
+//	@Column(name = "trained", nullable = false)
 	private boolean trained;
 	
-	@Transient
+//	@Transient
 	private Instances dataSet;
 	
-	@Transient
+//	@Transient
 	private Instances fullDataSet;
 	
-	@Transient
+//	@Transient
 	private NaiveBayesUpdateable trainedClassifier;
 	
 	public TrainedModel() {
