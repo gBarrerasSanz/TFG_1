@@ -1,7 +1,7 @@
 package guiatv.realtime.router;
 
 import guiatv.computervision.CvUtils;
-import guiatv.persistence.domain.Blob;
+import guiatv.persistence.domain.blobFrame;
 import guiatv.persistence.domain.Channel;
 
 import org.apache.log4j.Logger;
@@ -17,7 +17,7 @@ public class BlobCustomRouter {
 //	MyChService myChServ;
 	
     @Router
-    public String routeBlob(Blob blob) {
+    public String routeBlob(blobFrame blob) {
     	// TODO: Implementar
 //        boolean trained = learnedChRepImpl.isTrained(frame.getChannel(), frame.getRtmp());
         // DEBUG: Mostrar imagen

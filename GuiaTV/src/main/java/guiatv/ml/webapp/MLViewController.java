@@ -2,7 +2,7 @@ package guiatv.ml.webapp;
 
 import guiatv.catalog.datatypes.ListChannels;
 import guiatv.computervision.CvUtils;
-import guiatv.persistence.domain.Blob;
+import guiatv.persistence.domain.blobFrame;
 import guiatv.persistence.domain.Channel;
 import guiatv.persistence.domain.MyCh;
 import guiatv.persistence.repository.ChannelRepository;
@@ -62,7 +62,7 @@ public class MLViewController {
 	public String blobClassification(Model model, Pageable pageable,
 			@PathVariable(value="hashIdChBusiness") String hashIdChBusiness)
 	{
-		PageWrapper<Blob> page = null;
+		PageWrapper<blobFrame> page = null;
 		Channel ch = chServ.findByHashIdChBusiness(hashIdChBusiness, true);
 		if (ch == null) {
 			return null;
@@ -71,7 +71,7 @@ public class MLViewController {
 		if (myCh == null) {
 			return null;
 		}
-		page = new PageWrapper<Blob>(blobServ.findByChannel(myCh.getChannel(), pageable), "/ml/blobClassification");
+		page = new PageWrapper<blobFrame>(blobServ.findByChannel(myCh.getChannel(), pageable), "/ml/blobClassification");
 		page.setUrl(page.getUrl()+"/"+hashIdChBusiness+"/");
 		model.addAttribute("page", page);
 		return "blobClassification";
@@ -80,8 +80,8 @@ public class MLViewController {
 	@RequestMapping(value = "/blobClassification", method = RequestMethod.GET)
 	public String blobClassificationAllChannels(Model model, Pageable pageable)
 	{
-		PageWrapper<Blob> page = null;
-		page = new PageWrapper<Blob>(blobServ.findAll(pageable), "/ml/blobClassification");
+		PageWrapper<blobFrame> page = null;
+		page = new PageWrapper<blobFrame>(blobServ.findAll(pageable), "/ml/blobClassification");
 		model.addAttribute("page", page);
 		return "blobClassification";
 		
@@ -94,8 +94,8 @@ public class MLViewController {
 			produces = MediaType.IMAGE_PNG_VALUE)
 	@ResponseBody
     public ResponseEntity<byte[]> getBlobImg(@PathVariable("idBlobPersistence") Long idBlobPersistence) throws IOException {
-        Blob blob = blobServ.findOneByIdBlobPersistence(idBlobPersistence);
-        byte[] blobImgContent = CvUtils.convertByteArrayToPngDecodeable(blob.getBlob(), blob.getBlobCols(), blob.getBlobRows());
+        blobFrame blob = blobServ.findOneByIdBlobPersistence(idBlobPersistence);
+        byte[] blobImgContent = CvUtils.convertByteArrayToPngDecodeable(blob.getBlobImg(), blob.getBlobCols(), blob.getBlobRows());
         final HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.IMAGE_PNG);
         return new ResponseEntity<byte[]>(blobImgContent, headers, HttpStatus.OK);

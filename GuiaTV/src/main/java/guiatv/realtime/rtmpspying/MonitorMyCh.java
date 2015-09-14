@@ -2,7 +2,7 @@ package guiatv.realtime.rtmpspying;
 
 import guiatv.catalog.datatypes.ListChannels;
 import guiatv.common.CommonUtility;
-import guiatv.persistence.domain.Blob;
+import guiatv.persistence.domain.blobFrame;
 import guiatv.persistence.domain.Channel;
 import guiatv.persistence.domain.MyCh;
 import guiatv.persistence.domain.MyChState;

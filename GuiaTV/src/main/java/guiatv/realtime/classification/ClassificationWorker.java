@@ -7,7 +7,7 @@ import java.util.Date;
 
 import guiatv.computervision.CvUtils;
 import guiatv.cv.classificator.Classif_old;
-import guiatv.persistence.domain.Blob;
+import guiatv.persistence.domain.blobFrame;
 import guiatv.persistence.domain.RtSchedule;
 import guiatv.persistence.domain.RtSchedule.InstantState;
 import guiatv.persistence.domain.Schedule;
@@ -37,7 +37,7 @@ public class ClassificationWorker {
 	public ClassificationWorker() {
 	}	
 	
-	public RtSchedule classify(Blob blob) {
+	public RtSchedule classify(blobFrame blob) {
 		RtSchedule rtSched = null;
 		try {
 	//		logger.debug("Classifying blob from "+blob.getMlChannel().getChannel().getIdChBusiness());

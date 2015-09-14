@@ -16,11 +16,12 @@ import javax.persistence.TableGenerator;
 import javax.persistence.Transient;
 
 import org.apache.log4j.Logger;
+import org.hibernate.annotations.Type;
 import org.opencv.core.Mat;
 import org.opencv.highgui.Highgui;
 
-@Entity(name = "blob")
-public class Blob {
+@Entity(name = "blobFrame")
+public class blobFrame {
 	
 	private static final Logger logger = Logger.getLogger("debugLog");
 	
@@ -35,7 +36,7 @@ public class Blob {
     private Long idBlobPersistence;
 	
 	@ManyToOne(targetEntity=Channel.class, fetch=FetchType.LAZY)
-	@JoinColumn(name="channel_fk", referencedColumnName="idChPersistence")
+	@JoinColumn(name="channel", referencedColumnName="idChPersistence")
 	private Channel channel;
 	
 	@Transient
@@ -43,8 +44,8 @@ public class Blob {
 	
 	@Lob
 	@Basic(fetch = FetchType.LAZY)
-	@Column(name = "blob", nullable = false)
-	private byte[] blob;
+	@Column(name="blobImg", columnDefinition="bytea")
+	private byte[] blobImg;
 	
 	@Column(name = "blobCols", nullable = false)
 	private int blobCols;
@@ -52,10 +53,10 @@ public class Blob {
 	@Column(name = "blobRows", nullable = false)
 	private int blobRows;
 	
-	public Blob() {
+	public blobFrame() {
 	}
 	
-	public Blob(byte[] img, MyCh myCh) throws Exception {
+	public blobFrame(byte[] img, MyCh myCh) throws Exception {
 		// Extraer ROI
 		Mat imgMat = CvUtils.getGrayMatFromByteArray(img, 
 				myCh.getStreamSrc().getCols(), myCh.getStreamSrc().getRows());
@@ -64,18 +65,18 @@ public class Blob {
 		Highgui.imwrite("aragon.jpeg", roiMat);
 		this.blobCols = roiMat.cols();
 		this.blobRows = roiMat.rows();
-		this.blob = CvUtils.getByteArrayFromMat(roiMat);
+		this.blobImg = CvUtils.getByteArrayFromMat(roiMat);
 		this.channel = myCh.getChannel();
 		this.myCh = myCh;
 	}
 	
-	public Blob(Mat grayImgMat, MyCh myCh) {
+	public blobFrame(Mat grayImgMat, MyCh myCh) {
 		// Extraer ROI
 		Mat roiMat = CvUtils.getRoiFromMat(grayImgMat, 
 				myCh.getStreamSrc().getTopLeft(), myCh.getStreamSrc().getBotRight());
 		this.blobCols = roiMat.cols();
 		this.blobRows = roiMat.rows();
-		this.blob = CvUtils.getByteArrayFromMat(roiMat);
+		this.blobImg = CvUtils.getByteArrayFromMat(roiMat);
 		this.channel = myCh.getChannel();
 		this.myCh = myCh;
 	}
@@ -84,12 +85,12 @@ public class Blob {
      * 					GETTERS / SETTERS
      *********************************************************/
 
-	public byte[] getBlob() {
-		return blob;
+	public byte[] getBlobImg() {
+		return blobImg;
 	}
 
-	public void setBlob(byte[] blob) {
-		this.blob = blob;
+	public void setBlobImg(byte[] blobImg) {
+		this.blobImg = blobImg;
 	}
 
 	public Long getIdBlobPersistence() {

@@ -86,6 +86,11 @@
 			<property name="dataSource" ref="dataSource" />
 			<property name="jpaVendorAdapter" ref="vendorAdaptor" />
 			<property name="packagesToScan" value="guiatv.persistence.domain" />
+			<!-- <property name="mappingResources">  
+		        <list>  
+		        	<value>blob.hbm.xml</value>  
+		        </list>  
+	        </property> -->
 		</bean>
 		
 		<!-- H2 -->

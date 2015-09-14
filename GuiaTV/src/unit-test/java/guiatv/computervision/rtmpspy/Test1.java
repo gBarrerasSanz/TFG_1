@@ -3,7 +3,7 @@ package guiatv.computervision.rtmpspy;
 import guiatv.common.CommonUtility;
 import guiatv.computervision.CvUtils;
 import guiatv.computervision.Imshow;
-import guiatv.persistence.domain.Blob;
+import guiatv.persistence.domain.blobFrame;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
