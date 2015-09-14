@@ -40,10 +40,10 @@ public class AsyncTransactionService {
 //    	rtmpRep.save(ListRtmpSources);
 //    }
 	
-	@Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void insertSchedules(List<Schedule> lSchedules) {
-    	schedRep.save(lSchedules);
-    }
+//	@Transactional(propagation = Propagation.REQUIRES_NEW)
+//    public void insertSchedules(List<Schedule> lSchedules) {
+//    	schedRep.save(lSchedules);
+//    }
 	
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
     public void deleteSchedules(List<Schedule> lSchedules) {

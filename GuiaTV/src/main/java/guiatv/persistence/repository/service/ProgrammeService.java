@@ -36,7 +36,7 @@ public class ProgrammeService {
 	@Transactional(readOnly = true)
 	public Programme findByNameProg(String nameProg, boolean refs) {
 		Programme prog = progRep.findByNameProg(nameProg);
-		if (refs) {
+		if (prog != null && refs) {
 			Hibernate.initialize(prog.getListSchedules());
 		}
 		return prog;

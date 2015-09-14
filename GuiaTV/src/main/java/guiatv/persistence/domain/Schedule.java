@@ -60,7 +60,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(Include.NON_NULL)
-//@Table(uniqueConstraints={@UniqueConstraint(columnNames = {"channel", "programme", "start", "end"})})
+@Table(uniqueConstraints={@UniqueConstraint(columnNames = {"channel", "programme", "start", "end"})})
 @Entity(name = "schedule")
 public class Schedule extends ResourceSupport implements Serializable {
 	

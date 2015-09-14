@@ -86,7 +86,9 @@ public class SchedulePublisher {
 				e.printStackTrace();
 //				logger.error("ERROR: Unknown error");
 			}
-			schedServ.setFalsePublished(nonPublishedSched);
+			for (Schedule schedule: nonPublishedSched) {
+				schedServ.setFalsePublished(schedule);
+			}
 		}
 		/**
 		 * Actualizar el campo published de los schedules publicados a True.

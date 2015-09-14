@@ -65,7 +65,7 @@
 			<rows>661</rows>
 		</botRight>
 		<active>true</active>
-		<doSpying>true</doSpying>
+		<doSpying>false</doSpying>
 		<samplesToFalse>5</samplesToFalse>
 		<samplesToTrue>5</samplesToTrue>
 		<batchGoodSamplesUri>captures/03_a3/goodSamples/</batchGoodSamplesUri>
@@ -88,7 +88,7 @@
 			<rows>665</rows>
 		</botRight>
 		<active>true</active>
-		<doSpying>true</doSpying>
+		<doSpying>false</doSpying>
 		<samplesToFalse>5</samplesToFalse>
 		<samplesToTrue>5</samplesToTrue>
 		<batchGoodSamplesUri>captures/06_a6/goodSamples/</batchGoodSamplesUri>

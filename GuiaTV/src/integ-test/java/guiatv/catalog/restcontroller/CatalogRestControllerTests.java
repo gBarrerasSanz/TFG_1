@@ -197,7 +197,7 @@ public class CatalogRestControllerTests extends
 			List<Schedule> listSchedExpected = ListScheduleCreator
 					.getListSchedule();
 			// listSchedExpected.getlSched().get(0).getProgramme().setNameProg("1");
-			transService.insertSchedules(listSchedExpected);
+//			transService.insertSchedules(listSchedExpected); // TODO: HACER ESTO BIEN
 			ResponseEntity<ListProgrammes> resp = new TestRestTemplate()
 					.getForEntity(CATALOG_URI + "/programmes/",
 							ListProgrammes.class);

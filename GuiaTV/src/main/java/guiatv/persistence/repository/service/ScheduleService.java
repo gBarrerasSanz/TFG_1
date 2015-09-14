@@ -19,6 +19,7 @@ import guiatv.persistence.repository.ScheduleRepositoryImpl;
 import org.apache.log4j.Logger;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -137,23 +138,24 @@ public class ScheduleService {
 //		return schedRep.setTruePublishedWhereIdSched(idSched);
 //	}
 	
-	@Transactional(readOnly = true)
-	public int setTruePublished(List<Schedule> lSched) {
-		int retVal = 0;
-		for (Schedule sched: lSched) {
-			retVal += schedRep.setTruePublishedWhereIdSched(sched.getIdSched());
-		}
-		return retVal;
-	}
+//	@Transactional(readOnly = true)
+//	public int setTruePublished(List<Schedule> lSched) {
+//		int retVal = 0;
+//		for (Schedule sched: lSched) {
+//			retVal += schedRep.setTruePublishedWhereIdSched(sched.getIdSched());
+//		}
+//		return retVal;
+//	}
 	
-	@Transactional(readOnly = true)
-	public int setFalsePublished(List<Schedule> lSched) {
-		int retVal = 0;
-		for (Schedule sched: lSched) {
-			retVal += schedRep.setFalsePublishedWhereIdSched(sched.getIdSched());
-		}
-		return retVal;
-	}
+//	@Transactional(readOnly = true)
+//	public int setFalsePublished(List<Schedule> lSched) {
+//		int retVal = 0;
+//		for (Schedule sched: lSched) {
+//			retVal += schedRep.setFalsePublishedWhereIdSched(sched.getIdSched());
+//		}
+//		return retVal;
+//	}
+//	
 	
 	@Transactional(readOnly = true)
 	public List<Schedule> findByChannelEagerly(Channel ch) {
@@ -202,10 +204,23 @@ public class ScheduleService {
 		return lSched;
 	}
 	
+	@Modifying
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	public void setFalsePublished(Schedule sched) {
+		schedRep.setFalsePublishedWhereIdSched(sched.getIdSched());
+	}
+	
+	@Modifying
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	public void setTruePublished(Schedule sched) {
+		schedRep.setTruePublishedWhereIdSched(sched.getIdSched());
+	}
+	
 	/**
 	 * Devuelve de la base de datos, los schedules que empiezan secsFromStart
 	 * segundos después del momento actual, y aquellos schedules en curso
 	 */
+	@Modifying
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public List<Schedule> findByPublishedFalseAndSecondsFromStart(int secsFromStart) {
 		Date now = new Date();
@@ -236,59 +251,68 @@ public class ScheduleService {
     	schedRep.delete(lSched);
     }
 	
-	@Transactional(propagation = Propagation.REQUIRES_NEW)
-    public int save(List<Schedule> lSched) {
-		HashMap<Schedule, Integer> schedMap = new HashMap<Schedule, Integer>();
-		int numSaved = 0;
-		int numDup = 0;
-		int numDeprecated = 0;
-		for (Schedule sched: lSched) {
-			// Si el final del schedule NO es posterior al momento actual -> Saltar a la siguiente iteración
-			if ( ! CommonUtility.isScheduleOnTime(sched)) {
-				numDeprecated++;
-				continue;
-			}
-			try {
-				Channel ch = chRep.findByIdChBusiness(sched.getChannel().getIdChBusiness());
-				Programme prog = progRep.findByNameProg(sched.getProgramme().getNameProg());
-				if (ch != null) { // Ya existe canal
-					sched.setChannel(ch);
-				}
-				else { // No existe canal
-					chRep.save(sched.getChannel());
-				}
-				if (prog != null) { // Ya existe programa
-					sched.setProgramme(prog);
-				}
-				else { // No existe programa
-					progRep.save(sched.getProgramme());
-				}
-				Schedule schedIn = schedRep.findOneByChannelAndProgrammeAndStartAndEnd(
-						sched.getChannel(), sched.getProgramme(), sched.getStart(), sched.getEnd());
-				if (schedIn == null && ! schedMap.containsKey(sched)) { // Si no está en la base de datos y No se ha introducido antes
-//					logger.debug("sched = "+sched.toString());
-					schedRep.save(sched);
-					numSaved++;
-				}
-				else {
-//					logger.debug("Schedule REPETIDO: "+schedIn);
-					numDup++;
-				}
-				
-			} catch(Exception e) {
-				logger.debug("Schedule REPETIDO: "+sched);
-			}
-		}
-		
-		logger.debug("SCHEDULE LOADER: numSaved = "+numSaved+"/"+lSched.size()+"; "+
-				"numDeprecated = "+numDeprecated+"/"+lSched.size()+"; "+
-				"numDuplicated = "+numDup+"/"+lSched.size());
-		return numSaved;
-    }
+//	@Transactional(propagation = Propagation.REQUIRES_NEW)
+//    public int save(List<Schedule> lSched) {
+//		HashMap<Schedule, Integer> schedMap = new HashMap<Schedule, Integer>();
+//		int numSaved = 0;
+//		int numDup = 0;
+//		int numDeprecated = 0;
+//		for (Schedule sched: lSched) {
+//			// Si el final del schedule NO es posterior al momento actual -> Saltar a la siguiente iteración
+//			if ( ! CommonUtility.isScheduleOnTime(sched)) {
+//				numDeprecated++;
+//				continue;
+//			}
+//			try {
+//				Channel ch = chRep.findByIdChBusiness(sched.getChannel().getIdChBusiness());
+//				Programme prog = progRep.findByNameProg(sched.getProgramme().getNameProg());
+//				if (ch != null) { // Ya existe canal
+//					sched.setChannel(ch);
+//				}
+//				else { // No existe canal
+//					chRep.save(sched.getChannel());
+//				}
+//				if (prog != null) { // Ya existe programa
+//					sched.setProgramme(prog);
+//				}
+//				else { // No existe programa
+//					progRep.save(sched.getProgramme());
+//				}
+//				Schedule schedIn = schedRep.findOneByChannelAndProgrammeAndStartAndEnd(
+//						sched.getChannel(), sched.getProgramme(), sched.getStart(), sched.getEnd());
+//				if (schedIn == null && ! schedMap.containsKey(sched)) { // Si no está en la base de datos y No se ha introducido antes
+////					logger.debug("sched = "+sched.toString());
+//					schedRep.save(sched);
+//					numSaved++;
+//				}
+//				else {
+////					logger.debug("Schedule REPETIDO: "+schedIn);
+//					numDup++;
+//				}
+//				
+//			} catch(Exception e) {
+//				logger.debug("Schedule REPETIDO: "+sched);
+//			}
+//		}
+//		
+//		logger.debug("SCHEDULE LOADER: numSaved = "+numSaved+"/"+lSched.size()+"; "+
+//				"numDeprecated = "+numDeprecated+"/"+lSched.size()+"; "+
+//				"numDuplicated = "+numDup+"/"+lSched.size());
+//		return numSaved;
+//    }
 	
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
     public void save(Schedule sched){
     	schedRep.save(sched);
+    }
+	
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void saveIfNotExists(Schedule sched){
+    	Schedule schedule = schedRep.findOneByChannelAndProgrammeAndStartAndEnd(
+    			sched.getChannel(), sched.getProgramme(), sched.getStart(), sched.getEnd());
+		if (schedule == null) {
+			schedRep.save(sched);
+		}
     }
 	
 //	@Transactional(propagation = Propagation.REQUIRES_NEW)

@@ -48,16 +48,24 @@
 		<!-- Antes -->
 		<!-- <jdbc:embedded-database id="dataSource" type="H2" /> -->
 
-		<!-- Después -->
-		<bean id="dataSource"
+		<!-- H2 -->
+		<!-- <bean id="dataSource"
 			class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 			<property name="driverClassName" value="org.h2.Driver" />
 			<property name="url"
 				value="jdbc:h2:file:data/db;DB_CLOSE_DELAY=-1;MVCC=true"
 				 />
-				 <!-- value="jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;MVCC=true" -->
+				 value="jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;MVCC=true"
 			<property name="username" value="user" />
 			<property name="password" value="user" />
+		</bean> -->
+		
+		<!-- MySQL -->
+		<bean name="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		    <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		    <property name="url" value="jdbc:mysql://localhost:3306/guiatv" />
+		    <property name="username" value="user" />
+		    <property name="password" value="user" />
 		</bean>
 
 
@@ -79,13 +87,20 @@
 			<property name="jpaVendorAdapter" ref="vendorAdaptor" />
 			<property name="packagesToScan" value="guiatv.persistence.domain" />
 		</bean>
-
-		<bean id="abstractVendorAdaptor" abstract="true">
+		
+		<!-- H2 -->
+		<!-- <bean id="abstractVendorAdaptor" abstract="true">
 			<property name="generateDdl" value="true" />
 			<property name="database" value="H2" />
 			<property name="showSql" value="false" />
+		</bean> -->
+		
+		<bean id="abstractVendorAdaptor" abstract="true">
+			<property name="generateDdl" value="true" />
+			<property name="database" value="MYSQL" />
+			<property name="showSql" value="false" />
 		</bean>
-
+		
 		<bean id="entityManager"
 			class="org.springframework.orm.jpa.support.SharedEntityManagerBean">
 			<property name="entityManagerFactory" ref="entityManagerFactory" />
@@ -179,7 +194,7 @@
 		<bean id="scheduleLoader" class="guiatv.schedule.loader.ScheduleLoader" />
 
 		<int:outbound-channel-adapter id="scheduleLoaderOutbound"
-			channel="transformerChOut" ref="scheduleLoader" method="loadListSchedules">
+			channel="transformerChOut" ref="scheduleLoader" method="loadListSchedules" >
 		</int:outbound-channel-adapter>
 	</beans>
 

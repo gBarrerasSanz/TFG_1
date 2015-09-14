@@ -32,7 +32,7 @@ public class ChannelService {
 	@Transactional(readOnly = true)
 	public Channel findByIdChBusiness(String idBusiness, boolean refs) {
 		Channel ch = chRep.findByIdChBusiness(idBusiness);
-		if (refs) {
+		if (ch != null && refs) {
 			Hibernate.initialize(ch.getListSchedules());
 		}
 		return ch;
