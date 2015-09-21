@@ -104,7 +104,7 @@ public class TrainedModel {
 		this.myCh = myCh;
 	}
 	
-	public boolean learnSample(blobFrame blob, boolean truth) {
+	public boolean learnSample(BlobFrame blob, boolean truth) {
 		// Cargar o crear el modelo
 		loadOrCreateDataSet(blob);
 		loadOrCreateFullDataSet(blob);
@@ -130,7 +130,7 @@ public class TrainedModel {
 		}
 	}
 	
-	public boolean loadOrCreateDataSet(blobFrame blob) {
+	public boolean loadOrCreateDataSet(BlobFrame blob) {
 		if (dataSet == null) { // Si dataSet no está cargado
 			// Cargarlo del fichero en el disco duro
 			dataSet = ArffHelper.loadDataSet(dataSetUri);
@@ -153,7 +153,7 @@ public class TrainedModel {
 	/*
 	 * El acceso a fullDataSet se hace en exclusión mutua
 	 */
-	public synchronized boolean loadOrCreateFullDataSet(blobFrame blob) {
+	public synchronized boolean loadOrCreateFullDataSet(BlobFrame blob) {
 		if (fullDataSet == null) { // Si fullDataSet no está cargado
 			// Cargarlo del fichero en el disco duro
 			fullDataSet = ArffHelper.loadDataSet(fullDataSetUri);
@@ -206,7 +206,7 @@ public class TrainedModel {
 		}
 	}
 	
-	public boolean loadOrCreateTrainedClassifier(blobFrame blob) {
+	public boolean loadOrCreateTrainedClassifier(BlobFrame blob) {
 		if (dataSet == null) {
 			return false;
 		}
@@ -353,14 +353,14 @@ public class TrainedModel {
 			// Cargar muestras good
 			File goodDirFile = new File(batchGoodSamplesUri);
 			File[] goodListFiles = goodDirFile.listFiles();
-			List<blobFrame> lGoodBlob = CvUtils.loadFileListGroup(goodListFiles, myCh);
+			List<BlobFrame> lGoodBlob = CvUtils.loadFileListGroup(goodListFiles, myCh);
 	    	
 			// Crear el modelo con un blob cualquiera
 			loadOrCreateDataSet(lGoodBlob.get(0));
 			loadOrCreateFullDataSet(lGoodBlob.get(0));
 			loadOrCreateTrainedClassifier(lGoodBlob.get(0));
 			// Entrenar con las muestras de lGoodBlob 
-			for (blobFrame blob: lGoodBlob) {
+			for (BlobFrame blob: lGoodBlob) {
 				Instance instance = ArffHelper.getLabeledInstance(dataSet, blob, true);
 				ArffHelper.addInstanceToModel(instance, dataSet, 
 						fullDataSet, trainedClassifier);
@@ -370,9 +370,9 @@ public class TrainedModel {
 			// Cargar muestras bad
 	    	File badDirFile = new File(batchBadSamplesUri);
 	    	File[] badListFiles = badDirFile.listFiles();
-	    	List<blobFrame> lBadBlob = CvUtils.loadFileListGroup(badListFiles, myCh);
+	    	List<BlobFrame> lBadBlob = CvUtils.loadFileListGroup(badListFiles, myCh);
 	    	// Entrenar con las muestras de lGoodBlob 
-	    	for (blobFrame blob: lBadBlob) {
+	    	for (BlobFrame blob: lBadBlob) {
 				Instance instance = ArffHelper.getLabeledInstance(dataSet, blob, false);
 				ArffHelper.addInstanceToModel(instance, dataSet, 
 						fullDataSet, trainedClassifier);

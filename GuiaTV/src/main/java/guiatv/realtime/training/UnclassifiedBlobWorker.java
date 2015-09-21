@@ -5,7 +5,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 
 import guiatv.cv.classificator.Classif_old;
-import guiatv.persistence.domain.blobFrame;
+import guiatv.persistence.domain.BlobFrame;
 import guiatv.persistence.repository.service.BlobService;
 
 import org.apache.log4j.Logger;
@@ -32,7 +32,7 @@ public class UnclassifiedBlobWorker {
 	public UnclassifiedBlobWorker() {
 	}
 	
-	public void storeBlob(blobFrame blob) {
+	public void storeBlob(BlobFrame blob) {
 		blobServ.save(blob);
 		
 //		logger.debug("Received blob from channel "+blob.getMlChannel().getChannel().getIdChBusiness());

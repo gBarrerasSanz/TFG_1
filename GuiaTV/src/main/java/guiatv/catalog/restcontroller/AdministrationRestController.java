@@ -1,7 +1,7 @@
 package guiatv.catalog.restcontroller;
 
 import guiatv.common.CommonUtility;
-import guiatv.persistence.domain.blobFrame;
+import guiatv.persistence.domain.BlobFrame;
 import guiatv.persistence.domain.Channel;
 import guiatv.persistence.domain.MyCh;
 import guiatv.persistence.domain.Programme;
@@ -316,7 +316,7 @@ public class AdministrationRestController {
 			@RequestParam(value="idBlobPersistence", defaultValue="", required=true) long idBlobPersistence,
 			@RequestParam(value="classificationResult", defaultValue="", required=true) boolean classificationResult)
 	{
-		blobFrame blob = blobServ.findOneByIdBlobPersistenceInitChannel(idBlobPersistence);
+		BlobFrame blob = blobServ.findOneByIdBlobPersistenceInitChannel(idBlobPersistence);
 		// IMPORTANTE: Obtener el MyCh que está en memoria. No una nueva instancia de la BD
 		if (blob != null) {
 			MyCh myCh = monitorMyCh.getByChannel(blob.getChannel());

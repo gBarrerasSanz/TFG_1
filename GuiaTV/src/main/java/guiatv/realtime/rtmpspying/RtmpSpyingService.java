@@ -3,7 +3,7 @@ package guiatv.realtime.rtmpspying;
 import guiatv.common.CommonUtility;
 import guiatv.computervision.CvUtils;
 import guiatv.computervision.Imshow;
-import guiatv.persistence.domain.blobFrame;
+import guiatv.persistence.domain.BlobFrame;
 import guiatv.persistence.domain.Channel;
 import guiatv.persistence.domain.MyCh;
 import guiatv.persistence.repository.ChannelRepository;
@@ -151,7 +151,7 @@ public class RtmpSpyingService {
 		        					Mat imgGrayMat = CvUtils.getGrayMatAndDecodeFromByteArray(
 		        							data.toByteArray(), myCh.getStreamSrc().getCols(), 
 		        							myCh.getStreamSrc().getRows());
-		        					blobFrame blob = new blobFrame(imgGrayMat, myCh); 
+		        					BlobFrame blob = new BlobFrame(imgGrayMat, myCh); 
 		        					Highgui.imwrite("imgSpy.jpeg", CvUtils.getGrayMatFromByteArray(
 		        							blob.getBlobImg(), blob.getBlobCols(), blob.getBlobRows()));
 		        					capturedBlobsGateway.sendBlob(blob);

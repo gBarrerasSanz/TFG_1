@@ -1,6 +1,6 @@
 package guiatv.computervision;
 
-import guiatv.persistence.domain.blobFrame;
+import guiatv.persistence.domain.BlobFrame;
 import guiatv.persistence.domain.MyCh;
 
 import java.io.File;
@@ -89,19 +89,19 @@ public class CvUtils {
 		}
 	}
 	
-	public static void showBlob(blobFrame blob) {
+	public static void showBlob(BlobFrame blob) {
 		Mat blobMat = getGrayMatFromByteArray(blob.getBlobImg(), blob.getBlobCols(), blob.getBlobRows());
 		Imshow im = new Imshow("Image");
 		im.showImage(blobMat);
 	}
 	
-	public static List<blobFrame> loadFileListGroup(File[] fList, MyCh myCh) {
-		List<blobFrame> lBlob = new ArrayList<blobFrame>();
+	public static List<BlobFrame> loadFileListGroup(File[] fList, MyCh myCh) {
+		List<BlobFrame> lBlob = new ArrayList<BlobFrame>();
 		for (File imgFile: fList) {
 			try {
 				Mat imgMat = Highgui.imread(imgFile.getAbsolutePath(), Highgui.CV_LOAD_IMAGE_GRAYSCALE);
 				byte[] imgData = CvUtils.getByteArrayFromMat(imgMat);
-				blobFrame blob = new blobFrame(imgData, myCh);
+				BlobFrame blob = new BlobFrame(imgData, myCh);
 				lBlob.add(blob);
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();

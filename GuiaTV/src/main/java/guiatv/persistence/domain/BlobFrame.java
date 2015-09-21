@@ -20,8 +20,8 @@ import org.hibernate.annotations.Type;
 import org.opencv.core.Mat;
 import org.opencv.highgui.Highgui;
 
-@Entity(name = "blobFrame")
-public class blobFrame {
+@Entity(name = "blobframe")
+public class BlobFrame {
 	
 	private static final Logger logger = Logger.getLogger("debugLog");
 	
@@ -42,9 +42,10 @@ public class blobFrame {
 	@Transient
 	private MyCh myCh;
 	
-	@Lob
-	@Basic(fetch = FetchType.LAZY)
-	@Column(name="blobImg", columnDefinition="bytea")
+//	@Lob
+//	@Basic(fetch = FetchType.LAZY)
+//	@Column(name="blobImg", columnDefinition="bytea")
+	@Column(name = "blobImg", nullable = false, columnDefinition = "BINARY(256)", length = 256)
 	private byte[] blobImg;
 	
 	@Column(name = "blobCols", nullable = false)
@@ -53,10 +54,10 @@ public class blobFrame {
 	@Column(name = "blobRows", nullable = false)
 	private int blobRows;
 	
-	public blobFrame() {
+	public BlobFrame() {
 	}
 	
-	public blobFrame(byte[] img, MyCh myCh) throws Exception {
+	public BlobFrame(byte[] img, MyCh myCh) throws Exception {
 		// Extraer ROI
 		Mat imgMat = CvUtils.getGrayMatFromByteArray(img, 
 				myCh.getStreamSrc().getCols(), myCh.getStreamSrc().getRows());
@@ -70,7 +71,7 @@ public class blobFrame {
 		this.myCh = myCh;
 	}
 	
-	public blobFrame(Mat grayImgMat, MyCh myCh) {
+	public BlobFrame(Mat grayImgMat, MyCh myCh) {
 		// Extraer ROI
 		Mat roiMat = CvUtils.getRoiFromMat(grayImgMat, 
 				myCh.getStreamSrc().getTopLeft(), myCh.getStreamSrc().getBotRight());

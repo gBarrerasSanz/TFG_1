@@ -3,7 +3,7 @@ package guiatv.persistence.repository.service;
 import java.util.List;
 
 import guiatv.catalog.datatypes.ListChannels;
-import guiatv.persistence.domain.blobFrame;
+import guiatv.persistence.domain.BlobFrame;
 import guiatv.persistence.domain.Channel;
 import guiatv.persistence.domain.MyCh;
 import guiatv.persistence.domain.Programme;
@@ -30,21 +30,21 @@ public class BlobService {
 	BlobRepository blobRep;
 	
 	@Transactional(readOnly = true)
-	public List<blobFrame> findAll() {
+	public List<BlobFrame> findAll() {
 		return blobRep.findAll();
 	}
 	
 	@Transactional(readOnly = true)
-	public Page<blobFrame> findAll(Pageable pageable) {
-		Page<blobFrame> page = blobRep.findAll(pageable);
-		for (blobFrame blob: page) {
+	public Page<BlobFrame> findAll(Pageable pageable) {
+		Page<BlobFrame> page = blobRep.findAll(pageable);
+		for (BlobFrame blob: page) {
 			Hibernate.initialize(blob.getChannel());
 		}
 		return page;
 	}
 	
 	@Transactional(readOnly = true)
-	public Page<blobFrame> findByChannel(Channel channel, Pageable pageable) {
+	public Page<BlobFrame> findByChannel(Channel channel, Pageable pageable) {
 		return blobRep.findByChannel(channel, pageable);
 	}
 	
@@ -59,15 +59,15 @@ public class BlobService {
 //	}
 	
 	@Transactional(readOnly = true)
-	public blobFrame findOneByIdBlobPersistence(long idBlobPersistence) {
-		blobFrame blob = blobRep.findOneByIdBlobPersistence(idBlobPersistence);
+	public BlobFrame findOneByIdBlobPersistence(long idBlobPersistence) {
+		BlobFrame blob = blobRep.findOneByIdBlobPersistence(idBlobPersistence);
 		Hibernate.initialize(blob.getBlobImg());
 		return blob;
 	}
 	
 	@Transactional(readOnly = true)
-	public blobFrame findOneByIdBlobPersistenceInitChannel(long idBlobPersistence) {
-		blobFrame blob = blobRep.findOneByIdBlobPersistence(idBlobPersistence);
+	public BlobFrame findOneByIdBlobPersistenceInitChannel(long idBlobPersistence) {
+		BlobFrame blob = blobRep.findOneByIdBlobPersistence(idBlobPersistence);
 		if (blob != null) {
 			Hibernate.initialize(blob.getBlobImg());
 			// Inicializar Channel
@@ -86,7 +86,7 @@ public class BlobService {
 	}
 	
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void save(blobFrame blob) {
+    public void save(BlobFrame blob) {
 		try {
 			blobRep.save(blob);
 		} catch(Exception e) {
@@ -95,7 +95,7 @@ public class BlobService {
     }
 	
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void delete(blobFrame blob) {
+    public void delete(BlobFrame blob) {
 		blobRep.delete(blob);
     }
 	

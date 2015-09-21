@@ -51,16 +51,16 @@ public class BenchmarkTrainAll {
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME); // Cargar libreria de
 														// OpenCV
 		List<ChannelContainer> chList = new ArrayList<ChannelContainer>();
-//		chList.add(new ChannelContainer("00_a24", 1113, 562, 1203, 659));
-//		chList.add(new ChannelContainer("01_a1", 1118, 605, 1197, 666));
-//		chList.add(new ChannelContainer("02_a2", 1120, 614, 1194, 675));
-//		chList.add(new ChannelContainer("03_a3", 1103, 606, 1165, 661));
+		chList.add(new ChannelContainer("00_a24", 1113, 562, 1203, 659));
+		chList.add(new ChannelContainer("01_a1", 1118, 605, 1197, 666));
+		chList.add(new ChannelContainer("02_a2", 1120, 614, 1194, 675));
+		chList.add(new ChannelContainer("03_a3", 1103, 606, 1165, 661));
 		chList.add(new ChannelContainer("05_a5", 1123, 606, 1176, 663));
-//		chList.add(new ChannelContainer("06_a6", 1103, 615, 1153, 665));
+		chList.add(new ChannelContainer("06_a6", 1103, 615, 1153, 665));
 		chList.add(new ChannelContainer("07_aNeox", 1064, 629, 1177, 662));
-//		chList.add(new ChannelContainer("08_aNova", 1024, 614, 1151, 649));
-//		chList.add(new ChannelContainer("09_aTDP", 1145, 36, 1254, 94));
-//		chList.add(new ChannelContainer("10_aAragon", 1110, 50, 1164, 107));
+		chList.add(new ChannelContainer("08_aNova", 1024, 614, 1151, 649));
+		chList.add(new ChannelContainer("09_aTDP", 1145, 36, 1254, 94));
+		chList.add(new ChannelContainer("10_aAragon", 1110, 50, 1164, 107));
 		
 		String[] features_header  = {"FEATURES: VALOR DE LOS PÍXELES", "FEATURES: MOMENTOS DE IMAGEN"};
 		String[] folder = {"pixels", "moments"};

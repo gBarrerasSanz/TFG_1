@@ -20,7 +20,7 @@ import javax.persistence.Lob;
 import guiatv.common.CommonUtility;
 import guiatv.computervision.CvUtils;
 import guiatv.computervision.Imshow;
-import guiatv.persistence.domain.blobFrame;
+import guiatv.persistence.domain.BlobFrame;
 
 import org.opencv.core.Mat;
 import org.opencv.highgui.Highgui;
@@ -64,7 +64,7 @@ public class ArffHelper implements Serializable {
 		return classAttVals;
 	}
 	
-	public static Instances createInstancesObject(blobFrame blob) {
+	public static Instances createInstancesObject(BlobFrame blob) {
 		FastVector pixelAttVals = getPixelAttVals();
 		FastVector classAttVals = getClassAttVals();
 		// Se saca el objecto mat del blob
@@ -115,7 +115,7 @@ public class ArffHelper implements Serializable {
 	 * @param dataSet: IN/OUT
 	 * @param blob: IN
 	 */
-	public static NaiveBayesUpdateable createClassifierNaiveBayesUpdateable(Instances dataSet, blobFrame blob) {
+	public static NaiveBayesUpdateable createClassifierNaiveBayesUpdateable(Instances dataSet, BlobFrame blob) {
 		NaiveBayesUpdateable trainedClassifier = new NaiveBayesUpdateable();
 		try {
 			trainedClassifier.buildClassifier(dataSet);
@@ -126,7 +126,7 @@ public class ArffHelper implements Serializable {
 		}
 	}
 	
-	public static Instance getLabeledInstance(Instances dataSet, blobFrame blob, boolean truth) {
+	public static Instance getLabeledInstance(Instances dataSet, BlobFrame blob, boolean truth) {
 		FastVector pixelAttVals = getPixelAttVals();
 		FastVector classAttVals = getClassAttVals();
 		byte[] binBlob = getBinBlobFromBlob(blob);
@@ -140,7 +140,7 @@ public class ArffHelper implements Serializable {
 		return new Instance(1.0, vals);
 	}
 	
-	public static Instance getUnlabeledInstance(Instances dataSet, blobFrame blob) {
+	public static Instance getUnlabeledInstance(Instances dataSet, BlobFrame blob) {
 		FastVector pixelAttVals = getPixelAttVals();
 		byte[] binBlob = getBinBlobFromBlob(blob);
 		int numAtts = dataSet.numAttributes();
@@ -156,7 +156,7 @@ public class ArffHelper implements Serializable {
 		return newInstance;
 	}
 	
-	private static byte[] getBinBlobFromBlob(blobFrame blob) {
+	private static byte[] getBinBlobFromBlob(BlobFrame blob) {
 		// Se saca el objeto mat del blob
 		Mat img = CvUtils.getGrayMatFromByteArray(blob.getBlobImg(), blob.getBlobCols(), blob.getBlobRows());
 		// Se binariza la imagen 
