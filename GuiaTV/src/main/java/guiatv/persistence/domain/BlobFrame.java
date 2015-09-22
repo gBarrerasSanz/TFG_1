@@ -20,7 +20,7 @@ import org.hibernate.annotations.Type;
 import org.opencv.core.Mat;
 import org.opencv.highgui.Highgui;
 
-@Entity(name = "blobframe")
+@Entity(name = "blobFrame")
 public class BlobFrame {
 	
 	private static final Logger logger = Logger.getLogger("debugLog");
@@ -42,10 +42,10 @@ public class BlobFrame {
 	@Transient
 	private MyCh myCh;
 	
-//	@Lob
-//	@Basic(fetch = FetchType.LAZY)
-//	@Column(name="blobImg", columnDefinition="bytea")
-	@Column(name = "blobImg", nullable = false, columnDefinition = "BINARY(256)", length = 256)
+	// Funciona
+	@Lob
+	@Column(name="blobImg", length=65535)
+	@Type(type = "binary")
 	private byte[] blobImg;
 	
 	@Column(name = "blobCols", nullable = false)

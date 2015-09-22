@@ -35,13 +35,6 @@ public class ScheduleService {
 	
 	@Autowired
 	ScheduleRepository schedRep;
-	@Autowired
-	ChannelRepository chRep;
-	@Autowired
-	ProgrammeRepository progRep;
-	
-	@Autowired
-	ScheduleRepositoryImpl schedRepImpl;
 	
 	@Transactional(readOnly = true)
 	public List<Schedule> findAll(boolean refs) {
