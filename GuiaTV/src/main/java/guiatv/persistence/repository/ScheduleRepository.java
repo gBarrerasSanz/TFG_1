@@ -25,6 +25,8 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long>,
 	
 	List<Schedule> findByChannelOrderByStartAsc(Channel ch);
 	
+	List<Schedule> findByChannelAndStartAfterOrderByStartAsc(Channel ch, Date start);
+	
 	List<Schedule> findByChannel(Channel ch);
 	
 	@Query("SELECT s FROM schedule s WHERE s.channel = ?1 ORDER BY s.start ASC")

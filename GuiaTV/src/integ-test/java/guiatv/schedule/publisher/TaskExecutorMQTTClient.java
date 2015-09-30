@@ -39,7 +39,7 @@ public class TaskExecutorMQTTClient {
 	
 	private class MQTTClientWorker implements Runnable {
 		
-		int qos = 0;
+		int qos = 1;
 		
 		MqttClient mqttclient;
 		IMqttToken token;

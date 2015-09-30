@@ -218,7 +218,7 @@ public class AdministrationRestController {
 				return new ResponseEntity<String>(returnMsg, HttpStatus.OK);
 			}
 			else { // Schedule
-				Schedule sched = schedServ.findOneByChannelOrderByStartAsc(ch, true);
+				Schedule sched = schedServ.findByChannelAndStartAfterOrderByStartAsc(ch, true);
 				if (sched != null) {
 					List<Schedule> lSched = new ArrayList<Schedule>();
 					lSched.add(sched);

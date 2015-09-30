@@ -85,8 +85,9 @@ public class ScheduleService {
 	 con el primer elemento
 	 */
 	@Transactional(readOnly = true)
-	public Schedule findOneByChannelOrderByStartAsc(Channel ch, boolean refs) {
-		List<Schedule> lSched = schedRep.findByChannelOrderByStartAsc(ch);
+	public Schedule findByChannelAndStartAfterOrderByStartAsc(Channel ch, boolean refs) {
+		Date now = new Date();
+		List<Schedule> lSched = schedRep.findByChannelAndStartAfterOrderByStartAsc(ch, now);
 		if (lSched == null || lSched.size() == 0) {
 			return null;
 		}
