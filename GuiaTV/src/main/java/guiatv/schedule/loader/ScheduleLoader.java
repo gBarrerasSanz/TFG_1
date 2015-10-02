@@ -107,9 +107,9 @@ public class ScheduleLoader {
 				logger.debug("Schedule REPETIDO: "+sched);
 			}
 		}
-		
-		logger.debug("SCHEDULE LOADER: numSaved = "+numSaved+"/"+lSched.size()+"; "+
-				"numDeprecated = "+numDeprecated+"/"+lSched.size()+"; "+
-				"numDuplicated = "+numDup+"/"+lSched.size());
+//		
+//		logger.debug("SCHEDULE LOADER: numSaved = "+numSaved+"/"+lSched.size()+"; "+
+//				"numDeprecated = "+numDeprecated+"/"+lSched.size()+"; "+
+//				"numDuplicated = "+numDup+"/"+lSched.size());
 	}
 }

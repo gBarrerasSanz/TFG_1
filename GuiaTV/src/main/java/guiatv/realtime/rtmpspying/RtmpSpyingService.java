@@ -145,6 +145,7 @@ public class RtmpSpyingService {
 		        					// Si se ha dado señal de desactivar channel o dejar de espiarlo
 		        					if ( ! activeCh  || ! spiedCh) { 
 		        						// Entonces terminar
+		        						myCh.getMyChState().resetStateAndFifo();
 		        						logger.debug("Channel ["+ch.getIdChBusiness()+"] is NO LONGER SPIED");
 		        						return;
 		        					}
@@ -192,6 +193,7 @@ public class RtmpSpyingService {
 				 * Si por alguna razón, el espía termina -> comunicarlo debidamente
 				 */
 				myCh.getMyChState().releaseSpying();
+				myCh.getMyChState().resetStateAndFifo();
 				logger.debug("Channel ["+myCh.getChannel().getIdChBusiness()+"] is NO LONGER SPIED");
 		        if (in != null) {
 		            try { in.close(); } catch(Exception e){}

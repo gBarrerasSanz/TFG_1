@@ -1,5 +1,6 @@
 package guiatv.persistence.domain;
 
+import java.util.Iterator;
 import java.util.Queue;
 
 import org.apache.commons.collections4.queue.CircularFifoQueue;
@@ -15,10 +16,10 @@ public class MyChState {
 	private static final Logger logger = Logger.getLogger("debugLog");
 	
 	private MyCh myCh;
-	private boolean active;
-	private boolean spied;
-	private InstantState rtCurrState;
-	private Queue<InstantState> rtSchedFifo;
+	private volatile boolean active;
+	private volatile boolean spied;
+	private volatile InstantState rtCurrState;
+	private volatile Queue<InstantState> rtSchedFifo;
 	private int samplesToFalse;
 	private int samplesToTrue;
 	
@@ -109,7 +110,7 @@ public class MyChState {
 						break;
 					}
 				}
-				if (numOnProgramme > numOnAdverts) {
+				if (numOnProgramme >= numOnAdverts) {
 					rtCurrState = InstantState.ON_PROGRAMME;
 				}
 				if (numOnAdverts > numOnProgramme) {
@@ -117,7 +118,7 @@ public class MyChState {
 				}
 				Channel ch = rtSched.getMyCh().getChannel();
 				logger.debug("Initialized channel ("+ch.getIdChBusiness()+") -> "+rtCurrState);
-				return false;
+				return true;
 			}
 			else { // Si currentState ya estaba inicializado
 				int lastEventsToWatch;
@@ -128,11 +129,17 @@ public class MyChState {
 					lastEventsToWatch = samplesToTrue;
 				}
 				rtSchedFifo.add(rtSched.getState());
-				InstantState[] instantArr = (InstantState[]) rtSchedFifo.toArray();
+//				InstantState[] instantArr = (InstantState[]) rtSchedFifo.toArray();
+				InstantState[] instantArr = new InstantState[rtSchedFifo.size()];
+				int idx=0;
+				for (InstantState state: rtSchedFifo) {
+					instantArr[idx] = state;
+					idx++;
+				}
 				for (int i=instantArr.length-1; i >= instantArr.length-lastEventsToWatch; i--) {
 					InstantState instant = instantArr[i];
 					// Si alguno de los estados de la cola coincide con el estado actual -> Salir
-					if (instant.equals(rtSched)) {
+					if (instant.equals(rtCurrState)) {
 						return false;
 					}
 				}
