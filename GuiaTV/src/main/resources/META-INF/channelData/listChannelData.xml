@@ -18,10 +18,10 @@
 			<cols>1197</cols>
 			<rows>666</rows>
 		</botRight>
-		<active>false</active>
+		<active>true</active>
 		<doSpying>false</doSpying>
-		<samplesToFalse>5</samplesToFalse>
-		<samplesToTrue>5</samplesToTrue>
+		<samplesToFalse>2</samplesToFalse>
+		<samplesToTrue>2</samplesToTrue>
 		<batchGoodSamplesUri>captures/01_a1/goodSamples/</batchGoodSamplesUri>
 		<batchBadSamplesUri>captures/publicidad/</batchBadSamplesUri>
 	</deserializedChannel>
@@ -41,10 +41,10 @@
 			<cols>1254</cols>
 			<rows>94</rows>
 		</botRight>
-		<active>false</active>
+		<active>true</active>
 		<doSpying>false</doSpying>
-		<samplesToFalse>5</samplesToFalse>
-		<samplesToTrue>5</samplesToTrue>
+		<samplesToFalse>2</samplesToFalse>
+		<samplesToTrue>2</samplesToTrue>
 		<batchGoodSamplesUri>captures/09_aTDP/goodSamples/</batchGoodSamplesUri>
 		<batchBadSamplesUri>captures/publicidad/</batchBadSamplesUri>
 	</deserializedChannel>
@@ -66,8 +66,8 @@
 		</botRight>
 		<active>true</active>
 		<doSpying>true</doSpying>
-		<samplesToFalse>5</samplesToFalse>
-		<samplesToTrue>5</samplesToTrue>
+		<samplesToFalse>2</samplesToFalse>
+		<samplesToTrue>2</samplesToTrue>
 		<batchGoodSamplesUri>captures/03_a3/goodSamples/</batchGoodSamplesUri>
 		<batchBadSamplesUri>captures/publicidad/</batchBadSamplesUri>
 	</deserializedChannel>
@@ -89,8 +89,8 @@
 		</botRight>
 		<active>true</active>
 		<doSpying>false</doSpying>
-		<samplesToFalse>5</samplesToFalse>
-		<samplesToTrue>5</samplesToTrue>
+		<samplesToFalse>2</samplesToFalse>
+		<samplesToTrue>2</samplesToTrue>
 		<batchGoodSamplesUri>captures/06_a6/goodSamples/</batchGoodSamplesUri>
 		<batchBadSamplesUri>captures/publicidad/</batchBadSamplesUri>
 	</deserializedChannel>
@@ -111,10 +111,10 @@
 			<cols>1177</cols>
 			<rows>662</rows>
 		</botRight>
-		<active>false</active>
+		<active>true</active>
 		<doSpying>false</doSpying>
-		<samplesToFalse>5</samplesToFalse>
-		<samplesToTrue>5</samplesToTrue>
+		<samplesToFalse>2</samplesToFalse>
+		<samplesToTrue>2</samplesToTrue>
 		<batchGoodSamplesUri>captures/07_aNeox/goodSamples/</batchGoodSamplesUri>
 		<batchBadSamplesUri>captures/publicidad/</batchBadSamplesUri>
 	</deserializedChannel>
@@ -140,10 +140,10 @@
 			<cols>1176</cols>
 			<rows>663</rows>
 		</botRight>
-		<active>false</active>
+		<active>true</active>
 		<doSpying>false</doSpying>
-		<samplesToFalse>5</samplesToFalse>
-		<samplesToTrue>5</samplesToTrue>
+		<samplesToFalse>2</samplesToFalse>
+		<samplesToTrue>2</samplesToTrue>
 		<batchGoodSamplesUri>captures/05_a5/goodSamples/</batchGoodSamplesUri>
 		<batchBadSamplesUri>captures/publicidad/</batchBadSamplesUri>
 	</deserializedChannel>
@@ -163,10 +163,10 @@
 			<cols>1164</cols>
 			<rows>107</rows>
 		</botRight>
-		<active>false</active>
+		<active>true</active>
 		<doSpying>false</doSpying>
-		<samplesToFalse>5</samplesToFalse>
-		<samplesToTrue>5</samplesToTrue>
+		<samplesToFalse>2</samplesToFalse>
+		<samplesToTrue>2</samplesToTrue>
 		<batchGoodSamplesUri>captures/10_aAragon/goodSamples/</batchGoodSamplesUri>
 		<batchBadSamplesUri>captures/publicidad/</batchBadSamplesUri>
 	</deserializedChannel>
@@ -187,10 +187,10 @@
 			<cols>1151</cols>
 			<rows>649</rows>
 		</botRight>
-		<active>false</active>
+		<active>true</active>
 		<doSpying>false</doSpying>
-		<samplesToFalse>5</samplesToFalse>
-		<samplesToTrue>5</samplesToTrue>
+		<samplesToFalse>2</samplesToFalse>
+		<samplesToTrue>2</samplesToTrue>
 		<batchGoodSamplesUri>captures/08_aNova/goodSamples/</batchGoodSamplesUri>
 		<batchBadSamplesUri>captures/publicidad/</batchBadSamplesUri>
 	</deserializedChannel>
@@ -214,10 +214,10 @@
 			<cols></cols>
 			<rows></rows>
 		</botRight>
-		<active>false</active>
+		<active>true</active>
 		<doSpying>false</doSpying>
-		<samplesToFalse>5</samplesToFalse>
-		<samplesToTrue>5</samplesToTrue>
+		<samplesToFalse>2</samplesToFalse>
+		<samplesToTrue>2</samplesToTrue>
 		<batchGoodSamplesUri></batchGoodSamplesUri>
 		<batchBadSamplesUri></batchBadSamplesUri>
 	</deserializedChannel>

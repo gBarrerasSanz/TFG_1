@@ -151,21 +151,22 @@ function queryForClearTrainedModel(elem, hashIdChBusiness) {
 	});
 }
 
-function queryForSetTrained(elem, hashIdChBusiness, trained) {
+function queryForSetTrained(elem, hashIdChBusiness, must_train) {
 	$.ajax({
 		type : "GET",
 		url : "/admin/channels/setTrained/",
-		data : { hashIdChBusiness: hashIdChBusiness, trained: trained},
+		data : { hashIdChBusiness: hashIdChBusiness, trained: must_train},
 		complete: function(jqXHR, textStatus) {
 			var result = false;
 			switch(jqXHR.status){
 			case 200: // OK
 				// TODO: Cambiar los botones afectados
-				if (jqXHR.responseText == true) { // Si se ha pedido entrenar
+				if (must_train) {
 					writeOnFeedbackTA("Trained Model is now set as TRAINED\n"+
 							"Please refresh the webpage");
 				}
-				else {  // Si se ha pedido desentrenar
+				else {
+					// Si se ha pedido desentrenar
 					writeOnFeedbackTA("Trained Model is now set as NOT TRAINED\n"+
 						"Please refresh the webpage");
 				}
@@ -221,13 +222,18 @@ function onClearTrainedModelClicked(elem, hashIdChBusiness, trained) {
 }
 
 function onSetTrainedClicked(elem, hashIdChBusiness, isTrained) {
-	if (isTrained == true) { // Si está entrenado
-		// Entonces desentrenar
-		queryForSetTrained(elem, hashIdChBusiness, false);
+	var already_trained = (isTrained == 'true');
+	if (already_trained) { // Si está entrenado
+		must_train = false; // Entrenar
 	}
-	else { // Si NO esta entrenado
-		// Entonces entrenar
+	else { // Si no está entrenado
+		must_train = true; 
+	}
+	if (must_train) {
 		queryForSetTrained(elem, hashIdChBusiness, true);
+	}
+	else {
+		queryForSetTrained(elem, hashIdChBusiness, false);
 	}
 		
 }

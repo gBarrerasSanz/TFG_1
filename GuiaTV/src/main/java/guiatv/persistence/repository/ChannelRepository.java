@@ -25,7 +25,7 @@ public interface ChannelRepository extends JpaRepository<Channel, Long>,
 	
 	List<Channel> findByCountry(String country);
 	
-	<S extends Channel> Channel save(Channel ch);
+//	<S extends Channel> Channel save(Channel ch);
 	
 	@Modifying
 	@Query("UPDATE channel c SET c.nameCh = ?1 "

@@ -290,11 +290,11 @@ public class AdministrationRestController {
 			method = RequestMethod.GET)
 	public ResponseEntity<Boolean> setTrained(
 			@RequestParam(value="hashIdChBusiness", defaultValue="", required=true) String hashIdChBusiness,
-			@RequestParam(value="trained", defaultValue="", required=true) boolean trained)
+			@RequestParam(value="trained", defaultValue="", required=true) boolean must_train)
 	{
 		Channel ch = chServ.findByHashIdChBusiness(hashIdChBusiness, true);
 		MyCh myCh = monitorMyCh.getByChannel(ch);
-		if (trained) {
+		if (must_train) {
 			if ( myCh.getTrainedModel().isAbleToCV()) {
 				myCh.getTrainedModel().setTrained(true);
 				return new ResponseEntity<Boolean>(true, HttpStatus.OK);
